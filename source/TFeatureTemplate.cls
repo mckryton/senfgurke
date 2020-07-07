@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "TTemplate"
+Attribute VB_Name = "TFeatureTemplate"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -79,7 +79,7 @@ Private Sub pending(pending_msg)
     TCase.pending pending_msg
 End Sub
 
-Private Property Get Log() As logger
+Private Property Get Log() As Logger
     
     Set Log = TCase.Log
 End Property

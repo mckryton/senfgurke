@@ -2,14 +2,14 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "TCaseRunner"
+Attribute VB_Name = "TFeatureRunner"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Option Explicit
 
-Dim mLogger As logger
+Dim mLogger As Logger
 
 Public Sub run_testcases(pTestCases As Variant, Optional pTags)
     
@@ -31,10 +31,6 @@ Public Sub run_testcases(pTestCases As Variant, Optional pTags)
             Set testcase = Nothing
         End If
     Next
-    Exit Sub
-
-error_handler:
-    Log.log_function_error "TCaseRunner.run_testcases"
 End Sub
 
 Private Function test_has_tag(pTags As Variant, pTestCase As Variant)
@@ -54,21 +50,17 @@ Private Function test_has_tag(pTags As Variant, pTestCase As Variant)
             test_has_tag = True
         End If
     Next
-    Exit Function
-
-error_handler:
-    Log.log_function_error "TCaseRunner.run_testcases"
 End Function
 
-Public Property Get Log() As logger
+Public Property Get Log() As Logger
     
     If TypeName(mLogger) = "Nothing" Then
-        Set mLogger = New logger
+        Set mLogger = New Logger
     End If
     Set Log = mLogger
 End Property
 
-Public Property Let Log(ByVal pLogger As logger)
+Public Property Let Log(ByVal pLogger As Logger)
     Set mLogger = pLogger
 End Property
 

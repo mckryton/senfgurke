@@ -1,49 +1,34 @@
 Attribute VB_Name = "TestStart"
 Option Explicit
 
-Public Sub run_acceptance_tests(Optional pTags)
+Public Sub run_tests(Optional pTags)
     
-    Dim case_runner As TCaseRunner
+    Dim feature_runner As TFeatureRunner
     Dim acceptance_testcases As Variant
-    Dim Log As logger
+    Dim Log As Logger
 
     On Error GoTo error_handler
-    Set Log = New logger
-    acceptance_testcases = Array(New Feature_ApplyRules, New Feature_Rule_Permitted_Fonts)
-    Set case_runner = New TCaseRunner
-    case_runner.run_testcases acceptance_testcases, pTags
-    Exit Sub
+    Set Log = New Logger
+    acceptance_testcases = Array(New Feature_ApplyRules)
+    Set feature_runner = New TFeatureRunner
+    feature_runner.run_testcases acceptance_testcases, pTags
+End Sub
 
-error_handler:
-    Log.log_function_error "TestStart.run_acceptance_tests"
+Public Sub run_acceptance_tests()
+    TestStart.run_tests "feature"
 End Sub
 
 Public Sub run_acceptance_wip_tests()
     'wip = work in progress
-    TestStart.run_acceptance_tests "wip"
+    TestStart.run_tests "feature,wip"
 End Sub
 
-
-Public Sub run_unit_tests(Optional pTags)
-    
-    Dim case_runner As TCaseRunner
-    Dim unit_testcases As Variant
-    Dim Log As logger
-
-    On Error GoTo error_handler
-    Set Log = New logger
-    unit_testcases = Array(New Unit_ReadConfig, New Unit_ChooseTargetPresentation, New Unit_SetupRules)
-    Set case_runner = New TCaseRunner
-    case_runner.run_testcases unit_testcases, pTags
-    Exit Sub
-
-error_handler:
-    Log.log_function_error "TestStart.run_unit_tests"
+Public Sub run_unit_tests()
+    TestStart.run_tests "unit"
 End Sub
-
 
 Public Sub run_unit_wip_tests()
     'wip = work in progress
-    TestStart.run_unit_tests "wip"
+    TestStart.run_tests "unit,wip"
 End Sub
 

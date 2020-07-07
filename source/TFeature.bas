@@ -1,7 +1,7 @@
-Attribute VB_Name = "TCase"
+Attribute VB_Name = "TFeature"
 Option Explicit
 
-Dim m_Logger As logger
+Dim m_Logger As Logger
 
 Public Function raise_step_error(err_id As Long, Optional err_msg) As Variant
  
@@ -27,14 +27,14 @@ Public Sub pending(pending_msg)
     Err.raise ERR_ID_STEP_IS_PENDING, description:=pending_msg
 End Sub
 
-Public Property Get Log() As logger
+Public Property Get Log() As Logger
     
     If m_Logger Is Nothing Then
-        Set m_Logger = New logger
+        Set m_Logger = New Logger
     End If
     Set Log = m_Logger
 End Property
 
-Public Property Let Log(ByVal new_Logger As logger)
+Public Property Let Log(ByVal new_Logger As Logger)
     Set m_Logger = new_Logger
 End Property

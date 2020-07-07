@@ -1,6 +1,9 @@
 Attribute VB_Name = "ExtraVBA"
 Option Explicit
 
+'unfortunately there seems to be no compiler constant to distinct office applications
+#Const APP_NAME = "Microsoft Excel"
+
 Public Function existsItem(pvarKey As Variant, pcolACollection As Collection) As Boolean
                      
     On Error GoTo NOT_FOUND
@@ -32,8 +35,12 @@ Private Sub exportCode()
     #Else
         strSeparator = "\"
     #End If
-    strPath = ActivePresentation.Path & strSeparator & "source"
-    For Each vcomSource In Application.VBE.VBProjects("SlideValidator").VBComponents
+    #If APP_NAME = "Microsoft Powerpoint" Then
+        strPath = ActivePresentation.Path & strSeparator & "source"
+    #ElseIf APP_NAME = "Microsoft Excel" Then
+        strPath = ThisWorkbook.Path & strSeparator & "source"
+    #End If
+    For Each vcomSource In Application.VBE.VBProjects("Senfgurke").VBComponents
         Select Case vcomSource.Type
             Case vbext_ct_StdModule
                 strSuffix = "bas"

@@ -1,11 +1,7 @@
 Attribute VB_Name = "TExampleRunner"
-'------------------------------------------------------------------------
-' Description  : execute test steps for Gherkin scenarios / examples
-'------------------------------------------------------------------------
-
 Option Explicit
 
-Dim mLogger As logger
+Dim mLogger As Logger
 Dim mTestStopped As Boolean
 
 Public Sub run_example(pExampleLinesArray As Variant, pTestDefinitionObject As Variant)
@@ -120,16 +116,10 @@ Public Sub stop_test()
     TExampleRunner.TestStopped = True
 End Sub
 
-Public Sub pending(pPendingMsg)
-    
-    Debug.Print "PENDING: " & pPendingMsg
-    stop_test
-End Sub
-
-Public Property Get Log() As logger
+Public Property Get Log() As Logger
     
     If TypeName(mLogger) = "Nothing" Then
-        Set mLogger = New logger
+        Set mLogger = New Logger
     End If
     Set Log = mLogger
 End Property
