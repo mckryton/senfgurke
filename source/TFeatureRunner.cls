@@ -11,39 +11,37 @@ Option Explicit
 
 Dim mLogger As Logger
 
-Public Sub run_testcases(pTestCases As Variant, Optional pTags)
+Public Sub run_features(features As Variant, Optional pTags)
     
-    Dim all_testcases As Variant
-    Dim testcase As Variant
+    Dim all_features As Variant
+    Dim feature As Variant
     Dim run_test As Boolean
 
-    On Error GoTo error_handler
-    For Each testcase In pTestCases
+    For Each feature In features
         run_test = True
         If Not IsMissing(pTags) Then
-            run_test = test_has_tag(pTags, testcase)
+            run_test = test_has_tag(pTags, feature)
         End If
         If run_test Then
             Debug.Print ""
-            Debug.Print "Test case: " & TypeName(testcase)
-            Debug.Print vbTab & testcase.description & vbLf
-            testcase.test_examples
-            Set testcase = Nothing
+            Debug.Print "Test case: " & TypeName(feature)
+            Debug.Print vbTab & feature.description & vbLf
+            feature.test_examples
+            Set feature = Nothing
         End If
     Next
 End Sub
 
-Private Function test_has_tag(pTags As Variant, pTestCase As Variant)
+Private Function test_has_tag(pTags As Variant, pTesTFeature As Variant)
 
     Dim input_tags As Variant
     Dim feature_tags As Variant
     Dim match As Variant
     Dim tag As Variant
     
-    On Error GoTo error_handler
     test_has_tag = False
     input_tags = Split(Replace(pTags, " ", ""), ",")
-    feature_tags = Split(Replace(pTestCase.Tags, " ", ""), ",")
+    feature_tags = Split(Replace(pTesTFeature.Tags, " ", ""), ",")
     For Each tag In input_tags
         match = Filter(feature_tags, tag, True, vbBinaryCompare)
         If UBound(match) > -1 Then
@@ -54,13 +52,6 @@ End Function
 
 Public Property Get Log() As Logger
     
-    If TypeName(mLogger) = "Nothing" Then
-        Set mLogger = New Logger
-    End If
-    Set Log = mLogger
-End Property
-
-Public Property Let Log(ByVal pLogger As Logger)
-    Set mLogger = pLogger
+    Set Log = TFeature.Log
 End Property
 

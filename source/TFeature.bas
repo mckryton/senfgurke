@@ -1,7 +1,7 @@
 Attribute VB_Name = "TFeature"
 Option Explicit
 
-Dim m_Logger As Logger
+Dim m_logger As Logger
 
 Public Function raise_step_error(err_id As Long, Optional err_msg) As Variant
  
@@ -29,12 +29,12 @@ End Sub
 
 Public Property Get Log() As Logger
     
-    If m_Logger Is Nothing Then
-        Set m_Logger = New Logger
+    If m_logger Is Nothing Then
+        Set m_logger = New Logger
     End If
-    Set Log = m_Logger
+    Set Log = m_logger
 End Property
 
 Public Property Let Log(ByVal new_Logger As Logger)
-    Set m_Logger = new_Logger
+    Set m_logger = new_Logger
 End Property

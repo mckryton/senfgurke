@@ -1,48 +1,46 @@
 Attribute VB_Name = "TExampleRunner"
 Option Explicit
 
-Dim mLogger As Logger
-Dim mTestStopped As Boolean
+Public Const ATTR_STEP_HEAD = "step_head"
+Public Const ATTR_STEP_BODY = "step_body"
+Public Const ATTR_WHOLE_STEP = "whole_step"
+Public Const ATTR_ERROR = "error"
 
-Public Sub run_example(pExampleLinesArray As Variant, pTestDefinitionObject As Variant)
+Dim m_logger As Logger
+Dim m_is_test_stopped As Boolean
 
-    Dim intLineIndex As Integer
-    Dim colLine As Collection
-    Dim strLastStepType As String
+Public Sub run_example(example_steps As Variant, feature_object As Variant)
+
+    Dim step_index As Integer
+    Dim step_attributes As Collection
 
     On Error GoTo error_handler
-    TExampleRunner.TestStopped = False
-    intLineIndex = 0
-    Set colLine = getExampleLine(pExampleLinesArray, intLineIndex)
-    If LCase(colLine("line_head")) = "rule:" Then
-        print_rule colLine.Item("line")
+    TExampleRunner.IsTestStopped = False
+    step_index = 0
+    Set step_attributes = read_example_step(example_steps, step_index)
+    If LCase(step_attributes(ATTR_STEP_HEAD)) = "rule:" Then
+        print_rule step_attributes.Item(ATTR_WHOLE_STEP)
         Exit Sub
     End If
-    pTestDefinitionObject.before
-    print_scenario_title colLine.Item("line")
-    intLineIndex = intLineIndex + 1
-    Do While TExampleRunner.TestStopped = False And intLineIndex <= UBound(pExampleLinesArray)
-        Set colLine = getExampleLine(pExampleLinesArray, intLineIndex)
-        If colLine.Item("line_head") <> "And" Then
-            strLastStepType = colLine.Item("line_head")
-        End If
-        colLine.Remove "step_type"
-        colLine.Add strLastStepType, "step_type"
-        run_step_line colLine, pTestDefinitionObject
-        intLineIndex = intLineIndex + 1
+    feature_object.before
+    print_scenario_title step_attributes.Item(ATTR_WHOLE_STEP)
+    step_index = step_index + 1
+    Do While TExampleRunner.IsTestStopped = False And step_index <= UBound(example_steps)
+        Set step_attributes = read_example_step(example_steps, step_index)
+        run_step_line step_attributes, feature_object
+        step_index = step_index + 1
     Loop
-    If Not TExampleRunner.TestStopped Then
-        pTestDefinitionObject.after
+    If Not TExampleRunner.IsTestStopped Then
+        feature_object.after
     End If
-    
     Debug.Print
     Exit Sub
     
 error_handler:
     If Err.Number = ERR_ID_SCENARIO_SYNTAX_ERROR Then
-        Log.error_log "syntax error: " & Err.description & vbCr & vbLf & "in line >" & colLine.Item("line") & "<"
+        Log.error_log "syntax error: " & Err.description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
     Else
-        Log.log_function_error "TExampleRunner.runExample", Join(pExampleLinesArray, vbTab & vbCr & vbLf)
+        Log.log_function_error "Runtime errror in TExampleRunner.runExample", Join(example_steps, vbTab & vbCr & vbLf)
     End If
 End Sub
 
@@ -52,75 +50,90 @@ Private Sub print_rule(pRule As String)
     Debug.Print ""
 End Sub
 
-Private Sub print_scenario_title(pExampleTitle As String)
+Private Sub print_scenario_title(example_title As String)
     
-    If LCase(Left(pExampleTitle, Len("Scenario:"))) <> "scenario:" And LCase(Left(pExampleTitle, Len("Example:"))) <> "example:" Then
-        Err.raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="can't find scenario start in >" & pExampleTitle & "<"
+    If LCase(Left(example_title, Len("Scenario:"))) <> "scenario:" And LCase(Left(example_title, Len("Example:"))) <> "example:" Then
+        Err.raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="can't find scenario start in >" & example_title & "<"
     Else
-        Debug.Print vbTab & pExampleTitle
+        Debug.Print vbTab & example_title
     End If
 End Sub
 
-Private Sub run_step_line(pStepLine As Collection, pobjTestDefinition As Variant)
+Private Sub run_step_line(step_attributes As Collection, feature_object As Variant)
 
     Dim step_result As Variant
 
-    Select Case pStepLine.Item("step_type")
+    Select Case step_attributes.Item(ATTR_STEP_HEAD)
     Case "Given", "When", "Then"
-        step_result = pobjTestDefinition.run_step(pStepLine)
-        Debug.Print vbTab & step_result(0), vbTab & pStepLine.Item("line")
+        step_result = feature_object.run_step(step_attributes)
+        Debug.Print vbTab & step_result(0), vbTab & step_attributes.Item(ATTR_WHOLE_STEP)
         If step_result(0) = "FAILED" Or step_result(0) = "PENDING" Then
             Debug.Print "", step_result(1)
         End If
     Case Else
-        Err.raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="unexpected step type " & pStepLine.Item("step_type")
+        Err.raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
     End Select
 End Sub
 
-Public Function getExampleLine(pvarExample As Variant, pintLineIndex As Integer) As Collection
+Public Function read_example_step(example As Variant, step_index As Integer) As Collection
 
-    Dim colLineProps As Collection
-    Dim strLine As String     'the whole line
-    Dim strStepType As String 'e.g. Given, When, Then, And
-    Dim strStepDef As String  ' everything behind step type
-    Dim varWords As Variant   'all words of the line as array
+    Dim step_attributes As Collection
+    Dim prev_step_attributes As Collection
+    Dim whole_step As String
+    Dim step_head As String     'Given, When, Then, And or But (synonym for and)
+    Dim step_body As String
+    Dim step_words As Variant
     
-    On Error GoTo error_handler
-    strLine = Trim(pvarExample(pintLineIndex))
-    varWords = Split(strLine, " ")
-    strStepType = varWords(0)
-    strStepDef = Right(strLine, Len(strLine) - Len(strStepType))
-    Set colLineProps = New Collection
-    With colLineProps
-        .Add strLine, "line"
-        .Add strStepType, "line_head"
-        .Add strStepDef, "line_body"
-        .Add vbNullString, "step_type"      'step type depends on context, e.g. previous steps
+    whole_step = Trim(example(step_index))
+    step_words = Split(whole_step, " ")
+    step_head = step_words(0)
+    step_body = Trim(Right(whole_step, Len(whole_step) - Len(step_head)))
+    Set step_attributes = New Collection
+    With step_attributes
+        .Add whole_step, ATTR_WHOLE_STEP
+        .Add step_head, ATTR_STEP_HEAD
+        .Add step_body, ATTR_STEP_BODY
     End With
-    Set getExampleLine = colLineProps
-    Exit Function
+    If step_head = "And" Or step_head = "But" Then
+        If step_index = 1 Then
+            step_attributes.Add "Gherkin syntax error: no previous step to match """ & step_head & """ keyword", ATTR_ERROR
+            Set read_example_step = step_attributes
+            Exit Function
+        Else
+            Set prev_step_attributes = read_example_step(example, step_index - 1)
+            step_attributes(ATTR_STEP_HEAD) = prev_step_attributes(ATTR_STEP_HEAD)
+        End If
+    End If
+    step_attributes.Add validate_step_head(step_attributes(ATTR_STEP_HEAD)), ATTR_ERROR
+    Set read_example_step = step_attributes
+End Function
+Private Function validate_step_head(step_head) As String
 
-error_handler:
-    Log.log_function_error "TExampleRunner.getExampleLine"
+    Select Case step_head
+        Case "Given", "When", "Then", "Rule:", "Example:", "Scenario:"
+            validate_step_head = ""
+        Case Else
+            validate_step_head = "Gherkin syntax error: >" & step_head & "< is not a valid step type"
+    End Select
 End Function
 
-Public Property Get TestStopped() As Boolean
-    TestStopped = mTestStopped
+Public Property Get IsTestStopped() As Boolean
+    IsTestStopped = m_is_test_stopped
 End Property
 
-Private Property Let TestStopped(ByVal pTestStopped As Boolean)
-    mTestStopped = pTestStopped
+Private Property Let IsTestStopped(ByVal is_test_stopped As Boolean)
+    m_is_test_stopped = is_test_stopped
 End Property
 
 Public Sub stop_test()
-    TExampleRunner.TestStopped = True
+    TExampleRunner.IsTestStopped = True
 End Sub
 
 Public Property Get Log() As Logger
     
-    If TypeName(mLogger) = "Nothing" Then
-        Set mLogger = New Logger
+    If TypeName(m_logger) = "Nothing" Then
+        Set m_logger = New Logger
     End If
-    Set Log = mLogger
+    Set Log = m_logger
 End Property
 
