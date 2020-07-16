@@ -19,49 +19,57 @@ End Function
 
 Private Sub exportCode()
 
-    Dim vcomSource As VBComponent
-    Dim strPath As String
-    Dim strSeparator As String
-    Dim strSuffix As String
+    Dim vbe_source_object As VBComponent
+    Dim base_path As String
+    Dim sub_path As String
+    Dim file_path As String
+    Dim path_separator As String
+    Dim file_suffix As String
     Dim export_logger As Logger
 
     On Error GoTo error_handler
     Set export_logger = New Logger
     #If MAC_OFFICE_VERSION >= 15 Then
         'in Office 2016 MAC M$ switched to / as path separator
-        strSeparator = "/"
+        path_separator = "/"
     #ElseIf Mac Then
-        strSeparator = ":"
+        path_separator = ":"
     #Else
-        strSeparator = "\"
+        path_separator = "\"
     #End If
     #If APP_NAME = "Microsoft Powerpoint" Then
-        strPath = ActivePresentation.Path & strSeparator & "source"
+        base_path = ActivePresentation.Path
     #ElseIf APP_NAME = "Microsoft Excel" Then
-        strPath = ThisWorkbook.Path & strSeparator & "source"
+        base_path = ThisWorkbook.Path
     #End If
-    For Each vcomSource In Application.VBE.VBProjects("Senfgurke").VBComponents
-        Select Case vcomSource.Type
+    For Each vbe_source_object In Application.VBE.VBProjects("Senfgurke").VBComponents
+        Select Case vbe_source_object.Type
             Case vbext_ct_StdModule
-                strSuffix = "bas"
+                file_suffix = "bas"
             Case vbext_ct_ClassModule
-                strSuffix = "cls"
+                file_suffix = "cls"
             Case vbext_ct_Document
-                strSuffix = "cls"
+                file_suffix = "cls"
             Case vbext_ct_MSForm
-                strSuffix = "frm"
+                file_suffix = "frm"
             Case Else
-                strSuffix = "txt"
+                file_suffix = "txt"
         End Select
+        If Left(vbe_source_object.Name, 1) = "T" Or vbe_source_object.Name = "ExtraVBA" Or vbe_source_object.Name = "Logger" Then
+            sub_path = "source"
+        Else
+            sub_path = "test"
+        End If
+        file_path = base_path & path_separator & sub_path & path_separator & vbe_source_object.Name & "." & file_suffix
         #If Mac Then
             'try not to change forms unless Microsoft offers full support for forms on the Mac!
-            If Not strSuffix = "frm" Then
-                vcomSource.Export strPath & strSeparator & vcomSource.Name & "." & strSuffix
+            If Not file_suffix = "frm" Then
+                vbe_source_object.Export file_path
             End If
         #Else
-            vcomSource.Export strPath & strSeparator & vcomSource.Name & "." & strSuffix
+            vbe_source_object.Export file_path
         #End If
-        export_logger.Log "export code to " & strPath & strSeparator & vcomSource.Name & "." & strSuffix
+        export_logger.Log "export code to " & file_path
     Next
     Exit Sub
 

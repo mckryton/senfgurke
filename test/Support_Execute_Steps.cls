@@ -2,13 +2,11 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "TFeatureTemplate"
+Attribute VB_Name = "Support_Execute_Steps"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'this is a template for new example driven tests
-
 Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
@@ -16,8 +14,7 @@ Const cTags = ""
 
 Public Property Get description() As String
 
-    description = "Add a description" & vbLf & _
-                    vbTab & "to explain your features purpose."
+    description = "sample feature object for testing the framework"
 End Property
 
 Public Sub test_examples()
@@ -26,14 +23,6 @@ Public Sub test_examples()
     Dim example As Variant
 
     Set examples = New Collection
-    example = Array("Rule: specify a rule to classify the following examples")
-    examples.Add example
-    example = Array("Example: add a headline to identify this example", _
-                        "Given a precondition", _
-                        "And another precondition", _
-                        "When any action happens", _
-                        "Then some result is expected")
-    examples.Add example
     
     For Each example In examples
         TExampleRunner.run_example example, Me
@@ -46,13 +35,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     
     Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
         
-        Case "Given a precondition"
-           
-        Case "Given another precondition"
-            
-        Case "When any action happens"
-
-        Case "Then some result is expected"
+        Case "Given a step with an empty implementation"
         
         Case Else
             Err.raise ERR_ID_STEP_IS_MISSING
@@ -83,4 +66,6 @@ End Sub
 Private Property Get Log() As Logger
     Set Log = TFeature.Log
 End Property
+
+
 

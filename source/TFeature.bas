@@ -3,7 +3,7 @@ Option Explicit
 
 Dim m_logger As Logger
 
-Public Function raise_step_error(err_id As Long, Optional err_msg) As Variant
+Public Function fail_step(err_id As Long, Optional err_msg) As Variant
  
     Dim err_desc As String
     
@@ -12,14 +12,14 @@ Public Function raise_step_error(err_id As Long, Optional err_msg) As Variant
     Else
         err_desc = err_msg
     End If
-    TExampleRunner.stop_test
+    TExampleRunner.stop_example
     Select Case err_id
     Case ERR_ID_STEP_IS_PENDING
-        raise_step_error = Array("PENDING", err_desc)
+        fail_step = Array("PENDING", err_desc)
     Case ERR_ID_STEP_IS_MISSING
-        raise_step_error = Array("MISSING")
+        fail_step = Array("MISSING")
     Case Else
-        raise_step_error = Array("FAILED", err_desc)
+        fail_step = Array("FAILED", err_desc)
     End Select
 End Function
 
