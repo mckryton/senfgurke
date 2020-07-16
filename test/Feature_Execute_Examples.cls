@@ -13,7 +13,7 @@ Option Explicit
 Const cTags = "wip"
 
 Dim m_example As Variant
-Dim m_example_attributes As Collection
+Dim m_step_attributes As Collection
 Dim m_test_feature_object As Variant
 Dim m_step_result As Variant
 
@@ -29,7 +29,7 @@ Public Sub test_examples()
     Dim example As Variant
 
     Set examples = New Collection
-    example = Array("Rule: Steps not starting with Given, When, Then or And will produces a Gherkin syntax error")
+    example = Array("Rule: Steps not starting with Given, When, Then or And will produce a Gherkin syntax error")
     examples.Add example
     example = Array("Example: missing step type", _
                         "Given an example with a step ""bla bla bla""", _
@@ -50,7 +50,7 @@ Public Sub test_examples()
                         "Then the step type is set to ""When""")
     examples.Add example
     
-    example = Array("Rule: step result is OK if the step is implemented")
+    example = Array("Rule: step result is OK if the step is implemented and does not raise an error")
     examples.Add example
     example = Array("Example: Empty test step", _
                         "Given an example with a step ""Given a step with an empty implementation""", _
@@ -100,23 +100,23 @@ Public Function run_step(pcolStepProps As Collection) As Variant
             Set m_test_feature_object = New Support_Execute_Steps
         
         Case "When the second step is read"
-            Set m_example_attributes = TExampleRunner.read_step(m_example, 2)
+            Set m_step_attributes = TExampleRunner.read_step(m_example, 2)
         
         Case "When the step is read"
-            Set m_example_attributes = TExampleRunner.read_step(m_example, 1)
+            Set m_step_attributes = TExampleRunner.read_step(m_example, 1)
             
         Case "When the step is executed"
             Set step_attributes = TExampleRunner.read_step(m_example, 1)
             m_step_result = TExampleRunner.execute_step(step_attributes, m_test_feature_object)
         
         Case "Then the step result is an Gherkin Syntax Error claiming ""bla"" is not a valid step type"
-            TSpec.expect(m_example_attributes(TExampleRunner.ATTR_ERROR)).to_be "Gherkin syntax error: >bla< is not a valid step type"
+            TSpec.expect(m_step_attributes(TExampleRunner.ATTR_ERROR)).to_be "Gherkin syntax error: >bla< is not a valid step type"
         
         Case "Then the step type is set to ""Given"""
-            TSpec.expect(m_example_attributes(TExampleRunner.ATTR_STEP_HEAD)).to_be "Given"
+            TSpec.expect(m_step_attributes(TExampleRunner.ATTR_STEP_HEAD)).to_be "Given"
             
         Case "Then the step type is set to ""When"""
-            TSpec.expect(m_example_attributes(TExampleRunner.ATTR_STEP_HEAD)).to_be "When"
+            TSpec.expect(m_step_attributes(TExampleRunner.ATTR_STEP_HEAD)).to_be "When"
             
         Case "Then the execution result is ""OK"""
             TSpec.expect(m_step_result(0)).to_be "OK"
@@ -137,7 +137,7 @@ End Sub
 
 Public Sub after_example()
     Set m_test_feature_object = Nothing
-    Set m_example_attributes = Nothing
+    Set m_step_attributes = Nothing
 End Sub
 
 Public Property Get Tags() As Variant
