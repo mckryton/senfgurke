@@ -23,9 +23,8 @@ Public Sub run_features(features As Variant, Optional pTags)
             run_test = test_has_tag(pTags, feature)
         End If
         If run_test Then
-            Debug.Print ""
-            Debug.Print "Test case: " & TypeName(feature)
-            Debug.Print vbTab & feature.description & vbLf
+            TReport.report TReport.TYPE_FEATURE_NAME, TypeName(feature)
+            TReport.report TReport.TYPE_DESC, feature.description
             feature.test_examples
             Set feature = Nothing
         End If
@@ -41,7 +40,7 @@ Private Function test_has_tag(pTags As Variant, pTesTFeature As Variant)
     
     test_has_tag = False
     input_tags = Split(Replace(pTags, " ", ""), ",")
-    feature_tags = Split(Replace(pTesTFeature.Tags, " ", ""), ",")
+    feature_tags = Split(Replace(pTesTFeature.tags, " ", ""), ",")
     For Each tag In input_tags
         match = Filter(feature_tags, tag, True, vbBinaryCompare)
         If UBound(match) > -1 Then
@@ -50,8 +49,8 @@ Private Function test_has_tag(pTags As Variant, pTesTFeature As Variant)
     Next
 End Function
 
-Public Property Get Log() As Logger
+Public Property Get log() As Logger
     
-    Set Log = TFeature.Log
+    Set log = TFeature.log
 End Property
 

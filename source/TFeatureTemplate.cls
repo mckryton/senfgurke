@@ -55,7 +55,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
         Case "Then some result is expected"
         
         Case Else
-            Err.raise ERR_ID_STEP_IS_MISSING
+            Err.Raise ERR_ID_STEP_IS_MISSING
     End Select
     run_step = Array("OK")
     Exit Function
@@ -72,15 +72,15 @@ Public Sub after()
 
 End Sub
 
-Public Property Get Tags() As Variant
-    Tags = cTags
+Public Property Get tags() As Variant
+    tags = cTags
 End Property
 
 Private Sub pending(pending_msg)
     TFeature.pending pending_msg
 End Sub
 
-Private Property Get Log() As Logger
-    Set Log = TFeature.Log
+Private Property Get log() As Logger
+    Set log = TFeature.log
 End Property
 

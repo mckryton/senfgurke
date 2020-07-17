@@ -13,49 +13,48 @@ Public Sub run_example(example_steps As Variant, feature_object As Variant)
 
     Dim step_index As Integer
     Dim step_attributes As Collection
+    Dim step_result As Variant
+    Dim err_msg As String
 
     On Error GoTo error_handler
     TExampleRunner.IsTestStopped = False
     step_index = 0
     Set step_attributes = read_step(example_steps, step_index)
     If LCase(step_attributes(ATTR_STEP_HEAD)) = "rule:" Then
-        print_rule step_attributes.Item(ATTR_WHOLE_STEP)
+        TReport.report TReport.TYPE_RULE, step_attributes.Item(ATTR_WHOLE_STEP)
         Exit Sub
     End If
     feature_object.before_example
-    print_scenario_title step_attributes.Item(ATTR_WHOLE_STEP)
+    validate_example_title_syntax step_attributes.Item(ATTR_WHOLE_STEP)
+    TReport.report TReport.TYPE_EXAMPLE_TITLE, step_attributes.Item(ATTR_WHOLE_STEP)
     step_index = step_index + 1
     Do While TExampleRunner.IsTestStopped = False And step_index <= UBound(example_steps)
         Set step_attributes = read_step(example_steps, step_index)
-        execute_step step_attributes, feature_object
+        step_result = execute_step(step_attributes, feature_object)
+        err_msg = vbNullString
+        If Not step_result(0) = "OK" Then
+            err_msg = step_result(1)
+            TExampleRunner.stop_example
+        End If
+        TReport.report TReport.TYPE_STEP, step_attributes.Item(ATTR_WHOLE_STEP), step_result(0), err_msg
         step_index = step_index + 1
     Loop
     If Not TExampleRunner.IsTestStopped Then
         feature_object.after_example
     End If
-    Debug.Print
     Exit Sub
     
 error_handler:
     If Err.Number = ERR_ID_SCENARIO_SYNTAX_ERROR Then
-        Log.error_log "syntax error: " & Err.description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
+        log.error_log "syntax error: " & Err.description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
     Else
-        Log.log_function_error "Runtime errror in TExampleRunner.runExample", Join(example_steps, vbTab & vbCr & vbLf)
+        log.log_function_error "Runtime errror in TExampleRunner.runExample", Join(example_steps, vbTab & vbCr & vbLf)
     End If
 End Sub
 
-Private Sub print_rule(pRule As String)
-    
-    Debug.Print vbTab & pRule
-    Debug.Print ""
-End Sub
-
-Private Sub print_scenario_title(example_title As String)
-    
+Private Sub validate_example_title_syntax(example_title As String)
     If LCase(Left(example_title, Len("Scenario:"))) <> "scenario:" And LCase(Left(example_title, Len("Example:"))) <> "example:" Then
-        Err.raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="can't find scenario start in >" & example_title & "<"
-    Else
-        Debug.Print vbTab & example_title
+        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="can't find scenario start in >" & example_title & "<"
     End If
 End Sub
 
@@ -66,14 +65,9 @@ Public Function execute_step(step_attributes As Collection, feature_object As Va
     Select Case step_attributes.Item(ATTR_STEP_HEAD)
     Case "Given", "When", "Then"
         step_result = feature_object.run_step(step_attributes)
-        'TODO: move output to separate report classes
-        Debug.Print vbTab & step_result(0), vbTab & step_attributes.Item(ATTR_WHOLE_STEP)
-        If step_result(0) = "FAILED" Or step_result(0) = "PENDING" Then
-            Debug.Print "", step_result(1)
-        End If
         execute_step = step_result
     Case Else
-        Err.raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
+        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
     End Select
 End Function
 
@@ -133,11 +127,11 @@ Public Sub stop_example()
     TExampleRunner.IsTestStopped = True
 End Sub
 
-Public Property Get Log() As Logger
+Public Property Get log() As Logger
     
     If TypeName(m_logger) = "Nothing" Then
         Set m_logger = New Logger
     End If
-    Set Log = m_logger
+    Set log = m_logger
 End Property
 

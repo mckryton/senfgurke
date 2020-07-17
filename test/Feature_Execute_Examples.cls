@@ -19,8 +19,8 @@ Dim m_step_result As Variant
 
 Public Property Get description() As String
 
-    description = "Senfgurke will validate the Gherkin syntax of the given examples" & vbLf & _
-                    vbTab & "and calculate a result for every step of the example."
+    description = "Senfgurke will validate the Gherkin syntax of the given examples" & vbLf _
+                   & "and calculate a result for every step of the example."
 End Property
 
 Public Sub test_examples()
@@ -50,13 +50,25 @@ Public Sub test_examples()
                         "Then the step type is set to ""When""")
     examples.Add example
     
-    example = Array("Rule: step result is OK if the step is implemented and does not raise an error")
+    example = Array("Rule: implemented test steps are OK if no error was raised, otherwise the steps FAIL")
     examples.Add example
     example = Array("Example: Empty test step", _
                         "Given an example with a step ""Given a step with an empty implementation""", _
-                        "And the step has an empty matching step implementation", _
+                        "And the step has a matching step implementation", _
                         "When the step is executed", _
                         "Then the execution result is ""OK""")
+    examples.Add example
+    example = Array("Example: test step does match expectation", _
+                        "Given an example with a step ""Given a step with a valid expectation""", _
+                        "And the step has a matching step implementation", _
+                        "When the step is executed", _
+                        "Then the execution result is ""OK""")
+    examples.Add example
+    example = Array("Example: test step does not match expectation", _
+                        "Given an example with a step ""Given a step with an invalid expectation""", _
+                        "And the step has a matching step implementation", _
+                        "When the step is executed", _
+                        "Then the execution result is ""FAIL""")
     examples.Add example
     
     
@@ -95,8 +107,16 @@ Public Function run_step(pcolStepProps As Collection) As Variant
         Case "Given an example with a step ""Given a step with an empty implementation"""
              m_example = Array("Example: Empty test step", _
                                 "Given a step with an empty implementation")
+            
+        Case "Given an example with a step ""Given a step with a valid expectation"""
+            m_example = Array("Example: Matching expectation", _
+                                "Given a step with a valid expectation")
+        
+        Case "Given an example with a step ""Given a step with an invalid expectation"""
+            m_example = Array("Example: Failing expectation", _
+                                "Given a step with an invalid expectation")
                                 
-        Case "Given the step has an empty matching step implementation"
+        Case "Given the step has a matching step implementation"
             Set m_test_feature_object = New Support_Execute_Steps
         
         Case "When the second step is read"
@@ -122,7 +142,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
             TSpec.expect(m_step_result(0)).to_be "OK"
         
         Case Else
-            Err.raise ERR_ID_STEP_IS_MISSING
+            Err.Raise ERR_ID_STEP_IS_MISSING
     End Select
     run_step = Array("OK")
     Exit Function
@@ -140,16 +160,16 @@ Public Sub after_example()
     Set m_step_attributes = Nothing
 End Sub
 
-Public Property Get Tags() As Variant
-    Tags = cTags
+Public Property Get tags() As Variant
+    tags = cTags
 End Property
 
 Private Sub pending(pending_msg)
     TFeature.pending pending_msg
 End Sub
 
-Private Property Get Log() As Logger
-    Set Log = TFeature.Log
+Private Property Get log() As Logger
+    Set log = TFeature.log
 End Property
 
 
