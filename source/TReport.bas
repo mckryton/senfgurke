@@ -54,11 +54,11 @@ Public Property Get Report_Formatter() As Variant
     If Not IsObject(m_report_formatter) Then
         Set m_report_formatter = New TReport_Formatter_Verbose
     End If
-    Set Reporter = m_report_formatter
+    Set Report_Formatter = m_report_formatter
 End Property
 
 Public Property Let Report_Formatter(ByVal new_report_formatter As Variant)
-    Set m_report_formatter = new_reporter
+    Set m_report_formatter = new_report_formatter
 End Property
 
 

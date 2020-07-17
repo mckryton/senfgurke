@@ -64,11 +64,11 @@ error_handler:
     run_step = TFeature.fail_step(Err.Number, Err.description)
 End Function
 
-Public Sub before()
+Public Sub before_example()
     
 End Sub
 
-Public Sub after()
+Public Sub after_example()
 
 End Sub
 
