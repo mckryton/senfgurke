@@ -17,71 +17,70 @@ Dim m_step_attributes As Collection
 Dim m_test_feature_object As Variant
 Dim m_step_result As Variant
 
-Public Property Get description() As String
+Public Property Get Description() As String
 
-    description = "Senfgurke will validate the Gherkin syntax of the given examples" & vbLf _
+    Description = "Senfgurke will validate the Gherkin syntax of the given examples" & vbLf _
                    & "and calculate a result for every step of the example."
 End Property
 
-Public Sub test_examples()
+' in the future this property shall be replaced with a function that parses text
+Public Property Get Examples() As Collection
 
-    Dim examples As Collection
+    Dim examples_list As Collection
     Dim example As Variant
 
-    Set examples = New Collection
+    Set examples_list = New Collection
     example = Array("Rule: Steps not starting with Given, When, Then or And will produce a Gherkin syntax error")
-    examples.Add example
+    examples_list.Add example
     example = Array("Example: missing step type", _
                         "Given an example with a step ""bla bla bla""", _
                         "When the step is read", _
                         "Then the step result is an Gherkin Syntax Error claiming ""bla"" is not a valid step type")
-    examples.Add example
+    examples_list.Add example
     
     example = Array("Rule: ""And"" and ""But"" are used as a synonym for the previous step type Given, When or Then")
-    examples.Add example
+    examples_list.Add example
     example = Array("Example: And as synonym for Given", _
                         "Given an example with two steps ""Given x is 1"" and ""And y is 2""", _
                         "When the second step is read", _
                         "Then the step type is set to ""Given""")
-    examples.Add example
+    examples_list.Add example
     example = Array("Example: But as synonym for When", _
                         "Given an example with two steps ""When some action happens"" and ""But it doesn't matter""", _
                         "When the second step is read", _
                         "Then the step type is set to ""When""")
-    examples.Add example
+    examples_list.Add example
     
     example = Array("Rule: implemented test steps are OK if no error was raised, otherwise the steps FAIL")
-    examples.Add example
+    examples_list.Add example
     example = Array("Example: Empty test step", _
                         "Given an example with a step ""Given a step with an empty implementation""", _
                         "And the step has a matching step implementation", _
                         "When the step is executed", _
                         "Then the execution result is ""OK""")
-    examples.Add example
+    examples_list.Add example
     example = Array("Example: test step does match expectation", _
                         "Given an example with a step ""Given a step with a valid expectation""", _
                         "And the step has a matching step implementation", _
                         "When the step is executed", _
                         "Then the execution result is ""OK""")
-    examples.Add example
+    examples_list.Add example
     example = Array("Example: test step does not match expectation", _
                         "Given an example with a step ""Given a step with an invalid expectation""", _
                         "And the step has a matching step implementation", _
                         "When the step is executed", _
                         "Then the execution result is ""FAIL""")
-    examples.Add example
+    examples_list.Add example
     
     
 '    example = Array("Rule: Every step will result in one of the states OK, FAILED, MISSING or PENDING")
-'    examples.Add example
+'    examples_list.Add example
 '
 '    example = Array("Rule: FAILED, MISSING and PENDING test steps will end the example execution and continue with the next example")
-'    examples.Add example
-    
-    For Each example In examples
-        TExampleRunner.run_example example, Me
-    Next
-End Sub
+'    examples_list.Add example
+
+    Set Examples = examples_list
+End Property
 
 Public Function run_step(pcolStepProps As Collection) As Variant
 
@@ -117,7 +116,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
                                 "Given a step with an invalid expectation")
                                 
         Case "Given the step has a matching step implementation"
-            Set m_test_feature_object = New Support_Execute_Steps
+            Set m_test_feature_object = New Support_Test_Feature_Class
         
         Case "When the second step is read"
             Set m_step_attributes = TExampleRunner.read_step(m_example, 2)
@@ -148,7 +147,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     Exit Function
 
 error_handler:
-    run_step = TFeature.fail_step(Err.Number, Err.description)
+    run_step = TFeature.fail_step(Err.Number, Err.Description)
 End Function
 
 Public Sub before_example()

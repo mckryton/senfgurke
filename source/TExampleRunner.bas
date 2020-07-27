@@ -46,7 +46,7 @@ Public Sub run_example(example_steps As Variant, feature_object As Variant)
     
 error_handler:
     If Err.Number = ERR_ID_SCENARIO_SYNTAX_ERROR Then
-        log.error_log "syntax error: " & Err.description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
+        log.error_log "syntax error: " & Err.Description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
     Else
         log.log_function_error "Runtime errror in TExampleRunner.runExample", Join(example_steps, vbTab & vbCr & vbLf)
     End If
@@ -54,7 +54,7 @@ End Sub
 
 Private Sub validate_example_title_syntax(example_title As String)
     If LCase(Left(example_title, Len("Scenario:"))) <> "scenario:" And LCase(Left(example_title, Len("Example:"))) <> "example:" Then
-        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="can't find scenario start in >" & example_title & "<"
+        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, Description:="can't find scenario start in >" & example_title & "<"
     End If
 End Sub
 
@@ -67,7 +67,7 @@ Public Function execute_step(step_attributes As Collection, feature_object As Va
         step_result = feature_object.run_step(step_attributes)
         execute_step = step_result
     Case Else
-        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
+        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, Description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
     End Select
 End Function
 

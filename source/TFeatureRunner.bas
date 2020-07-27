@@ -1,31 +1,26 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
 Attribute VB_Name = "TFeatureRunner"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = True
 Option Explicit
-
-Dim mLogger As Logger
 
 Public Sub run_features(features As Variant, Optional pTags)
     
     Dim all_features As Variant
     Dim feature As Variant
-    Dim run_test As Boolean
+    Dim should_test_run As Boolean
+    Dim examples_list As Collection
+    Dim example As Variant
 
     For Each feature In features
-        run_test = True
+        should_test_run = True
         If Not IsMissing(pTags) Then
-            run_test = test_has_tag(pTags, feature)
+            should_test_run = test_has_tag(pTags, feature)
         End If
-        If run_test Then
+        If should_test_run Then
             TReport.report TReport.TYPE_FEATURE_NAME, TypeName(feature)
-            TReport.report TReport.TYPE_DESC, feature.description
-            feature.test_examples
+            TReport.report TReport.TYPE_DESC, feature.Description
+            Set examples_list = feature.Examples
+            For Each example In examples_list
+                TExampleRunner.run_example example, feature
+            Next
             Set feature = Nothing
         End If
     Next
@@ -48,9 +43,3 @@ Private Function test_has_tag(pTags As Variant, pTesTFeature As Variant)
         End If
     Next
 End Function
-
-Public Property Get log() As Logger
-    
-    Set log = TFeature.log
-End Property
-

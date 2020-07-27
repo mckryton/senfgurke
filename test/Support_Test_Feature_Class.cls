@@ -2,45 +2,39 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "TFeatureTemplate"
+Attribute VB_Name = "Support_Test_Feature_Class"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'this is a template for new example driven tests
+'this class serves as a substitute for dynamically created code(step implementations)
 
 Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
 Const cTags = ""
+
 Dim m_description As String
 
 Public Property Get Description() As String
     
     If m_description = vbNullString Then
-        m_description = "Add a description" & vbLf _
-                            & "to explain your features purpose."
+        m_description = "sample feature object for testing the framework"
     End If
     Description = m_description
 End Property
 
-' in the future this property shall be replaced with a function that parses text
-Public Property Get Examples() As Collection
+Public Sub test_examples()
 
-    Dim examples_list As Collection
+    Dim Examples As Collection
     Dim example As Variant
 
-    Set examples_list = New Collection
-    example = Array("Rule: specify a rule to classify the following examples_list")
-    examples_list.Add example
-    example = Array("Example: add a headline to identify this example", _
-                        "Given a precondition", _
-                        "And another precondition", _
-                        "When any action happens", _
-                        "Then some result is expected")
-    examples_list.Add example
-    Set Examples = examples_list
-End Property
+    Set Examples = New Collection
+    
+    For Each example In Examples
+        TExampleRunner.run_example example, Me
+    Next
+End Sub
 
 Public Function run_step(pcolStepProps As Collection) As Variant
     
@@ -48,13 +42,13 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     
     Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
         
-        Case "Given a precondition"
-           
-        Case "Given another precondition"
-            
-        Case "When any action happens"
-
-        Case "Then some result is expected"
+        Case "Given a step with an empty implementation"
+        
+        Case "Given a step with a valid expectation"
+            TSpec.expect(1).to_be 1
+        
+        Case "Given a step with an invalid expectation"
+            TSpec.expect(1).to_be 2
         
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
@@ -66,11 +60,11 @@ error_handler:
     run_step = TFeature.fail_step(Err.Number, Err.Description)
 End Function
 
-Public Sub before_example()
+Public Sub before()
     
 End Sub
 
-Public Sub after_example()
+Public Sub after()
 
 End Sub
 
@@ -89,4 +83,3 @@ End Property
 Public Property Let Description(ByVal new_description As String)
     m_description = new_description
 End Property
-
