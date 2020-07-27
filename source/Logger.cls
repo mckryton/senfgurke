@@ -20,7 +20,7 @@ Const LINE_BREAK = vbCr & vbLf
 'current log level - decreasing log level means decreasing amount of messages
 Dim mLogLevel As Integer
 
-Public Sub log(pLogMsg As String, Optional pMsgLogLevel)
+Public Sub Log(pLogMsg As String, Optional pMsgLogLevel)
 
     Dim msg_log_level As Integer
     Dim log_msg As String
@@ -59,7 +59,7 @@ Public Sub log_function_error(pFunctionName As String, Optional pLogMsg As Varia
     log_msg = Time & " error:" & LINE_BREAK & _
                 vbTab & "source:" & vbTab & Err.Source & LINE_BREAK & _
                 vbTab & "caller:" & vbTab & pFunctionName & LINE_BREAK & _
-                vbTab & "desc:" & vbTab & Err.description & LINE_BREAK
+                vbTab & "desc:" & vbTab & Err.Description & LINE_BREAK
     If Not IsMissing(pLogMsg) Then
         log_msg = log_msg & vbTab & "custom:" & vbTab & pLogMsg
     End If
@@ -67,23 +67,23 @@ Public Sub log_function_error(pFunctionName As String, Optional pLogMsg As Varia
 End Sub
 
 Public Sub debug_log(pLogMsg As String)
-    Me.log pLogMsg, LVL_DEBUG
+    Me.Log pLogMsg, LVL_DEBUG
 End Sub
 
 Public Sub info_log(pLogMsg As String)
-    Me.log pLogMsg, LVL_INFO
+    Me.Log pLogMsg, LVL_INFO
 End Sub
 
 Public Sub warning_log(pLogMsg As String)
-    Me.log pLogMsg, LVL_WARNING
+    Me.Log pLogMsg, LVL_WARNING
 End Sub
 
 Public Sub error_log(pLogMsg As String)
-    Me.log pLogMsg, LVL_ERROR
+    Me.Log pLogMsg, LVL_ERROR
 End Sub
 
 Public Sub critical_log(pLogMsg As String)
-    Me.log pLogMsg, LVL_CRITICAL
+    Me.Log pLogMsg, LVL_CRITICAL
 End Sub
 
 Public Property Get LogLevel() As Integer

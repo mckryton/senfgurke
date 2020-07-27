@@ -1,8 +1,6 @@
 Attribute VB_Name = "TFeature"
 Option Explicit
 
-Dim m_logger As Logger
-
 Public Function fail_step(err_id As Long, Optional err_msg) As Variant
  
     Dim err_desc As String
@@ -23,17 +21,6 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
 End Function
 
 Public Sub pending(pending_msg)
-    Err.Raise ERR_ID_STEP_IS_PENDING, description:=pending_msg
+    Err.Raise ERR_ID_STEP_IS_PENDING, Description:=pending_msg
 End Sub
 
-Public Property Get log() As Logger
-    
-    If m_logger Is Nothing Then
-        Set m_logger = New Logger
-    End If
-    Set log = m_logger
-End Property
-
-Public Property Let log(ByVal new_Logger As Logger)
-    Set m_logger = new_Logger
-End Property

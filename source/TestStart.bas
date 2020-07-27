@@ -4,7 +4,7 @@ Option Explicit
 Public Sub run_tests(Optional tags, Optional report_format)
     
     Dim features As Variant
-    Dim log As Logger
+    Dim Log As Logger
     Dim Reporter As Variant
 
     If IsMissing(report_format) Then
@@ -12,7 +12,7 @@ Public Sub run_tests(Optional tags, Optional report_format)
     Else
         Debug.Print "PENDING: support for mutliple report formats"
     End If
-    Set log = New Logger
+    Set Log = New Logger
     features = Array(New Feature_Execute_Examples, New Feature_Verbose_Output)
     TFeatureRunner.run_features features, tags
 End Sub

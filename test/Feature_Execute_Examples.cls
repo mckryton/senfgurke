@@ -167,9 +167,5 @@ Private Sub pending(pending_msg)
     TFeature.pending pending_msg
 End Sub
 
-Private Property Get log() As Logger
-    Set log = TFeature.log
-End Property
-
 
 

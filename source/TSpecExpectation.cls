@@ -125,6 +125,6 @@ End Sub
 
 Private Sub raise_expectation_err(pFailMsg)
     
-    Err.Raise Number:=TErrorDef.ERR_ID_EXPECTATION_FAILED, description:=pFailMsg
+    Err.Raise Number:=TErrorDef.ERR_ID_EXPECTATION_FAILED, Description:=pFailMsg
 End Sub
 

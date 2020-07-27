@@ -69,7 +69,7 @@ Private Sub exportCode()
         #Else
             vbe_source_object.Export file_path
         #End If
-        export_logger.log "export code to " & file_path
+        export_logger.Log "export code to " & file_path
     Next
     Exit Sub
 

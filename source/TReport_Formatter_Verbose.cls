@@ -33,8 +33,8 @@ Public Sub print_feature_name(feature_name As String)
     Debug.Print format_feature_name(feature_name)
 End Sub
 
-Public Sub print_description(description As String)
-    Debug.Print format_description(description)
+Public Sub print_description(Description As String)
+    Debug.Print format_description(Description)
 End Sub
 
 Public Sub print_rule(rule As String)
@@ -56,8 +56,8 @@ Public Function format_feature_name(feature_name As String) As String
     format_feature_name = vbLf & "Test case: " & feature_name
 End Function
 
-Public Function format_description(description As String) As String
-    format_description = vbTab & Join(Split(description, vbLf), vbLf + vbTab)
+Public Function format_description(Description As String) As String
+    format_description = vbTab & Join(Split(Description, vbLf), vbLf + vbTab)
 End Function
 
 Public Function format_rule(rule As String) As String

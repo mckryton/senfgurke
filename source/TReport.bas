@@ -13,6 +13,7 @@ Public Const TYPE_EXAMPLE_TITLE = "example_title"
 Public Const TYPE_STEP = "step"
 
 Dim m_report_formatter As Variant
+Dim m_logger As Logger
 
 Public Sub report(message_type As String, message_content As String, Optional status, Optional err_msg)
 
@@ -61,4 +62,10 @@ Public Property Let Report_Formatter(ByVal new_report_formatter As Variant)
     Set m_report_formatter = new_report_formatter
 End Property
 
+Public Property Get Log() As Logger
 
+    If m_logger Is Nothing Then
+        Set m_logger = New Logger
+    End If
+    Set Log = m_logger
+End Property

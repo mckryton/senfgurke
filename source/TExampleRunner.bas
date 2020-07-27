@@ -6,7 +6,6 @@ Public Const ATTR_STEP_BODY = "step_body"
 Public Const ATTR_WHOLE_STEP = "whole_step"
 Public Const ATTR_ERROR = "error"
 
-Dim m_logger As Logger
 Dim m_is_test_stopped As Boolean
 
 Public Sub run_example(example_steps As Variant, feature_object As Variant)
@@ -46,9 +45,9 @@ Public Sub run_example(example_steps As Variant, feature_object As Variant)
     
 error_handler:
     If Err.Number = ERR_ID_SCENARIO_SYNTAX_ERROR Then
-        log.error_log "syntax error: " & Err.Description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
+        TReport.Log.error_log "syntax error: " & Err.Description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
     Else
-        log.log_function_error "Runtime errror in TExampleRunner.runExample", Join(example_steps, vbTab & vbCr & vbLf)
+        TReport.Log.log_function_error "Runtime errror in TExampleRunner.runExample", Join(example_steps, vbTab & vbCr & vbLf)
     End If
 End Sub
 
@@ -126,12 +125,3 @@ End Property
 Public Sub stop_example()
     TExampleRunner.IsTestStopped = True
 End Sub
-
-Public Property Get log() As Logger
-    
-    If TypeName(m_logger) = "Nothing" Then
-        Set m_logger = New Logger
-    End If
-    Set log = m_logger
-End Property
-
