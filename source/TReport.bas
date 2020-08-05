@@ -22,12 +22,12 @@ Public Sub report(message_type As String, message_content As String, Optional st
     If Not Report_Formatter Is Nothing Then
         Set msg_package = New Collection
         If IsMissing(status) Then
-            msg_package.Add vbNull, TReport.MSG_STATUS
+            msg_package.Add vbNullString, TReport.MSG_STATUS
         Else
             msg_package.Add status, TReport.MSG_STATUS
         End If
         If IsMissing(err_msg) Then
-            msg_package.Add vbNull, TReport.MSG_ERR
+            msg_package.Add vbNullString, TReport.MSG_ERR
         Else
             msg_package.Add err_msg, TReport.MSG_ERR
         End If

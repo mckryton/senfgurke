@@ -11,8 +11,8 @@ Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
 Const cTags = "wip"
-Dim m_feature_desc As String
 Dim m_formatted_feature_desc As String
+Dim m_report_msg As Collection
 Dim m_verbose_formatter As TReport_Formatter_Verbose
 
 Public Property Get Description() As String
@@ -33,13 +33,13 @@ Public Property Get Examples() As Collection
     example = Array("Example: feature description with 2 lines", _
                     "Given a feature with a description ""description line 1 <newline> description line 2""", _
                     "And the report format is set to verbose", _
-                    "When the feature description is formatted", _
+                    "When the feature description is prepared for the report", _
                     "Then every line of the description is indented by one tab")
     examples_list.Add example
     example = Array("Example: feature description with a single line", _
                 "Given a feature with a description ""description line 1""", _
                 "And the report format is set to verbose", _
-                "When the feature description is formatted", _
+                "When the feature description is prepared for the report", _
                 "Then every line of the description is indented by one tab")
     examples_list.Add example
     example = Array("Rule: A step will be preceded with it's result in capital letters")
@@ -63,16 +63,16 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
     
         Case "Given a feature with a description ""description line 1 <newline> description line 2"""
-            m_feature_desc = "description line 1" & vbLf & "description line 2"
+            Set m_report_msg = TReport.build_msg_package(TReport.TYPE_DESC, "description line 1" & vbLf & "description line 2", vbNullString, vbNullString)
         
         Case "Given a feature with a description ""description line 1"""
-            m_feature_desc = "description line 1"
-    
+            Set m_report_msg = TReport.build_msg_package(TReport.TYPE_DESC, "description line 1", vbNullString, vbNullString)
+
         Case "Given the report format is set to verbose"
             Set m_verbose_formatter = New TReport_Formatter_Verbose
             
-        Case "When the feature description is formatted"
-            m_formatted_feature_desc = m_verbose_formatter.format_description(m_feature_desc)
+        Case "When the feature description is prepared for the report"
+            m_formatted_feature_desc = m_verbose_formatter.prepare_msg(m_report_msg)
             
         Case "Then every line of the description is indented by one tab"
             For Each desc_line In Split(m_formatted_feature_desc, vbLf)
