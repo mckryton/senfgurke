@@ -11,7 +11,9 @@ Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
 Const cTags = "wip"
-Dim m_test_feature_object As Support_Test_Feature_Class
+Dim m_feature_desc As String
+Dim m_formatted_feature_desc As String
+Dim m_verbose_formatter As TReport_Formatter_Verbose
 
 Public Property Get Description() As String
 
@@ -26,12 +28,19 @@ Public Property Get Examples() As Collection
     Dim example As Variant
 
     Set examples_list = New Collection
-    example = Array("Rule: verbose report will insert a tab after every linebreak in the dscription")
+    example = Array("Rule: verbose report will indent the feature description by one tab")
     examples_list.Add example
-    example = Array("Example: feature with description", _
-                    "Given a feature with a description ""this is the description of a feature""", _
-                    "When the feature is executed", _
-                    "Then the description is printed on the console with an extra tab inserted on the start of the second line")
+    example = Array("Example: feature description with 2 lines", _
+                    "Given a feature with a description ""description line 1 <newline> description line 2""", _
+                    "And the report format is set to verbose", _
+                    "When the feature description is formatted", _
+                    "Then every line of the description is indented by one tab")
+    examples_list.Add example
+    example = Array("Example: feature description with a single line", _
+                "Given a feature with a description ""description line 1""", _
+                "And the report format is set to verbose", _
+                "When the feature description is formatted", _
+                "Then every line of the description is indented by one tab")
     examples_list.Add example
     example = Array("Rule: A step will be preceded with it's result in capital letters")
     examples_list.Add example
@@ -47,13 +56,28 @@ Public Property Get Examples() As Collection
 End Property
 
 Public Function run_step(pcolStepProps As Collection) As Variant
+
+    Dim desc_line As Variant
     
     On Error GoTo error_handler
     Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
     
-        Case "Given a feature with a description ""this is the description <newline> of a feature"""
-            Set m_test_feature_object = New Support_Test_Feature_Class
-            m_test_feature_object.Description = "this is the description of a feature"
+        Case "Given a feature with a description ""description line 1 <newline> description line 2"""
+            m_feature_desc = "description line 1" & vbLf & "description line 2"
+        
+        Case "Given a feature with a description ""description line 1"""
+            m_feature_desc = "description line 1"
+    
+        Case "Given the report format is set to verbose"
+            Set m_verbose_formatter = New TReport_Formatter_Verbose
+            
+        Case "When the feature description is formatted"
+            m_formatted_feature_desc = m_verbose_formatter.format_description(m_feature_desc)
+            
+        Case "Then every line of the description is indented by one tab"
+            For Each desc_line In Split(m_formatted_feature_desc, vbLf)
+                TSpec.expect(Left(desc_line, 1)).to_be vbTab
+            Next
            
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
