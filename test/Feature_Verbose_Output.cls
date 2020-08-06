@@ -11,14 +11,15 @@ Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
 Const cTags = "wip"
-Dim m_formatted_feature_desc As String
+Dim m_report_output As String
 Dim m_report_msg As Collection
 Dim m_verbose_formatter As TReport_Formatter_Verbose
 
 Public Property Get Description() As String
 
-    Description = "The verbose formatter will show the test results" & vbLf _
-                    & "in a detailed format."
+    Description = "While executing examples senfgurke will send messages about progress" & vbLf _
+                    & "and success for reporting. The verbose formatter will turn those messages into" & vbLf _
+                    & " a verbose report that is printed on the debug console."
 End Property
 
 ' in the future this property shall be replaced with a function that parses text
@@ -31,27 +32,50 @@ Public Property Get Examples() As Collection
     example = Array("Rule: verbose report will indent the feature description by one tab")
     examples_list.Add example
     example = Array("Example: feature description with 2 lines", _
-                    "Given a feature with a description ""description line 1 <newline> description line 2""", _
-                    "And the report format is set to verbose", _
-                    "When the feature description is prepared for the report", _
-                    "Then every line of the description is indented by one tab")
+                "Given a feature with a description ""description line 1 <newline> description line 2""", _
+                "And the report format is set to verbose", _
+                "When the reported message is prepared as output for the report", _
+                "Then every line of the description is indented by one tab")
     examples_list.Add example
     example = Array("Example: feature description with a single line", _
                 "Given a feature with a description ""description line 1""", _
                 "And the report format is set to verbose", _
-                "When the feature description is prepared for the report", _
+                "When the reported message is prepared as output for the report", _
                 "Then every line of the description is indented by one tab")
     examples_list.Add example
-    example = Array("Rule: A step will be preceded with it's result in capital letters")
+    
+    example = Array("Rule: A step will be preceded with it's result in capital letters initially intendented by 1 tab " & vbLf _
+                    & "and then indented by 1 space and steps following after indented by 10 spaces")
     examples_list.Add example
-    example = Array("Rule: Rules and example titles will add an empty line before them")
+    example = Array("Example: successful step", _
+                "Given a step ""this is a step"" with the status ""OK""", _
+                "And the report format is set to verbose", _
+                "When the reported message is prepared as output for the report", _
+                "Then the step result is set to tab and "" OK       this is a step""")
     examples_list.Add example
-    example = Array("Rule: Failed steps will show the error message after the step")
+    example = Array("Example: failed step", _
+                "Given a step ""this is a step"" with the status ""FAILED""", _
+                "And the report format is set to verbose", _
+                "When the reported message is prepared as output for the report", _
+                "Then the step result is set to tab and "" FAILED   this is a step""")
     examples_list.Add example
-    example = Array("Rule: Pending steps will show a pending message after the step")
+    example = Array("Example: missing step", _
+                "Given a step ""this is a step"" with the status ""MISSING""", _
+                "And the report format is set to verbose", _
+                "When the reported message is prepared as output for the report", _
+                "Then the step result is set to tab and "" MISSING  this is a step""")
     examples_list.Add example
-    example = Array("Rule: Missing steps will show a code snippet after the step")
+    
+    example = Array("Rule: Rules and example titles will add an empty line before them " & vbLf _
+                    & "and indent following lines with 3 tabs")
     examples_list.Add example
+    
+'    example = Array("Rule: Failed steps will show the error message after the step")
+'    examples_list.Add example
+'    example = Array("Rule: Pending steps will show a pending message after the step")
+'    examples_list.Add example
+'    example = Array("Rule: Missing steps will show a code snippet after the step")
+'    examples_list.Add example
     Set Examples = examples_list
 End Property
 
@@ -71,13 +95,31 @@ Public Function run_step(pcolStepProps As Collection) As Variant
         Case "Given the report format is set to verbose"
             Set m_verbose_formatter = New TReport_Formatter_Verbose
             
-        Case "When the feature description is prepared for the report"
-            m_formatted_feature_desc = m_verbose_formatter.prepare_msg(m_report_msg)
+        Case "Given a step ""this is a step"" with the status ""OK"""
+            Set m_report_msg = TReport.build_msg_package(TReport.TYPE_STEP, "this is a step", "OK", vbNullString)
+            
+        Case "Given a step ""this is a step"" with the status ""FAILED"""
+            Set m_report_msg = TReport.build_msg_package(TReport.TYPE_STEP, "this is a step", "FAILED", vbNullString)
+        
+        Case "Given a step ""this is a step"" with the status ""MISSING"""
+            Set m_report_msg = TReport.build_msg_package(TReport.TYPE_STEP, "this is a step", "MISSING", vbNullString)
+            
+        Case "When the reported message is prepared as output for the report"
+            m_report_output = m_verbose_formatter.prepare_msg(m_report_msg)
             
         Case "Then every line of the description is indented by one tab"
-            For Each desc_line In Split(m_formatted_feature_desc, vbLf)
+            For Each desc_line In Split(m_report_output, vbLf)
                 TSpec.expect(Left(desc_line, 1)).to_be vbTab
             Next
+    
+        Case "Then the step result is set to tab and "" OK       this is a step"""
+            TSpec.expect(m_report_output).to_be vbTab & " OK       this is a step"
+        
+        Case "Then the step result is set to tab and "" FAILED   this is a step"""
+            TSpec.expect(m_report_output).to_be vbTab & " FAILED   this is a step"
+        
+        Case "Then the step result is set to tab and "" MISSING  this is a step"""
+            TSpec.expect(m_report_output).to_be vbTab & " MISSING  this is a step"
            
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING

@@ -42,9 +42,9 @@ Public Function format_step(step As String, status As String, err_msg As String)
     
     Dim formatted_msg As String
 
-    formatted_msg = vbTab & status & Space$(12) & step
+    formatted_msg = vbTab & " " & status & Space$(10 - 1 - Len(status)) & step
     If err_msg <> vbNullString Then
-        formatted_msg = formatted_msg & vbLf & Space$(12) & err_msg
+        formatted_msg = formatted_msg & vbLf & Space$(10) & err_msg
     End If
     format_step = formatted_msg
 End Function
