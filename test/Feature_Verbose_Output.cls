@@ -51,23 +51,30 @@ Public Property Get Examples() As Collection
                 "Given a step ""this is a step"" with the status ""OK""", _
                 "And the report format is set to verbose", _
                 "When the reported message is prepared as output for the report", _
-                "Then the step result is set to tab and "" OK       this is a step""")
+                "Then the resulting output is set to tab and "" OK       this is a step""")
     examples_list.Add example
     example = Array("Example: failed step", _
                 "Given a step ""this is a step"" with the status ""FAILED""", _
                 "And the report format is set to verbose", _
                 "When the reported message is prepared as output for the report", _
-                "Then the step result is set to tab and "" FAILED   this is a step""")
+                "Then the resulting output is set to tab and "" FAILED   this is a step""")
     examples_list.Add example
     example = Array("Example: missing step", _
                 "Given a step ""this is a step"" with the status ""MISSING""", _
                 "And the report format is set to verbose", _
                 "When the reported message is prepared as output for the report", _
-                "Then the step result is set to tab and "" MISSING  this is a step""")
+                "Then the resulting output is set to tab and "" MISSING  this is a step""")
     examples_list.Add example
     
     example = Array("Rule: Rules and example titles will add an empty line before them " & vbLf _
                     & "and indent following lines with 3 tabs")
+    examples_list.Add example
+    example = Array("Example: Rule over two lines", _
+                "Given a rule ""this is a sample rule<br>and this is line 2 of the same rule""", _
+                "And the report format is set to verbose", _
+                "When the reported message is prepared as output for the report", _
+                "Then the resulting output starts with a new line", _
+                "And every line after the first one is indented by 7 spaces")
     examples_list.Add example
     
 '    example = Array("Rule: Failed steps will show the error message after the step")
@@ -81,7 +88,9 @@ End Property
 
 Public Function run_step(pcolStepProps As Collection) As Variant
 
-    Dim desc_line As Variant
+    Dim output_line As Variant
+    Dim output_lines As Variant
+    Dim index As Integer
     
     On Error GoTo error_handler
     Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
@@ -103,23 +112,35 @@ Public Function run_step(pcolStepProps As Collection) As Variant
         
         Case "Given a step ""this is a step"" with the status ""MISSING"""
             Set m_report_msg = TReport.build_msg_package(TReport.TYPE_STEP, "this is a step", "MISSING", vbNullString)
+        
+        Case "Given a rule ""this is a sample rule<br>and this is line 2 of the same rule"""
+             Set m_report_msg = TReport.build_msg_package(TReport.TYPE_RULE, "this is a sample rule" & vbLf & "and this is line 2 of the same rule", vbNullString, vbNullString)
             
         Case "When the reported message is prepared as output for the report"
             m_report_output = m_verbose_formatter.prepare_msg(m_report_msg)
             
         Case "Then every line of the description is indented by one tab"
-            For Each desc_line In Split(m_report_output, vbLf)
-                TSpec.expect(Left(desc_line, 1)).to_be vbTab
+            For Each output_line In Split(m_report_output, vbLf)
+                TSpec.expect(Left(output_line, 1)).to_be vbTab
             Next
     
-        Case "Then the step result is set to tab and "" OK       this is a step"""
+        Case "Then the resulting output is set to tab and "" OK       this is a step"""
             TSpec.expect(m_report_output).to_be vbTab & " OK       this is a step"
         
-        Case "Then the step result is set to tab and "" FAILED   this is a step"""
+        Case "Then the resulting output is set to tab and "" FAILED   this is a step"""
             TSpec.expect(m_report_output).to_be vbTab & " FAILED   this is a step"
         
-        Case "Then the step result is set to tab and "" MISSING  this is a step"""
+        Case "Then the resulting output is set to tab and "" MISSING  this is a step"""
             TSpec.expect(m_report_output).to_be vbTab & " MISSING  this is a step"
+            
+        Case "Then the resulting output starts with a new line"
+            TSpec.expect(Left(m_report_output, 1)).to_be vbLf
+            
+        Case "Then every line after the first one is indented by 7 spaces"
+            output_lines = Split(m_report_output, vbLf)
+            For index = 2 To UBound(output_lines)
+                TSpec.expect(Left(output_lines(index), 7)).to_be Space$(7)
+            Next
            
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING

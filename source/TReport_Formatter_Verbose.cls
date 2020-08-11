@@ -62,5 +62,5 @@ Public Function format_feature_description(Description As String) As String
 End Function
 
 Public Function format_rule(rule As String) As String
-    format_rule = vbLf & vbTab & rule
+    format_rule = vbLf & Join(Split(rule, vbLf), vbLf + Space$(7))
 End Function
