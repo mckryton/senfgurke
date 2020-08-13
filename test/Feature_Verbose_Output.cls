@@ -77,8 +77,16 @@ Public Property Get Examples() As Collection
                 "And every line after the first one is indented by 7 spaces")
     examples_list.Add example
     
-'    example = Array("Rule: Failed steps will show the error message after the step")
-'    examples_list.Add example
+    example = Array("Rule: Failed steps will show the error message after the step indented")
+    examples_list.Add example
+    example = Array("Example: Step fails with an error message", _
+                "Given a step ""this step fails"" with status ""FAILED"" and with the error message ""err: sample err msg""", _
+                "And the report format is set to verbose", _
+                "When the reported message is prepared as output for the report", _
+                "Then the resulting output starts with the step status and description", _
+                "And the second line shows the indented error message")
+    examples_list.Add example
+    
 '    example = Array("Rule: Pending steps will show a pending message after the step")
 '    examples_list.Add example
 '    example = Array("Rule: Missing steps will show a code snippet after the step")
@@ -115,6 +123,9 @@ Public Function run_step(pcolStepProps As Collection) As Variant
         
         Case "Given a rule ""this is a sample rule<br>and this is line 2 of the same rule"""
              Set m_report_msg = TReport.build_msg_package(TReport.TYPE_RULE, "this is a sample rule" & vbLf & "and this is line 2 of the same rule", vbNullString, vbNullString)
+             
+        Case "Given a step ""this step fails"" with status ""FAILED"" and with the error message ""err: sample err msg"""
+            Set m_report_msg = TReport.build_msg_package(TReport.TYPE_STEP, "this step fails", "FAILED", "err: sample err msg")
             
         Case "When the reported message is prepared as output for the report"
             m_report_output = m_verbose_formatter.prepare_msg(m_report_msg)
@@ -141,6 +152,12 @@ Public Function run_step(pcolStepProps As Collection) As Variant
             For index = 2 To UBound(output_lines)
                 TSpec.expect(Left(output_lines(index), 7)).to_be Space$(7)
             Next
+            
+        Case "Then the resulting output starts with the step status and description"
+            TSpec.expect(Split(m_report_output, vbLf)(0)).to_be vbTab & " FAILED   this step fails"
+        
+        Case "Then the second line shows the indented error message"
+            TSpec.expect(Split(m_report_output, vbLf)(1)).to_be Space$(10) & "err: sample err msg"
            
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
