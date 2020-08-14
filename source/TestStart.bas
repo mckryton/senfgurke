@@ -13,7 +13,7 @@ Public Sub run_tests(Optional tags, Optional report_format)
         Debug.Print "PENDING: support for mutliple report formats"
     End If
     Set Log = New Logger
-    features = Array(New Feature_Execute_Examples, New Feature_Verbose_Output)
+    features = Array(New Feature_Run_Examples, New Feature_Verbose_Output)
     TFeatureRunner.run_features features, tags
 End Sub
 

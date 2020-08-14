@@ -2,13 +2,11 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "TFeatureTemplate"
+Attribute VB_Name = "Feature_Run_Tests"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'this is a template for new example driven tests
-
 Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
@@ -18,8 +16,8 @@ Dim m_description As String
 Public Property Get Description() As String
     
     If m_description = vbNullString Then
-        m_description = "Add a description" & vbLf _
-                            & "to explain your features purpose."
+        m_description = "The main purpose of senfgurke is to run tests containing" & vbLf _
+                            & "numerous examples used to describe distinct features."
     End If
     Description = m_description
 End Property
@@ -31,14 +29,14 @@ Public Property Get Examples() As Collection
     Dim example As Variant
 
     Set examples_list = New Collection
-    example = Array("Rule: specify a rule to classify the following examples_list")
+    example = Array("Rule: stop execution when the import of feature files fails")
     examples_list.Add example
-    example = Array("Example: add a headline to identify this example", _
-                        "Given a precondition", _
-                        "And another precondition", _
-                        "When any action happens", _
-                        "Then some result is expected")
-    examples_list.Add example
+'    example = Array("Example: import results with error message", _
+'                        "Given ", _
+'                        "When  ", _
+'                        "Then  ")
+'    examples_list.Add example
+
     Set Examples = examples_list
 End Property
 
@@ -85,3 +83,7 @@ End Sub
 Public Property Let Description(ByVal new_description As String)
     m_description = new_description
 End Property
+
+
+
+

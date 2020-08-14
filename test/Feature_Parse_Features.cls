@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Feature_Execute_Examples"
+Attribute VB_Name = "Feature_Parse_Features"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -11,16 +11,18 @@ Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
 Const cTags = ""
+Dim m_description As String
 
 Dim m_example As Variant
 Dim m_step_attributes As Collection
-Dim m_test_feature_object As Variant
-Dim m_step_result As Variant
 
 Public Property Get Description() As String
-
-    Description = "Senfgurke will validate the Gherkin syntax of the given examples" & vbLf _
-                   & "and calculate a result for every step of the example."
+    
+    If m_description = vbNullString Then
+        m_description = "Senfgurke will read feature specs from text" & vbLf _
+                            & "and identify it's elements like descriptions, rules and examples"
+    End If
+    Description = m_description
 End Property
 
 ' in the future this property shall be replaced with a function that parses text
@@ -30,6 +32,23 @@ Public Property Get Examples() As Collection
     Dim example As Variant
 
     Set examples_list = New Collection
+    example = Array("Rule: skip features not starting with the a feature keyword otherwise create a new feature")
+    examples_list.Add example
+    example = Array("Example: invalid feature spec", _
+                        "Given a precondition", _
+                        "And another precondition", _
+                        "When any action happens", _
+                        "Then some result is expected")
+    examples_list.Add example
+    example = Array("Example: feature starts with Ability:", _
+                        "Given a precondition", _
+                        "And another precondition", _
+                        "When any action happens", _
+                        "Then some result is expected")
+    examples_list.Add example
+    
+    example = Array("Rule: ignore trailing white space")
+    
     example = Array("Rule: Steps not starting with Given, When, Then or And will produce a Gherkin syntax error")
     examples_list.Add example
     example = Array("Example: missing step type", _
@@ -51,48 +70,19 @@ Public Property Get Examples() As Collection
                         "Then the step type is set to ""When""")
     examples_list.Add example
     
-    example = Array("Rule: implemented test steps are OK if no error was raised, otherwise the steps FAIL")
-    examples_list.Add example
-    example = Array("Example: Empty test step", _
-                        "Given an example with a step ""Given a step with an empty implementation""", _
-                        "And the step has a matching step implementation", _
-                        "When the step is executed", _
-                        "Then the execution result is ""OK""")
-    examples_list.Add example
-    example = Array("Example: test step does match expectation", _
-                        "Given an example with a step ""Given a step with a valid expectation""", _
-                        "And the step has a matching step implementation", _
-                        "When the step is executed", _
-                        "Then the execution result is ""OK""")
-    examples_list.Add example
-    example = Array("Example: test step does not match expectation", _
-                        "Given an example with a step ""Given a step with an invalid expectation""", _
-                        "And the step has a matching step implementation", _
-                        "When the step is executed", _
-                        "Then the execution result is ""FAIL""")
-    examples_list.Add example
-    
-    
-'    example = Array("Rule: Every step will result in one of the states OK, FAILED, MISSING or PENDING")
-'    examples_list.Add example
-'
-'    example = Array("Rule: FAILED, MISSING and PENDING test steps will end the example execution and continue with the next example")
-'    examples_list.Add example
-
     Set Examples = examples_list
 End Property
 
 Public Function run_step(pcolStepProps As Collection) As Variant
-
-    Dim step_attributes As Collection
     
     On Error GoTo error_handler
-    Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
     
+    Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
+        
         Case "Given an example with a step ""bla bla bla"""
             m_example = Array("Example: Gherkin syntax error", _
                                 "bla bla bla")
-                        
+           
         Case "Given an example with two steps ""Given x is 1"" and ""And y is 2"""
             m_example = Array("Example: Using And as Given", _
                                 "Given x is 1", _
@@ -102,32 +92,13 @@ Public Function run_step(pcolStepProps As Collection) As Variant
             m_example = Array("Example: Using But as When", _
                                 "When some action happens", _
                                 "But it doesn't matter")
-        
-        Case "Given an example with a step ""Given a step with an empty implementation"""
-             m_example = Array("Example: Empty test step", _
-                                "Given a step with an empty implementation")
             
-        Case "Given an example with a step ""Given a step with a valid expectation"""
-            m_example = Array("Example: Matching expectation", _
-                                "Given a step with a valid expectation")
-        
-        Case "Given an example with a step ""Given a step with an invalid expectation"""
-            m_example = Array("Example: Failing expectation", _
-                                "Given a step with an invalid expectation")
-                                
-        Case "Given the step has a matching step implementation"
-            Set m_test_feature_object = New Support_Test_Feature_Class
+        Case "When the step is read"
+            Set m_step_attributes = TExampleRunner.read_step(m_example, 1)
         
         Case "When the second step is read"
             Set m_step_attributes = TExampleRunner.read_step(m_example, 2)
-        
-        Case "When the step is read"
-            Set m_step_attributes = TExampleRunner.read_step(m_example, 1)
-            
-        Case "When the step is executed"
-            Set step_attributes = TExampleRunner.read_step(m_example, 1)
-            m_step_result = TExampleRunner.execute_step(step_attributes, m_test_feature_object)
-        
+
         Case "Then the step result is an Gherkin Syntax Error claiming ""bla"" is not a valid step type"
             TSpec.expect(m_step_attributes(TExampleRunner.ATTR_ERROR)).to_be "Gherkin syntax error: >bla< is not a valid step type"
         
@@ -137,9 +108,6 @@ Public Function run_step(pcolStepProps As Collection) As Variant
         Case "Then the step type is set to ""When"""
             TSpec.expect(m_step_attributes(TExampleRunner.ATTR_STEP_HEAD)).to_be "When"
             
-        Case "Then the execution result is ""OK"""
-            TSpec.expect(m_step_result(0)).to_be "OK"
-        
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
     End Select
@@ -155,7 +123,6 @@ Public Sub before_example()
 End Sub
 
 Public Sub after_example()
-    Set m_test_feature_object = Nothing
     Set m_step_attributes = Nothing
 End Sub
 
@@ -167,5 +134,7 @@ Private Sub pending(pending_msg)
     TFeature.pending pending_msg
 End Sub
 
-
+Public Property Let Description(ByVal new_description As String)
+    m_description = new_description
+End Property
 
