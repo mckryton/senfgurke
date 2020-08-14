@@ -29,14 +29,7 @@ Private Sub exportCode()
 
     On Error GoTo error_handler
     Set export_logger = New Logger
-    #If MAC_OFFICE_VERSION >= 15 Then
-        'in Office 2016 MAC M$ switched to / as path separator
-        path_separator = "/"
-    #ElseIf Mac Then
-        path_separator = ":"
-    #Else
-        path_separator = "\"
-    #End If
+    path_separator = get_path_separator
     #If APP_NAME = "Microsoft Powerpoint" Then
         base_path = ActivePresentation.Path
     #ElseIf APP_NAME = "Microsoft Excel" Then
@@ -76,3 +69,18 @@ Private Sub exportCode()
 error_handler:
     export_logger.log_function_error "ExtraVBA.exportCode"
 End Sub
+
+Public Function get_path_separator() As String
+    
+    ' word and excel return path separator via Application.PathSeparator
+    '  but this property is missing in Powerpoint
+
+    #If MAC_OFFICE_VERSION >= 15 Then
+        'in Office 2016 MAC M$ switched to / as path separator
+        get_path_separator = "/"
+    #ElseIf Mac Then
+        get_path_separator = ":"
+    #Else
+        get_path_separator = "\"
+    #End If
+End Function
