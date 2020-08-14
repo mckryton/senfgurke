@@ -55,10 +55,10 @@ Private Sub exportCode()
             Case Else
                 file_suffix = "txt"
         End Select
-        If Left(vbe_source_object.Name, 1) = "T" Or vbe_source_object.Name = "ExtraVBA" Or vbe_source_object.Name = "Logger" Then
-            sub_path = "source"
+        If Left(vbe_source_object.Name, 6) = "Steps_" Or Left(vbe_source_object.Name, 8) = "Support_" Then
+            sub_path = "step_definitions"
         Else
-            sub_path = "test"
+            sub_path = "source"
         End If
         file_path = base_path & path_separator & sub_path & path_separator & vbe_source_object.Name & "." & file_suffix
         #If Mac Then
