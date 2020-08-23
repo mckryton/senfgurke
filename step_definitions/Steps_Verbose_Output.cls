@@ -10,7 +10,7 @@ Attribute VB_Exposed = True
 Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
-Const cTags = "wip"
+Const cTags = ""
 Dim m_report_output As String
 Dim m_report_msg As Collection
 Dim m_verbose_formatter As TReport_Formatter_Verbose

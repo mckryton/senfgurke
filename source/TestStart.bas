@@ -11,7 +11,7 @@ Public Sub run_tests(Optional tags, Optional report_format)
     Else
         Debug.Print "PENDING: support for mutliple report formats"
     End If
-    step_definitions = Array(New Steps_Run_Examples, New Steps_Verbose_Output)
+    step_definitions = Array(New Steps_Run_Examples, New Steps_Verbose_Output, New Steps_Import_Feature_Files, New Steps_Parse_Features)
     TFeatureRunner.run_features step_definitions, tags
 End Sub
 
