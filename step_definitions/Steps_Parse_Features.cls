@@ -10,13 +10,14 @@ Attribute VB_Exposed = False
 Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
-Const cTags = ""
+Const cTags = "wip"
 Dim m_description As String
 
 'module variables used for steps
 Dim m_feature_text As String
 Dim m_example As Variant
 Dim m_step_attributes As Collection
+Dim m_parsed_feature As Collection
 
 Public Property Get Description() As String
     
@@ -37,10 +38,32 @@ Public Property Get Examples() As Collection
     example = Array("Rule: parse features spec only if it's starting with ""Feature:"" keyword or synonyms or has preceding tags")
     examples_list.Add example
     example = Array("Example: feature spec without feature keyword", _
-                        "Given feature ""this is just some text <br> without a feature keyword""", _
+                        "Given a feature ""this is just some text <br> without a feature keyword""", _
                         "When the feature is parsed", _
                         "Then the parsing results in the error message ""Feature lacks feature keyword at the beginning""")
     examples_list.Add example
+    
+    example = Array("Rule: elements of the features are identified by lines starting with <optional whitespace><keyword>:")
+    examples_list.Add example
+    example = Array("Example: feature containing one rule and one example", _
+                        "Given a feature named ""sample feature""", _
+                        "And the feature includes a rule ""this is a sample rule""", _
+                        "And the feature includes an example ""this is an example""", _
+                        "When the feature is parsed", _
+                        "Then the parsed result contains a separate item for each of the given elements")
+    examples_list.Add example
+    
+    example = Array("Rule: every line after a keyword up to the next keyword line or until the first example step in a example clause " _
+                        & " is considered to be description except comment lines")
+    examples_list.Add example
+    ' examples:
+    '   feature description includes comment
+    '   feature starts with comment
+    '   rule has description
+    '   example has description and steps
+    '   feature has example step as description
+    '
+    
     
 '    example = Array("Rule: translate synonyms ""Ability,Business Needs"" to ""Feature""")
 '    examples_list.Add example
@@ -87,7 +110,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     
     Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
         
-        Case "Given feature ""this is just some text <br> without a feature keyword"""
+        Case "Given a feature ""this is just some text <br> without a feature keyword"""
             m_feature_text = Replace("this is just some text <br> without a feature keyword", " <br> ", vbLf)
         
         Case "Given an example with a step ""bla bla bla"""
@@ -104,8 +127,17 @@ Public Function run_step(pcolStepProps As Collection) As Variant
                                 "When some action happens", _
                                 "But it doesn't matter")
             
+        Case "Given a feature named ""sample feature"""
+            m_feature_text = "Feature: sample feature"
+        
+        Case "Given the feature includes a rule ""this is a sample rule"""
+            m_feature_text = m_feature_text & vbLf & "Rule: this is a sample rule"
+            
+        Case "Given the feature includes an example ""this is an example"""
+            m_feature_text = m_feature_text & vbLf & "Example: this is an example"
+            
         Case "When the feature is parsed"
-            pending "parse feature text"
+            Set m_parsed_feature = TFeatureParse.parse_feature(m_feature_text)
         
         Case "When the step is read"
             Set m_step_attributes = TExampleRunner.read_step(m_example, 1)
@@ -113,6 +145,9 @@ Public Function run_step(pcolStepProps As Collection) As Variant
         Case "When the second step is read"
             Set m_step_attributes = TExampleRunner.read_step(m_example, 2)
 
+        Case "Then the parsing results in the error message ""Feature lacks feature keyword at the beginning"""
+            TSpec.expect(m_parsed_feature("error")).to_be "Feature lacks feature keyword at the beginning"
+        
         Case "Then the step result is an Gherkin Syntax Error claiming ""bla"" is not a valid step type"
             TSpec.expect(m_step_attributes(TExampleRunner.ATTR_ERROR)).to_be "Gherkin syntax error: >bla< is not a valid step type"
         
@@ -121,6 +156,15 @@ Public Function run_step(pcolStepProps As Collection) As Variant
             
         Case "Then the step type is set to ""When"""
             TSpec.expect(m_step_attributes(TExampleRunner.ATTR_STEP_HEAD)).to_be "When"
+            
+        Case "Then the parsed result contains a separate item for each of the given elements"
+            TSpec.expect(m_parsed_feature.Count).to_be 3
+            TSpec.expect(m_parsed_feature(1)("type")).to_be TFeature.CLAUSE_TYPE_FEATURE
+            TSpec.expect(m_parsed_feature(1)("name")).to_be "sample feature"
+            TSpec.expect(m_parsed_feature(2)("type")).to_be TFeature.CLAUSE_TYPE_RULE
+            TSpec.expect(m_parsed_feature(2)("name")).to_be "this is a sample rule"
+            TSpec.expect(m_parsed_feature(3)("type")).to_be TFeature.CLAUSE_TYPE_EXAMPLE
+            TSpec.expect(m_parsed_feature(3)("name")).to_be "this is an example"
             
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING

@@ -1,6 +1,11 @@
 Attribute VB_Name = "TFeature"
 Option Explicit
 
+Public Const CLAUSE_TYPE_FEATURE = "feature"
+Public Const CLAUSE_TYPE_RULE = "rule"
+Public Const CLAUSE_TYPE_EXAMPLE = "example"
+
+
 Public Function fail_step(err_id As Long, Optional err_msg) As Variant
  
     Dim err_desc As String
