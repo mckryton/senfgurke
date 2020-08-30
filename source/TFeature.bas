@@ -5,7 +5,6 @@ Public Const CLAUSE_TYPE_FEATURE = "feature"
 Public Const CLAUSE_TYPE_RULE = "rule"
 Public Const CLAUSE_TYPE_EXAMPLE = "example"
 
-
 Public Function fail_step(err_id As Long, Optional err_msg) As Variant
  
     Dim err_desc As String
@@ -26,6 +25,6 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
 End Function
 
 Public Sub pending(pending_msg)
-    Err.Raise ERR_ID_STEP_IS_PENDING, Description:=pending_msg
+    Err.Raise ERR_ID_STEP_IS_PENDING, description:=pending_msg
 End Sub
 

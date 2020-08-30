@@ -45,7 +45,7 @@ Public Sub run_example(example_steps As Variant, feature_object As Variant)
     
 error_handler:
     If Err.Number = ERR_ID_SCENARIO_SYNTAX_ERROR Then
-        TReport.Log.error_log "syntax error: " & Err.Description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
+        TReport.Log.error_log "syntax error: " & Err.description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
     Else
         TReport.Log.log_function_error "Runtime errror in TExampleRunner.runExample", Join(example_steps, vbTab & vbCr & vbLf)
     End If
@@ -53,7 +53,7 @@ End Sub
 
 Private Sub validate_example_title_syntax(example_title As String)
     If LCase(Left(example_title, Len("Scenario:"))) <> "scenario:" And LCase(Left(example_title, Len("Example:"))) <> "example:" Then
-        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, Description:="can't find scenario start in >" & example_title & "<"
+        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="can't find scenario start in >" & example_title & "<"
     End If
 End Sub
 
@@ -66,7 +66,7 @@ Public Function execute_step(step_attributes As Collection, feature_object As Va
         step_result = feature_object.run_step(step_attributes)
         execute_step = step_result
     Case Else
-        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, Description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
+        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
     End Select
 End Function
 
@@ -79,10 +79,10 @@ Public Function read_step(example As Variant, step_index As Integer) As Collecti
     Dim step_body As String
     Dim step_words As Variant
     
-    whole_step = Trim(example(step_index))
+    whole_step = trim(example(step_index))
     step_words = Split(whole_step, " ")
     step_head = step_words(0)
-    step_body = Trim(Right(whole_step, Len(whole_step) - Len(step_head)))
+    step_body = trim(Right(whole_step, Len(whole_step) - Len(step_head)))
     Set step_attributes = New Collection
     With step_attributes
         .Add whole_step, ATTR_WHOLE_STEP

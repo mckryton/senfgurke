@@ -15,13 +15,13 @@ Option Explicit
 Const cTags = ""
 Dim m_description As String
 
-Public Property Get Description() As String
+Public Property Get description() As String
     
     If m_description = vbNullString Then
         m_description = "Add a description" & vbLf _
                             & "to explain your features purpose."
     End If
-    Description = m_description
+    description = m_description
 End Property
 
 ' in the future this property shall be replaced with a function that parses text
@@ -46,7 +46,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     
     On Error GoTo error_handler
     
-    Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
+    Select Case pcolStepProps.Item(ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
         
         Case "Given a precondition"
            
@@ -63,7 +63,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     Exit Function
 
 error_handler:
-    run_step = TFeature.fail_step(Err.Number, Err.Description)
+    run_step = TFeature.fail_step(Err.Number, Err.description)
 End Function
 
 Public Sub before_example()
@@ -82,6 +82,6 @@ Private Sub pending(pending_msg)
     TFeature.pending pending_msg
 End Sub
 
-Public Property Let Description(ByVal new_description As String)
+Public Property Let description(ByVal new_description As String)
     m_description = new_description
 End Property

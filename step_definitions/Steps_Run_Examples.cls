@@ -16,9 +16,9 @@ Dim m_example As Variant
 Dim m_test_feature_object As Variant
 Dim m_step_result As Variant
 
-Public Property Get Description() As String
+Public Property Get description() As String
 
-    Description = "Senfgurke will validate the Gherkin syntax of the given examples" & vbLf _
+    description = "Senfgurke will validate the Gherkin syntax of the given examples" & vbLf _
                    & "and calculate a result for every step of the example."
 End Property
 
@@ -97,7 +97,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     Exit Function
 
 error_handler:
-    run_step = TFeature.fail_step(Err.Number, Err.Description)
+    run_step = TFeature.fail_step(Err.Number, Err.description)
 End Function
 
 Public Sub before_example()
