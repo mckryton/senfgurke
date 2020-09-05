@@ -9,6 +9,7 @@ Public Function parse_feature(feature_text As String) As Collection
     Dim keyword_value As Variant
     Dim current_clause As Collection
     Dim step_head_name As Variant
+    Dim is_example_started As Boolean
     
     Set parsed_feature = New Collection
     lines = Split(feature_text, vbLf)
@@ -22,14 +23,16 @@ Public Function parse_feature(feature_text As String) As Collection
                 current_clause.Add keyword_value(0), "type"
                 current_clause.Add keyword_value(1), "name"
                 parsed_feature.Add current_clause
+                is_example_started = False
             Else
                 If current_clause("type") = TFeature.CLAUSE_TYPE_EXAMPLE Then
                     step_head_name = read_step_head_name(CStr(line))
+                    If step_head_name(0) <> vbNullString Then
+                        add_step step_head_name, current_clause
+                        is_example_started = True
+                    End If
                 End If
-                If current_clause("type") = TFeature.CLAUSE_TYPE_EXAMPLE And step_head_name(0) <> vbNullString Then
-                    add_step step_head_name, current_clause
-                Else
-                    'PENDING description is not allowed after example steps
+                If Not is_example_started Then
                     add_description CStr(line), current_clause
                 End If
             End If

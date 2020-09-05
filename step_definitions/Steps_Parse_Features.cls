@@ -63,7 +63,7 @@ Public Property Get Examples() As Collection
     
     ' any trailing white space is removed from description
     example = Array("Rule: every line after a keyword up to the next keyword line or until the first example step in a example clause " _
-                        & " is considered to be description except comment lines")
+                        & " is considered to be description except comment lines") 'PENDING description is not allowed after example steps
     examples_list.Add example
     example = Array("Example: feature with 2 lines of description", _
                         "Given a feature named ""sample feature""", _
