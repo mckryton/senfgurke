@@ -16,12 +16,12 @@ Const cTags = ""
 
 Dim m_description As String
 
-Public Property Get description() As String
+Public Property Get Description() As String
     
     If m_description = vbNullString Then
         m_description = "sample feature object for testing the framework"
     End If
-    description = m_description
+    Description = m_description
 End Property
 
 Public Sub test_examples()
@@ -32,15 +32,15 @@ Public Sub test_examples()
     Set Examples = New Collection
     
     For Each example In Examples
-        TExampleRunner.run_example example, Me
+        TExampleRunner_Old.run_example example, Me
     Next
 End Sub
 
-Public Function run_step(pcolStepProps As Collection) As Variant
+Public Function run_step(step_definition As Variant) As Variant
     
     On Error GoTo error_handler
     
-    Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
+    Select Case step_definition.Item(TExampleRunner.STEP_ATTR_TYPE) & " " & step_definition.Item(TExampleRunner.STEP_ATTR_NAME)
         
         Case "Given a step with an empty implementation"
         
@@ -50,6 +50,11 @@ Public Function run_step(pcolStepProps As Collection) As Variant
         Case "Given a step with an invalid expectation"
             TSpec.expect(1).to_be 2
         
+        Case "Given a step with a valid implementation"
+        
+        Case "Given a step with an invalid implementation"
+            Err.Raise 7777, "sample for an failed test step"
+            
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
     End Select
@@ -57,14 +62,14 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     Exit Function
 
 error_handler:
-    run_step = TFeature.fail_step(Err.Number, Err.description)
+    run_step = TExampleRunner.fail_step(Err.Number, Err.Description)
 End Function
 
-Public Sub before()
+Public Sub before_example()
     
 End Sub
 
-Public Sub after()
+Public Sub after_example()
 
 End Sub
 
@@ -73,9 +78,9 @@ Public Property Get tags() As Variant
 End Property
 
 Private Sub pending(pending_msg)
-    TFeature.pending pending_msg
+    TFeatureRunner.pending pending_msg
 End Sub
 
-Public Property Let description(ByVal new_description As String)
+Public Property Let Description(ByVal new_description As String)
     m_description = new_description
 End Property

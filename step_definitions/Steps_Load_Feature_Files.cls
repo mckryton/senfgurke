@@ -18,13 +18,13 @@ Dim m_doc_path As String
 Dim m_feature_path As String
 Dim m_features As Collection
 
-Public Property Get description() As String
+Public Property Get Description() As String
     
     If m_description = vbNullString Then
         m_description = "Senfgurke will import examples from feature files" & vbLf _
                             & "containing feature name and description, rules and examples as text."
     End If
-    description = m_description
+    Description = m_description
 End Property
 
 Public Property Get Examples() As Collection
@@ -71,11 +71,11 @@ Public Property Get Examples() As Collection
     Set Examples = examples_list
 End Property
 
-Public Function run_step(pcolStepProps As Collection) As Variant
+Public Function run_step(step_definition As Collection) As Variant
     
     On Error GoTo error_handler
     
-    Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
+    Select Case step_definition.Item(TExampleRunner_Old.ATTR_STEP_HEAD) & " " & step_definition.Item(TExampleRunner_Old.ATTR_STEP_BODY)
         
         Case "Given the current application is stored under ""/Users/cuke/source/senfgurke"""
             m_doc_path = Join(Split("/Users/cuke/source/senfgurke", "/"), ExtraVBA.get_path_separator)
@@ -105,10 +105,10 @@ Public Function run_step(pcolStepProps As Collection) As Variant
             TSpec.expect(Dir()).to_be vbNullString
         
         Case "When the location for features is requested"
-            m_feature_path = TFeatureLoad.get_feature_dir(m_doc_path)
+            m_feature_path = TFeatureLoader.get_feature_dir(m_doc_path)
             
         Case "When the feature dir is read"
-            Set m_features = TFeatureLoad.load_features(m_feature_path)
+            Set m_features = TFeatureLoader.load_features(m_feature_path)
             
         Case "Then the feature dir is set to ""/Users/cuke/source/senfgurke/features"""
             TSpec.expect(m_feature_path).to_be Join(Split("/Users/cuke/source/senfgurke/features", "/"), ExtraVBA.get_path_separator)
@@ -126,7 +126,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     Exit Function
 
 error_handler:
-    run_step = TFeature.fail_step(Err.Number, Err.description)
+    run_step = TExampleRunner.fail_step(Err.Number, Err.Description)
 End Function
 
 Public Sub before_example()
@@ -142,10 +142,10 @@ Public Property Get tags() As Variant
 End Property
 
 Private Sub pending(pending_msg)
-    TFeature.pending pending_msg
+    TFeatureRunner.pending pending_msg
 End Sub
 
-Public Property Let description(ByVal new_description As String)
+Public Property Let Description(ByVal new_description As String)
     m_description = new_description
 End Property
 

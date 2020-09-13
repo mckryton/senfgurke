@@ -119,12 +119,12 @@ Public Sub contains(pvarExpectedItem As Variant)
             raise_expectation_err matcher_fail_msg
         End If
     ElseIf IsArray(Me.given_value) Then
-        TFeature.pending "contains matcher for array"
+        TFeatureRunner.pending "contains matcher for array"
     End If
 End Sub
 
 Private Sub raise_expectation_err(pFailMsg)
     
-    Err.Raise Number:=TErrorDef.ERR_ID_EXPECTATION_FAILED, description:=pFailMsg
+    Err.Raise Number:=TErrorDef.ERR_ID_EXPECTATION_FAILED, Description:=pFailMsg
 End Sub
 

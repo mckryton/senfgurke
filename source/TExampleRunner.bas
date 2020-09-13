@@ -1,118 +1,101 @@
 Attribute VB_Name = "TExampleRunner"
 Option Explicit
 
-Public Const ATTR_STEP_HEAD = "step_head"
-Public Const ATTR_STEP_BODY = "step_body"
-Public Const ATTR_WHOLE_STEP = "whole_step"
-Public Const ATTR_ERROR = "error"
+Public Const STEP_TYPE_GIVEN = "Given"
+Public Const STEP_TYPE_WHEN = "When"
+Public Const STEP_TYPE_THEN = "Then"
+
+Public Const STEP_ATTR_TYPE = "step_type"
+Public Const STEP_ATTR_HEAD = "step_head"
+Public Const STEP_ATTR_NAME = "step_name"
+Public Const STEP_ATTR_ERROR = "error"
+
+Public Const STEP_RESULT_OK = "OK"
+Public Const STEP_RESULT_FAIL = "FAIL"
+Public Const STEP_RESULT_MISSING = "MISSING"
+Public Const STEP_RESULT_PENDING = "PENDING"
+
+Public Const EXAMPLE_ATTR_STEPS = "steps"
 
 Dim m_is_test_stopped As Boolean
 
-Public Sub run_example(example_steps As Variant, feature_object As Variant)
+Public Function execute_step(step_attributes As Variant, feature_object As Variant) As Variant
+
+    Dim step_result As Variant
+
+    'TODO: refactor step implementation -> call steps indepent from theire class or module
+    step_result = feature_object.run_step(step_attributes)
+    execute_step = step_result
+End Function
+
+Public Function execute_example(example As Collection, feature_object As Variant) As Collection
 
     Dim step_index As Integer
-    Dim step_attributes As Collection
     Dim step_result As Variant
     Dim err_msg As String
+    Dim step As Variant
+    Dim example_statistics As Collection
 
     On Error GoTo error_handler
+    Set example_statistics = create_example_statistics
     TExampleRunner.IsTestStopped = False
-    step_index = 0
-    Set step_attributes = read_step(example_steps, step_index)
-    If LCase(step_attributes(ATTR_STEP_HEAD)) = "rule:" Then
-        TReport.report TReport.TYPE_RULE, step_attributes.Item(ATTR_WHOLE_STEP)
-        Exit Sub
-    End If
+    'step_index = 0
     feature_object.before_example
-    validate_example_title_syntax step_attributes.Item(ATTR_WHOLE_STEP)
-    TReport.report TReport.TYPE_EXAMPLE_TITLE, step_attributes.Item(ATTR_WHOLE_STEP)
-    step_index = step_index + 1
-    Do While TExampleRunner.IsTestStopped = False And step_index <= UBound(example_steps)
-        Set step_attributes = read_step(example_steps, step_index)
-        step_result = execute_step(step_attributes, feature_object)
+    'TODO: save original text from example after parsing
+    TReport.report TReport.TYPE_EXAMPLE_TITLE, example(TFeatureRunner.CLAUSE_ATTR_TYPE) & ": " & example(TFeatureRunner.CLAUSE_ATTR_NAME)
+    For Each step In example(TExampleRunner.EXAMPLE_ATTR_STEPS)
         err_msg = vbNullString
+        step_result = execute_step(step, feature_object)
         If Not step_result(0) = "OK" Then
             err_msg = step_result(1)
             TExampleRunner.stop_example
         End If
-        TReport.report TReport.TYPE_STEP, step_attributes.Item(ATTR_WHOLE_STEP), step_result(0), err_msg
-        step_index = step_index + 1
-    Loop
-    If Not TExampleRunner.IsTestStopped Then
+        increase_stats_counter CStr(step_result(0)), example_statistics
+        TReport.report TReport.TYPE_STEP, step(TExampleRunner.STEP_ATTR_HEAD) & " " & step(TExampleRunner.STEP_ATTR_NAME), step_result(0), err_msg
+        If IsTestStopped Then
+            Exit For
+        End If
+    Next
+    If Not TExampleRunner_Old.IsTestStopped Then
         feature_object.after_example
     End If
-    Exit Sub
+    Set execute_example = example_statistics
+    Exit Function
     
 error_handler:
     If Err.Number = ERR_ID_SCENARIO_SYNTAX_ERROR Then
-        TReport.Log.error_log "syntax error: " & Err.description & vbCr & vbLf & "in line >" & step_attributes.Item(ATTR_WHOLE_STEP) & "<"
+        TReport.Log.error_log "syntax error: " & Err.Description & vbCr & vbLf & "in line >" & _
+            step(TExampleRunner.STEP_ATTR_HEAD) & " " & step(TExampleRunner.STEP_ATTR_NAME) & "<"
     Else
-        TReport.Log.log_function_error "Runtime errror in TExampleRunner.runExample", Join(example_steps, vbTab & vbCr & vbLf)
+        TReport.Log.log_function_error "Runtime errror in TExampleRunner.execute_example", _
+            example(TFeatureRunner.CLAUSE_ATTR_TYPE) & " " & example(TFeatureRunner.CLAUSE_ATTR_NAME)
     End If
-End Sub
-
-Private Sub validate_example_title_syntax(example_title As String)
-    If LCase(Left(example_title, Len("Scenario:"))) <> "scenario:" And LCase(Left(example_title, Len("Example:"))) <> "example:" Then
-        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="can't find scenario start in >" & example_title & "<"
-    End If
-End Sub
-
-Public Function execute_step(step_attributes As Collection, feature_object As Variant) As Variant
-
-    Dim step_result As Variant
-
-    Select Case step_attributes.Item(ATTR_STEP_HEAD)
-    Case "Given", "When", "Then"
-        step_result = feature_object.run_step(step_attributes)
-        execute_step = step_result
-    Case Else
-        Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
-    End Select
 End Function
 
-Public Function read_step(example As Variant, step_index As Integer) As Collection
-
-    Dim step_attributes As Collection
-    Dim prev_step_attributes As Collection
-    Dim whole_step As String
-    Dim step_head As String     'Given, When, Then, And or But (synonym for and)
-    Dim step_body As String
-    Dim step_words As Variant
+Private Function create_example_statistics() As Collection
     
-    whole_step = trim(example(step_index))
-    step_words = Split(whole_step, " ")
-    step_head = step_words(0)
-    step_body = trim(Right(whole_step, Len(whole_step) - Len(step_head)))
-    Set step_attributes = New Collection
-    With step_attributes
-        .Add whole_step, ATTR_WHOLE_STEP
-        .Add step_head, ATTR_STEP_HEAD
-        .Add step_body, ATTR_STEP_BODY
-    End With
-    If step_head = "And" Or step_head = "But" Then
-        If step_index = 1 Then
-            step_attributes.Add "Gherkin syntax error: no previous step to match """ & step_head & """ keyword", ATTR_ERROR
-            Set read_step = step_attributes
-            Exit Function
-        Else
-            Set prev_step_attributes = read_step(example, step_index - 1)
-            'collection objects do not support item updates
-            step_attributes.Remove ATTR_STEP_HEAD
-            step_attributes.Add prev_step_attributes(ATTR_STEP_HEAD), ATTR_STEP_HEAD
-        End If
-    End If
-    step_attributes.Add validate_step_head(step_attributes(ATTR_STEP_HEAD)), ATTR_ERROR
-    Set read_step = step_attributes
+    Dim new_example_statistics As Collection
+    
+    Set new_example_statistics = New Collection
+    new_example_statistics.Add 0, TExampleRunner.STEP_RESULT_OK
+    new_example_statistics.Add 0, TExampleRunner.STEP_RESULT_MISSING
+    new_example_statistics.Add 0, TExampleRunner.STEP_RESULT_PENDING
+    new_example_statistics.Add 0, TExampleRunner.STEP_RESULT_FAIL
+    Set create_example_statistics = new_example_statistics
 End Function
-Private Function validate_step_head(step_head) As String
 
-    Select Case step_head
-        Case "Given", "When", "Then", "Rule:", "Example:", "Scenario:"
-            validate_step_head = ""
-        Case Else
-            validate_step_head = "Gherkin syntax error: >" & step_head & "< is not a valid step type"
-    End Select
-End Function
+Private Sub increase_stats_counter(result_type As String, example_statistics As Collection)
+
+    Dim counter As Long
+    
+    'My kingdom for a hash!
+    counter = example_statistics(result_type) + 1
+    example_statistics.Remove result_type
+    example_statistics.Add counter, result_type
+End Sub
+Public Sub stop_example()
+    TExampleRunner.IsTestStopped = True
+End Sub
 
 Public Property Get IsTestStopped() As Boolean
     IsTestStopped = m_is_test_stopped
@@ -122,6 +105,21 @@ Private Property Let IsTestStopped(ByVal is_test_stopped As Boolean)
     m_is_test_stopped = is_test_stopped
 End Property
 
-Public Sub stop_example()
-    TExampleRunner.IsTestStopped = True
-End Sub
+Public Function fail_step(err_id As Long, Optional err_msg) As Variant
+ 
+    Dim err_desc As String
+    
+    If IsMissing(err_msg) Then
+        err_desc = vbNullString
+    Else
+        err_desc = err_msg
+    End If
+    Select Case err_id
+    Case ERR_ID_STEP_IS_PENDING
+        fail_step = Array(TExampleRunner.STEP_RESULT_PENDING, err_desc)
+    Case ERR_ID_STEP_IS_MISSING
+        fail_step = Array(TExampleRunner.STEP_RESULT_MISSING, "PENDING: add code snippet as suggestion for missing test steps")
+    Case Else
+        fail_step = Array(TExampleRunner.STEP_RESULT_FAIL, err_desc)
+    End Select
+End Function

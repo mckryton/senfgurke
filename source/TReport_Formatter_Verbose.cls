@@ -57,8 +57,8 @@ Public Function format_feature_name(feature_name As String) As String
     format_feature_name = vbLf & "Test case: " & feature_name
 End Function
 
-Public Function format_feature_description(description As String) As String
-    format_feature_description = vbTab & Join(Split(description, vbLf), vbLf + vbTab)
+Public Function format_feature_description(Description As String) As String
+    format_feature_description = vbTab & Join(Split(Description, vbLf), vbLf + vbTab)
 End Function
 
 Public Function format_rule(rule As String) As String

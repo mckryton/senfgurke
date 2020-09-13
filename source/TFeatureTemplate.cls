@@ -42,11 +42,11 @@ Public Property Get Examples() As Collection
     Set Examples = examples_list
 End Property
 
-Public Function run_step(pcolStepProps As Collection) As Variant
+Public Function run_step(step_definition As Collection) As Variant
     
     On Error GoTo error_handler
     
-    Select Case pcolStepProps.Item(ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
+    Select Case step_definition.Item(ATTR_STEP_HEAD) & " " & step_definition.Item(TExampleRunner.ATTR_STEP_BODY)
         
         Case "Given a precondition"
            

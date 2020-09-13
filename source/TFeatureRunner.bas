@@ -1,6 +1,13 @@
 Attribute VB_Name = "TFeatureRunner"
 Option Explicit
 
+Public Const CLAUSE_TYPE_FEATURE = "feature"
+Public Const CLAUSE_TYPE_RULE = "rule"
+Public Const CLAUSE_TYPE_EXAMPLE = "example"
+
+Public Const CLAUSE_ATTR_TYPE = "type"
+Public Const CLAUSE_ATTR_NAME = "name"
+
 Public Sub run_features(features As Variant, Optional pTags)
     
     Dim all_features As Variant
@@ -16,10 +23,10 @@ Public Sub run_features(features As Variant, Optional pTags)
         End If
         If should_test_run Then
             TReport.report TReport.TYPE_FEATURE_NAME, TypeName(feature)
-            TReport.report TReport.TYPE_DESC, feature.description
+            TReport.report TReport.TYPE_DESC, feature.Description
             Set examples_list = feature.Examples
             For Each example In examples_list
-                TExampleRunner.run_example example, feature
+                TExampleRunner_Old.run_example example, feature
             Next
             Set feature = Nothing
         End If
@@ -43,3 +50,7 @@ Private Function test_has_tag(pTags As Variant, pTesTFeature As Variant)
         End If
     Next
 End Function
+
+Public Sub pending(pending_msg)
+    Err.Raise ERR_ID_STEP_IS_PENDING, Description:=pending_msg
+End Sub

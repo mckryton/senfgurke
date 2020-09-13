@@ -15,9 +15,9 @@ Dim m_report_output As String
 Dim m_report_msg As Collection
 Dim m_verbose_formatter As TReport_Formatter_Verbose
 
-Public Property Get description() As String
+Public Property Get Description() As String
 
-    description = "While executing examples senfgurke will send messages about progress" & vbLf _
+    Description = "While executing examples senfgurke will send messages about progress" & vbLf _
                     & "and success for reporting. The verbose formatter will turn those messages into" & vbLf _
                     & " a verbose report that is printed on the debug console."
 End Property
@@ -94,14 +94,14 @@ Public Property Get Examples() As Collection
     Set Examples = examples_list
 End Property
 
-Public Function run_step(pcolStepProps As Collection) As Variant
+Public Function run_step(step_definition As Collection) As Variant
 
     Dim output_line As Variant
     Dim output_lines As Variant
     Dim index As Integer
     
     On Error GoTo error_handler
-    Select Case pcolStepProps.Item(TExampleRunner.ATTR_STEP_HEAD) & " " & pcolStepProps.Item(TExampleRunner.ATTR_STEP_BODY)
+    Select Case step_definition.Item(TExampleRunner_Old.ATTR_STEP_HEAD) & " " & step_definition.Item(TExampleRunner_Old.ATTR_STEP_BODY)
     
         Case "Given a feature with a description ""description line 1 <newline> description line 2"""
             Set m_report_msg = TReport.build_msg_package(TReport.TYPE_DESC, "description line 1" & vbLf & "description line 2", vbNullString, vbNullString)
@@ -166,7 +166,7 @@ Public Function run_step(pcolStepProps As Collection) As Variant
     Exit Function
 
 error_handler:
-    run_step = TFeature.fail_step(Err.Number, Err.description)
+    run_step = TExampleRunner.fail_step(Err.Number, Err.Description)
 End Function
 
 Public Sub before_example()
@@ -182,5 +182,5 @@ Public Property Get tags() As Variant
 End Property
 
 Private Sub pending(pending_msg)
-    TFeature.pending pending_msg
+    TFeatureRunner.pending pending_msg
 End Sub
