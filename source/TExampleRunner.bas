@@ -19,13 +19,10 @@ Public Const EXAMPLE_ATTR_STEPS = "steps"
 
 Dim m_is_test_stopped As Boolean
 
-Public Function execute_step(step_attributes As Variant, feature_object As Variant) As Variant
-
-    Dim step_result As Variant
+Public Function execute_step(step_definition As TStep, step_implementation As Variant) As Variant
 
     'TODO: refactor step implementation -> call steps indepent from theire class or module
-    step_result = feature_object.run_step(step_attributes)
-    execute_step = step_result
+    execute_step = step_implementation.run_step(step_definition.StepImplementation)
 End Function
 
 Public Function execute_example(example As Collection, feature_object As Variant) As Collection
@@ -33,7 +30,7 @@ Public Function execute_example(example As Collection, feature_object As Variant
     Dim step_index As Integer
     Dim step_result As Variant
     Dim err_msg As String
-    Dim step As Variant
+    Dim step As TStep
     Dim example_statistics As Collection
 
     On Error GoTo error_handler

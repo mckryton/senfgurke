@@ -40,3 +40,7 @@ End Property
 Public Property Get WholeStep() As String
     WholeStep = Me.Head & " " & Me.Name
 End Property
+
+Public Property Get StepImplementation() As String
+    StepImplementation = Me.SType & " " & Me.Name
+End Property

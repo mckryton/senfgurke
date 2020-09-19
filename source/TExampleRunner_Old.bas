@@ -63,7 +63,7 @@ Public Function execute_step(step_attributes As Collection, feature_object As Va
 
     Select Case step_attributes.Item(ATTR_STEP_HEAD)
     Case "Given", "When", "Then"
-        step_result = feature_object.run_step(step_attributes)
+        step_result = feature_object.run_step(step_attributes.Item(TExampleRunner_Old.ATTR_STEP_HEAD) & " " & step_attributes.Item(TExampleRunner_Old.ATTR_STEP_BODY))
         execute_step = step_result
     Case Else
         Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, Description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
