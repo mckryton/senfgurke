@@ -14,6 +14,7 @@ Const cTags = "wip"
 
 Dim m_example_step As TStep
 Dim m_step_result As Variant
+Dim step_implementation_name As String
 
 Public Property Get Description() As String
 
@@ -53,11 +54,22 @@ Public Property Get Examples() As Collection
     example = Array("Rule: steps without any implementation return ""MISSING"" as status")
     'TODO: add code snippet for the implementation to the result
     examples_list.Add example
-    example = Array("Example: test step does not match anny implemenation", _
+    example = Array("Example: test step does not match any implemenation", _
                         "Given a step without an implementation", _
                         "When the step is executed", _
                         "Then the execution result is ""MISSING""")
     examples_list.Add example
+    
+    
+    example = Array("Rule: the name of the step implemenation function is the full step name " & _
+                            " stripped from illegal characters and spaces replaced with underscore")
+    examples_list.Add example
+    example = Array("Example: simple step name", _
+                        "Given a step ""Given a step""", _
+                        "When the step is translated into a function name", _
+                        "Then the name of the resulting function is ""Given_a_step""")
+    examples_list.Add example
+    'TODO: add more examples after support for scenario outlines is added
 
     Set Examples = examples_list
 End Property
@@ -108,9 +120,19 @@ Public Function run_step(step_definition As String) As Variant
                 .Name = CStr(Now()) 'create a random step name
             End With
                                                                       
+        Case "Given a step ""Given a step"""
+            Set m_example_step = New TStep
+            With m_example_step
+                .SType = STEP_TYPE_GIVEN
+                .Name = "a step"
+            End With
+        
         Case "When the step is executed"
-            m_step_result = TExampleRunner.execute_step(m_example_step, Me)
-            
+            m_step_result = TStepRunner.execute_step(m_example_step)
+        
+        Case "When the step is translated into a function name"
+            step_implementation_name = m_example_step.get_step_function_name()
+        
         Case "Then the execution result is ""OK"""
             TSpec.expect(m_step_result(0)).to_be "OK"
             
@@ -120,14 +142,17 @@ Public Function run_step(step_definition As String) As Variant
         Case "Then the execution result is ""MISSING"""
             TSpec.expect(m_step_result(0)).to_be "MISSING"
         
+        Case "Then the name of the resulting function is ""Given_a_step"""
+            TSpec.expect(step_implementation_name).to_be "Given_a_step"
+        
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
     End Select
-    run_step = Array(TExampleRunner.STEP_RESULT_OK)
+    run_step = Array(STEP_RESULT_OK)
     Exit Function
 
 error_handler:
-    run_step = TExampleRunner.fail_step(Err.Number, Err.Description)
+    run_step = TStepRunner.fail_step(Err.Number, Err.Description)
 End Function
 
 Public Sub before_example()
@@ -146,5 +171,15 @@ Private Sub pending(pending_msg)
     TFeatureRunner.pending pending_msg
 End Sub
 
+Public Sub Given_an_empty_step()
 
+End Sub
+
+Public Sub Given_a_valid_step()
+    TSpec.expect(1).to_be 1
+End Sub
+
+Public Sub Given_an_invalid_step()
+    TSpec.expect(1).to_be 2
+End Sub
 

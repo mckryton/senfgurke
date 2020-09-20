@@ -128,6 +128,8 @@ Public Property Get Examples() As Collection
 ''                        "When the second step is read", _
 ''                        "Then the step type is set to ""When""")
 ''    examples_list.Add example
+
+'TODO: warn when steps are longer than 255 chars
     
     Set Examples = examples_list
 End Property
@@ -246,13 +248,13 @@ Public Function run_step(step_definition As Collection) As Variant
         Case "Then the example clause from the parsed result contains all the steps"
             Set example_steps = m_parsed_feature.Clauses(1).Steps
             TSpec.expect(example_steps.Count).to_be 3
-            TSpec.expect(example_steps(1).SType).to_be TExampleRunner.STEP_TYPE_GIVEN
+            TSpec.expect(example_steps(1).SType).to_be STEP_TYPE_GIVEN
             TSpec.expect(example_steps(1).Name).to_be "a precondition"
             TSpec.expect(example_steps(1).Head).to_be "Given"
-            TSpec.expect(example_steps(2).SType).to_be TExampleRunner.STEP_TYPE_WHEN
+            TSpec.expect(example_steps(2).SType).to_be STEP_TYPE_WHEN
             TSpec.expect(example_steps(2).Name).to_be "action happens"
             TSpec.expect(example_steps(2).Head).to_be "When"
-            TSpec.expect(example_steps(3).SType).to_be TExampleRunner.STEP_TYPE_THEN
+            TSpec.expect(example_steps(3).SType).to_be STEP_TYPE_THEN
             TSpec.expect(example_steps(3).Name).to_be "some result is expected"
             TSpec.expect(example_steps(3).Head).to_be "Then"
             
@@ -264,7 +266,7 @@ Public Function run_step(step_definition As Collection) As Variant
     Exit Function
 
 error_handler:
-    run_step = TExampleRunner.fail_step(Err.Number, Err.Description)
+    run_step = TStepRunner.fail_step(Err.Number, Err.Description)
 End Function
 
 Public Sub before_example()

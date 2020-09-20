@@ -166,7 +166,7 @@ Public Function run_step(step_definition As Collection) As Variant
     Exit Function
 
 error_handler:
-    run_step = TExampleRunner.fail_step(Err.Number, Err.Description)
+    run_step = TStepRunner.fail_step(Err.Number, Err.Description)
 End Function
 
 Public Sub before_example()

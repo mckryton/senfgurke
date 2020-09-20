@@ -41,6 +41,37 @@ Public Property Get WholeStep() As String
     WholeStep = Me.Head & " " & Me.Name
 End Property
 
-Public Property Get StepImplementation() As String
-    StepImplementation = Me.SType & " " & Me.Name
+Public Property Get StepDefinition() As String
+    StepDefinition = Me.SType & " " & Me.Name
 End Property
+
+Public Function get_step_function_name() As String
+
+    'vba function names have the same restrictions like vba variables:
+    '   https://docs.microsoft.com/de-de/office/vba/language/glossary/vbe-glossary#variable
+
+    Dim current_char As String
+    Dim function_name As String
+    Dim index As Integer
+    
+    function_name = trim(Me.StepDefinition)
+    function_name = Replace(function_name, " ", "_")
+    index = 1
+    Do While index <= Len(function_name)
+        current_char = Mid(function_name, index, 1)
+        'a vba function name may contain any ascii letter, numbers and underscore
+        If Not ( _
+                 (Asc(current_char) > 47 And Asc(current_char) < 58) _
+                Or (Asc(current_char) > 64 And Asc(current_char) < 91) _
+                Or Asc(current_char) = 95 _
+                Or (Asc(current_char) > 96 And Asc(current_char) < 123) _
+                ) Then
+            function_name = Replace(function_name, current_char, "")
+        Else
+            index = index + 1
+        End If
+    Loop
+    'max len of a function name is 255 chars
+    function_name = Left(trim(function_name), 255)
+    get_step_function_name = function_name
+End Function

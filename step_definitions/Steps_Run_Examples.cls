@@ -65,11 +65,11 @@ Public Function run_step(step_definition As Collection) As Variant
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
     End Select
-    run_step = Array(TExampleRunner.STEP_RESULT_OK)
+    run_step = Array(STEP_RESULT_OK)
     Exit Function
 
 error_handler:
-    run_step = TExampleRunner.fail_step(Err.Number, Err.Description)
+    run_step = TStepRunner.fail_step(Err.Number, Err.Description)
 End Function
 
 Public Sub before_example()

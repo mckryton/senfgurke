@@ -40,7 +40,7 @@ Public Function run_step(step_definition As Variant) As Variant
     
     On Error GoTo error_handler
     
-    Select Case step_definition.Item(TExampleRunner.STEP_ATTR_TYPE) & " " & step_definition.Item(TExampleRunner.STEP_ATTR_NAME)
+    Select Case step_definition.Item(STEP_ATTR_TYPE) & " " & step_definition.Item(STEP_ATTR_NAME)
         
         Case "Given a step with an empty implementation"
         
@@ -62,7 +62,7 @@ Public Function run_step(step_definition As Variant) As Variant
     Exit Function
 
 error_handler:
-    run_step = TExampleRunner.fail_step(Err.Number, Err.Description)
+    run_step = TStepRunner.fail_step(Err.Number, Err.Description)
 End Function
 
 Public Sub before_example()
