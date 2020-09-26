@@ -27,3 +27,7 @@ End Property
 Public Property Let Description(ByVal rule_description As String)
     m_rule_description = rule_description
 End Property
+
+Public Property Get WholeRule() As String
+    WholeRule = "Rule: " & Me.Name
+End Property

@@ -1,10 +1,20 @@
 Attribute VB_Name = "TConfig"
 Option Explicit
 
-Public Property Get StepImplementations() As Variant
+Dim m_step_implementations As Collection
+
+Public Property Get StepImplementations() As Collection
     
-    'add all classes with step implmentations here:
-    StepImplementations = Array(New Steps_Run_Examples, New Steps_Load_Feature_Files, New Steps_Run_Steps)
+    Dim step_implementation_class As Variant
+    
+    If m_step_implementations Is Nothing Then
+        Set m_step_implementations = New Collection
+        'add all classes with step implmentations here:
+        For Each step_implementation_class In Array(New Steps_Run_Examples, New Steps_Parse_Features, New Steps_Run_Steps)
+            m_step_implementations.Add step_implementation_class
+        Next
+    End If
+    Set StepImplementations = m_step_implementations
 End Property
 
 Public Property Get MaxStepFunctionNameLength() As Variant

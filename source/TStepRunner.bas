@@ -28,8 +28,8 @@ Public Function run_step(step_definition As TStep) As Variant ', step_implementa
     For Each step_implementation_class In TConfig.StepImplementations
         step_result = CallByName(step_implementation_class, step_function_name, VbMethod)
     Next
-    If step_run_attempts = UBound(TConfig.StepImplementations) + 1 Then
-        run_step = fail_step(ERR_ID_STEP_IS_MISSING)
+    If step_run_attempts = TConfig.StepImplementations.Count Then
+        run_step = fail_step(ERR_ID_STEP_IS_MISSING, step_definition.get_step_function_template)
     Else
         run_step = Array("OK")
     End If
@@ -57,7 +57,7 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
     Case ERR_ID_STEP_IS_PENDING
         fail_step = Array(STEP_RESULT_PENDING, err_desc)
     Case ERR_ID_STEP_IS_MISSING
-        fail_step = Array(STEP_RESULT_MISSING, "PENDING: add code snippet as suggestion for missing test steps")
+        fail_step = Array(STEP_RESULT_MISSING, err_desc)
     Case Else
         fail_step = Array(STEP_RESULT_FAIL, err_desc)
     End Select

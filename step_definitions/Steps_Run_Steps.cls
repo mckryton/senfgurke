@@ -10,7 +10,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
-Const cTags = "wip"
+Const cTags = ""
 
 Dim m_example_step As TStep
 Dim m_step_result As Variant
