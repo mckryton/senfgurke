@@ -79,7 +79,7 @@ Public Property Get tags() As Variant
 End Property
 
 Private Sub pending(pending_msg)
-    TFeatureRunner.pending pending_msg
+    TStepRunner.pending pending_msg
 End Sub
 
 Public Property Let Description(ByVal new_description As String)

@@ -36,11 +36,11 @@ Public Sub test_examples()
     Next
 End Sub
 
-Public Function run_step(step_definition As Variant) As Variant
+Public Function run_step(step_definition As String) As Variant
     
     On Error GoTo error_handler
     
-    Select Case step_definition.Item(STEP_ATTR_TYPE) & " " & step_definition.Item(STEP_ATTR_NAME)
+    Select Case step_definition
         
         Case "Given a step with an empty implementation"
         
@@ -78,7 +78,7 @@ Public Property Get tags() As Variant
 End Property
 
 Private Sub pending(pending_msg)
-    TFeatureRunner.pending pending_msg
+    TStepRunner.pending pending_msg
 End Sub
 
 Public Property Let Description(ByVal new_description As String)

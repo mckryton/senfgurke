@@ -29,7 +29,7 @@ Public Sub run_example(example_steps As Variant, feature_object As Variant)
     step_index = step_index + 1
     Do While TExampleRunner_Old.IsTestStopped = False And step_index <= UBound(example_steps)
         Set step_attributes = read_step(example_steps, step_index)
-        step_result = execute_step(step_attributes, feature_object)
+        step_result = run_step(step_attributes, feature_object)
         err_msg = vbNullString
         If Not step_result(0) = "OK" Then
             err_msg = step_result(1)
@@ -57,14 +57,14 @@ Private Sub validate_example_title_syntax(example_title As String)
     End If
 End Sub
 
-Public Function execute_step(step_attributes As Collection, feature_object As Variant) As Variant
+Public Function run_step(step_attributes As Collection, feature_object As Variant) As Variant
 
     Dim step_result As Variant
 
     Select Case step_attributes.Item(ATTR_STEP_HEAD)
     Case "Given", "When", "Then"
         step_result = feature_object.run_step(step_attributes.Item(TExampleRunner_Old.ATTR_STEP_HEAD) & " " & step_attributes.Item(TExampleRunner_Old.ATTR_STEP_BODY))
-        execute_step = step_result
+        run_step = step_result
     Case Else
         Err.Raise ERR_ID_SCENARIO_SYNTAX_ERROR, Description:="unexpected step type " & step_attributes.Item(ATTR_STEP_HEAD)
     End Select
@@ -79,10 +79,10 @@ Public Function read_step(example As Variant, step_index As Integer) As Collecti
     Dim step_body As String
     Dim step_words As Variant
     
-    whole_step = trim(example(step_index))
+    whole_step = Trim(example(step_index))
     step_words = Split(whole_step, " ")
     step_head = step_words(0)
-    step_body = trim(Right(whole_step, Len(whole_step) - Len(step_head)))
+    step_body = Trim(Right(whole_step, Len(whole_step) - Len(step_head)))
     Set step_attributes = New Collection
     With step_attributes
         .Add whole_step, ATTR_WHOLE_STEP

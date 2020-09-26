@@ -1,23 +1,10 @@
 Ability: run examples
-    Senfgurke will validate the Gherkin syntax of the given examples
-    and calculate a result for every step of the example.
+    Senfgurke will locate the matching step implementation for each step
+    of an example and execute it.
 
-  # Rule: implemented test steps are OK if no error was raised, otherwise the steps FAIL
+  Rule: examples are executed until a step returns a status other than "OK"
 
-  Example: Empty test step
-     Given an example with a step "Given a step with an empty implementation"
-     And the step has a matching step implementation
-     When the step is executed
-     Then the execution result is "OK"
-
-  Example: test step does match expectation
-     Given an example with a step "Given a step with a valid expectation"
-     And the step has a matching step implementation
-     When the step is executed
-     Then the execution result is "OK"
-
-  Example: test step does not match expectation
-     Given an example with a step "Given a step with an invalid expectation"
-     And the step has a matching step implementation
-     When the step is executed
-     Then the execution result is "FAIL"
+  Example: example has 3 steps and 2nd fails
+     Given an feature with one example with 3 steps where the 2nd step fails
+     When the example is executed
+     Then only two steps of the example were executed

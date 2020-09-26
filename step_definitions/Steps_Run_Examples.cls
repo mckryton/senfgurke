@@ -30,37 +30,39 @@ Public Property Get Examples() As Collection
 
     Set examples_list = New Collection
     
-'    example = Array("Rule: examples are executed until a step returns a status other than ""OK""")
-'    examples_list.Add example
-'    example = Array("Example: example has 3 steps and 2nd fails", _
-'                        "Given an feature with one example with 3 steps which return OK except the 2nd step fails", _
-'                        "And all steps have a matching step implementation", _
-'                        "When the example is executed", _
-'                        "Then only two steps of the example were executed")
-'    examples_list.Add example
+    example = Array("Rule: examples are executed until a step returns a status other than ""OK""")
+    examples_list.Add example
+    example = Array("Example: example has 3 steps and 2nd fails", _
+                        "Given an feature with one example with 3 steps where the 2nd step fails", _
+                        "When the example is executed", _
+                        "Then only two steps of the example were executed")
+    examples_list.Add example
 
     Set Examples = examples_list
 End Property
 
-Public Function run_step(step_definition As Collection) As Variant
+Public Function run_step(step_definition As String) As Variant
 
     Dim step_attributes As Collection
     Dim feature_clause As Collection
     
     On Error GoTo error_handler
-    Select Case step_definition.Item(TExampleRunner_Old.ATTR_STEP_HEAD) & " " & step_definition.Item(TExampleRunner_Old.ATTR_STEP_BODY)
+    Select Case step_definition
                   
-        Case "Given an feature with one example with 3 steps which return OK except the 2nd step fails"
+        Case "Given an feature with one example with 3 steps where the 2nd step fails"
             Set m_parsed_feature = TFeatureParser.parse_feature( _
                 "Feature: sample feature" & vbLf & _
                 vbLf & _
                 "  Example: sample example" & vbLf & _
-                "    Given a step with a valid implementation" & vbLf & _
-                "    And a step with an invalid implementation" & vbLf & _
-                "    And a step with a valid implementation")
+                "    Given a valid step" & vbLf & _
+                "    And an invalid step" & vbLf & _
+                "    And a valid step")
             
         Case "When the example is executed"
-            'Set m_example_statistics = TExampleRunner.execute_example(m_parsed_feature(2), m_test_step_implementation)
+            Set m_example_statistics = TExampleRunner.run_example(m_parsed_feature.Clauses(1), silent:=True)
+        
+        Case "Then only two steps of the example were executed"
+            TSpec.expect(m_example_statistics.Count).to_be 2
         
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
@@ -85,6 +87,16 @@ Public Property Get tags() As Variant
 End Property
 
 Private Sub pending(pending_msg)
-    TFeatureRunner.pending pending_msg
+    TStepRunner.pending pending_msg
 End Sub
 
+Public Sub Given_to_long_name()
+'Public Sub Given_an_feature_with_one_example_with_3_steps_where_the_2nd_step_fails()
+    Set m_parsed_feature = TFeatureParser.parse_feature( _
+                    "Feature: sample feature" & vbLf & _
+                    vbLf & _
+                    "  Example: sample example" & vbLf & _
+                    "    Given a valid step" & vbLf & _
+                    "    And an invalid step" & vbLf & _
+                    "    And a valid step")
+End Sub

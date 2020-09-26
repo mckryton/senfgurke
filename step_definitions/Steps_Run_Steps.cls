@@ -14,7 +14,8 @@ Const cTags = "wip"
 
 Dim m_example_step As TStep
 Dim m_step_result As Variant
-Dim step_implementation_name As String
+Dim m_step_implementation_name As String
+Dim m_step_implementation_template As String
 
 Public Property Get Description() As String
 
@@ -52,7 +53,6 @@ Public Property Get Examples() As Collection
     examples_list.Add example
     
     example = Array("Rule: steps without any implementation return ""MISSING"" as status")
-    'TODO: add code snippet for the implementation to the result
     examples_list.Add example
     example = Array("Example: test step does not match any implemenation", _
                         "Given a step without an implementation", _
@@ -60,9 +60,21 @@ Public Property Get Examples() As Collection
                         "Then the execution result is ""MISSING""")
     examples_list.Add example
     
+    example = Array("Rule: missing steps return a code snippet for the step implementation")
+    examples_list.Add example
+    example = Array("Example: simple step function", _
+                        "Given a step ""Given a valid step""", _
+                        "When the code template for the step implementation is requested", _
+                        "Then the code template for the step implementation is " & _
+                            """Public Sub Given_a_valid_step_8A74152FD2F9()<br>" _
+                            & "    'Given a valid step<br><br>" _
+                            & "End Sub""" _
+                            )
+    examples_list.Add example
+    
     
     example = Array("Rule: the name of the step implemenation function is the full step name " & _
-                            " stripped from illegal characters and spaces replaced with underscore")
+                            " stripped from illegal characters and spaces replaced with underscore + hash")
     examples_list.Add example
     example = Array("Example: simple step name", _
                         "Given a step ""Given a step""", _
@@ -126,12 +138,22 @@ Public Function run_step(step_definition As String) As Variant
                 .SType = STEP_TYPE_GIVEN
                 .Name = "a step"
             End With
+            
+        Case "Given a step ""Given a valid step"""
+            Set m_example_step = New TStep
+            With m_example_step
+                .SType = STEP_TYPE_GIVEN
+                .Name = "a valid step"
+            End With
         
         Case "When the step is executed"
-            m_step_result = TStepRunner.execute_step(m_example_step)
+            m_step_result = TStepRunner.run_step(m_example_step)
         
         Case "When the step is translated into a function name"
-            step_implementation_name = m_example_step.get_step_function_name()
+            m_step_implementation_name = m_example_step.get_step_function_name()
+            
+        Case "When the code template for the step implementation is requested"
+            m_step_implementation_template = m_example_step.get_step_function_template
         
         Case "Then the execution result is ""OK"""
             TSpec.expect(m_step_result(0)).to_be "OK"
@@ -143,7 +165,17 @@ Public Function run_step(step_definition As String) As Variant
             TSpec.expect(m_step_result(0)).to_be "MISSING"
         
         Case "Then the name of the resulting function is ""Given_a_step"""
-            TSpec.expect(step_implementation_name).to_be "Given_a_step"
+            TSpec.expect(Left(m_step_implementation_name, Len("Given_a_step"))).to_be "Given_a_step"
+            TSpec.expect(Len(m_step_implementation_name)).to_be Len("Given_a_step_xxXXxxXXxxXX")
+            
+        Case "Then the code template for the step implementation is " & _
+                            """Public Sub Given_a_valid_step_8A74152FD2F9()<br>" _
+                            & "    'Given a valid step<br><br>" _
+                            & "End Sub"""
+            TSpec.expect(m_step_implementation_template).to_be "Public Sub Given_a_valid_step_8A74152FD2F9()" & vbLf _
+                                                                & "    'Given a valid step" & vbLf _
+                                                                & vbLf _
+                                                                & "End Sub"
         
         Case Else
             Err.Raise ERR_ID_STEP_IS_MISSING
@@ -168,18 +200,18 @@ Public Property Get tags() As Variant
 End Property
 
 Private Sub pending(pending_msg)
-    TFeatureRunner.pending pending_msg
+    TStepRunner.pending pending_msg
 End Sub
 
-Public Sub Given_an_empty_step()
+Public Sub Given_an_empty_step_8A7408D743D5()
 
 End Sub
 
-Public Sub Given_a_valid_step()
+Public Sub Given_a_valid_step_8A74152FD2F9()
     TSpec.expect(1).to_be 1
 End Sub
 
-Public Sub Given_an_invalid_step()
+Public Sub Given_an_invalid_step_CF4B201BCF1B()
     TSpec.expect(1).to_be 2
 End Sub
 

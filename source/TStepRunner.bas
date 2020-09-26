@@ -15,7 +15,7 @@ Public Const STEP_RESULT_FAIL = "FAIL"
 Public Const STEP_RESULT_MISSING = "MISSING"
 Public Const STEP_RESULT_PENDING = "PENDING"
 
-Public Function execute_step(step_definition As TStep) As Variant ', step_implementation As Variant) As Variant
+Public Function run_step(step_definition As TStep) As Variant ', step_implementation As Variant) As Variant
 
     Dim step_result As Variant
     Dim step_implementation_class As Variant
@@ -29,9 +29,9 @@ Public Function execute_step(step_definition As TStep) As Variant ', step_implem
         step_result = CallByName(step_implementation_class, step_function_name, VbMethod)
     Next
     If step_run_attempts = UBound(TConfig.StepImplementations) + 1 Then
-        execute_step = fail_step(ERR_ID_STEP_IS_MISSING)
+        run_step = fail_step(ERR_ID_STEP_IS_MISSING)
     Else
-        execute_step = Array("OK")
+        run_step = Array("OK")
     End If
     Exit Function
 
@@ -40,7 +40,7 @@ error_handler:
         step_run_attempts = step_run_attempts + 1
         Resume Next
     Else
-        execute_step = fail_step(Err.Number, Err.Description)
+        run_step = fail_step(Err.Number, Err.Description)
     End If
 End Function
 
@@ -62,3 +62,8 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
         fail_step = Array(STEP_RESULT_FAIL, err_desc)
     End Select
 End Function
+
+Public Sub pending(pending_msg)
+    Err.Raise ERR_ID_STEP_IS_PENDING, Description:=pending_msg
+End Sub
+

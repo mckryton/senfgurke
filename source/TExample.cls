@@ -38,6 +38,10 @@ Public Property Let Description(ByVal example_description As String)
     m_example_description = example_description
 End Property
 
+Public Property Get OriginalHeadline() As String
+    OriginalHeadline = Me.Head & " " & Me.Name
+End Property
+
 Public Property Get Steps() As Collection
     If m_steps Is Nothing Then
         Set m_steps = New Collection

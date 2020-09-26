@@ -34,11 +34,11 @@ Public Property Get Name() As String
 End Property
 
 Public Property Let Name(ByVal step_name As String)
-    m_step_name = step_name
+    m_step_name = Trim(step_name)
 End Property
 
-Public Property Get WholeStep() As String
-    WholeStep = Me.Head & " " & Me.Name
+Public Property Get OriginalStepDefinition() As String
+    OriginalStepDefinition = Me.Head & " " & Me.Name
 End Property
 
 Public Property Get StepDefinition() As String
@@ -49,12 +49,13 @@ Public Function get_step_function_name() As String
 
     'vba function names have the same restrictions like vba variables:
     '   https://docs.microsoft.com/de-de/office/vba/language/glossary/vbe-glossary#variable
+    '   max len is 255 chars, but compiler crashes on mac os for Office version 16.41 if function name > 63 chars
 
     Dim current_char As String
     Dim function_name As String
     Dim index As Integer
     
-    function_name = trim(Me.StepDefinition)
+    function_name = Me.StepDefinition
     function_name = Replace(function_name, " ", "_")
     index = 1
     Do While index <= Len(function_name)
@@ -72,6 +73,16 @@ Public Function get_step_function_name() As String
         End If
     Loop
     'max len of a function name is 255 chars
-    function_name = Left(trim(function_name), 255)
+    function_name = Left(Trim(function_name), TConfig.MaxStepFunctionNameLength - 13) & "_" & ExtraVBA.hash12(Me.StepDefinition)
     get_step_function_name = function_name
+End Function
+
+Public Function get_step_function_template() As String
+
+    Dim template As String
+    
+    template = "Public Sub " & Me.get_step_function_name & "()" & vbLf
+    template = template & "    '" & Me.StepDefinition & vbLf & vbLf
+    template = template & "End Sub"
+    get_step_function_template = template
 End Function

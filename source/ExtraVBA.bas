@@ -84,3 +84,49 @@ Public Function get_path_separator() As String
         get_path_separator = "\"
     #End If
 End Function
+
+Function hash12(s As String)
+    ' source: https://stackoverflow.com/questions/14717526/vba-hash-string
+    ' create a 12 character hash from string s
+    
+    Dim l As Integer, l3 As Integer
+    Dim s1 As String, s2 As String, s3 As String
+    
+    l = Len(s)
+    l3 = Int(l / 3)
+    s1 = Mid(s, 1, l3)      ' first part
+    s2 = Mid(s, l3 + 1, l3) ' middle part
+    s3 = Mid(s, 2 * l3 + 1) ' the rest of the string...
+    
+    hash12 = hash4(s1) + hash4(s2) + hash4(s3)
+
+End Function
+
+Function hash4(txt)
+    ' source: https://stackoverflow.com/questions/14717526/vba-hash-string
+    Dim x As Long
+    Dim mask, i, j, nC, crc As Integer
+    Dim c As String
+    
+    crc = &HFFFF
+    
+    For nC = 1 To Len(txt)
+        j = Asc(Mid(txt, nC))
+        crc = crc Xor j
+        For j = 1 To 8
+            mask = 0
+            If crc / 2 <> Int(crc / 2) Then mask = &HA001
+            crc = Int(crc / 2) And &H7FFF: crc = crc Xor mask
+        Next j
+    Next nC
+    
+    c = Hex$(crc)
+    
+    ' <<<<< new section: make sure returned string is always 4 characters long >>>>>
+    ' pad to always have length 4:
+    While Len(c) < 4
+      c = "0" & c
+    Wend
+    
+    hash4 = c
+End Function

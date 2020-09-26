@@ -13,7 +13,7 @@ Public Function get_feature_dir(this_doc_path As String) As String
     End If
 End Function
 
-Public Function load_features(feature_dir As String) As Collection
+Public Function load_features(Optional feature_dir) As Collection
 
     Dim dir_entry As String
     Dim attributes As Integer
@@ -22,6 +22,9 @@ Public Function load_features(feature_dir As String) As Collection
     Dim subdir As Variant
     Dim subdirs As Collection
     
+    If IsMissing(feature_dir) Then
+        feature_dir = get_feature_dir(senfgurke_workbook.Path)
+    End If
     Set features = New Collection
     dir_entry = Dir(feature_dir)
     Do While dir_entry <> vbNullString
@@ -31,7 +34,7 @@ Public Function load_features(feature_dir As String) As Collection
         End If
         dir_entry = Dir()
     Loop
-    Set subdirs = get_subdirs(feature_dir)
+    Set subdirs = get_subdirs(CStr(feature_dir))
     For Each subdir In subdirs
         Set subdir_features = TFeatureLoader.load_features(feature_dir & ExtraVBA.get_path_separator & subdir)
         merge_features features, subdir_features
@@ -50,7 +53,7 @@ Private Function read_feature(feature_file As String) As String
     Open feature_file For Input As #file_id
     Do Until EOF(1)
         Line Input #1, text_line
-        feature = feature & vbLf & text_line
+        feature = feature & text_line & vbLf
     Loop
     Close #file_id
     read_feature = feature

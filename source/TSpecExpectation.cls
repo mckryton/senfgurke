@@ -119,7 +119,7 @@ Public Sub contains(pvarExpectedItem As Variant)
             raise_expectation_err matcher_fail_msg
         End If
     ElseIf IsArray(Me.given_value) Then
-        TFeatureRunner.pending "contains matcher for array"
+        TStepRunner.pending "contains matcher for array"
     End If
 End Sub
 

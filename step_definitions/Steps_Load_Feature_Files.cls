@@ -71,11 +71,11 @@ Public Property Get Examples() As Collection
     Set Examples = examples_list
 End Property
 
-Public Function run_step(step_definition As Collection) As Variant
+Public Function run_step(step_definition As String) As Variant
     
     On Error GoTo error_handler
     
-    Select Case step_definition.Item(TExampleRunner_Old.ATTR_STEP_HEAD) & " " & step_definition.Item(TExampleRunner_Old.ATTR_STEP_BODY)
+    Select Case step_definition
         
         Case "Given the current application is stored under ""/Users/cuke/source/senfgurke"""
             m_doc_path = Join(Split("/Users/cuke/source/senfgurke", "/"), ExtraVBA.get_path_separator)
@@ -142,7 +142,7 @@ Public Property Get tags() As Variant
 End Property
 
 Private Sub pending(pending_msg)
-    TFeatureRunner.pending pending_msg
+    TStepRunner.pending pending_msg
 End Sub
 
 Public Property Let Description(ByVal new_description As String)

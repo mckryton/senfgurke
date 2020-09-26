@@ -1,56 +1,20 @@
 Attribute VB_Name = "TFeatureRunner"
 Option Explicit
 
-Public Const CLAUSE_TYPE_FEATURE = "feature"
-Public Const CLAUSE_TYPE_RULE = "rule"
-Public Const CLAUSE_TYPE_EXAMPLE = "example"
-
-Public Const CLAUSE_ATTR_TYPE = "type"
-Public Const CLAUSE_ATTR_NAME = "name"
-
-Public Sub run_features(features As Variant, Optional pTags)
+Public Sub run_feature(feature As TFeature)
     
     Dim all_features As Variant
-    Dim feature As Variant
-    Dim should_test_run As Boolean
-    Dim examples_list As Collection
-    Dim example As Variant
+    Dim feature_clause As Variant
+    Dim example As TExample
 
-    For Each feature In features
-        should_test_run = True
-        If Not IsMissing(pTags) Then
-            should_test_run = test_has_tag(pTags, feature)
-        End If
-        If should_test_run Then
-            TReport.report TReport.TYPE_FEATURE_NAME, TypeName(feature)
-            TReport.report TReport.TYPE_DESC, feature.Description
-            Set examples_list = feature.Examples
-            For Each example In examples_list
-                TExampleRunner_Old.run_example example, feature
-            Next
-            Set feature = Nothing
+    'TODO: filter tags
+    TReport.report TReport.TYPE_FEATURE_NAME, feature.Name
+    TReport.report TReport.TYPE_DESC, feature.Description
+    For Each feature_clause In feature.Clauses
+        If TypeName(feature_clause) = "TExample" Then
+            Set example = feature_clause
+            TExampleRunner.run_example example
         End If
     Next
 End Sub
 
-Private Function test_has_tag(pTags As Variant, pTesTFeature As Variant)
-
-    Dim input_tags As Variant
-    Dim feature_tags As Variant
-    Dim match As Variant
-    Dim tag As Variant
-    
-    test_has_tag = False
-    input_tags = Split(Replace(pTags, " ", ""), ",")
-    feature_tags = Split(Replace(pTesTFeature.tags, " ", ""), ",")
-    For Each tag In input_tags
-        match = Filter(feature_tags, tag, True, vbBinaryCompare)
-        If UBound(match) > -1 Then
-            test_has_tag = True
-        End If
-    Next
-End Function
-
-Public Sub pending(pending_msg)
-    Err.Raise ERR_ID_STEP_IS_PENDING, Description:=pending_msg
-End Sub
