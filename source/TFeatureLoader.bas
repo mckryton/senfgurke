@@ -25,18 +25,21 @@ Public Function load_features(Optional feature_dir) As Collection
     If IsMissing(feature_dir) Then
         feature_dir = get_feature_dir(senfgurke_workbook.Path)
     End If
+    If Right(feature_dir, 1) <> ExtraVBA.get_path_separator Then
+        feature_dir = feature_dir & ExtraVBA.get_path_separator
+    End If
     Set features = New Collection
     dir_entry = Dir(feature_dir)
     Do While dir_entry <> vbNullString
-        attributes = GetAttr(feature_dir & ExtraVBA.get_path_separator & dir_entry)
+        attributes = GetAttr(feature_dir & dir_entry)
         If attributes <> vbHidden And attributes <> vbSystem And Right(dir_entry, 8) = ".feature" Then
-            features.Add read_feature(feature_dir & ExtraVBA.get_path_separator & dir_entry)
+            features.Add read_feature(feature_dir & dir_entry)
         End If
         dir_entry = Dir()
     Loop
     Set subdirs = get_subdirs(CStr(feature_dir))
     For Each subdir In subdirs
-        Set subdir_features = TFeatureLoader.load_features(feature_dir & ExtraVBA.get_path_separator & subdir)
+        Set subdir_features = TFeatureLoader.load_features(feature_dir & subdir)
         merge_features features, subdir_features
         Set subdir_features = Nothing
     Next
@@ -77,7 +80,7 @@ Private Function get_subdirs(feature_dir As String) As Collection
     Set subdirs = New Collection
     subdir = Dir(feature_dir, vbDirectory)
     Do While subdir <> vbNullString
-        attributes = GetAttr(feature_dir & ExtraVBA.get_path_separator & subdir)
+        attributes = GetAttr(feature_dir & subdir)
         If attributes = vbDirectory Then
             If attributes <> vbHidden & attributes <> vbSystem And Left(subdir, 1) <> "." Then
                 subdirs.Add subdir
