@@ -9,8 +9,13 @@ Example: feature spec without feature keyword
   When the feature is parsed
   Then the parsing results in the error message "Feature lacks feature keyword at the beginning"
 
+Example: feature with tags
+  Given a feature "@tag1 @tag2<br>Feature: sample feature"
+  When the feature is parsed
+  Then the parsed feature doesn't contain any error
 
-Rule: feature clauses are limited by lines matching this format <optional whitespace><keyword>:<optional whitespace><name><optional whitespace>any optional whitspace is ignored
+
+Rule: feature clauses are limited by lines matching this format <optional whitespace><keyword>:<optional whitespace><name><optional whitespace>any optional whitespace is ignored
 
 Example: feature contains one rule and one example
   Given a feature named "sample feature"
@@ -44,7 +49,7 @@ Example: rule with description
   And the rules description is set to "this is a description"
 
 
-Rule: every line in a example clause starting with "<optional whitspace><step keyword><space>" is considered to be a step where <tep keyword> is one of those: Given, When, Then, And, But
+Rule: every line in a example clause starting with "<optional whitespace><step keyword><space>" is considered to be a step where <tep keyword> is one of those: Given, When, Then, And, But
 
 Example: simple example with Given, When, Then steps
   Given a feature
@@ -55,3 +60,19 @@ Example: simple example with Given, When, Then steps
   When the feature is parsed
   Then the parsed result contains an example
   And the example clause from the parsed result contains all the steps
+
+
+Rule: any line starting with an @ sign is a tag line where tags are starting with @ and ending with space
+
+Example: feature tags
+  Given a feature
+  And the first line of the feature is "  @wip @important @beta"
+  When the feature is parsed
+  Then the parsed features contains the tags wip, important and beta
+
+Example: example tags
+  Given a feature
+  And the line before the only example is "  @wip @important @beta"
+  When the feature is parsed
+  Then the parsed features contains the an example
+  And the example contains the tags wip, important and beta
