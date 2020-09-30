@@ -31,11 +31,11 @@ Public Property Let Name(ByVal feature_name As String)
     m_feature_name = feature_name
 End Property
 
-Public Property Get Description() As String
-    Description = m_feature_description
+Public Property Get description() As String
+    description = m_feature_description
 End Property
 
-Public Property Let Description(ByVal feature_description As String)
+Public Property Let description(ByVal feature_description As String)
     m_feature_description = feature_description
 End Property
 
@@ -53,3 +53,7 @@ End Property
 Public Property Let ErrorStatus(ByVal error_status As String)
     m_error_status = error_status
 End Property
+
+Private Sub Class_Initialize()
+    m_error_status = vbNullString
+End Sub

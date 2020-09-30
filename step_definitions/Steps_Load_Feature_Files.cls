@@ -18,13 +18,13 @@ Dim m_doc_path As String
 Dim m_feature_path As String
 Dim m_features As Collection
 
-Public Property Get Description() As String
+Public Property Get description() As String
     
     If m_description = vbNullString Then
         m_description = "Senfgurke will import examples from feature files" & vbLf _
                             & "containing feature name and description, rules and examples as text."
     End If
-    Description = m_description
+    description = m_description
 End Property
 
 Public Property Get Examples() As Collection
@@ -126,7 +126,7 @@ Public Function run_step(step_definition As String) As Variant
     Exit Function
 
 error_handler:
-    run_step = TStepRunner.fail_step(Err.Number, Err.Description)
+    run_step = TStepRunner.fail_step(Err.Number, Err.description)
 End Function
 
 Public Sub before_example()
@@ -145,7 +145,7 @@ Private Sub pending(pending_msg)
     TStepRunner.pending pending_msg
 End Sub
 
-Public Property Let Description(ByVal new_description As String)
+Public Property Let description(ByVal new_description As String)
     m_description = new_description
 End Property
 

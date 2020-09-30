@@ -11,7 +11,7 @@ Public Sub run_feature(feature As TFeature)
     'TODO: filter tags
     Set example_runner = New TExampleRunner
     TReport.report TReport.TYPE_FEATURE_NAME, feature.Name
-    TReport.report TReport.TYPE_DESC, feature.Description
+    TReport.report TReport.TYPE_DESC, feature.description
     For Each feature_clause In feature.Clauses
         If TypeName(feature_clause) = "TExample" Then
             Set example = feature_clause

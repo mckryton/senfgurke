@@ -123,8 +123,9 @@ Public Sub contains(pvarExpectedItem As Variant)
     End If
 End Sub
 
-Private Sub raise_expectation_err(pFailMsg)
+Private Sub raise_expectation_err(fail_msg)
     
-    Err.Raise Number:=TErrorDef.ERR_ID_EXPECTATION_FAILED, Description:=pFailMsg
+    TSpec.LastFailMsg = fail_msg
+    Err.Raise Number:=ERR_ID_EXPECTATION_FAILED, description:=fail_msg
 End Sub
 

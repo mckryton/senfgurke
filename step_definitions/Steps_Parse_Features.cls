@@ -136,6 +136,26 @@ Public Sub Given_this_line_is_followed_by_____Then_some_resul_EA08DF64E8E9()
     m_feature_text = m_feature_text & vbLf & "    Then some result is expected"
 End Sub
 
+Public Sub Given_a_feature_tag1_tag2brFeature_sample_feature_015C96EDA874()
+    'Given a feature "@tag1 @tag2<br>Feature: sample feature"
+
+    m_feature_text = "@tag1 @tag2" & vbLf _
+                        & "Feature: sample feature"
+End Sub
+
+Public Sub Given_the_first_line_of_the_feature_is___wip_impor_D41303270416()
+    'Given the first line of the feature is "  @wip @important @beta"
+
+    m_feature_text = "  @wip @important @beta"
+End Sub
+
+Public Sub Given_the_line_before_the_only_example_is___wip_im_FC1ACED9ED9D()
+    'Given the line before the only example is "  @wip @important @beta"
+
+    m_feature_text = m_feature_text & vbLf & "  @wip @important @beta" & vbLf _
+                        & "Example: sample example"
+End Sub
+
 Public Sub When_the_feature_is_parsed_1AA9891E2CA3()
     'When the feature is parsed
     
@@ -175,7 +195,7 @@ End Sub
 Public Sub Then_the_feature_description_is_set_to_those_two_l_A335E10C9C02()
     'Then the feature description is set to those two lines
 
-    TSpec.expect(m_parsed_feature.Description).to_be "this is" & vbLf & "the description"
+    TSpec.expect(m_parsed_feature.description).to_be "this is" & vbLf & "the description"
 End Sub
 
 Public Sub Then_the_parsed_feature_contains_a_rule_5FF16597B7E1()
@@ -187,7 +207,7 @@ End Sub
 Public Sub Then_the_rules_description_is_set_to_this_is_a_des_B3D47E4F8255()
     'Then the rules description is set to "this is a description"
 
-     TSpec.expect(m_parsed_feature.Clauses(1).Description).to_be "this is a description"
+     TSpec.expect(m_parsed_feature.Clauses(1).description).to_be "this is a description"
 End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_AF5E3525167D()
@@ -212,4 +232,10 @@ Public Sub Then_the_example_clause_from_the_parsed_result_con_F111F3E2BACC()
     TSpec.expect(example_steps(3).SType).to_be STEP_TYPE_THEN
     TSpec.expect(example_steps(3).Name).to_be "some result is expected"
     TSpec.expect(example_steps(3).Head).to_be "Then"
+End Sub
+
+Public Sub Then_the_parsed_feature_doesnt_contain_any_error_0453F9190B1C()
+    'Then the parsed feature doesn't contain any error
+
+    TSpec.expect(m_parsed_feature.ErrorStatus).to_be vbNullString
 End Sub

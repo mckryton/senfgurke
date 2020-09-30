@@ -15,9 +15,9 @@ Dim m_report_output As String
 Dim m_report_msg As Collection
 Dim m_verbose_formatter As TReport_Formatter_Verbose
 
-Public Property Get Description() As String
+Public Property Get description() As String
 
-    Description = "While executing examples senfgurke will send messages about progress" & vbLf _
+    description = "While executing examples senfgurke will send messages about progress" & vbLf _
                     & "and success for reporting. The verbose formatter will turn those messages into" & vbLf _
                     & " a verbose report that is printed on the debug console."
 End Property
@@ -166,7 +166,7 @@ Public Function run_step(step_definition As String) As Variant
     Exit Function
 
 error_handler:
-    run_step = TStepRunner.fail_step(Err.Number, Err.Description)
+    run_step = TStepRunner.fail_step(Err.Number, Err.description)
 End Function
 
 Public Sub before_example()

@@ -26,6 +26,7 @@ Public Function run_step(step_definition As TStep) As Variant ', step_implementa
     step_run_attempts = 0
     step_function_name = step_definition.get_step_function_name
     For Each step_implementation_class In TConfig.StepImplementations
+        TSpec.LastFailMsg = vbNullString
         step_result = CallByName(step_implementation_class, step_function_name, VbMethod)
     Next
     If step_run_attempts = TConfig.StepImplementations.Count Then
@@ -40,7 +41,7 @@ error_handler:
         step_run_attempts = step_run_attempts + 1
         Resume Next
     Else
-        run_step = fail_step(Err.Number, Err.Description)
+        run_step = fail_step(Err.Number, Err.description)
     End If
 End Function
 
@@ -59,11 +60,11 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
     Case ERR_ID_STEP_IS_MISSING
         fail_step = Array(STEP_RESULT_MISSING, err_desc)
     Case Else
-        fail_step = Array(STEP_RESULT_FAIL, err_desc)
+        fail_step = Array(STEP_RESULT_FAIL, err_desc & vbLf & TSpec.LastFailMsg)
     End Select
 End Function
 
 Public Sub pending(pending_msg)
-    Err.Raise ERR_ID_STEP_IS_PENDING, Description:=pending_msg
+    Err.Raise ERR_ID_STEP_IS_PENDING, description:=pending_msg
 End Sub
 

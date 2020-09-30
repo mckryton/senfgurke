@@ -17,9 +17,9 @@ Dim m_step_result As Variant
 Dim m_step_implementation_name As String
 Dim m_step_implementation_template As String
 
-Public Property Get Description() As String
+Public Property Get description() As String
 
-    Description = "Senfgurke will locate the matching step implementation for each step" & vbLf _
+    description = "Senfgurke will locate the matching step implementation for each step" & vbLf _
                    & "of an example and execute it."
 End Property
 
@@ -184,7 +184,7 @@ Public Function run_step(step_definition As String) As Variant
     Exit Function
 
 error_handler:
-    run_step = TStepRunner.fail_step(Err.Number, Err.Description)
+    run_step = TStepRunner.fail_step(Err.Number, Err.description)
 End Function
 
 Public Sub before_example()

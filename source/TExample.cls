@@ -30,11 +30,11 @@ Public Property Let Name(ByVal example_name As String)
     m_example_name = example_name
 End Property
 
-Public Property Get Description() As String
-    Description = m_example_description
+Public Property Get description() As String
+    description = m_example_description
 End Property
 
-Public Property Let Description(ByVal example_description As String)
+Public Property Let description(ByVal example_description As String)
     m_example_description = example_description
 End Property
 

@@ -101,17 +101,17 @@ Private Sub add_description(line As String, feature As TFeature)
     Dim clause As Variant
     
     If feature.Clauses.Count = 0 Then
-        If feature.Description = vbNullString Then
-            feature.Description = Trim(line)
+        If feature.description = vbNullString Then
+            feature.description = Trim(line)
         Else
-            feature.Description = feature.Description & vbLf & Trim(line)
+            feature.description = feature.description & vbLf & Trim(line)
         End If
     Else
         Set clause = feature.Clauses(feature.Clauses.Count)
-        If clause.Description = vbNullString Then
-            clause.Description = Trim(line)
+        If clause.description = vbNullString Then
+            clause.description = Trim(line)
         Else
-            clause.Description = clause.Description & vbLf & Trim(line)
+            clause.description = clause.description & vbLf & Trim(line)
         End If
     End If
 End Sub

@@ -16,7 +16,7 @@ Public Sub run_features(features As Variant, Optional pTags)
         End If
         If should_test_run Then
             TReport.report TReport.TYPE_FEATURE_NAME, TypeName(feature)
-            TReport.report TReport.TYPE_DESC, feature.Description
+            TReport.report TReport.TYPE_DESC, feature.description
             Set examples_list = feature.Examples
             For Each example In examples_list
                 TExampleRunner_Old.run_example example, feature
