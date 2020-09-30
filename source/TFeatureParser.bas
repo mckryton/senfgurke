@@ -20,17 +20,7 @@ Public Function parse_feature(feature_text As String) As TFeature
         For Each line In lines
             keyword_value = read_keyword_value(CStr(line))
             If Not keyword_value(0) = vbNullString Then
-                Select Case keyword_value(0)
-                    Case CLAUSE_TYPE_FEATURE
-                        parsed_feature.Head = CStr(keyword_value(0))
-                        parsed_feature.Name = CStr(keyword_value(1))
-                    Case CLAUSE_TYPE_RULE
-                        Set current_clause = create_rule(rule_name:=CStr(keyword_value(1)))
-                        parsed_feature.Clauses.Add current_clause
-                    Case CLAUSE_TYPE_EXAMPLE
-                        Set current_clause = create_example(example_head:=CStr(keyword_value(0)), example_name:=CStr(keyword_value(1)))
-                        parsed_feature.Clauses.Add current_clause
-                End Select
+                Set current_clause = update_feature(parsed_feature, CStr(keyword_value(0)), CStr(keyword_value(1)))
                 is_example_started = False
             Else
                 If TypeName(current_clause) = "TExample" Then
@@ -47,6 +37,25 @@ Public Function parse_feature(feature_text As String) As TFeature
         Next
     End If
     Set parse_feature = parsed_feature
+End Function
+
+Private Function update_feature(parsed_feature As TFeature, clause_keyword As String, clause_name As String)
+
+    Dim current_clause As Variant
+    
+    Select Case clause_keyword
+        Case CLAUSE_TYPE_FEATURE
+            parsed_feature.Head = CStr(clause_keyword)
+            parsed_feature.Name = CStr(clause_name)
+            Set current_clause = Nothing
+        Case CLAUSE_TYPE_RULE
+            Set current_clause = create_rule(rule_name:=clause_name)
+            parsed_feature.Clauses.Add current_clause
+        Case CLAUSE_TYPE_EXAMPLE
+            Set current_clause = create_example(example_head:=CStr(clause_keyword), example_name:=clause_name)
+            parsed_feature.Clauses.Add current_clause
+    End Select
+    Set update_feature = current_clause
 End Function
 
 Private Function read_keyword_value(text_line As String) As Variant
