@@ -13,6 +13,8 @@ Dim m_example_head As String
 Dim m_example_name As String
 Dim m_example_description As String
 Dim m_steps As Collection
+Dim m_example_tags As Collection
+Dim m_original_headline As String
 
 Public Property Get Head() As String
     Head = m_example_head
@@ -39,7 +41,11 @@ Public Property Let description(ByVal example_description As String)
 End Property
 
 Public Property Get OriginalHeadline() As String
-    OriginalHeadline = Me.Head & " " & Me.Name
+    OriginalHeadline = m_original_headline
+End Property
+
+Public Property Let OriginalHeadline(original_headline As String)
+    m_original_headline = original_headline
 End Property
 
 Public Property Get Steps() As Collection
@@ -49,11 +55,24 @@ Public Property Get Steps() As Collection
     Set Steps = m_steps
 End Property
 
+Public Property Get Tags() As Collection
+    If m_example_tags Is Nothing Then
+        Set m_example_tags = New Collection
+    End If
+    Set Tags = m_example_tags
+End Property
+
+Public Property Let Tags(ByVal example_tags As Collection)
+
+    Set m_example_tags = example_tags
+End Property
+
+
 Public Sub add_step(step_head As String, step_name As String)
 
     Dim new_step As TStep
     Dim previous_step_type As String
-    
+
     If Me.Steps.Count = 0 Then
         previous_step_type = STEP_TYPE_GIVEN
     Else

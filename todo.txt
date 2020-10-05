@@ -4,3 +4,6 @@ parse features:
 
 run examples:
 * revalidate pending
+
+tags:
+* filter multiple tags  
