@@ -11,7 +11,7 @@ Option Explicit
 
 'module variables used for steps
 Dim m_feature_text As String
-Dim m_example As Variant
+Dim m_example As TExample
 Dim m_step_attributes As Collection
 Dim m_parsed_feature As TFeature
 
@@ -146,7 +146,7 @@ End Sub
 Public Sub Given_the_first_line_of_the_feature_is___wip_impor_D41303270416()
     'Given the first line of the feature is "  @wip @important @beta"
 
-    m_feature_text = "  @wip @important @beta"
+    m_feature_text = "  @wip @important @beta" & vbLf & m_feature_text
 End Sub
 
 Public Sub Given_the_line_before_the_only_example_is___wip_im_FC1ACED9ED9D()
@@ -238,4 +238,27 @@ Public Sub Then_the_parsed_feature_doesnt_contain_any_error_0453F9190B1C()
     'Then the parsed feature doesn't contain any error
 
     TSpec.expect(m_parsed_feature.ErrorStatus).to_be vbNullString
+End Sub
+
+Public Sub Then_the_parsed_features_contains_the_tags_wip_imp_3E416E210DFE()
+    'Then the parsed features contains the tags wip, important and beta
+
+    TSpec.expect(m_parsed_feature.Tags("@wip")).to_be "@wip"
+    TSpec.expect(m_parsed_feature.Tags("@important")).to_be "@important"
+    TSpec.expect(m_parsed_feature.Tags("@beta")).to_be "@beta"
+End Sub
+
+Public Sub Then_the_parsed_features_contains_an_example_AF5E191DE8EE()
+    'Then the parsed features contains an example
+    
+    TSpec.expect(TypeName(m_parsed_feature.Clauses(1))).to_be "TExample"
+    Set m_example = m_parsed_feature.Clauses(1)
+End Sub
+
+Public Sub Then_the_example_contains_the_tags_wip_important_a_C2643DFE6EC5()
+    'Then the example contains the tags wip, important and beta
+
+    TSpec.expect(m_example.Tags("@wip")).to_be "@wip"
+    TSpec.expect(m_example.Tags("@important")).to_be "@important"
+    TSpec.expect(m_example.Tags("@beta")).to_be "@beta"
 End Sub

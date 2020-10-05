@@ -74,5 +74,5 @@ Example: example tags
   Given a feature
   And the line before the only example is "  @wip @important @beta"
   When the feature is parsed
-  Then the parsed features contains the an example
+  Then the parsed features contains an example
   And the example contains the tags wip, important and beta
