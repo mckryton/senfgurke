@@ -10,7 +10,7 @@ Attribute VB_Exposed = True
 Option Explicit
 
 'separate tags by comma, e.g.: "wip,debug,production"
-Const cTags = ""
+Const cTags = "wip"
 Dim m_report_output As String
 Dim m_report_msg As Collection
 Dim m_verbose_formatter As TReport_Formatter_Verbose
@@ -109,8 +109,6 @@ Public Function run_step(step_definition As String) As Variant
         Case "Given a feature with a description ""description line 1"""
             Set m_report_msg = TReport.build_msg_package(TReport.TYPE_DESC, "description line 1", vbNullString, vbNullString)
 
-        Case "Given the report format is set to verbose"
-            Set m_verbose_formatter = New TReport_Formatter_Verbose
             
         Case "Given a step ""this is a step"" with the status ""OK"""
             Set m_report_msg = TReport.build_msg_package(TReport.TYPE_STEP, "this is a step", "OK", vbNullString)
@@ -169,18 +167,71 @@ error_handler:
     run_step = TStepRunner.fail_step(Err.Number, Err.description)
 End Function
 
-Public Sub before_example()
+Public Sub Given_the_report_format_is_set_to_verbose_E5DA50C752C0()
+    'Given the report format is set to verbose
+
+    Set m_verbose_formatter = New TReport_Formatter_Verbose
+End Sub
+
+Public Sub Given_a_feature_sample_feature_was_reported_0D24F9E46180()
+    'Given a feature "sample feature" was reported
+
+    Dim report_msg As Collection
     
+    Set report_msg = TReport.build_msg_package(TYPE_FEATURE_NAME, "Feature: sample feature", vbNullString, vbNullString)
+    m_verbose_formatter.process_msg report_msg, silent:=True
 End Sub
 
-Public Sub after_example()
+Public Sub Given_a_rule_empty_rule_was_reported_54FD3DF8F4CE()
+    'Given a rule "empty rule" was reported
 
+    Dim report_msg As Collection
+    
+    Set report_msg = TReport.build_msg_package(TYPE_RULE, "Rule: empty rule", vbNullString, vbNullString)
+    m_verbose_formatter.process_msg report_msg, silent:=True
 End Sub
 
-Public Property Get tags() As Variant
-    tags = cTags
-End Property
+Public Sub Given_a_rule_has_example_was_reported_5994B2613C44()
+    'Given a rule "has example" was reported
 
-Private Sub pending(pending_msg)
-    TStepRunner.pending pending_msg
+    Dim report_msg As Collection
+    
+    Set report_msg = TReport.build_msg_package(TYPE_RULE, "Rule: has example", vbNullString, vbNullString)
+    m_verbose_formatter.process_msg report_msg, silent:=True
+End Sub
+
+Public Sub Given_an_example_sample_example_was_reported_DADE4FE80353()
+    'Given an example "sample example" was reported
+
+    Dim report_msg As Collection
+    
+    Set report_msg = TReport.build_msg_package(TYPE_EXAMPLE_TITLE, "Example: sample example", vbNullString, vbNullString)
+    m_verbose_formatter.process_msg report_msg, silent:=True
+End Sub
+
+Public Sub When_the_execution_of_the_first_example_step_is_re_D9239339DB19()
+    'When the execution of the first example step is reported
+    
+    Dim report_msg As Collection
+    
+    Set report_msg = TReport.build_msg_package(TYPE_STEP, "Given sample step", "OK", vbNullString)
+    m_report_output = m_verbose_formatter.process_msg(report_msg, silent:=True)
+End Sub
+
+Public Sub Then_the_report_output_contains_Feature_sample_fea_8DE9A6ECF9F3()
+    'Then the report output contains "Feature: sample feature"
+
+    TSpec.expect(m_report_output).include "Feature: sample feature"
+End Sub
+
+Public Sub Then_the_report_output_contains_Rule_has_example_59141C67DD91()
+    'Then the report output contains "Rule: has example"
+
+    TSpec.expect(m_report_output).include "Rule: has example"
+End Sub
+
+Public Sub Then_the_report_output_doesnt_contain_Rule_empty_r_8DE9E0B03217()
+    'Then the report output doesn't contain "Rule: empty rule"
+
+    TSpec.expect(m_report_output).not_to_include "Rule: empty rule"
 End Sub

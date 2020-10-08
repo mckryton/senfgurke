@@ -76,9 +76,6 @@ Public Function run_step(step_definition As String) As Variant
     On Error GoTo error_handler
     
     Select Case step_definition
-        
-        Case "Given the current application is stored under ""/Users/cuke/source/senfgurke"""
-            m_doc_path = Join(Split("/Users/cuke/source/senfgurke", "/"), ExtraVBA.get_path_separator)
             
         Case "Given feature dir is set to ""/this/path/does/not/exist/features"""
             m_doc_path = Join(Split("/this/path/does/not/exist/features", "/"), ExtraVBA.get_path_separator)
@@ -103,15 +100,10 @@ Public Function run_step(step_definition As String) As Variant
             TSpec.expect(Dir(m_feature_path)).to_be vbNullString
             TSpec.expect(Dir(m_feature_path & ExtraVBA.get_path_separator & "subdir")).to_be "dummy_1.feature"
             TSpec.expect(Dir()).to_be vbNullString
-        
-        Case "When the location for features is requested"
-            m_feature_path = TFeatureLoader.get_feature_dir(m_doc_path)
+
             
         Case "When the feature dir is read"
             Set m_features = TFeatureLoader.load_features(m_feature_path)
-            
-        Case "Then the feature dir is set to ""/Users/cuke/source/senfgurke/features"""
-            TSpec.expect(m_feature_path).to_be Join(Split("/Users/cuke/source/senfgurke/features", "/"), ExtraVBA.get_path_separator)
             
         Case "Then two features are loaded"
             TSpec.expect(m_features.Count).to_be 2
@@ -129,24 +121,20 @@ error_handler:
     run_step = TStepRunner.fail_step(Err.Number, Err.description)
 End Function
 
-Public Sub before_example()
-    
+Public Sub Given_the_current_application_is_stored_under_User_7A25EDA8AE2B()
+    'Given the current application is stored under "/Users/cuke/source/senfgurke"
+
+    m_doc_path = Join(Split("/Users/cuke/source/senfgurke", "/"), ExtraVBA.get_path_separator)
 End Sub
 
-Public Sub after_example()
+Public Sub When_the_location_for_features_is_requested_2F12A184CE3C()
+    'When the location for features is requested
 
+    m_feature_path = TFeatureLoader.get_feature_dir(m_doc_path)
 End Sub
 
-Public Property Get tags() As Variant
-    tags = cTags
-End Property
+Public Sub Then_the_feature_dir_is_set_to_Userscukesourcesenf_4E87ADCB5888()
+    'Then the feature dir is set to "/Users/cuke/source/senfgurke/features"
 
-Private Sub pending(pending_msg)
-    TStepRunner.pending pending_msg
+    TSpec.expect(m_feature_path).to_be Join(Split("/Users/cuke/source/senfgurke/features", "/"), ExtraVBA.get_path_separator)
 End Sub
-
-Public Property Let description(ByVal new_description As String)
-    m_description = new_description
-End Property
-
-

@@ -85,7 +85,7 @@ Public Function get_path_separator() As String
     #End If
 End Function
 
-Function hash12(s As String)
+Public Function hash12(s As String)
     ' source: https://stackoverflow.com/questions/14717526/vba-hash-string
     ' create a 12 character hash from string s
     
@@ -102,7 +102,7 @@ Function hash12(s As String)
 
 End Function
 
-Function hash4(txt)
+Private Function hash4(txt)
     ' source: https://stackoverflow.com/questions/14717526/vba-hash-string
     Dim x As Long
     Dim mask, i, j, nC, crc As Integer

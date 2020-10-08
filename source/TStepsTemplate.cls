@@ -74,8 +74,8 @@ Public Sub after_example()
 
 End Sub
 
-Public Property Get tags() As Variant
-    tags = cTags
+Public Property Get Tags() As Variant
+    Tags = cTags
 End Property
 
 Private Sub pending(pending_msg)

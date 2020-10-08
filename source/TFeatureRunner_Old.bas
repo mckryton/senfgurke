@@ -35,7 +35,7 @@ Private Function test_has_tag(pTags As Variant, pTesTFeature As Variant)
     
     test_has_tag = False
     input_tags = Split(Replace(pTags, " ", ""), ",")
-    feature_tags = Split(Replace(pTesTFeature.tags, " ", ""), ",")
+    feature_tags = Split(Replace(pTesTFeature.Tags, " ", ""), ",")
     For Each tag In input_tags
         match = Filter(feature_tags, tag, True, vbBinaryCompare)
         If UBound(match) > -1 Then

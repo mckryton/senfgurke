@@ -6,14 +6,14 @@ Dim m_last_fail_msg As String
 Public Function expect(pvarGivenValue As Variant) As TSpecExpectation
 
     Dim expectation As TSpecExpectation
-
+    
     Set expectation = New TSpecExpectation
     expectation.given_value = pvarGivenValue
     Set expect = expectation
 End Function
 
 Public Property Get LastFailMsg() As String
-
+    
     LastFailMsg = m_last_fail_msg
 End Property
 

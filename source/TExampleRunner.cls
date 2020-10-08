@@ -39,7 +39,7 @@ Public Function run_example(example As TExample, Optional silent) As Collection
     Next
     Set run_example = example_statistics
     Exit Function
-
+    
 error_handler:
     TReport.Log.log_function_error "Runtime errror in TExampleRunner.run_example", _
         example(CLAUSE_ATTR_TYPE) & " " & example(CLAUSE_ATTR_NAME)
@@ -57,3 +57,6 @@ End Property
 Private Property Let IsTestStopped(ByVal is_test_stopped As Boolean)
     m_is_test_stopped = is_test_stopped
 End Property
+
+
+

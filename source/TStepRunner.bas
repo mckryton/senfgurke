@@ -65,6 +65,6 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
 End Function
 
 Public Sub pending(pending_msg)
-    Err.Raise ERR_ID_STEP_IS_PENDING, description:=pending_msg
+    fail_step ERR_ID_STEP_IS_PENDING, pending_msg
 End Sub
 

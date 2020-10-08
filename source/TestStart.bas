@@ -1,7 +1,7 @@
 Attribute VB_Name = "TestStart"
 Option Explicit
 
-Public Sub run_tests(Optional tags, Optional report_format)
+Public Sub run_tests(Optional Tags, Optional report_format)
     
     Dim step_definitions As Variant
     Dim reporter As Variant
@@ -12,7 +12,7 @@ Public Sub run_tests(Optional tags, Optional report_format)
         Debug.Print "PENDING: support for mutliple report formats"
     End If
     step_definitions = Array(New Steps_Verbose_Output, New Steps_Load_Feature_Files, New Steps_Run_Steps)
-    TFeatureRunner_Old.run_features step_definitions, tags
+    TFeatureRunner_Old.run_features step_definitions, Tags
 End Sub
 
 Public Sub run_wip_test()

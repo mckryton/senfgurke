@@ -13,7 +13,9 @@ Dim m_feature_head As String
 Dim m_feature_name As String
 Dim m_feature_description As String
 Dim m_clauses As Collection
+Dim m_feature_tags As Collection
 Dim m_error_status As String
+Dim m_parsed_lines_index As Long
 
 Public Property Get Head() As String
     Head = m_feature_head
@@ -54,6 +56,50 @@ Public Property Let ErrorStatus(ByVal error_status As String)
     m_error_status = error_status
 End Property
 
+Public Property Get Tags() As Collection
+    If m_feature_tags Is Nothing Then
+        Set m_feature_tags = New Collection
+    End If
+    Set Tags = m_feature_tags
+End Property
+
+Public Property Let Tags(ByVal feature_tags As Collection)
+
+    Set m_feature_tags = feature_tags
+End Property
+
+Public Property Get ParsedLinesIndex() As Long
+    ParsedLinesIndex = m_parsed_lines_index
+End Property
+
+Public Property Let ParsedLinesIndex(ByVal parsed_lines_index As Long)
+    m_parsed_lines_index = parsed_lines_index
+End Property
+
+Public Sub add_tags(feature_line As String)
+
+    Dim tag_list As Variant
+    Dim index As Long
+    Dim tag As Variant
+    
+    tag_list = Split(Trim(feature_line), " ")
+    For Each tag In tag_list
+        If Len(tag) > 1 Then
+            If Left(tag, 1) = "@" Then
+                If Not ExtraVBA.existsItem(tag, Me.Tags) Then
+                    Me.Tags.Add tag, tag
+                End If
+            End If
+        End If
+    Next
+End Sub
 Private Sub Class_Initialize()
     m_error_status = vbNullString
+    m_parsed_lines_index = 0
+End Sub
+
+Private Sub Class_Terminate()
+
+    Set m_clauses = Nothing
+    Set m_feature_tags = Nothing
 End Sub

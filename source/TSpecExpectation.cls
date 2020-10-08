@@ -123,6 +123,38 @@ Public Sub contains(pvarExpectedItem As Variant)
     End If
 End Sub
 
+Public Function include(include_item As Variant) As Boolean
+
+    Dim matcher_fail_msg As String
+    
+    If TypeName(include_item) = "String" Then
+        If InStr(Me.given_value, include_item) = 0 Then
+            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+                        vbTab & "string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                        vbTab & "should include:" & vbTab & ">" & include_item & "<"
+            raise_expectation_err matcher_fail_msg
+        End If
+    Else
+        Debug.Print "PENDING: include test for arrays"
+    End If
+End Function
+
+Public Function not_to_include(include_item As Variant) As Boolean
+
+    Dim matcher_fail_msg As String
+    
+    If TypeName(include_item) = "String" Then
+        If InStr(Me.given_value, include_item) > 0 Then
+            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+                        vbTab & "string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                        vbTab & "should not include:" & vbTab & ">" & include_item & "<"
+            raise_expectation_err matcher_fail_msg
+        End If
+    Else
+        Debug.Print "PENDING: include test for arrays"
+    End If
+End Function
+
 Private Sub raise_expectation_err(fail_msg)
     
     TSpec.LastFailMsg = fail_msg

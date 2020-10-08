@@ -72,7 +72,7 @@ Public Sub add_step(step_head As String, step_name As String)
 
     Dim new_step As TStep
     Dim previous_step_type As String
-
+    
     If Me.Steps.Count = 0 Then
         previous_step_type = STEP_TYPE_GIVEN
     Else

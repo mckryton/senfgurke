@@ -9,13 +9,38 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub process_msg(msg_package As Collection)
+Dim m_current_feature As String
+Dim m_current_rule As String
+Dim m_current_example As String
+
+Public Function process_msg(msg_package As Collection, Optional silent) As String
 
     Dim message As String
 
+    If IsMissing(silent) Then silent = False
     message = prepare_msg(msg_package)
-    Debug.Print message
-End Sub
+    Select Case msg_package(TReport.MSG_TYPE)
+        Case TReport.TYPE_FEATURE_NAME
+            CurrentFeature = message & vbLf
+        Case TReport.TYPE_DESC
+            CurrentFeature = CurrentFeature & message & vbLf
+        Case TReport.TYPE_RULE
+            CurrentRule = message & vbLf
+        Case TReport.TYPE_EXAMPLE_TITLE
+            CurrentExample = message & vbLf
+        Case TReport.TYPE_STEP
+            message = Join(Split(CurrentFeature & CurrentRule & CurrentExample & message, vbLf), vbLf)
+            'report feature names, rules and example titles only when example steps are reported
+            If Not silent Then Debug.Print message
+            process_msg = message
+            CurrentFeature = vbNullString
+            CurrentRule = vbNullString
+            CurrentExample = vbNullString
+        Case Else
+            Debug.Print "DEBUG: unknown report msg type >" & msg_package(TReport.MSG_TYPE) & "<"
+            process_msg = vbNullString
+    End Select
+End Function
 
 Public Function prepare_msg(msg_package As Collection) As String
     
@@ -64,3 +89,27 @@ End Function
 Public Function format_rule(rule As String) As String
     format_rule = vbLf & Join(Split(rule, vbLf), vbLf + Space$(7))
 End Function
+
+Private Property Get CurrentFeature() As String
+    CurrentFeature = m_current_feature
+End Property
+
+Private Property Let CurrentFeature(ByVal current_feature As String)
+    m_current_feature = current_feature
+End Property
+
+Private Property Get CurrentRule() As String
+    CurrentRule = m_current_rule
+End Property
+
+Private Property Let CurrentRule(ByVal current_rule As String)
+    m_current_rule = current_rule
+End Property
+
+Private Property Get CurrentExample() As String
+    CurrentExample = m_current_example
+End Property
+
+Private Property Let CurrentExample(ByVal current_example As String)
+    m_current_example = current_example
+End Property

@@ -2,7 +2,7 @@ Attribute VB_Name = "TRun"
 Option Explicit
 
 Public Sub test(Optional filter_tag, Optional report_format)
-
+    
     Dim step_definitions As Variant
     Dim features_as_text As Collection
     Dim parsed_features As Collection
@@ -21,6 +21,6 @@ End Sub
 
 Public Sub wip()
     'wip = work in progress
-
+    
     test "@wip"
 End Sub

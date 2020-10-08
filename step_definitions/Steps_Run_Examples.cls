@@ -29,7 +29,7 @@ End Sub
 
 Public Sub Given_a_feature_has_a_first_example_tagged_example_A6ACCC9CD3BB()
     'Given a feature has a first example "tagged example" with the tag "@sample"
-
+    
     m_feature_text = "Feature: sample feature" & vbLf _
                         & vbLf _
                         & "@sample" & vbLf _
@@ -49,16 +49,16 @@ End Sub
 Public Sub When_the_example_is_executed_A6DB3176A298()
     'When the example is executed
     Dim example_runner As TExampleRunner
-
+    
     Set example_runner = New TExampleRunner
     Set m_example_statistics = example_runner.run_example(m_parsed_feature.Clauses(1), silent:=True)
 End Sub
 
 Public Sub When_the_feature_is_executed_with_tag_parameter_sa_2662F331171B()
     'When the feature is executed with tag parameter "@sample"
-
+    
     Dim parsed_feature As TFeature
-
+    
     Set parsed_feature = TFeatureParser.parse_feature(m_feature_text)
     Set m_feature_statistics = TFeatureRunner.run_feature(parsed_feature, filter_tag:="@sample", silent:=True)
 End Sub

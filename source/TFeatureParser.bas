@@ -22,7 +22,7 @@ Public Function parse_feature(feature_text As String) As TFeature
             line = Trim(lines(line_index))
             keyword_value = read_keyword_value(CStr(line))
             If Not keyword_value(0) = vbNullString Then
-                Set current_clause = update_feature(parsed_feature, CStr(keyword_value(0)), CStr(keyword_value(1)), clause_tags)
+                Set current_clause = update_feature(parsed_feature, CStr(keyword_value(0)), CStr(keyword_value(1)), clause_tags, line)
                 has_example_steps = False
                 Set clause_tags = clone_tags(parsed_feature.Tags)
             ElseIf is_tag_line(line) Then
@@ -103,7 +103,7 @@ Public Sub add_tags(feature_line As String, Tags As Collection)
     Next
 End Sub
 
-Private Function update_feature(parsed_feature As TFeature, clause_keyword As String, clause_name As String, clause_tags As Collection)
+Private Function update_feature(parsed_feature As TFeature, clause_keyword As String, clause_name As String, clause_tags As Collection, feature_line As String)
 
     Dim current_clause As Variant
     
@@ -112,7 +112,7 @@ Private Function update_feature(parsed_feature As TFeature, clause_keyword As St
             Set current_clause = create_rule(rule_name:=clause_name)
             parsed_feature.Clauses.Add current_clause
         Case CLAUSE_TYPE_EXAMPLE
-            Set current_clause = create_example(example_head:=CStr(clause_keyword), example_name:=clause_name, example_tags:=clause_tags)
+            Set current_clause = create_example(example_head:=CStr(clause_keyword), example_name:=clause_name, example_tags:=clause_tags, feature_line:=feature_line)
             parsed_feature.Clauses.Add current_clause
         Case Else
             Debug.Print "PARSE ERROR: unknown clause >" & clause_keyword & "<"
@@ -157,7 +157,7 @@ Private Function create_rule(rule_name As String) As TRule
     Set create_rule = new_rule
 End Function
 
-Private Function create_example(example_head As String, example_name As String, example_tags As Collection) As TExample
+Private Function create_example(example_head As String, example_name As String, example_tags As Collection, feature_line As String) As TExample
 
     Dim new_example As TExample
     
@@ -165,6 +165,7 @@ Private Function create_example(example_head As String, example_name As String, 
     new_example.Head = example_head
     new_example.Name = example_name
     new_example.Tags = example_tags
+    new_example.OriginalHeadline = feature_line
     Set create_example = new_example
 End Function
 
