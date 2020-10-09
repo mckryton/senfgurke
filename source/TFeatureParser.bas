@@ -1,6 +1,8 @@
 Attribute VB_Name = "TFeatureParser"
 Option Explicit
 
+Const KEYWORDS = "Example,Scenario,Scenario Outline,Rule,Ability,Business Needs,Feature"
+
 Public Function parse_feature(feature_text As String) As TFeature
 
     Dim parsed_feature As TFeature
@@ -20,13 +22,15 @@ Public Function parse_feature(feature_text As String) As TFeature
     If parsed_feature.ErrorStatus = vbNullString Then
         For line_index = parsed_feature.ParsedLinesIndex + 1 To UBound(lines)
             line = Trim(lines(line_index))
-            keyword_value = read_keyword_value(CStr(line))
-            If Not keyword_value(0) = vbNullString Then
+            If is_clause_definition_line(line) Then
+                keyword_value = read_keyword_value(CStr(line))
                 Set current_clause = update_feature(parsed_feature, CStr(keyword_value(0)), CStr(keyword_value(1)), clause_tags, line)
                 has_example_steps = False
                 Set clause_tags = clone_tags(parsed_feature.Tags)
             ElseIf is_tag_line(line) Then
                 add_tags line, clause_tags
+            ElseIf is_comment_line(line) Then
+                'ignore comments
             Else
                 If TypeName(current_clause) = "TExample" Then
                     step_head_name = read_step_head_name(CStr(line))
@@ -57,11 +61,13 @@ Private Function parse_feature_definition(feature_text As String) As TFeature
     header_finished = False
     line_index = 0
     feature_lines = Split(feature_text, vbLf)
-    Do While line_index < UBound(feature_lines) And header_finished = False
+    Do While line_index <= UBound(feature_lines) And header_finished = False
         line = CStr(feature_lines(line_index))
         If is_tag_line(line) Then
-             parsed_feature.add_tags line
-             line_index = line_index + 1
+            parsed_feature.add_tags line
+            line_index = line_index + 1
+        ElseIf is_comment_line(line) Then
+            line_index = line_index + 1
         Else
             feature_spec = read_keyword_value(line)
             If Not CStr(feature_spec(0)) = CLAUSE_TYPE_FEATURE Then
@@ -74,6 +80,33 @@ Private Function parse_feature_definition(feature_text As String) As TFeature
     Loop
     parsed_feature.ParsedLinesIndex = line_index
     Set parse_feature_definition = parsed_feature
+End Function
+
+Private Function is_clause_definition_line(feature_line As String) As Boolean
+    
+    Dim keyword  As Variant
+    Dim clause_name As String
+    
+    'clause definition format is /^<keyword>:[^:]*$/
+    If UBound(Split(Trim(feature_line), ":")) > 0 Then
+        clause_name = Split(Trim(feature_line), ":")(0)
+        For Each keyword In Split(KEYWORDS, ",")
+            If clause_name = CStr(keyword) Then
+               is_clause_definition_line = True
+               Exit Function
+            End If
+        Next
+    End If
+    is_clause_definition_line = False
+End Function
+
+Private Function is_comment_line(feature_line As String) As Boolean
+
+    If Left(Trim(feature_line), 1) = "#" Then
+        is_comment_line = True
+    Else
+        is_comment_line = False
+    End If
 End Function
 
 Private Function is_tag_line(feature_line As String) As Boolean
@@ -205,16 +238,16 @@ Private Function read_step_head_name(line As String) As Variant
     read_step_head_name = Array(vbNullString, vbNullString)
 End Function
 
-Public Function parse_feature_list(features_as_text As Collection) As Collection
+Public Function parse_loaded_features(feature_list As Collection) As Collection
     
     Dim feature_text As Variant
     Dim parsed_features As Collection
 
     Set parsed_features = New Collection
-    For Each feature_text In features_as_text
+    For Each feature_text In feature_list
         parsed_features.Add parse_feature(CStr(feature_text))
     Next
-    Set parse_feature_list = parsed_features
+    Set parse_loaded_features = parsed_features
 End Function
 
 Private Function clone_tags(source_tags As Collection) As Collection

@@ -12,7 +12,7 @@ Public Sub test(Optional filter_tag, Optional report_format)
     If IsMissing(filter_tag) Then filter_tag = vbNullString
     If IsMissing(report_format) Then TReport.Report_Formatter = New TReport_Formatter_Verbose
     Set features_as_text = TFeatureLoader.load_features
-    Set parsed_features = TFeatureParser.parse_feature_list(features_as_text)
+    Set parsed_features = TFeatureParser.parse_loaded_features(features_as_text)
     For Each parsed_feature In parsed_features
         Set feature = parsed_feature
         TFeatureRunner.run_feature feature, filter_tag:=filter_tag

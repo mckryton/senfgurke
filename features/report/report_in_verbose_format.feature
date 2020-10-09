@@ -5,7 +5,6 @@ Ability: Report in verbose format
 
   Rule: feature and rule  names and description are only shown when a following example is executed
 
-    @wip
     Example: rule without example
       Given the report format is set to verbose
       And a feature "sample feature" was reported
