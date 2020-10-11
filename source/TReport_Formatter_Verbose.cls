@@ -67,7 +67,7 @@ Public Function format_step(step As String, status As String, err_msg As String)
     
     Dim formatted_msg As String
 
-    formatted_msg = vbTab & " " & status & Space$(10 - 1 - Len(status)) & step
+    formatted_msg = Space$(4) & " " & status & Space$(10 - 1 - Len(status)) & step
     If err_msg <> vbNullString Then
         formatted_msg = formatted_msg & vbLf & Space$(10) & err_msg
     End If
@@ -75,7 +75,7 @@ Public Function format_step(step As String, status As String, err_msg As String)
 End Function
 
 Public Function format_example_title(example_title As String) As String
-    format_example_title = vbLf & vbTab & example_title
+    format_example_title = vbLf & Space$(4) & example_title
 End Function
 
 Public Function format_feature_name(feature_name As String) As String
@@ -83,11 +83,11 @@ Public Function format_feature_name(feature_name As String) As String
 End Function
 
 Public Function format_feature_description(description As String) As String
-    format_feature_description = vbTab & Join(Split(description, vbLf), vbLf + vbTab)
+    format_feature_description = Space$(4) & Join(Split(description, vbLf), vbLf + vbTab)
 End Function
 
 Public Function format_rule(rule As String) As String
-    format_rule = vbLf & Join(Split(rule, vbLf), vbLf + Space$(7))
+    format_rule = vbLf & Space$(2) & Join(Split(rule, vbLf), vbLf + Space$(7))
 End Function
 
 Private Property Get CurrentFeature() As String

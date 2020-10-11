@@ -1,4 +1,3 @@
-@wip
 Ability: parse examples
   Senfgurke will read feature specs from text
   and identify examples and their example steps from within features
