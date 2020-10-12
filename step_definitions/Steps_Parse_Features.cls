@@ -9,11 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_feature_text As String
-Dim m_example As TExample
-Dim m_step_attributes As Collection
-Dim m_parsed_feature As TFeature
-
 Public Sub Given_a_feature_this_is_just_some_text_br_without__E5818F3BFB1B()
     'Given a feature "this is just some text <br> without a feature keyword"
     m_feature_text = Replace("this is just some text <br> without a feature keyword", " <br> ", vbLf)
@@ -57,26 +52,6 @@ End Sub
 Public Sub Given_a_feature_F5C67A506977()
     'Given a feature
     m_feature_text = "Feature: sample feature"
-End Sub
-
-Public Sub Given_the_feature_includes_a_line___Example_sample_AB5AFF90706C()
-    'Given the feature includes a line "  Example: sample example"
-    m_feature_text = m_feature_text & vbLf & "  Example: sample example"
-End Sub
-
-Public Sub Given_this_line_is_followed_by_____Given_a_precond_888463027745()
-    'Given this line is followed by "    Given a precondition"
-    m_feature_text = m_feature_text & vbLf & "    Given a precondition"
-End Sub
-
-Public Sub Given_this_line_is_followed_by_____When_action_hap_85C0334B9847()
-    'Given this line is followed by "    When action happens"
-    m_feature_text = m_feature_text & vbLf & "    When action happens"
-End Sub
-
-Public Sub Given_this_line_is_followed_by_____Then_some_resul_EA08DF64E8E9()
-    'Given this line is followed by "    Then some result is expected"
-    m_feature_text = m_feature_text & vbLf & "    Then some result is expected"
 End Sub
 
 Public Sub Given_a_feature_tag1_tag2brFeature_sample_feature_015C96EDA874()
@@ -156,9 +131,10 @@ Public Sub Then_the_rules_description_is_set_to_this_is_a_des_B3D47E4F8255()
      TSpec.expect(m_parsed_feature.Clauses(1).description).to_be "this is a description"
 End Sub
 
-Public Sub Then_the_parsed_result_contains_an_example_AF5E3525167D()
-    'Then the parsed result contains an example
+Public Sub Then_the_parsed_features_contains_an_example_AF5E191DE8EE()
+    'Then the parsed features contains an example
     TSpec.expect(TypeName(m_parsed_feature.Clauses(1))).to_be "TExample"
+    Set m_example = m_parsed_feature.Clauses(1)
 End Sub
 
 Public Sub Then_the_example_clause_from_the_parsed_result_con_F111F3E2BACC()
@@ -189,12 +165,6 @@ Public Sub Then_the_parsed_features_contains_the_tags_wip_imp_3E416E210DFE()
     TSpec.expect(m_parsed_feature.Tags("@wip")).to_be "@wip"
     TSpec.expect(m_parsed_feature.Tags("@important")).to_be "@important"
     TSpec.expect(m_parsed_feature.Tags("@beta")).to_be "@beta"
-End Sub
-
-Public Sub Then_the_parsed_features_contains_an_example_AF5E191DE8EE()
-    'Then the parsed features contains an example
-    TSpec.expect(TypeName(m_parsed_feature.Clauses(1))).to_be "TExample"
-    Set m_example = m_parsed_feature.Clauses(1)
 End Sub
 
 Public Sub Then_the_example_contains_the_tags_wip_important_a_C2643DFE6EC5()

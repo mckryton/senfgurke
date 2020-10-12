@@ -2,7 +2,6 @@ Ability: parse features
   Senfgurke will read feature specs from text
   and identify it's elements like descriptions, rules and examples
 
-  # Rule: translate synonyms Ability,Business Needs to Feature
   Rule: parse features spec only if it's starting with "Feature:" keyword or synonyms or has preceding tags
 
     Example: feature spec without feature keyword
@@ -48,3 +47,9 @@ Ability: parse features
       When the feature is parsed
       Then the parsed feature contains a rule
       And the rules description is set to "this is a description"
+
+  Rule: steps following a background clause are assigned to the feature
+
+    Example: background with one Given step
+
+  # Rule: translate synonyms Ability,Business Needs to Feature
