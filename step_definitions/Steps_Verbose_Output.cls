@@ -64,24 +64,35 @@ Public Sub Given_a_feature_with_a_description______________de_57503E7AB70E()
     Set m_report_msg = TReport.build_msg_package(TYPE_DESC, "description line", vbNullString, vbNullString)
 End Sub
 
-Public Sub Given_a_step_this_is_a_step_with_the_status_OK_0E21472CE4EB()
-    'Given a step "this is a step" with the status "OK"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "this is a step", "OK", vbNullString)
+Public Sub Given_a_step_Given_a_sample_step_with_the_status_O_5B21E75AB1FF()
+    'Given a step "Given a sample step" with the status "OK"
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "OK", vbNullString)
 End Sub
 
-Public Sub Given_a_step_this_is_a_step_with_the_status_FAIL_360E08B64EC7()
-    'Given a step "this is a step" with the status "FAIL"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "this is a step", "FAIL", vbNullString)
+Public Sub Given_a_step_Given_a_sample_step_with_the_status_F_F41A25B4E7EE()
+    'Given a step "Given a sample step" with the status "FAIL"
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "FAIL", vbNullString)
 End Sub
 
-Public Sub Given_a_step_this_is_a_step_with_the_status_MISSIN_21F60E25EEB6()
-    'Given a step "this is a step" with the status "MISSING"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "this is a step", "MISSING", vbNullString)
+Public Sub Given_a_step_Given_a_sample_step_with_the_status_M_1374A1806E0C()
+    'Given a step "Given a sample step" with the status "MISSING"
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "MISSING", vbNullString)
 End Sub
 
-Public Sub Given_a_step_this_is_a_step_with_the_status_PENDIN_21F60E25F5CD()
-    'Given a step "this is a step" with the status "PENDING"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "this is a step", "PENDING", vbNullString)
+Public Sub Given_a_step_Given_a_sample_step_with_the_status_P_1374A1807577()
+    'Given a step "Given a sample step" with the status "PENDING"
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "PENDING", vbNullString)
+End Sub
+
+Public Sub Given_a_rule_this_is_a_sample_rulebrand_this_is_li_66F25EBBC7D8()
+    'Given a rule "this is a sample rule<br>and this is line 2 of the same rule"
+    Set m_report_msg = TReport.build_msg_package(TYPE_RULE, "this is a sample rule" & vbLf _
+                                                & " and this is line 2 of the same rule", "PENDING", vbNullString)
+End Sub
+
+Public Sub Given_a_step_Given_a_sample_step_fails_with_the_er_A7846F27AC5A()
+    'Given a step "Given a sample step" fails with the error message "err: sample err msg"
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "FAIL", "err: sample err msg")
 End Sub
 
 Public Sub When_the_execution_of_the_first_example_step_is_re_D9239339DB19()
@@ -118,22 +129,42 @@ Public Sub Then_the_description_is_reported_as_____descriptio_DC415FBFDF74()
     TSpec.expect(m_report_output).to_be "    description line"
 End Sub
 
-Public Sub Then_the_resulting_output_is_set_to______OK________797C1D1BB64A()
-    'Then the resulting output is set to "     OK       this is a step"
-    TSpec.expect(m_report_output).to_be "     OK       this is a step"
+Public Sub Then_the_resulting_output_is_set_to______OK________0579C48400A4()
+    'Then the resulting output is set to "     OK       Given a sample step"
+    TSpec.expect(m_report_output).to_be "     OK       Given a sample step"
 End Sub
 
-Public Sub Then_the_resulting_output_is_set_to______FAIL______797C4A9D98D0()
-    'Then the resulting output is set to "     FAIL     this is a step"
-    TSpec.expect(m_report_output).to_be "     FAIL     this is a step"
+Public Sub Then_the_resulting_output_is_set_to______FAIL______0579278900A4()
+    'Then the resulting output is set to "     FAIL     Given a sample step"
+    TSpec.expect(m_report_output).to_be "     FAIL     Given a sample step"
 End Sub
 
-Public Sub Then_the_resulting_output_is_set_to______MISSING___797CBC9B3E08()
-    'Then the resulting output is set to "     MISSING  this is a step"
-    TSpec.expect(m_report_output).to_be "     MISSING  this is a step"
+Public Sub Then_the_resulting_output_is_set_to______MISSING___05796940D9E8()
+    'Then the resulting output is set to "     MISSING  Given a sample step"
+    TSpec.expect(m_report_output).to_be "     MISSING  Given a sample step"
 End Sub
 
-Public Sub Then_the_resulting_output_is_set_to______PENDING___797CE9928C61()
-    'Then the resulting output is set to "     PENDING  this is a step"
-    TSpec.expect(m_report_output).to_be "     PENDING  this is a step"
+Public Sub Then_the_resulting_output_is_set_to______PENDING___057958CFD9E8()
+    'Then the resulting output is set to "     PENDING  Given a sample step"
+    TSpec.expect(m_report_output).to_be "     PENDING  Given a sample step"
+End Sub
+
+Public Sub Then_the_resulting_output_starts_with_a_new_line_3C50FD6E1351()
+    'Then the resulting output starts with a new line
+    TSpec.expect(Left(m_report_output, 1)).to_be vbLf
+End Sub
+
+Public Sub Then_every_line_after_the_first_one_is_indented_by_B850B3BC8E58()
+    'Then every line after the first one is indented by 7 spaces
+    TSpec.expect(Left(Split(m_report_output, vbLf)(2), 7)).to_be Space$(7)
+End Sub
+
+Public Sub Then_the_resulting_output_starts_with_the_step_sta_D72578893FDD()
+    'Then the resulting output starts with the step status and name
+    TSpec.expect(Split(m_report_output, vbLf)(0)).to_be "     FAIL     Given a sample step"
+End Sub
+
+Public Sub Then_the_second_line_shows_the_indented_error_mess_629169F5560B()
+    'Then the second line shows the indented error message
+    TSpec.expect(Split(m_report_output, vbLf)(1)).to_be Space$(10) & "err: sample err msg"
 End Sub
