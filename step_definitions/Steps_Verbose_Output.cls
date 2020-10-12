@@ -65,34 +65,34 @@ Public Sub Given_a_feature_with_a_description______________de_57503E7AB70E()
 End Sub
 
 Public Sub Given_a_step_Given_a_sample_step_with_the_status_O_5B21E75AB1FF()
-    'Given a step "Given a sample step" with the status "OK"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "OK", vbNullString)
+    'Given a step "Given a sample step" with the status STATUS_OK
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", STATUS_OK, vbNullString)
 End Sub
 
 Public Sub Given_a_step_Given_a_sample_step_with_the_status_F_F41A25B4E7EE()
-    'Given a step "Given a sample step" with the status "FAIL"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "FAIL", vbNullString)
+    'Given a step "Given a sample step" with the status STATUS_FAIL
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", STATUS_FAIL, vbNullString)
 End Sub
 
 Public Sub Given_a_step_Given_a_sample_step_with_the_status_M_1374A1806E0C()
-    'Given a step "Given a sample step" with the status "MISSING"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "MISSING", vbNullString)
+    'Given a step "Given a sample step" with the status STATUS_MISSING
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", STATUS_MISSING, vbNullString)
 End Sub
 
 Public Sub Given_a_step_Given_a_sample_step_with_the_status_P_1374A1807577()
-    'Given a step "Given a sample step" with the status "PENDING"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "PENDING", vbNullString)
+    'Given a step "Given a sample step" with the status STATUS_PENDING
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", STATUS_PENDING, vbNullString)
 End Sub
 
 Public Sub Given_a_rule_this_is_a_sample_rulebrand_this_is_li_66F25EBBC7D8()
     'Given a rule "this is a sample rule<br>and this is line 2 of the same rule"
     Set m_report_msg = TReport.build_msg_package(TYPE_RULE, "this is a sample rule" & vbLf _
-                                                & " and this is line 2 of the same rule", "PENDING", vbNullString)
+                                                & " and this is line 2 of the same rule", STATUS_PENDING, vbNullString)
 End Sub
 
 Public Sub Given_a_step_Given_a_sample_step_fails_with_the_er_A7846F27AC5A()
     'Given a step "Given a sample step" fails with the error message "err: sample err msg"
-    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", "FAIL", "err: sample err msg")
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, "Given a sample step", STATUS_FAIL, "err: sample err msg")
 End Sub
 
 Public Sub When_the_execution_of_the_first_example_step_is_re_D9239339DB19()
@@ -100,7 +100,7 @@ Public Sub When_the_execution_of_the_first_example_step_is_re_D9239339DB19()
     
     Dim report_msg As Collection
     
-    Set report_msg = TReport.build_msg_package(TYPE_STEP, "Given sample step", "OK", vbNullString)
+    Set report_msg = TReport.build_msg_package(TYPE_STEP, "Given sample step", STATUS_OK, vbNullString)
     m_report_output = m_verbose_formatter.process_msg(report_msg, silent:=True)
 End Sub
 
@@ -161,7 +161,7 @@ End Sub
 
 Public Sub Then_the_resulting_output_starts_with_the_step_sta_D72578893FDD()
     'Then the resulting output starts with the step status and name
-    TSpec.expect(Split(m_report_output, vbLf)(0)).to_be "     FAIL     Given a sample step"
+    TSpec.expect(Split(m_report_output, vbLf)(0)).to_be "     STATUS_FAIL     Given a sample step"
 End Sub
 
 Public Sub Then_the_second_line_shows_the_indented_error_mess_629169F5560B()

@@ -1,4 +1,3 @@
-@wip
 Ability: Report in verbose format
     While executing examples senfgurke will send messages about progress
     and success for reporting. The verbose formatter will turn those messages into

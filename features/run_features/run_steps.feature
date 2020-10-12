@@ -40,9 +40,9 @@ Ability: run steps
       Then the code template for the step implementation is "Public Sub Given_a_valid_step_8A74152FD2F9()<br>    'Given a valid step<br><br>End Sub"
 
 
-  Rule: the name of the step implemenation function is the full step name  stripped from illegal characters and spaces replaced with underscore + hash
+  Rule: the name of the step implemenation function is the full step name  stripped from illegal characters and spaces replaced with underscore + hash from the original step name
 
     Example: simple step name
       Given a step "Given a step"
       When the step is translated into a function name
-      Then the name of the resulting function is "Given_a_step"
+      Then the name of the resulting function is "Given_a_step_C7224E350E70"

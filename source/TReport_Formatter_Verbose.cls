@@ -79,7 +79,7 @@ Public Function format_example_title(example_title As String) As String
 End Function
 
 Public Function format_feature_name(feature_name As String) As String
-    format_feature_name = vbLf & "Test case: " & feature_name
+    format_feature_name = vbLf & "Feature: " & feature_name
 End Function
 
 Public Function format_feature_description(description As String) As String

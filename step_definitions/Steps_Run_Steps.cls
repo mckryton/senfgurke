@@ -11,110 +11,8 @@ Option Explicit
 
 Dim m_example_step As TStep
 Dim m_step_result As Variant
-Dim m_step_implementation_name As String
-Dim m_step_implementation_template As String
-
-Public Function run_step(step_definition As String) As Variant
-
-    Dim step_attributes As Collection
-    Dim feature_clause As Collection
-    
-    On Error GoTo error_handler
-    Select Case step_definition
-        
-        Case "Given a step with an empty implementation"
-            Set m_example_step = New TStep
-            With m_example_step
-                .SType = STEP_TYPE_GIVEN
-                .Name = "an empty step"
-            End With
-            
-        Case "Given an empty step"
-            'until VBA adds support for closures, there seems to be no way to create functions on the fly
-            ' therefore this step implementation is fix
-            
-        Case "Given a step with a working implementation"
-            Set m_example_step = New TStep
-            With m_example_step
-                .SType = STEP_TYPE_GIVEN
-                .Name = "a valid step"
-            End With
-            
-        Case "Given a valid step"
-            TSpec.expect(1).to_be 1
-            
-        Case "Given a step with a failing implementation"
-            Set m_example_step = New TStep
-            With m_example_step
-                .SType = STEP_TYPE_GIVEN
-                .Name = "an invalid step"
-            End With
-            
-        Case "Given an invalid step"
-            TSpec.expect(1).to_be 2
-            
-        Case "Given a step without an implementation"
-            Set m_example_step = New TStep
-            With m_example_step
-                .SType = STEP_TYPE_GIVEN
-                .Name = CStr(Now()) 'create a random step name
-            End With
-                                                                      
-        Case "Given a step ""Given a step"""
-            Set m_example_step = New TStep
-            With m_example_step
-                .SType = STEP_TYPE_GIVEN
-                .Name = "a step"
-            End With
-            
-        Case "Given a step ""Given a valid step"""
-            Set m_example_step = New TStep
-            With m_example_step
-                .SType = STEP_TYPE_GIVEN
-                .Name = "a valid step"
-            End With
-        
-        Case "When the step is executed"
-            m_step_result = TStepRunner.run_step(m_example_step)
-        
-        Case "When the step is translated into a function name"
-            m_step_implementation_name = m_example_step.get_step_function_name()
-            
-        Case "When the code template for the step implementation is requested"
-            m_step_implementation_template = m_example_step.get_step_function_template
-        
-        Case "Then the execution result is ""OK"""
-            TSpec.expect(m_step_result(0)).to_be "OK"
-            
-        Case "Then the execution result is ""FAIL"""
-            TSpec.expect(m_step_result(0)).to_be "FAIL"
-            
-        Case "Then the execution result is ""MISSING"""
-            TSpec.expect(m_step_result(0)).to_be "MISSING"
-        
-        Case "Then the name of the resulting function is ""Given_a_step"""
-            TSpec.expect(Left(m_step_implementation_name, Len("Given_a_step"))).to_be "Given_a_step"
-            TSpec.expect(Len(m_step_implementation_name)).to_be Len("Given_a_step_xxXXxxXXxxXX")
-            
-        Case "Then the code template for the step implementation is " & _
-                            """Public Sub Given_a_valid_step_8A74152FD2F9()<br>" _
-                            & "    'Given a valid step<br><br>" _
-                            & "End Sub"""
-            TSpec.expect(m_step_implementation_template).to_be "Public Sub Given_a_valid_step_8A74152FD2F9()" & vbLf _
-                                                                & "    'Given a valid step" & vbLf _
-                                                                & vbLf _
-                                                                & "End Sub"
-        
-        Case Else
-            Err.Raise ERR_ID_STEP_IS_MISSING
-    End Select
-    run_step = Array(STEP_RESULT_OK)
-    Exit Function
-
-error_handler:
-    run_step = TStepRunner.fail_step(Err.Number, Err.description)
-End Function
-
+Dim m_step_function_template As String
+Dim m_step_function_name As String
 
 Public Sub Given_an_empty_step_8A7408D743D5()
 
@@ -126,5 +24,93 @@ End Sub
 
 Public Sub Given_an_invalid_step_CF4B201BCF1B()
     TSpec.expect(1).to_be 2
+End Sub
+
+Public Sub Given_a_step_with_an_empty_implementation_F776BB776C61()
+    'Given a step with an empty implementation
+    Set m_example_step = New TStep
+    m_example_step.SType = STEP_TYPE_GIVEN
+    m_example_step.Name = "an empty step"
+    'the step function itself can't be created dynamically
+End Sub
+
+Public Sub Given_a_step_with_a_working_implementation_C0368FD3CAAA()
+    'Given a step with a working implementation
+    Set m_example_step = New TStep
+    m_example_step.SType = STEP_TYPE_GIVEN
+    m_example_step.Name = "a valid step"
+    'the step function itself can't be created dynamically
+End Sub
+
+Public Sub Given_a_step_with_a_failing_implementation_C036A44ACAAA()
+    'Given a step with a failing implementation
+    Set m_example_step = New TStep
+    m_example_step.SType = STEP_TYPE_GIVEN
+    m_example_step.Name = "an invalid step"
+    'the step function itself can't be created dynamically
+End Sub
+
+Public Sub Given_a_step_without_an_implementation_F76ADB85CAAA()
+    'Given a step without an implementation
+    Set m_example_step = New TStep
+    m_example_step.SType = STEP_TYPE_GIVEN
+    m_example_step.Name = "a random step name " & CStr(Now())
+End Sub
+
+Public Sub Given_a_step_Given_a_valid_step_EB3A0AE3CD52()
+    'Given a step "Given a valid step"
+    Set m_example_step = New TStep
+    m_example_step.SType = STEP_TYPE_GIVEN
+    m_example_step.Name = "a valid step"
+End Sub
+
+Public Sub Given_a_step_Given_a_step_812EA637D130()
+    'Given a step "Given a step"
+    Set m_example_step = New TStep
+    m_example_step.SType = STEP_TYPE_GIVEN
+    m_example_step.Name = "a step"
+End Sub
+
+Public Sub When_the_step_is_executed_1AA9D7327110()
+    'When the step is executed
+    m_step_result = TStepRunner.run_step(m_example_step)
+End Sub
+
+Public Sub When_the_code_template_for_the_step_implementation_0EC5AFD47941()
+    'When the code template for the step implementation is requested
+    m_step_function_template = m_example_step.get_step_function_template
+End Sub
+
+Public Sub When_the_step_is_translated_into_a_function_name_0F03C2292FFD()
+    'When the step is translated into a function name
+    m_step_function_name = m_example_step.get_step_function_name
+End Sub
+Public Sub Then_the_execution_result_is_OK_BCFE239EF6D5()
+    'Then the execution result is "OK"
+    TSpec.expect(m_step_result(0)).to_be "OK"
+End Sub
+
+Public Sub Then_the_execution_result_is_FAIL_BCFE239E0AC4()
+    'Then the execution result is "FAIL"
+    TSpec.expect(m_step_result(0)).to_be "FAIL"
+End Sub
+
+Public Sub Then_the_execution_result_is_MISSING_ABFD48E56748()
+    'Then the execution result is "MISSING"
+    TSpec.expect(m_step_result(0)).to_be "MISSING"
+End Sub
+
+Public Sub Then_the_code_template_for_the_step_implementation_46484D426FED()
+    'Then the code template for the step implementation is "Public Sub Given_a_valid_step_8A74152FD2F9()" & vblf & "    'Given a valid step" & vblf & "" & vblf & "End Sub"
+    TSpec.expect(m_step_function_template).to_be _
+        "Public Sub Given_a_valid_step_8A74152FD2F9()" & vbLf _
+        & "    'Given a valid step" & vbLf _
+        & vbLf _
+        & "End Sub"
+End Sub
+
+Public Sub Then_the_name_of_the_resulting_function_is_Given_a_E0B741C87B98()
+    'Then the name of the resulting function is "Given_a_step_C7224E350E70"
+    TSpec.expect(m_step_function_name).to_be "Given_a_step_C7224E350E70"
 End Sub
 

@@ -1,5 +1,4 @@
 parse features:
-* ignore comments
 * ignore empty lines
 * parse description per type (feature, rule, example)
 
@@ -11,3 +10,6 @@ tags:
 
 report:
 * process type specific description
+
+run steps:
+* recognize new step class immediately

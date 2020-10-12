@@ -27,7 +27,7 @@ Public Function run_example(example As TExample, Optional silent) As Collection
     For Each step In example.Steps
         err_msg = vbNullString
         step_result = TStepRunner.run_step(step)
-        If Not step_result(0) = "OK" Then
+        If Not step_result(0) = STATUS_OK Then
             err_msg = step_result(1)
             stop_example
         End If

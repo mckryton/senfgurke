@@ -151,13 +151,13 @@ Public Function not_to_include(include_item As Variant) As Boolean
             raise_expectation_err matcher_fail_msg
         End If
     Else
-        Debug.Print "PENDING: include test for arrays"
+        Debug.Print "STATUS_PENDING: include test for arrays"
     End If
 End Function
 
 Private Sub raise_expectation_err(fail_msg)
     
     TSpec.LastFailMsg = fail_msg
-    Err.Raise Number:=ERR_ID_EXPECTATION_FAILED, description:=fail_msg
+    Err.Raise Number:=ERR_ID_EXPECTATION_STATUS_FAILED, description:=fail_msg
 End Sub
 
