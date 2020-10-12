@@ -1,7 +1,7 @@
 Attribute VB_Name = "TFeatureParser"
 Option Explicit
 
-Const KEYWORDS = "Example,Scenario,Scenario Outline,Rule,Ability,Business Needs,Feature"
+Const KEYWORDS = "Example,Scenario,Scenario Outline,Rule,Ability,Business Needs,Feature,Background"
 
 Public Function parse_feature(feature_text As String) As TFeature
 
@@ -32,7 +32,7 @@ Public Function parse_feature(feature_text As String) As TFeature
             ElseIf is_comment_line(line) Then
                 'ignore comments
             Else
-                If TypeName(current_clause) = "TExample" Then
+                If TypeName(current_clause) = "TExample" Or TypeName(current_clause) = "TBackground" Then
                     step_head_name = read_step_head_name(CStr(line))
                     If step_head_name(0) <> vbNullString Then
                         current_clause.add_step step_head:=CStr(step_head_name(0)), step_name:=CStr(step_head_name(1))
@@ -136,7 +136,7 @@ Public Sub add_tags(feature_line As String, Tags As Collection)
     Next
 End Sub
 
-Private Function update_feature(parsed_feature As TFeature, clause_keyword As String, clause_name As String, clause_tags As Collection, feature_line As String)
+Private Function update_feature(parsed_feature As TFeature, clause_keyword As String, clause_name As String, clause_tags As Collection, feature_line As String) As Variant
 
     Dim current_clause As Variant
     
@@ -147,6 +147,8 @@ Private Function update_feature(parsed_feature As TFeature, clause_keyword As St
         Case CLAUSE_TYPE_EXAMPLE
             Set current_clause = create_example(example_head:=CStr(clause_keyword), example_name:=clause_name, example_tags:=clause_tags, feature_line:=feature_line)
             parsed_feature.Clauses.Add current_clause
+        Case CLAUSE_TYPE_BACKGROUND
+            Set current_clause = create_background(parsed_feature)
         Case Else
             Debug.Print "PARSE ERROR: unknown clause >" & clause_keyword & "<"
     End Select
@@ -168,6 +170,8 @@ Private Function read_keyword_value(text_line As String) As Variant
                 keyword = CLAUSE_TYPE_FEATURE
             Case "Business Need"
                 keyword = CLAUSE_TYPE_FEATURE
+            Case "Background"
+                keyword = CLAUSE_TYPE_BACKGROUND
             Case "Rule"
                 keyword = CLAUSE_TYPE_RULE
             Case "Scenario"
@@ -176,9 +180,20 @@ Private Function read_keyword_value(text_line As String) As Variant
                 keyword = CLAUSE_TYPE_EXAMPLE
             Case "Example"
                 keyword = CLAUSE_TYPE_EXAMPLE
+            Case Else
+                Debug.Print "PARSE ERROR: unknown keyword >" & line_items(0) & "<"
         End Select
     End If
     read_keyword_value = Array(keyword, Trim(Right(text_line, Len(text_line) - InStr(text_line, ":"))))
+End Function
+
+Private Function create_background(parsed_feature As TFeature) As TBackground
+
+    Dim new_background As TBackground
+    
+    Set new_background = New TBackground
+    new_background.ParentFeature = parsed_feature
+    Set create_background = new_background
 End Function
 
 Private Function create_rule(rule_name As String) As TRule

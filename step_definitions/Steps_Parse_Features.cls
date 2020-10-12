@@ -85,6 +85,12 @@ Public Sub Given_the_feature_has_an_example_with_two_steps_an_C0F08DC30BAD()
                         & "   And step two"
 End Sub
 
+Public Sub Given_the_feature_has_a_background_clause_containi_EE3E39AB4582()
+    'Given the feature has a background clause containing a Given step
+        m_feature_text = m_feature_text & vbLf _
+                        & "  Background:" & vbLf _
+                        & "   Given a step"
+End Sub
 Public Sub When_the_feature_is_parsed_1AA9891E2CA3()
     'When the feature is parsed
     Set m_parsed_feature = TFeatureParser.parse_feature(m_feature_text)
@@ -178,3 +184,9 @@ Public Sub Then_the_parsed_result_contains_an_example_with_tw_7F3806C826C5()
     'Then the parsed result contains an example with two steps
     TSpec.expect(m_parsed_feature.Clauses(1).Steps.Count).to_be 2
 End Sub
+
+Public Sub Then_the_Given_step_is_assigned_to_the_feature_622D49FE1220()
+    'Then the Given step is assigned to the feature
+    TSpec.expect(m_parsed_feature.BackgroundSteps(1).StepDefinition).to_be "Given a step"
+End Sub
+

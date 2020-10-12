@@ -16,6 +16,7 @@ Dim m_clauses As Collection
 Dim m_feature_tags As Collection
 Dim m_error_status As String
 Dim m_parsed_lines_index As Long
+Dim m_background_steps As Collection
 
 Public Property Get Head() As String
     Head = m_feature_head
@@ -64,7 +65,6 @@ Public Property Get Tags() As Collection
 End Property
 
 Public Property Let Tags(ByVal feature_tags As Collection)
-
     Set m_feature_tags = feature_tags
 End Property
 
@@ -74,6 +74,13 @@ End Property
 
 Public Property Let ParsedLinesIndex(ByVal parsed_lines_index As Long)
     m_parsed_lines_index = parsed_lines_index
+End Property
+
+Public Property Get BackgroundSteps() As Collection
+    If m_background_steps Is Nothing Then
+        Set m_background_steps = New Collection
+    End If
+    Set BackgroundSteps = m_background_steps
 End Property
 
 Public Sub add_tags(feature_line As String)
@@ -93,13 +100,14 @@ Public Sub add_tags(feature_line As String)
         End If
     Next
 End Sub
+
 Private Sub Class_Initialize()
     m_error_status = vbNullString
     m_parsed_lines_index = 0
 End Sub
 
 Private Sub Class_Terminate()
-
     Set m_clauses = Nothing
     Set m_feature_tags = Nothing
+    Set m_background_steps = Nothing
 End Sub

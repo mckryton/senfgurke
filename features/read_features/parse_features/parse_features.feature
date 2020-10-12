@@ -50,6 +50,11 @@ Ability: parse features
 
   Rule: steps following a background clause are assigned to the feature
 
+    @wip
     Example: background with one Given step
+      Given a feature named "sample feature"
+      And the feature has a background clause containing a Given step
+      When the feature is parsed
+      Then the Given step is assigned to the feature
 
   # Rule: translate synonyms Ability,Business Needs to Feature

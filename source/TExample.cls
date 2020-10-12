@@ -67,7 +67,6 @@ Public Property Let Tags(ByVal example_tags As Collection)
     Set m_example_tags = example_tags
 End Property
 
-
 Public Sub add_step(step_head As String, step_name As String)
 
     Dim new_step As TStep
