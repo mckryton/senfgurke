@@ -11,74 +11,74 @@ Option Explicit
 
 Public Sub Given_a_feature_this_is_just_some_text_br_without__E5818F3BFB1B()
     'Given a feature "this is just some text <br> without a feature keyword"
-    m_feature_text = Replace("this is just some text <br> without a feature keyword", " <br> ", vbLf)
+    TStepVars.feature_text = Replace("this is just some text <br> without a feature keyword", " <br> ", vbLf)
 End Sub
 
 Public Sub Given_a_feature_named_sample_feature_FD3D0FF62C49()
     'Given a feature named "sample feature"
-    m_feature_text = "Feature: sample feature"
+    TStepVars.feature_text = "Feature: sample feature"
 End Sub
 
 Public Sub Given_the_feature_includes_a_rule_this_is_a_sample_1BF5A1CEA9A0()
     'Given the feature includes a rule "this is a sample rule"
-    m_feature_text = m_feature_text & vbLf & "Rule: this is a sample rule"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "Rule: this is a sample rule"
 End Sub
 
 Public Sub Given_the_feature_includes_an_example_this_is_an_e_1BF5BD6536EF()
     'Given the feature includes an example "this is an example"
-    m_feature_text = m_feature_text & vbLf & "Example: this is an example"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "Example: this is an example"
 End Sub
 
 Public Sub Given_a_feature_starting_with___Feature_sample_fea_C087A1013C38()
     'Given a feature starting with "  Feature: sample feature "
-    m_feature_text = "  Feature: sample feature "
+    TStepVars.feature_text = "  Feature: sample feature "
 End Sub
 
 Public Sub Given_the_feature_continues_with_the_line_____Rule_40058483AAFA()
     'Given the feature continues with the line "    Rule: this is a rule"
-    m_feature_text = m_feature_text & vbLf & "    Rule: this is a rule"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "    Rule: this is a rule"
 End Sub
 
 Public Sub Given_the_line_with_the_feature_keyword_is_followe_EB6ACC822715()
     'Given the line with the feature keyword is followed by two lines "  this is<br>  the description"
-    m_feature_text = m_feature_text & vbLf & "  this is" & vbLf & "  the description"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "  this is" & vbLf & "  the description"
 End Sub
 
 Public Sub Given_the_rule_is_followed_by_a_line___this_is_a_d_CCBFA097ACF8()
     'Given the rule is followed by a line "  this is a description"
-    m_feature_text = m_feature_text & vbLf & "  this is a description"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "  this is a description"
 End Sub
 
 Public Sub Given_a_feature_F5C67A506977()
     'Given a feature
-    m_feature_text = "Feature: sample feature"
+    TStepVars.feature_text = "Feature: sample feature"
 End Sub
 
 Public Sub Given_a_feature_tag1_tag2brFeature_sample_feature_015C96EDA874()
     'Given a feature "@tag1 @tag2<br>Feature: sample feature"
-    m_feature_text = "@tag1 @tag2" & vbLf _
+    TStepVars.feature_text = "@tag1 @tag2" & vbLf _
                         & "Feature: sample feature"
 End Sub
 
 Public Sub Given_the_first_line_of_the_feature_is___wip_impor_D41303270416()
     'Given the first line of the feature is "  @wip @important @beta"
-    m_feature_text = "  @wip @important @beta" & vbLf & m_feature_text
+    TStepVars.feature_text = "  @wip @important @beta" & vbLf & TStepVars.feature_text
 End Sub
 
 Public Sub Given_the_line_before_the_only_example_is___wip_im_FC1ACED9ED9D()
     'Given the line before the only example is "  @wip @important @beta"
-    m_feature_text = m_feature_text & vbLf & "  @wip @important @beta" & vbLf _
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "  @wip @important @beta" & vbLf _
                         & "Example: sample example"
 End Sub
 
 Public Sub Given_the_first_line_of_the_feature_is__this_is_a__D211BCD22A79()
     'Given the first line of the feature is "# this is a comment"
-    m_feature_text = "# this is a comment" & vbLf & m_feature_text
+    TStepVars.feature_text = "# this is a comment" & vbLf & TStepVars.feature_text
 End Sub
 
 Public Sub Given_the_feature_has_an_example_with_two_steps_an_C0F08DC30BAD()
     'Given the feature has an example with two steps and a comment line between the steps
-    m_feature_text = m_feature_text & vbLf _
+    TStepVars.feature_text = TStepVars.feature_text & vbLf _
                         & "  Example: sample example" & vbLf _
                         & "   Given step one" & vbLf _
                         & " # this is a comment" & vbLf _
@@ -87,13 +87,13 @@ End Sub
 
 Public Sub Given_the_feature_has_a_background_clause_containi_EE3E39AB4582()
     'Given the feature has a background clause containing a Given step
-        m_feature_text = m_feature_text & vbLf _
+        TStepVars.feature_text = TStepVars.feature_text & vbLf _
                         & "  Background:" & vbLf _
                         & "   Given a step"
 End Sub
 Public Sub When_the_feature_is_parsed_1AA9891E2CA3()
     'When the feature is parsed
-    Set m_parsed_feature = TFeatureParser.parse_feature(m_feature_text)
+    Set m_parsed_feature = TFeatureParser.parse_feature(TStepVars.feature_text)
 End Sub
 
 Public Sub Then_the_parsing_results_in_the_error_message_Feat_C2170B1F73BD()
@@ -140,7 +140,7 @@ End Sub
 Public Sub Then_the_parsed_features_contains_an_example_AF5E191DE8EE()
     'Then the parsed features contains an example
     TSpec.expect(TypeName(m_parsed_feature.Clauses(1))).to_be "TExample"
-    Set m_example = m_parsed_feature.Clauses(1)
+    Set TStepVars.example = m_parsed_feature.Clauses(1)
 End Sub
 
 Public Sub Then_the_example_clause_from_the_parsed_result_con_F111F3E2BACC()
@@ -175,9 +175,9 @@ End Sub
 
 Public Sub Then_the_example_contains_the_tags_wip_important_a_C2643DFE6EC5()
     'Then the example contains the tags wip, important and beta
-    TSpec.expect(m_example.Tags("@wip")).to_be "@wip"
-    TSpec.expect(m_example.Tags("@important")).to_be "@important"
-    TSpec.expect(m_example.Tags("@beta")).to_be "@beta"
+    TSpec.expect(TStepVars.example.Tags("@wip")).to_be "@wip"
+    TSpec.expect(TStepVars.example.Tags("@important")).to_be "@important"
+    TSpec.expect(TStepVars.example.Tags("@beta")).to_be "@beta"
 End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_with_tw_7F3806C826C5()

@@ -45,7 +45,6 @@ error_handler:
         example(CLAUSE_ATTR_TYPE) & " " & example(CLAUSE_ATTR_NAME)
 End Function
 
-
 Public Sub stop_example()
     IsTestStopped = True
 End Sub

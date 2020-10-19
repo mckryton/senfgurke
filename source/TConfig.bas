@@ -9,8 +9,10 @@ Public Property Get StepImplementations() As Collection
     
     If m_step_implementations Is Nothing Then
         Set m_step_implementations = New Collection
-        'add all classes with step implmentations here:
-        For Each step_implementation_class In Array(New Steps_Run_Examples, New Steps_Parse_Features, New Steps_Load_Feature_Files, New Steps_Verbose_Output, New Steps_Run_Steps, New Steps_Parse_Examples)
+        'add all classes with step implementations here:
+        For Each step_implementation_class In Array(New Steps_Run_Examples, New Steps_Parse_Features, _
+                        New Steps_Load_Feature_Files, New Steps_Verbose_Output, New Steps_Run_Steps, _
+                        New Steps_Parse_Examples, New Steps_Run_features, New Steps_confirm_collection_member)
             m_step_implementations.Add step_implementation_class
         Next
     End If

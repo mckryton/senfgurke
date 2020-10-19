@@ -103,25 +103,24 @@ Public Property Let given_value(ByVal pvarGivenValue As Variant)
     On Error GoTo 0
 End Property
 
-Public Sub contains(pvarExpectedItem As Variant)
+Public Function contains(expected_member As Variant) As Boolean
 
     Dim matcher_fail_msg As String
-    
+
+    contains = False
     If TypeName(Me.given_value) = "Collection" Then
-        If Not ExtraVBA.existsItem(pvarExpectedItem(0), Me.given_value) Then
+        If ExtraVBA.collection_has_value(expected_member, Me.given_value) Then
+            contains = True
+        Else
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
-                        vbTab & "collection does not contain item " & ">" & pvarExpectedItem(0) & "<"
+                        vbTab & "collection does not contain item " & ">" & expected_member & "<"
             raise_expectation_err matcher_fail_msg
-        ElseIf Me.given_value(pvarExpectedItem(0)) <> pvarExpectedItem(1) Then
-            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
-                        vbTab & "found:" & vbTab & vbTab & ">" & Me.given_value(pvarExpectedItem(0)) & "<" & vbLf & _
-                        vbTab & "expected:" & vbTab & ">" & pvarExpectedItem(1) & "<"
-            raise_expectation_err matcher_fail_msg
+        
         End If
     ElseIf IsArray(Me.given_value) Then
-        TStepRunner.pending "contains matcher for array"
+        Debug.Print "TSpecExpectation PENDING: contains matcher for array"
     End If
-End Sub
+End Function
 
 Public Function include(include_item As Variant) As Boolean
 

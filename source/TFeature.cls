@@ -93,7 +93,7 @@ Public Sub add_tags(feature_line As String)
     For Each tag In tag_list
         If Len(tag) > 1 Then
             If Left(tag, 1) = "@" Then
-                If Not ExtraVBA.existsItem(tag, Me.Tags) Then
+                If Not ExtraVBA.collection_has_key(tag, Me.Tags) Then
                     Me.Tags.Add tag, tag
                 End If
             End If

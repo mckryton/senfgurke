@@ -9,7 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_example_step As TStep
 Dim m_step_result As Variant
 Dim m_step_function_template As String
 Dim m_step_function_name As String
@@ -28,62 +27,62 @@ End Sub
 
 Public Sub Given_a_step_with_an_empty_implementation_F776BB776C61()
     'Given a step with an empty implementation
-    Set m_example_step = New TStep
-    m_example_step.SType = STEP_TYPE_GIVEN
-    m_example_step.Name = "an empty step"
+    Set TStepVars.example_step = New TStep
+    TStepVars.example_step.SType = STEP_TYPE_GIVEN
+    TStepVars.example_step.Name = "an empty step"
     'the step function itself can't be created dynamically
 End Sub
 
 Public Sub Given_a_step_with_a_working_implementation_C0368FD3CAAA()
     'Given a step with a working implementation
-    Set m_example_step = New TStep
-    m_example_step.SType = STEP_TYPE_GIVEN
-    m_example_step.Name = "a valid step"
+    Set TStepVars.example_step = New TStep
+    TStepVars.example_step.SType = STEP_TYPE_GIVEN
+    TStepVars.example_step.Name = "a valid step"
     'the step function itself can't be created dynamically
 End Sub
 
 Public Sub Given_a_step_with_a_failing_implementation_C036A44ACAAA()
     'Given a step with a failing implementation
-    Set m_example_step = New TStep
-    m_example_step.SType = STEP_TYPE_GIVEN
-    m_example_step.Name = "an invalid step"
+    Set TStepVars.example_step = New TStep
+    TStepVars.example_step.SType = STEP_TYPE_GIVEN
+    TStepVars.example_step.Name = "an invalid step"
     'the step function itself can't be created dynamically
 End Sub
 
 Public Sub Given_a_step_without_an_implementation_F76ADB85CAAA()
     'Given a step without an implementation
-    Set m_example_step = New TStep
-    m_example_step.SType = STEP_TYPE_GIVEN
-    m_example_step.Name = "a random step name " & CStr(Now())
+    Set TStepVars.example_step = New TStep
+    TStepVars.example_step.SType = STEP_TYPE_GIVEN
+    TStepVars.example_step.Name = "a random step name " & CStr(Now())
 End Sub
 
 Public Sub Given_a_step_Given_a_valid_step_EB3A0AE3CD52()
     'Given a step "Given a valid step"
-    Set m_example_step = New TStep
-    m_example_step.SType = STEP_TYPE_GIVEN
-    m_example_step.Name = "a valid step"
+    Set TStepVars.example_step = New TStep
+    TStepVars.example_step.SType = STEP_TYPE_GIVEN
+    TStepVars.example_step.Name = "a valid step"
 End Sub
 
 Public Sub Given_a_step_Given_a_step_812EA637D130()
     'Given a step "Given a step"
-    Set m_example_step = New TStep
-    m_example_step.SType = STEP_TYPE_GIVEN
-    m_example_step.Name = "a step"
+    Set TStepVars.example_step = New TStep
+    TStepVars.example_step.SType = STEP_TYPE_GIVEN
+    TStepVars.example_step.Name = "a step"
 End Sub
 
 Public Sub When_the_step_is_executed_1AA9D7327110()
     'When the step is executed
-    m_step_result = TStepRunner.run_step(m_example_step)
+    m_step_result = TStepRunner.run_step(TStepVars.example_step)
 End Sub
 
 Public Sub When_the_code_template_for_the_step_implementation_0EC5AFD47941()
     'When the code template for the step implementation is requested
-    m_step_function_template = m_example_step.get_step_function_template
+    m_step_function_template = TStepVars.example_step.get_step_function_template
 End Sub
 
 Public Sub When_the_step_is_translated_into_a_function_name_0F03C2292FFD()
     'When the step is translated into a function name
-    m_step_function_name = m_example_step.get_step_function_name
+    m_step_function_name = TStepVars.example_step.get_step_function_name
 End Sub
 Public Sub Then_the_execution_result_is_OK_BCFE239EF6D5()
     'Then the execution result is "OK"

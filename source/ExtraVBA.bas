@@ -4,17 +4,62 @@ Option Explicit
 'unfortunately there seems to be no compiler constant to distinct office applications
 #Const APP_NAME = "Microsoft Excel"
 
-Public Function existsItem(pvarKey As Variant, pcolACollection As Collection) As Boolean
+Public Function collection_has_key(search_key As Variant, search_target As Collection) As Boolean
                      
     On Error GoTo NOT_FOUND
     'use typename to access the collections item independ of its type (object or basic type)
-    TypeName pcolACollection.Item(pvarKey)
+    TypeName search_target.Item(search_key)
     On Error GoTo 0
-    existsItem = True
+    collection_has_key = True
     Exit Function
                      
 NOT_FOUND:
-    existsItem = False
+    collection_has_key = False
+End Function
+
+Public Function collection_has_value(search_value As Variant, search_target As Collection) As Boolean
+                     
+    Dim member_value As Variant
+    Dim search_value_type As String
+                     
+    collection_has_value = False
+    search_value_type = TypeName(search_value)
+    For Each member_value In search_target
+        If search_value_type = TypeName(member_value) Then
+            If IsArray(search_value) Then
+                If arrays_are_equal(search_value, member_value) Then
+                    collection_has_value = True
+                    Exit Function
+                End If
+            Else
+                If member_value = search_value Then
+                    collection_has_value = True
+                    Exit Function
+                End If
+            End If
+        End If
+    Next
+End Function
+
+Private Function arrays_are_equal(first_array As Variant, second_array As Variant) As Boolean
+
+    Dim first_value As String
+    Dim second_value As String
+
+    On Error GoTo UNSUPPORTED_ARRAY_ERROR
+    first_value = Join(first_array, "#")
+    second_value = Join(second_array, "#")
+    On Error GoTo 0
+    If first_value = second_value Then
+        arrays_are_equal = True
+    Else
+        arrays_are_equal = False
+    End If
+    Exit Function
+    
+UNSUPPORTED_ARRAY_ERROR:
+    Debug.Print "ExtraVBA ERROR: can't compare arrays with non-primitive values"
+    Err.Raise ERR_ID_UNSUPPORTED_ARRAY_ERROR, "ExtraVBA.arrays_are_equal", "can't compare arrays with non-primitive values"
 End Function
 
 Private Sub exportCode()

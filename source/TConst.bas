@@ -14,6 +14,7 @@ Public Const ERR_ID_STEP_IS_STATUS_PENDING = vbError + 6020
 Public Const ERR_ID_STEP_IS_STATUS_MISSING = vbError + 6030
 Public Const ERR_ID_EXPECTATION_STATUS_FAILED = vbObjectError + 6500
 Public Const ERR_ID_UNKNOWN_MSG_TYPE = vbObjectError + 6600
+Public Const ERR_ID_UNSUPPORTED_ARRAY_ERROR = vbObjectError + 6700
 
 Public Const STATUS_OK = "OK"
 Public Const STATUS_FAIL = "FAIL"

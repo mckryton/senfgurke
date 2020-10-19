@@ -11,32 +11,32 @@ Option Explicit
 
 Public Sub Given_a_feature_F5C67A506977()
     'Given a feature
-    m_feature_text = "Feature: sample feature"
+    TStepVars.feature_text = "Feature: sample feature"
 End Sub
 
 Public Sub Given_the_feature_includes_a_line___Example_sample_AB5AFF90706C()
     'Given the feature includes a line "  Example: sample example"
-    m_feature_text = m_feature_text & vbLf & "  Example: sample example"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "  Example: sample example"
 End Sub
 
 Public Sub Given_this_line_is_followed_by_____Given_a_precond_888463027745()
     'Given this line is followed by "    Given a precondition"
-    m_feature_text = m_feature_text & vbLf & "    Given a precondition"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "    Given a precondition"
 End Sub
 
 Public Sub Given_this_line_is_followed_by_____When_action_hap_85C0334B9847()
     'Given this line is followed by "    When action happens"
-    m_feature_text = m_feature_text & vbLf & "    When action happens"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "    When action happens"
 End Sub
 
 Public Sub Given_this_line_is_followed_by_____Then_some_resul_EA08DF64E8E9()
     'Given this line is followed by "    Then some result is expected"
-    m_feature_text = m_feature_text & vbLf & "    Then some result is expected"
+    TStepVars.feature_text = TStepVars.feature_text & vbLf & "    Then some result is expected"
 End Sub
 
 Public Sub Given_an_example_with_two_steps_Given_x_is_1_and_A_192EBBAC25E6()
     'Given an example with two steps "Given x is 1" and "And y is 2"
-    m_feature_text = "Feature: sample feature" & vbLf _
+    TStepVars.feature_text = "Feature: sample feature" & vbLf _
                         & vbLf _
                         & "  Example: sample example" & vbLf _
                         & "    Given x is 1" & vbLf _
@@ -45,7 +45,7 @@ End Sub
 
 Public Sub Given_an_example_with_two_steps_When_some_action_h_BF2A304D0F15()
     'Given an example with two steps "When some action happens" and "But it doesn't matter"
-    m_feature_text = "Feature: sample feature" & vbLf _
+    TStepVars.feature_text = "Feature: sample feature" & vbLf _
                     & vbLf _
                     & "  Example: sample example" & vbLf _
                     & "    When some action happens" & vbLf _
