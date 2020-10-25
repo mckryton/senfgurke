@@ -106,14 +106,20 @@ End Property
 Public Function contains(expected_member As Variant) As Boolean
 
     Dim matcher_fail_msg As String
+    Dim expected_member_text As String
 
     contains = False
     If TypeName(Me.given_value) = "Collection" Then
         If ExtraVBA.collection_has_value(expected_member, Me.given_value) Then
             contains = True
         Else
+            If IsArray(expected_member) Then
+                expected_member_text = Join(expected_member, "*")
+            Else
+                expected_member_text = CStr(expected_member)
+            End If
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
-                        vbTab & "collection does not contain item " & ">" & expected_member & "<"
+                        vbTab & "collection does not contain item " & ">" & expected_member_text & "<"
             raise_expectation_err matcher_fail_msg
         
         End If

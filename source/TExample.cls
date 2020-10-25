@@ -101,3 +101,14 @@ Private Function get_step_type(step_head As String) As String
             get_step_type = "unknown step type"
     End Select
 End Function
+
+Public Sub insert_background_steps(background_steps As Collection)
+    
+    Dim background_step As TStep
+    Dim step_index As Long
+    
+    For step_index = background_steps.Count To 1
+        Set background_step = background_steps(step_index)
+        Me.Steps.Add background_step, before:=1
+    Next
+End Sub

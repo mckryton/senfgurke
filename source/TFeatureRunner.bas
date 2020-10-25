@@ -22,6 +22,7 @@ Public Function run_feature(feature As TFeature, Optional filter_tag, Optional s
         If TypeName(feature_clause) = "TExample" Then
             Set example = feature_clause
             If filter_tag = vbNullString Or ExtraVBA.collection_has_key(filter_tag, example.Tags) = True Then
+                If feature.BackgroundSteps.Count > 0 Then example.insert_background_steps feature.BackgroundSteps
                 Set example_statistics = example_runner.run_example(example, silent:=silent)
                 feature_statistics.Add example_statistics
             End If

@@ -32,6 +32,10 @@ Public Sub Given_a_step_C7224E350E70()
     'Given a step
 End Sub
 
+Public Sub Given_a_background_step_CF4BC54A1652()
+    'Given a background step
+End Sub
+
 Public Sub When_the_feature_is_executed_A6DB756AA298()
     'When the feature is executed
     
@@ -43,5 +47,6 @@ End Sub
 
 Public Sub Then_the_background_step_is_executed_once_before_e_36EB01695F3D()
     'Then the background step is executed once before each example
-    'TSpec.expect(TStepVars.feature_statistics(1)).contains Array("OK", "Given a background step")
+    TSpec.expect(TStepVars.feature_statistics(1)).contains Array("OK", "Given a background step")
+    TSpec.expect(TStepVars.feature_statistics(2)).contains Array("OK", "Given a background step")
 End Sub

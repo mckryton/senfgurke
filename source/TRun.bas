@@ -25,14 +25,3 @@ Public Sub wip()
     test "@wip"
 End Sub
 
-
-Public Sub dummy()
-        
-    Dim x, y As Variant
-    
-
-    x = Array(1, "text", vbNullString, 1.23)
-    y = Array(1, "text", vbNullString, 1.23)
-    
-    If Join(x, "#") = Join(y, "#") Then Debug.Print "arrays are equal"
-End Sub
