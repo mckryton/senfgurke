@@ -28,9 +28,8 @@ Ability: make steps executable
   Rule: step function names end with a hashed value of the original step name
 
 
-  Rule: number and text values are used as parameters (expressions) for step function names 
+  Rule: number and text values are used as parameters (expressions) for step function names
 
-    @wip
     Example: Step with one integer value
       Given a step "Given a year has 12 months"
       When the function for the step is calculated
@@ -48,3 +47,10 @@ Ability: make steps executable
       Then the function name starts with "Given_the_name_of_the_first_day_of_the_week_is_STR"
 
     Example: step with escaped text
+
+    @wip
+    Example: add +1 to sum
+      Given a is 2
+      And b is 3
+      When sum+1 is applied to a and b
+      Then the result is 5
