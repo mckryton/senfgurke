@@ -12,7 +12,7 @@ Option Explicit
 Dim m_step_type As String
 Dim m_step_head As String
 Dim m_step_name As String
-Dim m_parameters As Collection
+Dim m_expressions As Collection
 
 Public Property Get SType() As String
     SType = m_step_type
@@ -57,9 +57,9 @@ Public Function get_step_function_name() As String
     
     function_name = Me.StepDefinition
     'function_name = Replace(function_name, "\""", "_")
-    Me.parameters = extract_step_parameters(function_name)
-    function_name = Me.parameters("function_name_with_placeholders")
-    Me.parameters.remove "function_name_with_placeholders"
+    Me.Expressions = extract_step_expressions(function_name)
+    function_name = Me.Expressions("function_name_with_placeholders")
+    Me.Expressions.remove "function_name_with_placeholders"
     function_name = Replace(function_name, " ", "_")
     function_name = remove_non_ascii_chars(function_name)
     'max len of a function name is 255 chars, but config may require a lower value because of a bug in Office for Mac
@@ -90,82 +90,105 @@ Private Function remove_non_ascii_chars(function_name As String) As String
     remove_non_ascii_chars = function_name
 End Function
 
-Public Function extract_step_parameters(function_name As String) As Collection
+Public Function extract_step_expressions(function_name As String) As Collection
 
-    Dim step_parameters As Collection
+    Dim step_expressions As Collection
     Dim function_name_with_placeholders As String
     Dim char_index As Long
     Dim current_char As String
-    Dim param_value As String
-    Dim matching_position As Long
-    Dim param_type As String
-    Dim found_matching_quote As Boolean
-    Dim search_index As Long
+    Dim next_expression As Collection
+    Dim previous_char As String
     
     function_name_with_placeholders = vbNullString
-    param_type = vbNullString
-    Set step_parameters = New Collection
-    param_value = vbNullString
+    Set step_expressions = New Collection
     For char_index = 1 To Len(function_name)
+        If char_index > 1 Then previous_char = Mid(function_name, char_index - 1, 1) Else previous_char = " "
         current_char = Mid(function_name, char_index, 1)
         If current_char = "\" Then
             'ignore escaped chars, continue parameter search after the escaped char
             char_index = char_index + 2
             function_name_with_placeholders = function_name_with_placeholders & Mid(function_name, char_index, char_index + 1)
         ElseIf current_char = """" Then
-            'found string parameter, look for matching quotes
-            found_matching_quote = False
-            search_index = char_index
-            Do
-                'ignore escaped quotes as matching quotes
-                matching_position = InStr(search_index + 1, function_name, """")
-                If Mid(function_name, matching_position - 1, 1) = "\" Then
-                    search_index = matching_position
-                Else
-                    found_matching_quote = True
-                End If
-            Loop While found_matching_quote = False And matching_position > 0
-            If matching_position = 0 Then matching_position = Len(function_name)
-            param_value = Mid(function_name, char_index + 1, matching_position - char_index - 1)
-            param_type = "STR"
-            add_parameter param_value, param_type, step_parameters
-            function_name_with_placeholders = function_name_with_placeholders & param_type
-            char_index = matching_position
-            param_value = vbNullString
-            param_type = vbNullString
-        ElseIf IsNumeric(current_char) Or (param_value <> vbNullString And current_char = ".") Then
-            'add number or separator to the numeric parameter
-            param_value = param_value & current_char
-            If current_char = "." Then param_type = "DBL"
-        ElseIf param_value <> vbNullString Then
-            'reached the end of a numeric parameter
-            add_parameter param_value, param_type, step_parameters
-            function_name_with_placeholders = function_name_with_placeholders & param_type & current_char
-            param_value = vbNullString
-            param_type = vbNullString
-        Else
+            Set next_expression = find_string_expression(function_name, char_index)
+        ElseIf (IsNumeric(current_char) Or current_char = ".") And previous_char = " " Then
+            Set next_expression = find_numeric_expression(function_name, char_index)
+        End If
+        If next_expression Is Nothing Then
             function_name_with_placeholders = function_name_with_placeholders & current_char
+        Else
+            add_expression next_expression, step_expressions
+            function_name_with_placeholders = function_name_with_placeholders & next_expression("type")
+            char_index = next_expression("end_index")
+            Set next_expression = Nothing
         End If
     Next
-    If param_value <> vbNullString Then
-        add_parameter param_value, param_type, step_parameters
-        function_name_with_placeholders = function_name_with_placeholders & param_type
-    End If
-    step_parameters.Add function_name_with_placeholders, "function_name_with_placeholders"
-    Set extract_step_parameters = step_parameters
+    step_expressions.Add function_name_with_placeholders, "function_name_with_placeholders"
+    Set extract_step_expressions = step_expressions
 End Function
 
-Private Sub add_parameter(param_value As String, param_type As String, parameters As Collection)
+Private Function find_numeric_expression(function_name As String, start_index As Long) As Collection
 
-    If param_type = vbNullString Then param_type = "INT"
-    Select Case param_type
+    Dim expression As Collection
+    Dim search_index As Long
+    Dim current_char As String
+    Dim expression_type As String
+    Dim new_expression As String
+    
+    expression_type = "INT"
+    new_expression = vbNullString
+    search_index = start_index
+    Do
+        current_char = Mid(function_name, search_index, 1)
+        If current_char = "." Then expression_type = "DBL"
+        new_expression = new_expression & current_char
+        search_index = search_index + 1
+    Loop While (IsNumeric(current_char) Or current_char = ".") And search_index <= Len(function_name)
+    If current_char = " " Or (IsNumeric(current_char) And search_index > Len(function_name)) Then
+        Set expression = New Collection
+        expression.Add Trim(new_expression), "value"
+        expression.Add expression_type, "type"
+        If current_char = " " Then search_index = search_index - 2
+        expression.Add search_index, "end_index"
+    End If
+    Set find_numeric_expression = expression
+End Function
+
+Private Function find_string_expression(function_name As String, start_index As Long) As Collection
+
+    Dim expression As Collection
+    Dim found_matching_quote As Boolean
+    Dim search_index As Long
+    Dim matching_position As Long
+
+    Set expression = New Collection
+    'found string parameter, look for matching quotes
+    found_matching_quote = False
+    search_index = start_index
+    Do
+        'ignore escaped quotes as matching quotes
+        matching_position = InStr(search_index + 1, function_name, """")
+        If Mid(function_name, matching_position - 1, 1) = "\" Then
+            search_index = matching_position
+        Else
+            found_matching_quote = True
+        End If
+    Loop While found_matching_quote = False And matching_position > 0
+    If matching_position = 0 Then matching_position = Len(function_name)
+    expression.Add Mid(function_name, start_index + 1, matching_position - start_index - 1), "value"
+    expression.Add "STR", "type"
+    expression.Add matching_position, "end_index"
+    Set find_string_expression = expression
+End Function
+
+Private Sub add_expression(expression As Collection, extracted_expressions As Collection)
+
+    Select Case expression("type")
         Case "INT"
-            parameters.Add CInt(param_value)
+            extracted_expressions.Add CInt(expression("value"))
         Case "DBL"
-            parameters.Add CDbl(param_value)
+            extracted_expressions.Add CDbl(expression("value"))
         Case Else
-            param_value = Replace(param_value, "\", "")
-            parameters.Add CStr(param_value)
+            extracted_expressions.Add CStr(Replace(expression("value"), "\", ""))
     End Select
 End Sub
 
@@ -174,8 +197,8 @@ Public Function get_step_function_template() As String
     Dim template As String
     
     template = "Public Sub " & Me.get_step_function_name & "("
-    If Me.parameters.Count > 0 Then
-        template = template & "step_parameters As Collection"
+    If Me.Expressions.Count > 0 Then
+        template = template & "step_expressions As Collection"
     End If
     template = template & ")" & vbLf
     template = template & "    '" & Me.StepDefinition & vbLf & vbLf
@@ -183,17 +206,17 @@ Public Function get_step_function_template() As String
     get_step_function_template = template
 End Function
 
-Public Property Get parameters() As Collection
-    If m_parameters Is Nothing Then
-        Set m_parameters = New Collection
+Public Property Get Expressions() As Collection
+    If m_expressions Is Nothing Then
+        Set m_expressions = New Collection
     End If
-    Set parameters = m_parameters
+    Set Expressions = m_expressions
 End Property
 
-Public Property Let parameters(ByVal new_parameters As Collection)
-    Set m_parameters = new_parameters
+Public Property Let Expressions(ByVal new_expressions As Collection)
+    Set m_expressions = new_expressions
 End Property
 
 Private Sub Class_Terminate()
-    Set m_parameters = Nothing
+    Set m_expressions = Nothing
 End Sub

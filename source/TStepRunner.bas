@@ -14,7 +14,7 @@ Public Function run_step(step_definition As TStep) As Variant
     step_function_name = step_definition.get_step_function_name
     For Each step_implementation_class In TConfig.StepImplementations
         TSpec.LastFailMsg = vbNullString
-        step_result = try_step(step_implementation_class, step_function_name, step_definition.parameters)
+        step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions)
     Next
     If step_run_attempts = TConfig.StepImplementations.Count Then
         run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING, step_definition.get_step_function_template)
@@ -32,12 +32,12 @@ error_handler:
     End If
 End Function
 
-Private Function try_step(step_implementation_class As Variant, step_function_name As String, step_parameters As Collection) As Variant
+Private Function try_step(step_implementation_class As Variant, step_function_name As String, step_expressions As Collection) As Variant
 
     Dim step_result As String
     
-    If step_parameters.Count > 0 Then
-        step_result = CallByName(step_implementation_class, step_function_name, VbMethod, step_parameters)
+    If step_expressions.Count > 0 Then
+        step_result = CallByName(step_implementation_class, step_function_name, VbMethod, step_expressions)
     Else
         step_result = CallByName(step_implementation_class, step_function_name, VbMethod)
     End If

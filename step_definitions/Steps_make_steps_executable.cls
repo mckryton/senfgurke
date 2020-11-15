@@ -43,11 +43,6 @@ Public Sub Given_a_step_STR_F5C6F4BA1D15(step_parameters As Collection)
     End With
 End Sub
 
-Public Sub When_the_function_name_for_the_second_step_is_calc_7916E785717F()
-    'When the function name for the second step is calculated
-    m_step_function_name = example_step.get_step_function_name
-End Sub
-
 Public Sub When_the_function_for_the_step_is_calculated_41249A4C9E7F()
     'When the function for the step is calculated
     m_step_function_name = example_step.get_step_function_name
