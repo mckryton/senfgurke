@@ -16,7 +16,7 @@ Dim m_clauses As Collection
 Dim m_feature_tags As Collection
 Dim m_error_status As String
 Dim m_parsed_lines_index As Long
-Dim m_background_steps As Collection
+Dim m_background As TBackground
 
 Public Property Get Head() As String
     Head = m_feature_head
@@ -34,11 +34,11 @@ Public Property Let Name(ByVal feature_name As String)
     m_feature_name = feature_name
 End Property
 
-Public Property Get description() As String
-    description = m_feature_description
+Public Property Get Description() As String
+    Description = m_feature_description
 End Property
 
-Public Property Let description(ByVal feature_description As String)
+Public Property Let Description(ByVal feature_description As String)
     m_feature_description = feature_description
 End Property
 
@@ -76,11 +76,15 @@ Public Property Let ParsedLinesIndex(ByVal parsed_lines_index As Long)
     m_parsed_lines_index = parsed_lines_index
 End Property
 
-Public Property Get BackgroundSteps() As Collection
-    If m_background_steps Is Nothing Then
-        Set m_background_steps = New Collection
+Public Property Get Background() As TBackground
+    If m_background Is Nothing Then
+        Set m_background = New TBackground
     End If
-    Set BackgroundSteps = m_background_steps
+    Set Background = m_background
+End Property
+
+Public Property Let Background(new_background As TBackground)
+    Set m_background = new_background
 End Property
 
 Public Sub add_tags(feature_line As String)
@@ -109,5 +113,5 @@ End Sub
 Private Sub Class_Terminate()
     Set m_clauses = Nothing
     Set m_feature_tags = Nothing
-    Set m_background_steps = Nothing
+    Set m_background = Nothing
 End Sub

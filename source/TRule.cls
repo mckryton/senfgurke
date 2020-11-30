@@ -20,11 +20,11 @@ Public Property Let Name(ByVal rule_name As String)
     m_rule_name = rule_name
 End Property
 
-Public Property Get description() As String
-    description = m_rule_description
+Public Property Get Description() As String
+    Description = m_rule_description
 End Property
 
-Public Property Let description(ByVal rule_description As String)
+Public Property Let Description(ByVal rule_description As String)
     m_rule_description = rule_description
 End Property
 

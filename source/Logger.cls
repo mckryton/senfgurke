@@ -59,7 +59,7 @@ Public Sub log_function_error(pFunctionName As String, Optional pLogMsg As Varia
     log_msg = Time & " error:" & LINE_BREAK & _
                 vbTab & "source:" & vbTab & Err.Source & LINE_BREAK & _
                 vbTab & "caller:" & vbTab & pFunctionName & LINE_BREAK & _
-                vbTab & "desc:" & vbTab & Err.description & LINE_BREAK
+                vbTab & "desc:" & vbTab & Err.Description & LINE_BREAK
     If Not IsMissing(pLogMsg) Then
         log_msg = log_msg & vbTab & "custom:" & vbTab & pLogMsg
     End If

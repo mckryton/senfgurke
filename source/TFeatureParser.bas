@@ -3,7 +3,7 @@ Option Explicit
 
 Const KEYWORDS = "Example,Scenario,Scenario Outline,Rule,Ability,Business Needs,Feature,Background"
 
-Public Function parse_feature(feature_text As String) As TFeature
+Public Function parse_feature(gherkin_text As String) As TFeature
 
     Dim parsed_feature As TFeature
     Dim lines As Variant
@@ -15,9 +15,9 @@ Public Function parse_feature(feature_text As String) As TFeature
     Dim line_index As Long
     Dim clause_tags As Collection
     
-    Set parsed_feature = parse_feature_definition(feature_text)
+    Set parsed_feature = parse_feature_definition(gherkin_text)
     Set current_clause = Nothing
-    lines = Split(Trim(feature_text), vbLf)
+    lines = Split(Trim(gherkin_text), vbLf)
     Set clause_tags = clone_tags(parsed_feature.Tags)
     If parsed_feature.ErrorStatus = vbNullString Then
         For line_index = parsed_feature.ParsedLinesIndex + 1 To UBound(lines)
@@ -25,21 +25,16 @@ Public Function parse_feature(feature_text As String) As TFeature
             If is_clause_definition_line(line) Then
                 keyword_value = read_keyword_value(CStr(line))
                 Set current_clause = update_feature(parsed_feature, CStr(keyword_value(0)), CStr(keyword_value(1)), clause_tags, line)
-                has_example_steps = False
+                If CStr(keyword_value(0)) = CLAUSE_TYPE_EXAMPLE Or CStr(keyword_value(0)) = CLAUSE_TYPE_BACKGROUND Then
+                    parse_steps lines, line_index, current_clause
+                End If
                 Set clause_tags = clone_tags(parsed_feature.Tags)
             ElseIf is_tag_line(line) Then
                 add_tags line, clause_tags
             ElseIf is_comment_line(line) Then
                 'ignore comments
             Else
-                If TypeName(current_clause) = "TExample" Or TypeName(current_clause) = "TBackground" Then
-                    step_head_name = read_step_head_name(CStr(line))
-                    If step_head_name(0) <> vbNullString Then
-                        current_clause.add_step step_head:=CStr(step_head_name(0)), step_name:=CStr(step_head_name(1))
-                        has_example_steps = True
-                    End If
-                End If
-                If Not has_example_steps Then
+                If Not TypeName(current_clause) = "TExample" Or TypeName(current_clause) = "TBackground" Then
                     add_description CStr(line), parsed_feature
                 End If
             End If
@@ -48,7 +43,46 @@ Public Function parse_feature(feature_text As String) As TFeature
     Set parse_feature = parsed_feature
 End Function
 
-Private Function parse_feature_definition(feature_text As String) As TFeature
+Public Sub parse_steps(feature_lines As Variant, example_start_index As Long, current_clause As Variant)
+
+    Dim line_index As Long
+    Dim line As String
+    Dim is_docstring As Boolean
+    Dim docstring As String
+    
+    is_docstring = False
+    docstring = vbNullString
+    For line_index = example_start_index + 1 To UBound(feature_lines)
+        line = Trim(feature_lines(line_index))
+        If Right(line, 3) = """""""" And is_docstring Then
+            is_docstring = False
+            docstring = docstring & Left(line, Len(line) - 3)
+            If current_clause.Steps.Count > 0 Then
+                current_clause.Steps(current_clause.Steps.Count).Name = current_clause.Steps(current_clause.Steps.Count).Name _
+                    & " """ & docstring & """"
+            End If
+        ElseIf is_docstring Then
+            docstring = docstring & line
+        ElseIf Left(line, 3) = """""""" And Not is_docstring Then
+            is_docstring = True
+            docstring = Mid(line, 4, Len(line) - 3)
+        ElseIf is_step_line(line) Then
+            parse_step line, current_clause
+        ElseIf is_clause_definition_line(line) Then
+            Exit Sub
+        End If
+    Next
+End Sub
+
+Public Sub parse_step(step_line As String, current_clause As Variant)
+
+    Dim step_head As String
+    
+    step_head = Split(step_line, " ")(0)
+    current_clause.add_step step_head:=step_head, step_name:=Right(step_line, Len(step_line) - InStr(step_line, " "))
+End Sub
+
+Private Function parse_feature_definition(gherkin_text As String) As TFeature
     
     Dim parsed_feature As TFeature
     Dim line_index As Long
@@ -60,7 +94,7 @@ Private Function parse_feature_definition(feature_text As String) As TFeature
     Set parsed_feature = New TFeature
     header_finished = False
     line_index = 0
-    feature_lines = Split(feature_text, vbLf)
+    feature_lines = Split(gherkin_text, vbLf)
     Do While line_index <= UBound(feature_lines) And header_finished = False
         line = CStr(feature_lines(line_index))
         If is_tag_line(line) Then
@@ -118,6 +152,18 @@ Private Function is_tag_line(feature_line As String) As Boolean
     End If
 End Function
 
+Private Function is_step_line(feature_line As String) As Boolean
+
+    Dim first_word As String
+    
+    first_word = Split(Trim(feature_line) & " ", " ")(0)
+    If InStr("Given When Then And But", first_word) > 0 And Len(first_word) > 2 Then
+        is_step_line = True
+    Else
+        is_step_line = False
+    End If
+End Function
+
 Public Sub add_tags(feature_line As String, Tags As Collection)
 
     Dim tag_list As Variant
@@ -148,7 +194,7 @@ Private Function update_feature(parsed_feature As TFeature, clause_keyword As St
             Set current_clause = create_example(example_head:=CStr(clause_keyword), example_name:=clause_name, example_tags:=clause_tags, feature_line:=feature_line)
             parsed_feature.Clauses.Add current_clause
         Case CLAUSE_TYPE_BACKGROUND
-            Set current_clause = create_background(parsed_feature)
+            Set current_clause = parsed_feature.Background
         Case Else
             Debug.Print "PARSE ERROR: unknown clause >" & clause_keyword & "<"
     End Select
@@ -187,15 +233,6 @@ Private Function read_keyword_value(text_line As String) As Variant
     read_keyword_value = Array(keyword, Trim(Right(text_line, Len(text_line) - InStr(text_line, ":"))))
 End Function
 
-Private Function create_background(parsed_feature As TFeature) As TBackground
-
-    Dim new_background As TBackground
-    
-    Set new_background = New TBackground
-    new_background.ParentFeature = parsed_feature
-    Set create_background = new_background
-End Function
-
 Private Function create_rule(rule_name As String) As TRule
 
     Dim new_rule As TRule
@@ -222,17 +259,17 @@ Private Sub add_description(line As String, feature As TFeature)
     Dim clause As Variant
     
     If feature.Clauses.Count = 0 Then
-        If feature.description = vbNullString Then
-            feature.description = Trim(line)
+        If feature.Description = vbNullString Then
+            feature.Description = Trim(line)
         Else
-            feature.description = feature.description & vbLf & Trim(line)
+            feature.Description = feature.Description & vbLf & Trim(line)
         End If
     Else
         Set clause = feature.Clauses(feature.Clauses.Count)
-        If clause.description = vbNullString Then
-            clause.description = Trim(line)
+        If clause.Description = vbNullString Then
+            clause.Description = Trim(line)
         Else
-            clause.description = clause.description & vbLf & Trim(line)
+            clause.Description = clause.Description & vbLf & Trim(line)
         End If
     End If
 End Sub
@@ -255,12 +292,12 @@ End Function
 
 Public Function parse_loaded_features(feature_list As Collection) As Collection
     
-    Dim feature_text As Variant
+    Dim gherkin_text As Variant
     Dim parsed_features As Collection
 
     Set parsed_features = New Collection
-    For Each feature_text In feature_list
-        parsed_features.Add parse_feature(CStr(feature_text))
+    For Each gherkin_text In feature_list
+        parsed_features.Add parse_feature(CStr(gherkin_text))
     Next
     Set parse_loaded_features = parsed_features
 End Function
@@ -276,3 +313,8 @@ Private Function clone_tags(source_tags As Collection) As Collection
     Next
     Set clone_tags = target_tags
 End Function
+
+
+
+
+

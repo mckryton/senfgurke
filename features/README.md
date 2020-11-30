@@ -28,8 +28,7 @@
 
 * [Parse examples](read_features/parse_features/parse_examples.feature)
 
-  Senfgurke will read feature specs from text
-  and identify examples and their example steps from within features
+  Examples (aka scenarios) are the executable part of a feature. An example
 
 * [Parse features](read_features/parse_features/parse_features.feature)
 

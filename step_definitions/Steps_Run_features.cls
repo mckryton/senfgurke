@@ -11,7 +11,7 @@ Option Explicit
 
 Public Sub Given_a_feature_has_a_background_step_FD3D5509A1FD()
     'Given a feature has a background step
-    TStepVars.feature_text = "Feature: sample feature" & vbLf _
+    TStepVars.gherkin_text = "Feature: sample feature" & vbLf _
                                 & vbLf _
                                 & "  Background:" & vbLf _
                                 & "    Given a background step" & vbLf
@@ -19,7 +19,7 @@ End Sub
 
 Public Sub Given_the_feature_has_two_examples_with_on_step_0A1C38A7165C()
     'Given the feature has two examples with on step
-    TStepVars.feature_text = TStepVars.feature_text _
+    TStepVars.gherkin_text = TStepVars.gherkin_text _
                                 & vbLf _
                                 & "  Example: example one" & vbLf _
                                 & "    Given a step" & vbLf _
@@ -41,7 +41,7 @@ Public Sub When_the_feature_is_executed_A6DB756AA298()
     
     Dim parsed_feature As TFeature
     
-    Set parsed_feature = TFeatureParser.parse_feature(TStepVars.feature_text)
+    Set parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
     Set TStepVars.feature_statistics = TFeatureRunner.run_feature(parsed_feature, silent:=True)
 End Sub
 

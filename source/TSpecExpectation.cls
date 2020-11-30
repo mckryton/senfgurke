@@ -163,6 +163,6 @@ End Function
 Private Sub raise_expectation_err(fail_msg)
     
     TSpec.LastFailMsg = fail_msg
-    Err.Raise Number:=ERR_ID_EXPECTATION_STATUS_FAILED, description:=fail_msg
+    Err.Raise Number:=ERR_ID_EXPECTATION_STATUS_FAILED, Description:=fail_msg
 End Sub
 
