@@ -1,4 +1,3 @@
-@wip
 Ability: parse features
   Senfgurke will read feature specs from text
   and identify it's elements like descriptions, rules and examples

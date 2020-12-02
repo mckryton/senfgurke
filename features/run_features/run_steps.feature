@@ -32,6 +32,14 @@ Ability: run steps
       Then the execution result is "MISSING"
 
 
+  Rule: steps can return explitcitly "PENDING" state to indicate a missing implemenation
+
+    Example: test step without pending message
+      Given a step returning PENDING without a pending message
+      When the step is executed
+      Then the execution result is "PENDING"
+
+
   Rule: missing steps return a code snippet for the step implementation
 
     Example: simple step function
