@@ -13,6 +13,18 @@ Dim m_step_result As Variant
 Dim m_step_function_template As String
 Dim m_step_function_name As String
 
+Public Sub Given_a_step_returning_PENDING_without_a_pending_m_F201CAEBCFB1()
+    'Given a step returning PENDING without a pending message
+    Set TStepVars.example_step = New TStep
+    TStepVars.example_step.SType = STEP_TYPE_GIVEN
+    TStepVars.example_step.Name = "a pending step"
+    'won't create code dynamically, so step "Given a pending step" is hard coded below
+End Sub
+
+Public Sub Given_a_pending_step_6A3533BBBFE5()
+    pending
+End Sub
+
 Public Sub Given_an_empty_step_8A7408D743D5()
 
 End Sub
@@ -70,7 +82,7 @@ Public Sub Given_a_step_Given_a_step_812EA637D130()
     TStepVars.example_step.Name = "a step"
 End Sub
 
-Public Sub When_the_step_is_executed_1AA9D7327110()
+Public Sub When_the_step_is_executed_CEB06B444334()
     'When the step is executed
     m_step_result = TStepRunner.run_step(TStepVars.example_step)
 End Sub
@@ -84,19 +96,10 @@ Public Sub When_the_step_is_translated_into_a_function_name_0F03C2292FFD()
     'When the step is translated into a function name
     m_step_function_name = TStepVars.example_step.get_step_function_name
 End Sub
-Public Sub Then_the_execution_result_is_OK_BCFE239EF6D5()
-    'Then the execution result is "OK"
-    TSpec.expect(m_step_result(0)).to_be "OK"
-End Sub
 
-Public Sub Then_the_execution_result_is_FAIL_BCFE239E0AC4()
-    'Then the execution result is "FAIL"
-    TSpec.expect(m_step_result(0)).to_be "FAIL"
-End Sub
-
-Public Sub Then_the_execution_result_is_MISSING_ABFD48E56748()
-    'Then the execution result is "MISSING"
-    TSpec.expect(m_step_result(0)).to_be "MISSING"
+Public Sub Then_the_execution_result_is_STR_80FDCF952A5A(step_expressions As Collection)
+    'Then the execution result is {string}
+    TSpec.expect(m_step_result(0)).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_code_template_for_the_step_implementation_46484D426FED()

@@ -83,7 +83,17 @@ Public Function format_feature_name(feature_name As String) As String
 End Function
 
 Public Function format_feature_description(Description As String) As String
-    format_feature_description = Space$(4) & Join(Split(Description, vbLf), vbLf + vbTab)
+
+    Dim desc_lines As Variant
+    Dim line As Variant
+    Dim formatted_desc As String
+    
+    formatted_desc = vbNullString
+    desc_lines = Split(Description, vbLf)
+    For Each line In desc_lines
+        formatted_desc = format_feature_description & Space$(4) & Trim(line) & vbLf
+    Next
+    format_feature_description = Left(formatted_desc, Len(formatted_desc) - 1)
 End Function
 
 Public Function format_rule(rule As String) As String

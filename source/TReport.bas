@@ -37,10 +37,12 @@ Public Sub report(message_type As String, message_content As String, Optional st
     End If
 End Sub
 
-Public Function build_msg_package(message_type As String, message_content As String, status As String, err_msg As String) As Collection
+Public Function build_msg_package(message_type As String, message_content As String, Optional status As String, Optional err_msg As String) As Collection
 
     Dim msg_package As Collection
     
+    If IsMissing(status) Then status = vbNullString
+    If IsMissing(err_msg) Then err_msg = vbNullString
     Set msg_package = New Collection
     With msg_package
         .Add message_type, TReport.MSG_TYPE

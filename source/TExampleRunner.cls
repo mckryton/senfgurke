@@ -29,6 +29,8 @@ Public Function run_example(example As TExample, Optional silent) As Collection
         step_result = TStepRunner.run_step(step)
         If Not step_result(0) = STATUS_OK Then
             err_msg = step_result(1)
+            'this is a hack because of the broken exception handling in vba (e.g. vba will overwrite custom err descriptions)
+            If step_result(0) = STATUS_PENDING Then err_msg = TSpec.LastFailMsg
             stop_example
         End If
         example_statistics.Add Array(step_result(0), step.OriginalStepDefinition)

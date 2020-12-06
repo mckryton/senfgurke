@@ -60,7 +60,8 @@ Ability: Report in verbose format
       Then the resulting output is set to "     PENDING  Given a sample step"
 
 
-  Rule: Rules and example titles will add an empty line before them and indent following lines with 3 tabs
+  Rule: re-format indention for description
+    Align description lines on the left with a fix indention of 7 spaces.
 
     Example: Rule over two lines
       Given a rule "this is a sample rule<br>and this is line 2 of the same rule"
@@ -76,5 +77,5 @@ Ability: Report in verbose format
       Given a step "Given a sample step" fails with the error message "err: sample err msg"
       And the report format is set to verbose
       When the reported message is prepared as output for the report
-      Then the resulting output starts with the step status and name
+      Then the first line of the resulting output is set to "     FAIL     Given a sample step"
       And the second line shows the indented error message
