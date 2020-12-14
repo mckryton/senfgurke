@@ -67,41 +67,6 @@ Public Property Let Tags(ByVal example_tags As Collection)
     Set m_example_tags = example_tags
 End Property
 
-Public Sub add_step(step_head As String, step_name As String)
-
-    Dim new_step As TStep
-    Dim previous_step_type As String
-    
-    If Me.Steps.Count = 0 Then
-        previous_step_type = STEP_TYPE_GIVEN
-    Else
-        previous_step_type = Me.Steps(Me.Steps.Count).SType
-    End If
-    Set new_step = New TStep
-    If step_head = "And" Or step_head = "But" Then
-        new_step.SType = previous_step_type
-    Else
-        new_step.SType = get_step_type(step_head)
-    End If
-    new_step.Head = step_head
-    new_step.Name = step_name
-    Me.Steps.Add new_step
-End Sub
-
-Private Function get_step_type(step_head As String) As String
-
-    Select Case step_head
-        Case "Given"
-            get_step_type = STEP_TYPE_GIVEN
-        Case "When"
-            get_step_type = STEP_TYPE_WHEN
-        Case "Then"
-            get_step_type = STEP_TYPE_THEN
-        Case Else
-            get_step_type = "unknown step type"
-    End Select
-End Function
-
 Public Sub insert_background_steps(background_steps As Collection)
     
     Dim background_step As TStep

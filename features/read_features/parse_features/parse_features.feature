@@ -32,7 +32,9 @@ Ability: parse features
       And the  parsed result contains a rule with the name "this is a rule"
 
 
-  Rule: every line after a keyword up to the next keyword line or until the first example step in a example clause is considered to be description except comment lines
+  Rule: keyword values are single lines
+    The name of rule or a feature is set in the same line as the corresponding
+    keyword. Every following line not starting with <keyword>: is just description.
 
     Example: feature with 2 lines of description
       Given a feature named "sample feature"
@@ -48,6 +50,7 @@ Ability: parse features
       Then the parsed feature contains a rule
       And the rules description is set to "this is a description"
 
+
   Rule: steps following a background clause are assigned to the feature
 
     Example: background with one Given step
@@ -55,5 +58,9 @@ Ability: parse features
       And the feature has a background clause containing a Given step
       When the feature is parsed
       Then the Given step is assigned to the feature
+
+
+
+
 
   # Rule: translate synonyms Ability,Business Needs to Feature

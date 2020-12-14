@@ -12,13 +12,13 @@ Option Explicit
 Dim m_parsed_example As TExample
 Dim m_parsed_background As TBackground
 
-Public Sub Given_a_feature_F5C668746977()
-    'Given a feature
-    TStepVars.gherkin_text = "Feature: sample feature"
+Public Sub Given_an_example_STR_6A35400021EE(step_expressions As Collection)
+    'Given an example {string}
+    TStepVars.gherkin_text = "Example: " & step_expressions(1)
 End Sub
 
-Public Sub Given_the_feature_includes_a_line_STR_84B3E9B86DF3(step_expressions As Collection)
-    'Given the feature includes a line {string}
+Public Sub Given_the_example_contains_a_step_STR_7D7301221369(step_expressions As Collection)
+    'Given the example contains a step {string}
     TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf & step_expressions(1)
 End Sub
 
@@ -34,11 +34,6 @@ Public Sub Given_an_example_with_two_steps_STR_and_STR_A2651FF47542(step_express
                         & "  Example: sample example" & vbLf _
                         & step_expressions(1) & vbLf _
                         & step_expressions(2)
-End Sub
-
-Public Sub Given_an_example_F5C6F737F747()
-    'Given an example
-    TStepVars.gherkin_text = "Example: sample example"
 End Sub
 
 Public Sub Given_the_first_step_is_STR_5F91EBC94964(step_expressions As Collection)
@@ -84,20 +79,16 @@ End Sub
 
 Public Sub Then_the_example_clause_from_the_parsed_result_con_C8ADD15947E9()
     'Then the example clause from the parsed result contains all the steps
-    
-    Dim example_steps As Collection
-    
-    Set example_steps = m_parsed_feature.Clauses(1).Steps
-    TSpec.expect(example_steps.Count).to_be 3
-    TSpec.expect(example_steps(1).SType).to_be STEP_TYPE_GIVEN
-    TSpec.expect(example_steps(1).Name).to_be "a precondition"
-    TSpec.expect(example_steps(1).Head).to_be "Given"
-    TSpec.expect(example_steps(2).SType).to_be STEP_TYPE_WHEN
-    TSpec.expect(example_steps(2).Name).to_be "action happens"
-    TSpec.expect(example_steps(2).Head).to_be "When"
-    TSpec.expect(example_steps(3).SType).to_be STEP_TYPE_THEN
-    TSpec.expect(example_steps(3).Name).to_be "some result is expected"
-    TSpec.expect(example_steps(3).Head).to_be "Then"
+    TSpec.expect(m_parsed_example.Steps.Count).to_be 3
+    TSpec.expect(m_parsed_example.Steps(1).SType).to_be STEP_TYPE_GIVEN
+    TSpec.expect(m_parsed_example.Steps(1).Name).to_be "a precondition"
+    TSpec.expect(m_parsed_example.Steps(1).Head).to_be "Given"
+    TSpec.expect(m_parsed_example.Steps(2).SType).to_be STEP_TYPE_WHEN
+    TSpec.expect(m_parsed_example.Steps(2).Name).to_be "action happens"
+    TSpec.expect(m_parsed_example.Steps(2).Head).to_be "When"
+    TSpec.expect(m_parsed_example.Steps(3).SType).to_be STEP_TYPE_THEN
+    TSpec.expect(m_parsed_example.Steps(3).Name).to_be "some result is expected"
+    TSpec.expect(m_parsed_example.Steps(3).Head).to_be "Then"
 End Sub
 
 Public Sub Then_the_type_of_the_second_step_is_set_to_STR_9CA91DFBD6DD(step_expressions As Collection)

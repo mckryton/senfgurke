@@ -48,38 +48,25 @@ Public Sub parse_steps(feature_lines As Variant, example_start_index As Long, cu
     Dim line_index As Long
     Dim line As String
     Dim is_docstring As Boolean
-    Dim docstring As String
+    Dim docstring_value As String
     
     is_docstring = False
-    docstring = vbNullString
+    docstring_value = vbNullString
     For line_index = example_start_index + 1 To UBound(feature_lines)
         line = Trim(feature_lines(line_index))
         If Right(line, 3) = """""""" And is_docstring Then
             is_docstring = False
-            docstring = docstring & Left(line, Len(line) - 3)
-            If current_clause.Steps.Count > 0 Then
-                current_clause.Steps(current_clause.Steps.Count).Name = current_clause.Steps(current_clause.Steps.Count).Name _
-                    & " """ & docstring & """"
-            End If
+            current_clause.Steps(current_clause.Steps.Count).Docstring = docstring_value
         ElseIf is_docstring Then
-            docstring = docstring & line
+            docstring_value = docstring_value & line
         ElseIf Left(line, 3) = """""""" And Not is_docstring Then
             is_docstring = True
-            docstring = Mid(line, 4, Len(line) - 3)
         ElseIf is_step_line(line) Then
-            parse_step line, current_clause
+            current_clause.Steps.Add create_step(line, current_clause)
         ElseIf is_clause_definition_line(line) Then
             Exit Sub
         End If
     Next
-End Sub
-
-Public Sub parse_step(step_line As String, current_clause As Variant)
-
-    Dim step_head As String
-    
-    step_head = Split(step_line, " ")(0)
-    current_clause.add_step step_head:=step_head, step_name:=Right(step_line, Len(step_line) - InStr(step_line, " "))
 End Sub
 
 Private Function parse_feature_definition(gherkin_text As String) As TFeature
@@ -314,7 +301,13 @@ Private Function clone_tags(source_tags As Collection) As Collection
     Set clone_tags = target_tags
 End Function
 
+Public Function create_step(step_definition As String, Optional parent_clause) As TStep
 
-
-
-
+    Dim new_step As TStep
+    
+    If IsMissing(parent_clause) Then Set parent_clause = Nothing
+    Set new_step = New TStep
+    new_step.Parent = parent_clause
+    new_step.parse_step_definition step_definition
+    Set create_step = new_step
+End Function
