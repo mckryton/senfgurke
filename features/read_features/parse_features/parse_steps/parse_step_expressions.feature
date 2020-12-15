@@ -16,7 +16,7 @@ Ability: parse step expressions
     Example: integer expression
       Given a step definition "Given a step with a number 1"
        When the step definition is parsed
-       Then the step has one step expression type "integer"
+       Then the step has one step expression type "long"
         And the value of the expression is 1
 
     Example: integer expression
@@ -24,6 +24,3 @@ Ability: parse step expressions
        When the step definition is parsed
        Then the step has one step expression type "double"
         And the value of the expression is 3.14
-
-
-  Rule: recognice docstrings

@@ -37,10 +37,10 @@ Public Function get_step_function_name() As String
         function_name = function_name & "_"
         step_element = Me.Elements(index)
         If IsNumeric(step_element) Then
-            Select Case Me.Expressions(step_element).TypeName
+            Select Case LCase(TypeName(Me.Expressions(step_element)))
                 Case "string"
                     function_name = function_name & "STR"
-                Case "integer"
+                Case "long"
                     function_name = function_name & "INT"
                 Case "double"
                     function_name = function_name & "DBL"
@@ -60,11 +60,14 @@ Private Function get_step_comment_name() As String
 
     Dim function_name As String
     Dim step_element As Variant
+    Dim type_name As String
     
     function_name = vbNullString
     For Each step_element In Me.Elements
         If IsNumeric(step_element) Then
-            function_name = function_name & "{" & Me.Expressions(step_element).TypeName & "}"
+            type_name = LCase(TypeName(Me.Expressions(step_element)))
+            If type_name = "long" Then type_name = "integer"
+            function_name = function_name & "{" & type_name & "}"
         Else
             function_name = function_name & step_element
         End If
@@ -96,7 +99,7 @@ Private Function remove_non_ascii_chars(function_name As String) As String
     remove_non_ascii_chars = function_name
 End Function
 
-Public Sub disassemble_step_name(step_name As String)
+Private Sub disassemble_step_name(step_name As String)
 
     Dim name_element As String
     Dim char_index As Long
@@ -125,7 +128,7 @@ Public Sub disassemble_step_name(step_name As String)
             name_element = vbNullString
             'add only a reference to the expression in the list of step name elements
             Me.Elements.Add Me.Expressions.Count + 1
-            Me.Expressions.Add expression
+            Me.Expressions.Add expression.Value
             char_index = expression.IndexEnd
             Set expression = Nothing
         End If
@@ -153,7 +156,7 @@ Private Function find_numeric_expression(step_name As String, start_index As Lon
     Loop While (IsNumeric(current_char) Or current_char = ".") And search_index <= Len(step_name)
     If current_char = " " Or (IsNumeric(current_char) And search_index > Len(step_name)) Then
         If expression.TypeName = "integer" Then
-            expression.Value = CInt(Trim(expression_name))
+            expression.Value = CLng(Trim(expression_name))
         Else
             expression.Value = CDbl(Trim(expression_name))
         End If
@@ -277,11 +280,11 @@ Public Property Get Name() As Variant
         step_name = step_name & " "
         step_element = Me.Elements(index)
         If IsNumeric(step_element) Then
-            Select Case Me.Expressions(step_element).TypeName
-                Case "string"
-                    step_name = step_name & """" & Me.Expressions(step_element).Value & """"
+            Select Case TypeName(Me.Expressions(step_element))
+                Case "String"
+                    step_name = step_name & """" & Me.Expressions(step_element) & """"
                 Case Else
-                    step_name = step_name & CStr(Me.Expressions(step_element).Value)
+                    step_name = step_name & CStr(Me.Expressions(step_element))
             End Select
         Else
             step_name = step_name & step_element
