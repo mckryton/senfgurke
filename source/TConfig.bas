@@ -21,6 +21,10 @@ Public Property Get StepImplementations() As Collection
     Set StepImplementations = m_step_implementations
 End Property
 
+Public Property Let StepImplementations(new_stepimplementations As Collection)
+    Set m_step_implementations = new_stepimplementations
+End Property
+
 Public Property Get MaxStepFunctionNameLength() As Variant
     
     'VBA compiler crashes under MacOS (v16.41) if a function name is longer than 63 characters

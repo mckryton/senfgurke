@@ -17,10 +17,10 @@ Public Sub test(Optional filter_tag, Optional report_format)
         Set feature = parsed_feature
         TFeatureRunner.run_feature feature, filter_tag:=filter_tag
     Next
+    TConfig.StepImplementations = Nothing
 End Sub
 
 Public Sub wip()
     'wip = work in progress
-    
     test "@wip"
 End Sub

@@ -44,20 +44,13 @@ Public Sub Then_the_function_name_for_the_first_step_ends_wit_79EB11152D22(step_
     'And the function name for the first step ends with {string}
     Dim function_name As String
     
-    function_name = TStepVars.first_step.get_step_function_name
+    function_name = TStepVars.example.Steps(1).get_step_function_name
     function_name = Left(function_name, Len(function_name) - 13)
     TSpec.expect(Right(function_name, 3)).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_step_has_one_string_parameter_with_two_li_AD35FD5BD215()
     'Then the step has one string parameter with two lines
-    TSpec.expect(TypeName(TStepVars.first_step.Expressions(1))).to_be "String"
-    TSpec.expect(UBound(Split(TStepVars.first_step.Expressions(1), vbLf))).to_be 1
+    TSpec.expect(TypeName(TStepVars.example.Steps(1).Expressions(1))).to_be "String"
+    TSpec.expect(UBound(Split(TStepVars.example.Steps(1).Expressions(1), vbLf))).to_be 1
 End Sub
-
-Public Sub Then_the_first_step_has_a_docstring_value_STR_B59597EF055B(step_expressions As Collection)
-    'And the first step has a docstring value {string}
-    TSpec.expect(TStepVars.first_step.Docstring).to_be step_expressions(1)
-End Sub
-
-
