@@ -60,6 +60,17 @@ Public Sub Given_a_step_STR_with_the_status_STR_FAF1B1E8C8DC(step_expressions As
     Set m_report_msg = TReport.build_msg_package(TYPE_STEP, step_expressions(1), step_expressions(2), vbNullString)
 End Sub
 
+Public Sub Given_a_step_STR_followed_by_a_docstring_STR_with__B7F15CFA718B(step_expressions As Collection)
+    'Given a step {string} followed by a docstring {string} with the status {string}
+    Dim docstring_step As String
+    
+    docstring_step = step_expressions(1) & vbLf _
+                        & """""""" & vbLf _
+                        & step_expressions(2) & vbLf _
+                        & """"""""
+    Set m_report_msg = TReport.build_msg_package(TYPE_STEP, docstring_step, step_expressions(3), vbNullString)
+End Sub
+
  Public Sub Given_a_rule_STR_F5C6A47A4718(step_expressions As Collection)
     'Given a rule {string}
     Set m_report_msg = TReport.build_msg_package(TYPE_RULE, Replace(step_expressions(1), "<br>", vbLf))
@@ -107,6 +118,17 @@ End Sub
 Public Sub Then_the_first_line_of_the_resulting_output_is_set_2D1D1353FBA6(step_expressions As Collection)
     'Then the first line of the resulting output is set to {string}
     TSpec.expect(Split(m_report_output, vbLf)(0)).to_be step_expressions(1)
+End Sub
+
+Public Sub Then_2nd_and_4th_line_are_STR_A56F9A13380D(step_expressions As Collection)
+    'And 2nd and 4th line are {string}
+    TSpec.expect(Split(m_report_output, vbLf)(1)).to_be step_expressions(1)
+    TSpec.expect(Split(m_report_output, vbLf)(3)).to_be step_expressions(1)
+End Sub
+
+Public Sub Then_the_3rd_line_is_STR_DBF0DB00D378(step_expressions As Collection)
+    'And the 3rd line is {string}
+    TSpec.expect(Split(m_report_output, vbLf)(2)).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_resulting_output_starts_with_a_new_line_3342859E2E9A()

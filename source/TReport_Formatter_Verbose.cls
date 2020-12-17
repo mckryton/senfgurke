@@ -63,11 +63,23 @@ Public Function prepare_msg(msg_package As Collection) As String
     prepare_msg = formatted_msg
 End Function
 
-Public Function format_step(step As String, status As String, err_msg As String) As String
+Public Function format_step(step_name As String, status As String, err_msg As String) As String
     
     Dim formatted_msg As String
+    Dim step_lines As Variant
+    Dim line_index As Integer
 
-    formatted_msg = Space$(4) & " " & status & Space$(10 - 1 - Len(status)) & step
+    step_lines = Split(step_name, vbLf)
+    formatted_msg = Space$(4) & " " & status & Space$(10 - 1 - Len(status)) & step_lines(0)
+    'format docstring output if available
+    If UBound(step_lines) > 0 Then
+        formatted_msg = formatted_msg & vbLf & Space$(16) & Trim(step_lines(1))
+        For line_index = 2 To UBound(step_lines) - 1
+            formatted_msg = formatted_msg & vbLf & Space$(18) & Trim(step_lines(line_index))
+        Next
+        formatted_msg = formatted_msg & vbLf & Space$(16) & Trim(step_lines(UBound(step_lines)))
+    End If
+    'add err msg if available
     If err_msg <> vbNullString Then
         formatted_msg = formatted_msg & vbLf & Space$(10) & err_msg
     End If

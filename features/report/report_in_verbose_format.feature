@@ -33,7 +33,11 @@ Ability: Report in verbose format
       Then the description is reported as "    description line"
 
 
-  Rule: A step will be preceded with it's result in capital letters initially intendented by 5 spaces and step names following after 14 characters from the left
+  Rule: format step results and names
+    A step will be preceded with it's result in capital letters initially
+    intendented by 5 spaces and step names following after 14 characters
+    from the left. Docstrings indicators are indented by 16 spaces while
+    docsting content is indented by 18 spaces.
 
     Example: successful step
       Given a step "Given a sample step" with the status "OK"
@@ -58,6 +62,14 @@ Ability: Report in verbose format
       And the report format is set to verbose
       When the reported message is prepared as output for the report
       Then the resulting output is set to "     PENDING  Given a sample step"
+
+    Example: successful step with a docstring
+      Given a step "Given a sample step" followed by a docstring "this is a docstring" with the status "OK"
+      And the report format is set to verbose
+      When the reported message is prepared as output for the report
+      Then the first line of the resulting output is set to "     OK       Given a sample step"
+       And 2nd and 4th line are "              \"\"\""
+       And the 3rd line is "                this is a docstring"
 
 
   Rule: re-format indention for description
