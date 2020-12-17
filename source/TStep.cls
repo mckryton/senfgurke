@@ -224,6 +224,10 @@ Public Property Let Expressions(ByVal new_expressions As Collection)
     Set m_expressions = new_expressions
 End Property
 
+Private Sub Class_Initialize()
+    m_docstring = vbNullString
+End Sub
+
 Private Sub Class_Terminate()
     Set m_expressions = Nothing
 End Sub
@@ -279,7 +283,9 @@ Public Property Get Name() As Variant
     For index = 2 To Me.Elements.Count
         step_name = step_name & " "
         step_element = Me.Elements(index)
-        If IsNumeric(step_element) Then
+        If index = Me.Elements.Count And Me.Docstring <> vbNullString Then
+            step_name = step_name & vbLf & """""""" & vbLf & Me.Docstring & vbLf & """"""""
+        ElseIf IsNumeric(step_element) Then
             Select Case TypeName(Me.Expressions(step_element))
                 Case "String"
                     step_name = step_name & """" & Me.Expressions(step_element) & """"

@@ -49,6 +49,7 @@ Public Sub parse_steps(feature_lines As Variant, example_start_index As Long, cu
     Dim line As String
     Dim is_docstring As Boolean
     Dim docstring_value As String
+    Dim current_step As TStep
     
     is_docstring = False
     docstring_value = vbNullString
@@ -56,8 +57,13 @@ Public Sub parse_steps(feature_lines As Variant, example_start_index As Long, cu
         line = Trim(feature_lines(line_index))
         If Right(line, 3) = """""""" And is_docstring Then
             is_docstring = False
-            current_clause.Steps(current_clause.Steps.Count).Docstring = docstring_value
+            Set current_step = current_clause.Steps(current_clause.Steps.Count)
+            current_step.Docstring = docstring_value
+            current_step.Expressions.Add docstring_value
+            current_step.Elements.Add current_step.Expressions.Count
+            docstring_value = vbNullString
         ElseIf is_docstring Then
+            If Not docstring_value = vbNullString Then docstring_value = docstring_value & vbLf
             docstring_value = docstring_value & line
         ElseIf Left(line, 3) = """""""" And Not is_docstring Then
             is_docstring = True

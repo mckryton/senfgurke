@@ -13,7 +13,8 @@ Public Property Get StepImplementations() As Collection
         For Each step_implementation_class In Array(New Steps_Run_Examples, New Steps_Parse_Features, _
                         New Steps_Load_Feature_Files, New Steps_report_verbose, New Steps_Run_Steps, _
                         New Steps_Parse_Examples, New Steps_Run_features, New Steps_confirm_collection_member, _
-                        New Steps_make_steps_executable, New Steps_parse_steps, New Steps_parse_step_expressions)
+                        New Steps_make_steps_executable, New Steps_parse_steps, New Steps_parse_step_expressions, _
+                        New Steps_parse_docstrings)
             m_step_implementations.Add step_implementation_class
         Next
     End If

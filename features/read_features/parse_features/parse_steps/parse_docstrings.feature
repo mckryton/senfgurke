@@ -10,14 +10,15 @@ Ability: parse docstrings
     Docstrings are embraced by a sequence of 3 double quotation marks """
 
       Example: example with docstring
-        Given an example
+        Given an example definition
           And the first step is "Given a first step"
           And this step is followed by a docstring containing "this is a docstring"
          When the example is parsed
-         Then first step is changed to "Given a first step \"this is a docstring\""
+         Then the first step has an expression
+          And the function name for the first step ends with "STR"
 
       Example: example with multiline docstring
-        Given an example
+        Given an example definition
               """
               Example: simple docstring
                 Given a first step
@@ -33,7 +34,9 @@ Ability: parse docstrings
 
       Example: feature background with docstring
         Given a background
-          And the first step of the background is "Given a first background step"
+          And the first step is "Given a first background step"
           And this step is followed by a docstring containing "this is a docstring"
          When the feature background is parsed
-         Then first step of the background is changed to "Given a first background step \"this is a docstring\""
+         Then the first step has an expression
+          And the function name for the first step ends with "STR"
+          And the first step has a docstring value "this is a docstring"
