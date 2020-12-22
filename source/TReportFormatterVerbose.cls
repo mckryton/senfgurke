@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "TReport_Formatter_Verbose"
+Attribute VB_Name = "TReportFormatterVerbose"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -18,7 +18,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
     Dim message As String
 
     If IsMissing(silent) Then silent = False
-    message = prepare_msg(msg_package)
+    message = format_msg_content(msg_package)
     Select Case msg_package(TReport.MSG_TYPE)
         Case TReport.TYPE_FEATURE_NAME
             CurrentFeature = message & vbLf
@@ -42,7 +42,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
     End Select
 End Function
 
-Public Function prepare_msg(msg_package As Collection) As String
+Public Function format_msg_content(msg_package As Collection) As String
     
     Dim formatted_msg As String
     
@@ -60,7 +60,7 @@ Public Function prepare_msg(msg_package As Collection) As String
         Case Else
             formatted_msg = vbNullString
     End Select
-    prepare_msg = formatted_msg
+    format_msg_content = formatted_msg
 End Function
 
 Public Function format_step(step_name As String, status As String, err_msg As String) As String

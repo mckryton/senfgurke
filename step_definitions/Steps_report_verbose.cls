@@ -11,11 +11,11 @@ Option Explicit
 
 Dim m_report_output As String
 Dim m_report_msg As Collection
-Dim m_verbose_formatter As TReport_Formatter_Verbose
+Dim m_verbose_formatter As TReportFormatterVerbose
 
 Public Sub Given_the_report_format_is_set_to_verbose_558493C4C322()
     'Given the report format is set to verbose
-    Set m_verbose_formatter = New TReport_Formatter_Verbose
+    Set m_verbose_formatter = New TReportFormatterVerbose
 End Sub
 
 Public Sub Given_a_feature_STR_was_reported_B5EB56508778(step_expressions As Collection)
@@ -92,7 +92,7 @@ End Sub
 
 Public Sub When_the_reported_message_is_prepared_as_output_fo_5E1841FB3AC8()
     'When the reported message is prepared as output for the report
-    m_report_output = m_verbose_formatter.prepare_msg(m_report_msg)
+    m_report_output = m_verbose_formatter.format_msg_content(m_report_msg)
 End Sub
 
 Public Sub Then_the_report_output_contains_STR_5A8ED3F2F3C6(step_expressions As Collection)

@@ -40,6 +40,26 @@
   Senfgurke will read feature specs from text
   and identify rules as counterpart for the following examples
 
+* [Parse steps](read_features/parse_features/parse_steps.feature)
+
+  Steps are the building blocks of examples. Every step has a matching step
+  definition where the step is expressed as working code. As result an example
+  can be considered as working if all the code from the step definition is
+  executed without errors.
+
+#### Parse Steps
+
+* [Parse docstrings](read_features/parse_features/parse_steps/parse_docstrings.feature)
+
+  Sometimes steps refer to a larger text strucure having multiple lines (e.g.
+  describing a feature in a single step). Therefor step can be expanded by one
+  docstring following the step directly. Docstrings are embraced by three double
+  quotation marks
+
+* [Parse step expressions](read_features/parse_features/parse_steps/parse_step_expressions.feature)
+
+  To match a step with it's step definition it has to be disassembled into its
+
 * [Parse tags](read_features/parse_features/parse_tags.feature)
 
   Senfgurke will read feature specs from text
@@ -47,11 +67,18 @@
 
 ## Report
 
+* [Report in dot format](report/report_in_dot_format.feature)
+
+  When running examples form all features a verbose output would be confusing.
+  Therefore the dot format will mark successul executed examples with a single
+  dot. Different results can be detected by a matching letter (e.g. F for
+  failed steps).
+
 * [Report in verbose format](report/report_in_verbose_format.feature)
 
-  While executing examples senfgurke will send messages about progress
-  and success for reporting. The verbose formatter will turn those messages into
-  a verbose report that is printed on the debug console.
+  While developing new features or debugging selected examples the verbose
+  report format come in handy. It will show step definition next to the latest
+  execution result as well as name and descriptions for features and rules.
 
 ## Run Features
 
