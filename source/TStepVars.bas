@@ -11,4 +11,8 @@ Public m_step_function_name As String
 Public step As TStep
 Public first_step As TStep
 Public Background As TBackground
-
+Public ReportOutput As String
+Public ReportMsg As Collection
+Public ReportFormatter As Variant
+Public ReportMessages As Collection
+Public CodeTemplate As String

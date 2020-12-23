@@ -11,6 +11,7 @@ Public Const TYPE_DESC = "description"
 Public Const TYPE_RULE = "rule"
 Public Const TYPE_EXAMPLE_TITLE = "example_title"
 Public Const TYPE_STEP = "step"
+Public Const TYPE_CODE_TEMPLATE = "code_template"
 
 Dim m_report_formatter As Variant
 Dim m_logger As Logger
@@ -71,3 +72,15 @@ Public Property Get Log() As Logger
     End If
     Set Log = m_logger
 End Property
+
+Public Sub report_code_templates_for_missing_steps()
+
+    Dim code_templates As String
+    
+    code_templates = Report_Formatter.get_code_templates_for_missing_steps
+    If code_templates <> vbNullString Then
+        Debug.Print
+        Debug.Print
+        Debug.Print code_templates
+    End If
+End Sub

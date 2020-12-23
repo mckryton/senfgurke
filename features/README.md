@@ -67,18 +67,24 @@
 
 ## Report
 
-* [Report in dot format](report/report_in_dot_format.feature)
+* [Report in progress format](report/report_in_progress_format.feature)
 
   When running examples form all features a verbose output would be confusing.
-  Therefore the dot format will mark successul executed examples with a single
-  dot. Different results can be detected by a matching letter (e.g. F for
-  failed steps).
+  Therefore the progress format will mark successul executed examples with
+  a single dot to indicate the execution progress. Different results can be
+  detected by a matching letter (e.g. F for failed steps).
+
+  Background:
+  Given the report format is set to progress
 
 * [Report in verbose format](report/report_in_verbose_format.feature)
 
   While developing new features or debugging selected examples the verbose
   report format come in handy. It will show step definition next to the latest
   execution result as well as name and descriptions for features and rules.
+
+  Background:
+  Given the report format is set to verbose
 
 ## Run Features
 

@@ -12,6 +12,7 @@ Option Explicit
 Dim m_current_feature As String
 Dim m_current_rule As String
 Dim m_current_example As String
+Dim m_step_templates As Collection
 
 Public Function process_msg(msg_package As Collection, Optional silent) As String
 
@@ -36,6 +37,8 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             CurrentFeature = vbNullString
             CurrentRule = vbNullString
             CurrentExample = vbNullString
+        Case TReport.TYPE_CODE_TEMPLATE
+            StepTemplates.Add message
         Case Else
             Debug.Print "DEBUG: unknown report msg type >" & msg_package(TReport.MSG_TYPE) & "<"
             process_msg = vbNullString
@@ -57,6 +60,8 @@ Public Function format_msg_content(msg_package As Collection) As String
             formatted_msg = format_example_title(msg_package(TReport.MSG_CONTENT))
         Case TReport.TYPE_STEP
             formatted_msg = format_step(msg_package(TReport.MSG_CONTENT), msg_package(TReport.MSG_STATUS), msg_package(TReport.MSG_ERR))
+        Case TReport.TYPE_CODE_TEMPLATE
+            formatted_msg = msg_package(TReport.MSG_CONTENT)
         Case Else
             formatted_msg = vbNullString
     End Select
@@ -135,3 +140,31 @@ End Property
 Private Property Let CurrentExample(ByVal current_example As String)
     m_current_example = current_example
 End Property
+
+Private Property Get StepTemplates() As Collection
+    
+    If m_step_templates Is Nothing Then
+        Set m_step_templates = New Collection
+    End If
+    Set StepTemplates = m_step_templates
+End Property
+
+Private Sub Class_Terminate()
+    Set m_step_templates = Nothing
+End Sub
+
+Public Function get_code_templates_for_missing_steps() As String
+
+    Dim report_output As String
+    Dim template As Variant
+    
+    report_output = vbNullString
+    For Each template In StepTemplates
+        report_output = vbLf & CStr(template)
+    Next
+    If report_output <> vbNullString Then
+        report_output = "You can implement step definitions for undefined steps with these snippets:" _
+                            & vbLf & report_output
+    End If
+    get_code_templates_for_missing_steps = report_output
+End Function
