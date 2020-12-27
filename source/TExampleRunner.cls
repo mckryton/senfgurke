@@ -21,7 +21,7 @@ Public Function run_example(example As TExample, Optional silent) As Collection
     If IsMissing(silent) Then silent = False
     Set example_statistics = New Collection
     IsTestStopped = False
-    If Not silent Then TReport.report TReport.TYPE_EXAMPLE_TITLE, example.OriginalHeadline
+    If Not silent Then TRun.Reporter.report REPORT_MSG_TYPE_EXAMPLE_TITLE, example.OriginalHeadline
     example_statistics.Add example.OriginalHeadline, "example"
     On Error GoTo error_handler
     For Each step In example.Steps
@@ -34,7 +34,7 @@ Public Function run_example(example As TExample, Optional silent) As Collection
             stop_example
         End If
         example_statistics.Add Array(step_result(0), step.OriginalStepDefinition)
-        If Not silent Then TReport.report TReport.TYPE_STEP, step.OriginalStepDefinition, step_result(0), err_msg
+        If Not silent Then TRun.Reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_result(0), err_msg
         If IsTestStopped Then
             Exit For
         End If
@@ -43,7 +43,7 @@ Public Function run_example(example As TExample, Optional silent) As Collection
     Exit Function
     
 error_handler:
-    TReport.Log.log_function_error "Runtime errror in TExampleRunner.run_example", _
+    TRun.Log.log_function_error "Runtime errror in TExampleRunner.run_example", _
         example(CLAUSE_ATTR_TYPE) & " " & example(CLAUSE_ATTR_NAME)
 End Function
 

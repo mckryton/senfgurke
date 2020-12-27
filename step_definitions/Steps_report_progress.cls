@@ -21,11 +21,11 @@ Public Sub Given__INT_steps_were_reported_as_successful_53AEBD4A25F4(step_expres
     
     Set TStepVars.ReportMessages = New Collection
     For index = 1 To step_expressions(1)
-        TStepVars.ReportMessages.Add TReport.build_msg_package(TYPE_STEP, "Given a successful step", "OK", vbNullString)
+        TStepVars.ReportMessages.Add TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, "Given a successful step", "OK", vbNullString)
     Next
 End Sub
 
 Public Sub Given_the_next_step_STR_was_reported_as_missing_07941E95CA02(step_expressions As Collection)
     'And the next step {string} was reported as missing
-    TStepVars.ReportMessages.Add TReport.build_msg_package(TYPE_STEP, step_expressions(1), "MISSING", vbNullString)
+    TStepVars.ReportMessages.Add TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, step_expressions(1), "MISSING", vbNullString)
 End Sub

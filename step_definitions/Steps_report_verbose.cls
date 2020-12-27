@@ -19,7 +19,7 @@ Public Sub Given_a_feature_STR_was_reported_B5EB56508778(step_expressions As Col
 
     Dim report_msg As Collection
     
-    Set report_msg = TReport.build_msg_package(TYPE_FEATURE_NAME, "Feature: " & step_expressions(1), vbNullString, vbNullString)
+    Set report_msg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_FEATURE_NAME, "Feature: " & step_expressions(1), vbNullString, vbNullString)
     TStepVars.ReportFormatter.process_msg report_msg, silent:=True
 End Sub
 
@@ -28,7 +28,7 @@ Public Sub Given_a_rule_STR_was_reported_A5D68D23D5AE(step_expressions As Collec
 
     Dim report_msg As Collection
     
-    Set report_msg = TReport.build_msg_package(TYPE_RULE, "Rule: " & step_expressions(1), vbNullString, vbNullString)
+    Set report_msg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_RULE, "Rule: " & step_expressions(1), vbNullString, vbNullString)
     TStepVars.ReportFormatter.process_msg report_msg, silent:=True
 End Sub
 
@@ -37,18 +37,18 @@ Public Sub Given_an_example_STR_was_reported_9C2B7078D5AE(step_expressions As Co
 
     Dim report_msg As Collection
     
-    Set report_msg = TReport.build_msg_package(TYPE_EXAMPLE_TITLE, "Example: " & step_expressions(1), vbNullString, vbNullString)
+    Set report_msg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_EXAMPLE_TITLE, "Example: " & step_expressions(1), vbNullString, vbNullString)
     TStepVars.ReportFormatter.process_msg report_msg, silent:=True
 End Sub
 
 Public Sub Given_a_line_from_the_feature_is_reported_as_featu_AB794F4783C4(step_expressions As Collection)
     'Given a line from the feature is reported as feature description {string}
-    Set TStepVars.ReportMsg = TReport.build_msg_package(TYPE_DESC, step_expressions(1), vbNullString, vbNullString)
+    Set TStepVars.ReportMsg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_DESC, step_expressions(1), vbNullString, vbNullString)
 End Sub
 
 Public Sub Given_a_feature_with_a_description_STR_F0A63D8946A5(step_expressions As Collection)
     'Given a feature with a description {string}
-    Set TStepVars.ReportMsg = TReport.build_msg_package(TYPE_DESC, step_expressions(1), vbNullString, vbNullString)
+    Set TStepVars.ReportMsg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_DESC, step_expressions(1), vbNullString, vbNullString)
 End Sub
 
 Public Sub Given_a_step_STR_followed_by_a_docstring_STR_with__B7F15CFA718B(step_expressions As Collection)
@@ -59,17 +59,17 @@ Public Sub Given_a_step_STR_followed_by_a_docstring_STR_with__B7F15CFA718B(step_
                         & """""""" & vbLf _
                         & step_expressions(2) & vbLf _
                         & """"""""
-    Set TStepVars.ReportMsg = TReport.build_msg_package(TYPE_STEP, docstring_step, step_expressions(3), vbNullString)
+    Set TStepVars.ReportMsg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, docstring_step, step_expressions(3), vbNullString)
 End Sub
 
  Public Sub Given_a_rule_STR_F5C6A47A4718(step_expressions As Collection)
     'Given a rule {string}
-    Set TStepVars.ReportMsg = TReport.build_msg_package(TYPE_RULE, Replace(step_expressions(1), "<br>", vbLf))
+    Set TStepVars.ReportMsg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_RULE, Replace(step_expressions(1), "<br>", vbLf))
 End Sub
 
 Public Sub Given_a_step_STR_fails_with_the_error_message_STR_F54FA807B797(step_expressions As Collection)
     'Given a step {string} fails with the error message {string}
-    Set TStepVars.ReportMsg = TReport.build_msg_package(TYPE_STEP, step_expressions(1), STATUS_FAIL, step_expressions(2))
+    Set TStepVars.ReportMsg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, step_expressions(1), STATUS_FAIL, step_expressions(2))
 End Sub
 
 Public Sub When_the_execution_of_the_first_example_step_is_re_7D6F60A0AA78()
@@ -77,7 +77,7 @@ Public Sub When_the_execution_of_the_first_example_step_is_re_7D6F60A0AA78()
     
     Dim report_msg As Collection
     
-    Set report_msg = TReport.build_msg_package(TYPE_STEP, "Given sample step", STATUS_OK, vbNullString)
+    Set report_msg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, "Given sample step", STATUS_OK, vbNullString)
     TStepVars.ReportOutput = TStepVars.ReportFormatter.process_msg(report_msg, silent:=True)
 End Sub
 

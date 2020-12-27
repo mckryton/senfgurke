@@ -11,7 +11,7 @@ Option Explicit
 
 Public Sub Given_a_step_STR_with_the_status_STR_FAF1B1E8C8DC(step_expressions As Collection)
     'Given a step {string} with the status {string}
-    Set TStepVars.ReportMsg = TReport.build_msg_package(TYPE_STEP, step_expressions(1), step_expressions(2), vbNullString)
+    Set TStepVars.ReportMsg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), vbNullString)
 End Sub
 
 
@@ -21,7 +21,7 @@ Public Sub Given_a_code_template_for_a_missing_step_was_repor_E4A1AA906A81(step_
     Dim report_msg As Collection
     
     TStepVars.CodeTemplate = step_expressions(1)
-    Set report_msg = TReport.build_msg_package(TYPE_CODE_TEMPLATE, TStepVars.CodeTemplate)
+    Set report_msg = TRun.Reporter.build_msg_package(REPORT_MSG_TYPE_CODE_TEMPLATE, TStepVars.CodeTemplate)
     TStepVars.ReportFormatter.process_msg report_msg, silent:=True
 End Sub
 

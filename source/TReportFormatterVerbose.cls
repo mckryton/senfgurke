@@ -20,16 +20,16 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
 
     If IsMissing(silent) Then silent = False
     message = format_msg_content(msg_package)
-    Select Case msg_package(TReport.MSG_TYPE)
-        Case TReport.TYPE_FEATURE_NAME
+    Select Case msg_package(REPORT_MSG_TYPE)
+        Case REPORT_MSG_TYPE_FEATURE_NAME
             CurrentFeature = message & vbLf
-        Case TReport.TYPE_DESC
+        Case REPORT_MSG_TYPE_DESC
             CurrentFeature = CurrentFeature & message & vbLf
-        Case TReport.TYPE_RULE
+        Case REPORT_MSG_TYPE_RULE
             CurrentRule = message & vbLf
-        Case TReport.TYPE_EXAMPLE_TITLE
+        Case REPORT_MSG_TYPE_EXAMPLE_TITLE
             CurrentExample = message & vbLf
-        Case TReport.TYPE_STEP
+        Case REPORT_MSG_TYPE_STEP
             message = Join(Split(CurrentFeature & CurrentRule & CurrentExample & message, vbLf), vbLf)
             'report feature names, rules and example titles only when example steps are reported
             If Not silent Then Debug.Print message
@@ -37,10 +37,10 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             CurrentFeature = vbNullString
             CurrentRule = vbNullString
             CurrentExample = vbNullString
-        Case TReport.TYPE_CODE_TEMPLATE
+        Case REPORT_MSG_TYPE_CODE_TEMPLATE
             StepTemplates.Add message
         Case Else
-            Debug.Print "DEBUG: unknown report msg type >" & msg_package(TReport.MSG_TYPE) & "<"
+            Debug.Print "DEBUG: unknown report msg type >" & msg_package(REPORT_MSG_TYPE) & "<"
             process_msg = vbNullString
     End Select
 End Function
@@ -49,19 +49,19 @@ Public Function format_msg_content(msg_package As Collection) As String
     
     Dim formatted_msg As String
     
-    Select Case msg_package(TReport.MSG_TYPE)
-        Case TReport.TYPE_FEATURE_NAME
-            formatted_msg = format_feature_name(msg_package(TReport.MSG_CONTENT))
-        Case TReport.TYPE_DESC
-            formatted_msg = format_feature_description(msg_package(TReport.MSG_CONTENT))
-        Case TReport.TYPE_RULE
-            formatted_msg = format_rule(msg_package(TReport.MSG_CONTENT))
-        Case TReport.TYPE_EXAMPLE_TITLE
-            formatted_msg = format_example_title(msg_package(TReport.MSG_CONTENT))
-        Case TReport.TYPE_STEP
-            formatted_msg = format_step(msg_package(TReport.MSG_CONTENT), msg_package(TReport.MSG_STATUS), msg_package(TReport.MSG_ERR))
-        Case TReport.TYPE_CODE_TEMPLATE
-            formatted_msg = msg_package(TReport.MSG_CONTENT)
+    Select Case msg_package(REPORT_MSG_TYPE)
+        Case REPORT_MSG_TYPE_FEATURE_NAME
+            formatted_msg = format_feature_name(msg_package(REPORT_MSG_CONTENT))
+        Case REPORT_MSG_TYPE_DESC
+            formatted_msg = format_feature_description(msg_package(REPORT_MSG_CONTENT))
+        Case REPORT_MSG_TYPE_RULE
+            formatted_msg = format_rule(msg_package(REPORT_MSG_CONTENT))
+        Case REPORT_MSG_TYPE_EXAMPLE_TITLE
+            formatted_msg = format_example_title(msg_package(REPORT_MSG_CONTENT))
+        Case REPORT_MSG_TYPE_STEP
+            formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))
+        Case REPORT_MSG_TYPE_CODE_TEMPLATE
+            formatted_msg = msg_package(REPORT_MSG_CONTENT)
         Case Else
             formatted_msg = vbNullString
     End Select

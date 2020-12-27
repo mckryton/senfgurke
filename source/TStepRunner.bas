@@ -18,7 +18,7 @@ Public Function run_step(step_definition As TStep) As Variant
     Next
     If step_run_attempts = TConfig.StepImplementations.Count Then
         run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING)
-        TReport.report TYPE_CODE_TEMPLATE, step_definition.get_step_function_template
+        TRun.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, step_definition.get_step_function_template
     Else
         run_step = Array(STATUS_OK)
     End If
