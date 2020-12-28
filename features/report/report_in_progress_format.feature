@@ -36,7 +36,7 @@ Ability: Report in progress format
 
 
   Rule: Keep code templates as is
-@wip
+
     Example: Missing step
       Given a code template for a missing step was reported as
         """

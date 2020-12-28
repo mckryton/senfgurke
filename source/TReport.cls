@@ -10,8 +10,9 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Dim m_report_formatter As Variant
+Dim m_console_output As String
 
-Public Sub report(message_type As String, message_content As String, Optional status, Optional err_msg)
+Public Sub report(message_type As String, message_content As String, Optional status, Optional err_msg, Optional silent)
 
     Dim msg_package As Collection
     
@@ -28,7 +29,7 @@ Public Sub report(message_type As String, message_content As String, Optional st
             msg_package.Add err_msg, REPORT_MSG_ERR
         End If
         Set msg_package = build_msg_package(message_type, message_content, CStr(status), CStr(err_msg))
-        Report_Formatter.process_msg msg_package
+        Report_Formatter.process_msg msg_package, silent:=silent
         Set msg_package = Nothing
     End If
 End Sub
@@ -58,6 +59,7 @@ End Property
 
 Public Property Let Report_Formatter(ByVal new_report_formatter As Variant)
     Set m_report_formatter = new_report_formatter
+    m_report_formatter.Reporter = Me
 End Property
 
 Public Sub report_code_templates_for_missing_steps()
@@ -69,5 +71,28 @@ Public Sub report_code_templates_for_missing_steps()
         Debug.Print
         Debug.Print
         Debug.Print code_templates
+    End If
+End Sub
+
+Public Property Get ConsoleOutput() As String
+    'this is for testing and debugging only, because you can't read the content of the immediate window
+    ConsoleOutput = m_console_output
+End Property
+
+Public Property Let ConsoleOutput(ByVal new_console_output As String)
+    'this is for testing and debugging only, because you can't read the content of the immediate window
+    m_console_output = new_console_output
+End Property
+
+Public Sub print_report(report_output As String, Optional consecutive, Optional silent)
+     
+    If IsMissing(silent) Then silent = False
+    If IsMissing(consecutive) Then consecutive = False
+    If silent Then
+        ConsoleOutput = ConsoleOutput & vbLf & report_output
+    ElseIf consecutive Then
+        Debug.Print report_output;
+    Else
+        Debug.Print report_output
     End If
 End Sub

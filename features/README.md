@@ -84,7 +84,15 @@
   execution result as well as name and descriptions for features and rules.
 
   Background:
-  Given the report format is set to verbose
+  Given the report format is "verbose"
+
+* [Report statistics](report/report_statistics.feature)
+
+  At the end of a test run getting a summary about how many examples and steps
+  were executed and how many of them passed and failed helps to get an
+  overview if the test run was successful. To decide where to put some effort
+  to make the next test run faster, it is also good to know how long the test
+  took.
 
 ## Run Features
 

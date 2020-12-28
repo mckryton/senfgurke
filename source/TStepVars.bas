@@ -16,3 +16,4 @@ Public ReportMsg As Collection
 Public ReportFormatter As Variant
 Public ReportMessages As Collection
 Public CodeTemplate As String
+Public Session As TSession

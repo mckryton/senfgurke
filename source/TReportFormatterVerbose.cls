@@ -13,6 +13,7 @@ Dim m_current_feature As String
 Dim m_current_rule As String
 Dim m_current_example As String
 Dim m_step_templates As Collection
+Dim m_reporter As TReport
 
 Public Function process_msg(msg_package As Collection, Optional silent) As String
 
@@ -32,7 +33,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
         Case REPORT_MSG_TYPE_STEP
             message = Join(Split(CurrentFeature & CurrentRule & CurrentExample & message, vbLf), vbLf)
             'report feature names, rules and example titles only when example steps are reported
-            If Not silent Then Debug.Print message
+            Reporter.print_report message, silent:=silent
             process_msg = message
             CurrentFeature = vbNullString
             CurrentRule = vbNullString
@@ -40,7 +41,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             StepTemplates.Add message
         Case Else
-            Debug.Print "DEBUG: unknown report msg type >" & msg_package(REPORT_MSG_TYPE) & "<"
+            TRun.Session.Log.debug_log "unknown report msg type >" & msg_package(REPORT_MSG_TYPE) & "<"
             process_msg = vbNullString
     End Select
 End Function
@@ -168,3 +169,12 @@ Public Function get_code_templates_for_missing_steps() As String
     End If
     get_code_templates_for_missing_steps = report_output
 End Function
+
+Public Property Get Reporter() As TReport
+    Set Reporter = m_reporter
+End Property
+
+Public Property Let Reporter(ByVal new_reporter As TReport)
+    Set m_reporter = new_reporter
+End Property
+

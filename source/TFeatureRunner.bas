@@ -15,8 +15,8 @@ Public Function run_feature(feature As TFeature, Optional filter_tag, Optional s
     Set example_runner = New TExampleRunner
     Set feature_statistics = New Collection
     If Not silent Then
-        TRun.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, feature.Name
-        TRun.Reporter.report REPORT_MSG_TYPE_DESC, feature.Description
+        TRun.Session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, feature.Name
+        TRun.Session.Reporter.report REPORT_MSG_TYPE_DESC, feature.Description
     End If
     For Each feature_clause In feature.Clauses
         If TypeName(feature_clause) = "TExample" Then
@@ -27,7 +27,7 @@ Public Function run_feature(feature As TFeature, Optional filter_tag, Optional s
                 feature_statistics.Add example_statistics
             End If
         ElseIf TypeName(feature_clause) = "TRule" Then
-            TRun.Reporter.report REPORT_MSG_TYPE_RULE, feature_clause.WholeRule
+            TRun.Session.Reporter.report REPORT_MSG_TYPE_RULE, feature_clause.WholeRule
         End If
     Next
     Set run_feature = feature_statistics
