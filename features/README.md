@@ -1,5 +1,12 @@
 # Features
 
+* [Collect statistics](collect_statistics.feature)
+
+  Several statistics are collected during a test run to learn more about
+  the success of the test run in general. E.g. duration will tell you about
+  the performance of the code under tests. Counting the excuted steps and
+  their results will help you to get an overview about the test run results.
+
 ## Confirm Expectations
 
 * [Confirm collection members](confirm_expectations/confirm_collection_members.feature)
@@ -110,3 +117,10 @@
 
   Senfgurke will locate the matching step implementation for each step
   of an example and execute it.
+
+## Support Functions
+
+* [Get unix time](support_functions/get_unix_time.feature)
+
+  There is no built in support for unix time stamps in vba. However using unix
+  time stamps helps to calculate durations.

@@ -175,3 +175,11 @@ Private Function hash4(txt)
     
     hash4 = c
 End Function
+
+Public Function get_unix_timestamp(in_date As Date, in_time As Single) As Long
+
+    Dim unix_ref_date As Double
+    
+    unix_ref_date = DateSerial(1970, 1, 1)
+    get_unix_timestamp = CLng((in_date - unix_ref_date) * 86400 + (in_time * 1000))
+End Function
