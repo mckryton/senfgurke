@@ -33,3 +33,8 @@ Public Sub Then_the_value_of_the_expression_is_DBL_8D490483D413(step_expressions
     'Then the value of the expression is {double}
     TSpec.expect(TStepVars.step.Expressions(1)).to_be step_expressions(1)
 End Sub
+
+Public Sub Then_the_step_has_no_step_expressions_DF47F903F69C()
+    'Then the step has no step expressions
+    TSpec.expect(TStepVars.step.Expressions.Count).to_be 0
+End Sub

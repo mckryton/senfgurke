@@ -142,19 +142,28 @@ Private Function find_numeric_expression(step_name As String, start_index As Lon
     Dim search_index As Long
     Dim current_char As String
     Dim expression_name As String
+    Dim expression_is_valid As Boolean
     
     Set expression = New TStepExpression
     expression.TypeName = "integer"
     expression_name = vbNullString
     search_index = start_index
+    expression_is_valid = True
     expression.IndexStart = start_index
     Do
         current_char = Mid(step_name, search_index, 1)
-        If current_char = "." Then expression.TypeName = "double"
+        If current_char = "." Then
+            If expression.TypeName = "double" Then
+                'a numeric expression with more than one decimal separator is probably a date
+                expression_is_valid = False
+            Else
+                expression.TypeName = "double"
+            End If
+        End If
         expression_name = expression_name & current_char
         search_index = search_index + 1
     Loop While (IsNumeric(current_char) Or current_char = ".") And search_index <= Len(step_name)
-    If current_char = " " Or (IsNumeric(current_char) And search_index > Len(step_name)) Then
+    If (current_char = " " Or (IsNumeric(current_char)) And search_index > Len(step_name)) And expression_is_valid Then
         If expression.TypeName = "integer" Then
             expression.Value = CLng(Trim(expression_name))
         Else

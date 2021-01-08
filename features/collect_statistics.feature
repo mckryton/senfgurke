@@ -19,7 +19,7 @@ Ability: Collect statistics
            Given duration of a test run is 42 ms
             When the duration is calculated
             Then the resulting output is "0m 0.042s"
-@wip
+
          Example: duration more than a minute
            Given duration of a test run is 74531 ms
             When the duration is calculated

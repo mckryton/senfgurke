@@ -33,17 +33,19 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
     End Select
 End Function
 
-Public Function format_msg_content(msg_package As Collection) As String
+Public Function format_msg_content(msg_package As Collection, Optional silent) As String
     
     Dim formatted_msg As String
     
+    If IsMissing(silent) Then silent = False
     Select Case msg_package(REPORT_MSG_TYPE)
         Case REPORT_MSG_TYPE_STEP
             formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             StepTemplates.Add msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_DURATION
-            Reporter.print_report vbLf & message, silent:=silent
+            formatted_msg = vbLf & msg_package(REPORT_MSG_CONTENT)
+            Reporter.print_report formatted_msg, silent:=silent
         Case Else
             formatted_msg = vbNullString
     End Select
