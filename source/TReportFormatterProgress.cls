@@ -38,18 +38,12 @@ Public Function format_msg_content(msg_package As Collection) As String
     Dim formatted_msg As String
     
     Select Case msg_package(REPORT_MSG_TYPE)
-'        Case REPORT_MSG_TYPE_FEATURE_NAME
-'            formatted_msg = format_feature_name(msg_package(REPORT_MSG_CONTENT))
-'        Case REPORT_MSG_TYPE_DESC
-'            formatted_msg = format_feature_description(msg_package(REPORT_MSG_CONTENT))
-'        Case REPORT_MSG_TYPE_RULE
-'            formatted_msg = format_rule(msg_package(REPORT_MSG_CONTENT))
-'        Case REPORT_MSG_TYPE_EXAMPLE_TITLE
-'            formatted_msg = format_example_title(msg_package(REPORT_MSG_CONTENT))
         Case REPORT_MSG_TYPE_STEP
             formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             StepTemplates.Add msg_package(REPORT_MSG_CONTENT)
+        Case REPORT_MSG_TYPE_DURATION
+            Reporter.print_report vbLf & message, silent:=silent
         Case Else
             formatted_msg = vbNullString
     End Select

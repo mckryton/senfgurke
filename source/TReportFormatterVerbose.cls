@@ -40,6 +40,8 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             CurrentExample = vbNullString
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             StepTemplates.Add message
+        Case REPORT_MSG_TYPE_DURATION
+            Reporter.print_report vbLf & message, silent:=silent
         Case Else
             TRun.Session.Log.debug_log "unknown report msg type >" & msg_package(REPORT_MSG_TYPE) & "<"
             process_msg = vbNullString
@@ -62,6 +64,8 @@ Public Function format_msg_content(msg_package As Collection) As String
         Case REPORT_MSG_TYPE_STEP
             formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
+            formatted_msg = msg_package(REPORT_MSG_CONTENT)
+        Case REPORT_MSG_TYPE_DURATION
             formatted_msg = msg_package(REPORT_MSG_CONTENT)
         Case Else
             formatted_msg = vbNullString

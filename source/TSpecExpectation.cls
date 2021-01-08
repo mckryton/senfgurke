@@ -45,7 +45,7 @@ Public Sub not_to_be(pExpectedValue)
         Else
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
                                 vbTab & "found:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
-                                vbTab & "expected:" & vbTab & ">" & pExpectedValue & "<"
+                                vbTab & "expected:" & vbTab & "not >" & pExpectedValue & "<"
             raise_expectation_err matcher_fail_msg
         End If
     End If

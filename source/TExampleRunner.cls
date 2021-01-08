@@ -26,7 +26,7 @@ Public Function run_example(example As TExample, Optional silent) As Collection
     On Error GoTo error_handler
     For Each step In example.Steps
         err_msg = vbNullString
-        step_result = TStepRunner.run_step(step)
+        step_result = TStepRunner.run_step(step, silent:=silent)
         If Not step_result(0) = STATUS_OK Then
             err_msg = step_result(1)
             'this is a hack because of the broken exception handling in vba (e.g. vba will overwrite custom err descriptions)

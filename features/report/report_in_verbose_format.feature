@@ -75,8 +75,8 @@ Ability: Report in verbose format
         And the second line shows the indented error message
 
 
-  Rule: Keep code templates as is
-@wip
+  Rule: Code templates should be introduced with an explanation
+
     Example: Missing step
       Given a code template for a missing step was reported as
       """

@@ -1,7 +1,7 @@
 Attribute VB_Name = "TStepRunner"
 Option Explicit
 
-Public Function run_step(step_definition As TStep) As Variant
+Public Function run_step(step_definition As TStep, Optional silent) As Variant
 
     Dim step_result As Variant
     Dim step_implementation_class As Variant
@@ -10,6 +10,7 @@ Public Function run_step(step_definition As TStep) As Variant
     Dim step_parameter_values As Variant
     
     On Error GoTo error_handler
+    If IsMissing(silent) Then silent = False
     step_run_attempts = 0
     step_function_name = step_definition.get_step_function_name
     For Each step_implementation_class In TConfig.StepImplementations
@@ -18,7 +19,7 @@ Public Function run_step(step_definition As TStep) As Variant
     Next
     If step_run_attempts = TConfig.StepImplementations.Count Then
         run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING)
-        TRun.Session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, step_definition.get_step_function_template
+        If Not silent Then TRun.Session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, step_definition.get_step_function_template
     Else
         run_step = Array(STATUS_OK)
     End If

@@ -10,9 +10,9 @@ Ability: Report statistics
 
       Example: verbose report
         Given the report format is set to verbose
-          And statistics are 2 failed example each with a passed, failed and skipped step
-          And statistics are 1 passed example with 3 passed steps
-          And statitics contains 0.022s for the test duration
+#          And statistics has logged 2 failed example each with a passed, failed and skipped step
+#          And statistics has logged 1 passed example with 3 passed steps
+          And statistics has logged 0.022s for the test duration
          When the statistics are reported
          Then line 1 of the resulting output is "3 scenarios (2 failed, 1 passed)"
           And line 2 of the resulting output is "9 steps (2 failed, 2 skipped, 5 passed)"

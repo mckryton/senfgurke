@@ -5,7 +5,7 @@ Feature: get unix time
 
 
   Rule: a unix time stamps should be the number of milliseconds since 1.1.1970 00:00:00
-@wip
+
     Example: date time conversion
       # vba does not consider the local timezone
       Given the current date is 01.01.1970 00:00:01

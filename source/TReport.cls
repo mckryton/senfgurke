@@ -89,7 +89,7 @@ Public Sub print_report(report_output As String, Optional consecutive, Optional 
     If IsMissing(silent) Then silent = False
     If IsMissing(consecutive) Then consecutive = False
     If silent Then
-        ConsoleOutput = ConsoleOutput & vbLf & report_output
+        ConsoleOutput = ConsoleOutput & report_output & vbLf
     ElseIf consecutive Then
         Debug.Print report_output;
     Else
