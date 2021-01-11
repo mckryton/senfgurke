@@ -13,6 +13,7 @@ Public Sub Given_the_report_format_is_STR_94DE9139C9BF(step_expressions As Colle
     'Given the report format is {string}
     Set TStepVars.Session = New TSession
     TStepVars.Session.set_report_format step_expressions(1)
+    Set TStepVars.ReportFormatter = TStepVars.Session.Reporter.Report_Formatter
 End Sub
 
 
@@ -51,8 +52,8 @@ Public Sub When_the_report_will_report_code_templates_for_the_B3C6D3155FBC()
     TStepVars.ReportOutput = TStepVars.Session.Reporter.Report_Formatter.get_code_templates_for_missing_steps
 End Sub
 
-Public Sub Then_the_resulting_output_is_STR_8EBDD0FB2136(step_expressions As Collection)
-    'Then the resulting output is {string}
+Public Sub Then_the_resulting_report_output_is_STR_4C01A19A67C4(step_expressions As Collection)
+    'Then the resulting report output is {string}
     TSpec.expect(TStepVars.ReportOutput).to_be step_expressions(1)
 End Sub
 

@@ -9,11 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Option Explicit
 
-Public Sub Given_the_report_format_is_set_to_verbose_558493C4C322()
-    'Given the report format is set to verbose
-    Set TStepVars.ReportFormatter = New TReportFormatterVerbose
-End Sub
-
 Public Sub Given_a_feature_STR_was_reported_B5EB56508778(step_expressions As Collection)
     'Given a feature {string} was reported
     TStepVars.Session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, "Feature: " & step_expressions(1), silent:=True

@@ -9,11 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_the_report_format_is_set_to_progress_4F152AAE8E9C()
-    'And the report format is set to progress
-    Set TStepVars.ReportFormatter = New TReportFormatterProgress
-End Sub
-
 Public Sub Given__INT_steps_were_reported_as_successful_53AEBD4A25F4(step_expressions As Collection)
     'Given  {integer} steps were reported as successful
     

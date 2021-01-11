@@ -82,7 +82,7 @@
   detected by a matching letter (e.g. F for failed steps).
 
   Background:
-  Given the report format is set to progress
+  Given the report format is "progress"
 
 * [Report in verbose format](report/report_in_verbose_format.feature)
 

@@ -41,22 +41,22 @@ Ability: Report in verbose format
     Example: successful step
       Given a step "Given a sample step" with the status "OK"
        When the reported message is formatted
-       Then the resulting output is "     OK       Given a sample step"
+       Then the resulting report output is "     OK       Given a sample step"
 
     Example: failed step
       Given a step "Given a sample step" with the status "FAIL"
        When the reported message is formatted
-       Then the resulting output is "     FAIL     Given a sample step"
+       Then the resulting report output is "     FAIL     Given a sample step"
 
     Example: missing step
       Given a step "Given a sample step" with the status "MISSING"
        When the reported message is formatted
-       Then the resulting output is "     MISSING  Given a sample step"
+       Then the resulting report output is "     MISSING  Given a sample step"
 
     Example: pending step
       Given a step "Given a sample step" with the status "PENDING"
        When the reported message is formatted
-       Then the resulting output is "     PENDING  Given a sample step"
+       Then the resulting report output is "     PENDING  Given a sample step"
 
     Example: successful step with a docstring
       Given a step "Given a sample step" followed by a docstring "this is a docstring" with the status "OK"
@@ -86,7 +86,7 @@ Public Sub Given_a_missing_step_6A350234BFE5()
 End Sub
       """
        When the report will report code templates for the missing steps
-       Then the resulting output is
+       Then the resulting report output is
      """
 You can implement step definitions for undefined steps with these snippets:
 

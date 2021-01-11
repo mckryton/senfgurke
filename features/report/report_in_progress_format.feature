@@ -5,34 +5,34 @@ Ability: Report in progress format
     detected by a matching letter (e.g. F for failed steps).
 
   Background:
-    Given the report format is set to progress
+    Given the report format is "progress"
 
   Rule: format step results and names
 
     Example: successful step
       Given a step "Given a sample step" with the status "OK"
       When the reported message is formatted
-      Then the resulting output is set to "."
+      Then the resulting report output is set to "."
 
     Example: failed step
       Given a step "Given a sample step" with the status "FAIL"
       When the reported message is formatted
-      Then the resulting output is set to "F"
+      Then the resulting report output is set to "F"
 
     Example: missing step
       Given a step "Given a sample step" with the status "MISSING"
       When the reported message is formatted
-      Then the resulting output is set to "M"
+      Then the resulting report output is set to "M"
 
     Example: pending step
       Given a step "Given a sample step" with the status "PENDING"
       When the reported message is formatted
-      Then the resulting output is set to "P"
+      Then the resulting report output is set to "P"
 
     Example: three successful steps
       Given 3 steps were reported as successful
        When step results are reported
-       Then the resulting output is "..."
+       Then the resulting report output is "..."
 
 
   Rule: Keep code templates as is
@@ -46,7 +46,7 @@ Public Sub Given_a_missing_step_6A350234BFE5()
 End Sub
         """
        When the report will report code templates for the missing steps
-       Then the resulting output is
+       Then the resulting report output is
         """
 You can implement step definitions for undefined steps with these snippets:
 
