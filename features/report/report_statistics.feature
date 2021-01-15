@@ -7,7 +7,7 @@ Ability: Report statistics
 
 
     Rule: statistics should appear as formatted text
-
+@wip
       Example: verbose report
         Given the report format is "verbose"
           And a test run took 22 ms
