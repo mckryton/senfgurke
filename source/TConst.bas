@@ -20,6 +20,8 @@ Public Const STATUS_OK = "OK"
 Public Const STATUS_FAIL = "FAIL"
 Public Const STATUS_MISSING = "MISSING"
 Public Const STATUS_PENDING = "PENDING"
+Public Const STATUS_SKIPPED = "SKIPPED"
+
 
 Public Const STEP_TYPE_GIVEN = "Given"
 Public Const STEP_TYPE_WHEN = "When"

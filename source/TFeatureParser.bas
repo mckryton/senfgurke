@@ -26,7 +26,7 @@ Public Function parse_feature(gherkin_text As String) As TFeature
                 keyword_value = read_keyword_value(CStr(line))
                 Set current_clause = update_feature(parsed_feature, CStr(keyword_value(0)), CStr(keyword_value(1)), clause_tags, line)
                 If CStr(keyword_value(0)) = CLAUSE_TYPE_EXAMPLE Or CStr(keyword_value(0)) = CLAUSE_TYPE_BACKGROUND Then
-                    parse_steps lines, line_index, current_clause
+                    line_index = parse_steps(lines, line_index, current_clause)
                 End If
                 Set clause_tags = clone_tags(parsed_feature.Tags)
             ElseIf is_tag_line(line) Then
@@ -43,7 +43,7 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     Set parse_feature = parsed_feature
 End Function
 
-Public Sub parse_steps(feature_lines As Variant, example_start_index As Long, current_clause As Variant)
+Public Function parse_steps(feature_lines As Variant, example_start_index As Long, current_clause As Variant) As Long
 
     Dim line_index As Long
     Dim line As String
@@ -69,10 +69,12 @@ Public Sub parse_steps(feature_lines As Variant, example_start_index As Long, cu
         ElseIf is_step_line(line) Then
             current_clause.Steps.Add create_step(line, current_clause)
         ElseIf is_clause_definition_line(line) Then
-            Exit Sub
+            parse_steps = line_index - 1
+            Exit Function
         End If
     Next
-End Sub
+    parse_steps = line_index
+End Function
 
 Private Function parse_feature_definition(gherkin_text As String) As TFeature
     

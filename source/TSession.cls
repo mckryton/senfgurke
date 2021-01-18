@@ -131,7 +131,7 @@ Public Function get_step_statistics(run_statistics As Collection) As String
     Dim counter As Long
     
     Set step_statistics = New Collection
-    states = Array(STATUS_OK, STATUS_FAIL, STATUS_MISSING, STATUS_PENDING)
+    states = Array(STATUS_OK, STATUS_FAIL, STATUS_MISSING, STATUS_PENDING, STATUS_SKIPPED)
     For index = 0 To UBound(states)
         step_statistics.Add 0, states(index)
     Next
@@ -160,6 +160,7 @@ Public Function get_step_statistics(run_statistics As Collection) As String
     step_results = Replace(step_results, STATUS_FAIL, "failed")
     step_results = Replace(step_results, STATUS_MISSING, "undefined")
     step_results = Replace(step_results, STATUS_PENDING, "pending")
+    step_results = Replace(step_results, STATUS_SKIPPED, "skipped")
     get_step_statistics = Left(step_results, Len(step_results) - 2) & ")"
 End Function
 

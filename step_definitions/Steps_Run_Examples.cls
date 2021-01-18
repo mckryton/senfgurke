@@ -12,6 +12,11 @@ Option Explicit
 Dim m_parsed_feature As TFeature
 Dim m_feature_statistics As Collection
 
+Public Sub Given_an_example_with_matching_step_implementation_B7CBC6F3337F(step_expressions As Collection)
+    'Given an example with matching step implementations {string}
+    Set m_parsed_feature = TFeatureParser.parse_feature(step_expressions(1))
+End Sub
+
 Public Sub Given_an_feature_with_one_example_with_3_steps_whe_B4401525657E()
     'Given an feature with one example with 3 steps where the 2nd step fails
     Set m_parsed_feature = TFeatureParser.parse_feature( _
@@ -21,6 +26,16 @@ Public Sub Given_an_feature_with_one_example_with_3_steps_whe_B4401525657E()
                     "    Given a valid step" & vbLf & _
                     "    And an invalid step" & vbLf & _
                     "    And a valid step")
+End Sub
+
+Public Sub Given_a_valid_step_6A35DF3A18EC()
+    'Given a valid step
+    
+End Sub
+
+Public Sub Given_an_invalid_step_FF6BEF10050E()
+    'And an invalid step
+    TSpec.expect(1).to_be 2
 End Sub
 
 Public Sub Given_a_feature_has_a_first_example_tagged_example_A6ACCC9CD3BB()
@@ -40,13 +55,14 @@ Public Sub Given_the_feature_has_a_second_example_untagged_ex_EE05AE816679()
                         & "  Given a valid step"
 End Sub
 
-Public Sub When_the_example_is_executed_A6DB3176A298()
+Public Sub When_the_example_is_executed_8C8F015690BC()
     'When the example is executed
     
     Dim example_runner As TExampleRunner
     
     Set example_runner = New TExampleRunner
-    Set TStepVars.example_statistics = example_runner.run_example(m_parsed_feature.Clauses(1), silent:=True)
+    Set m_feature_statistics = TFeatureRunner.run_feature(m_parsed_feature, silent:=True)
+    'Set TStepVars.example_statistics = example_runner.run_example(m_parsed_feature.Clauses(1), silent:=True)
 End Sub
 
 Public Sub When_the_feature_is_executed_with_tag_parameter_sa_2662F331171B()
@@ -58,9 +74,14 @@ Public Sub When_the_feature_is_executed_with_tag_parameter_sa_2662F331171B()
     Set m_feature_statistics = TFeatureRunner.run_feature(parsed_feature, filter_tag:="@sample", silent:=True)
 End Sub
 
-Public Sub Then_only_two_steps_of_the_example_were_executed_73EBE317BB87()
-    'Then only two steps of the example were executed
-    TSpec.expect(TStepVars.example_statistics.Count).to_be 3 'stats count includes example name
+Public Sub Then_step_statistics_is_STR_121A2677FC0F(step_expressions As Collection)
+    'Then step statistics is {string}
+    
+    Dim run_statistics As Collection
+    
+    Set run_statistics = New Collection
+    run_statistics.Add m_feature_statistics
+    TSpec.expect(TRun.Session.get_step_statistics(run_statistics)).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_only_the_example_tagged_example_is_executed_0C73E26B826F()

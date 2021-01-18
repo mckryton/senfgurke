@@ -2,12 +2,19 @@ Ability: run examples
     Senfgurke will locate the matching step implementation for each step
     of an example and execute it.
 
-  Rule: examples are executed until a step returns a status other than "OK"
+  Rule: after an failed step all existing steps will return with status "skipped"
 
     Example: example has 3 steps and 2nd fails
-       Given an feature with one example with 3 steps where the 2nd step fails
+       Given an example with matching step implementations
+        """
+          Ability: sample feature
+            Example: sample example
+              Given a valid step
+                And an invalid step
+                And a valid step
+        """
        When the example is executed
-       Then only two steps of the example were executed
+       Then step statistics is "3 steps (1 passed, 1 failed, 1 skipped)"
 
 
   Rule: for given tags only examples with a matching tag are executed
