@@ -57,14 +57,14 @@ Public Property Let ErrorStatus(ByVal error_status As String)
     m_error_status = error_status
 End Property
 
-Public Property Get Tags() As Collection
+Public Property Get tags() As Collection
     If m_feature_tags Is Nothing Then
         Set m_feature_tags = New Collection
     End If
-    Set Tags = m_feature_tags
+    Set tags = m_feature_tags
 End Property
 
-Public Property Let Tags(ByVal feature_tags As Collection)
+Public Property Let tags(ByVal feature_tags As Collection)
     Set m_feature_tags = feature_tags
 End Property
 
@@ -97,8 +97,8 @@ Public Sub add_tags(feature_line As String)
     For Each tag In tag_list
         If Len(tag) > 1 Then
             If Left(tag, 1) = "@" Then
-                If Not ExtraVBA.collection_has_key(tag, Me.Tags) Then
-                    Me.Tags.Add tag, tag
+                If Not ExtraVBA.collection_has_key(tag, Me.tags) Then
+                    Me.tags.Add tag, tag
                 End If
             End If
         End If

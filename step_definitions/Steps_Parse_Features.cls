@@ -131,7 +131,7 @@ Public Sub Then_the_rules_description_is_set_to_STR_750959DF7853(step_expression
      TSpec.expect(m_parsed_feature.Clauses(1).Description).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_parsed_features_contains_an_example_AF5E191DE8EE()
+Public Sub Then_the_parsed_features_contains_an_example_7B67F2AF5933()
     'Then the parsed features contains an example
     TSpec.expect(TypeName(m_parsed_feature.Clauses(1))).to_be "TExample"
     Set TStepVars.example = m_parsed_feature.Clauses(1)
@@ -140,20 +140,6 @@ End Sub
 Public Sub Then_the_parsed_feature_doesnt_contain_any_error_EB00DB92B133()
     'Then the parsed feature doesn't contain any error
     TSpec.expect(m_parsed_feature.ErrorStatus).to_be vbNullString
-End Sub
-
-Public Sub Then_the_parsed_features_contains_the_tags_wip_imp_3E416E210DFE()
-    'Then the parsed features contains the tags wip, important and beta
-    TSpec.expect(m_parsed_feature.Tags("@wip")).to_be "@wip"
-    TSpec.expect(m_parsed_feature.Tags("@important")).to_be "@important"
-    TSpec.expect(m_parsed_feature.Tags("@beta")).to_be "@beta"
-End Sub
-
-Public Sub Then_the_example_contains_the_tags_wip_important_a_C2643DFE6EC5()
-    'Then the example contains the tags wip, important and beta
-    TSpec.expect(TStepVars.example.Tags("@wip")).to_be "@wip"
-    TSpec.expect(TStepVars.example.Tags("@important")).to_be "@important"
-    TSpec.expect(TStepVars.example.Tags("@beta")).to_be "@beta"
 End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_with_tw_7F3806C826C5()

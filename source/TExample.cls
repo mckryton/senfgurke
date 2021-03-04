@@ -55,14 +55,14 @@ Public Property Get Steps() As Collection
     Set Steps = m_steps
 End Property
 
-Public Property Get Tags() As Collection
+Public Property Get tags() As Collection
     If m_example_tags Is Nothing Then
         Set m_example_tags = New Collection
     End If
-    Set Tags = m_example_tags
+    Set tags = m_example_tags
 End Property
 
-Public Property Let Tags(ByVal example_tags As Collection)
+Public Property Let tags(ByVal example_tags As Collection)
 
     Set m_example_tags = example_tags
 End Property

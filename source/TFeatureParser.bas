@@ -18,7 +18,7 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     Set parsed_feature = parse_feature_definition(gherkin_text)
     Set current_clause = Nothing
     lines = Split(Trim(gherkin_text), vbLf)
-    Set clause_tags = clone_tags(parsed_feature.Tags)
+    Set clause_tags = clone_tags(parsed_feature.tags)
     If parsed_feature.ErrorStatus = vbNullString Then
         For line_index = parsed_feature.ParsedLinesIndex + 1 To UBound(lines)
             line = Trim(lines(line_index))
@@ -28,7 +28,7 @@ Public Function parse_feature(gherkin_text As String) As TFeature
                 If CStr(keyword_value(0)) = CLAUSE_TYPE_EXAMPLE Or CStr(keyword_value(0)) = CLAUSE_TYPE_BACKGROUND Then
                     line_index = parse_steps(lines, line_index, current_clause)
                 End If
-                Set clause_tags = clone_tags(parsed_feature.Tags)
+                Set clause_tags = clone_tags(parsed_feature.tags)
             ElseIf is_tag_line(line) Then
                 add_tags line, clause_tags
             ElseIf is_comment_line(line) Then
@@ -68,7 +68,8 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
             is_docstring = True
         ElseIf is_step_line(line) Then
             current_clause.Steps.Add create_step(line, current_clause)
-        ElseIf is_clause_definition_line(line) Then
+        ElseIf is_clause_definition_line(line) Or Trim(line) = "" Or is_tag_line(line) Then
+            'example is finished either with next example, empty line or tag line
             parse_steps = line_index - 1
             Exit Function
         End If
@@ -158,7 +159,7 @@ Private Function is_step_line(feature_line As String) As Boolean
     End If
 End Function
 
-Public Sub add_tags(feature_line As String, Tags As Collection)
+Public Sub add_tags(feature_line As String, tags As Collection)
 
     Dim tag_list As Variant
     Dim index As Long
@@ -168,8 +169,8 @@ Public Sub add_tags(feature_line As String, Tags As Collection)
     For Each tag In tag_list
         If Len(tag) > 1 Then
             If Left(tag, 1) = "@" Then
-                If Not ExtraVBA.collection_has_key(tag, Tags) Then
-                    Tags.Add tag, tag
+                If Not ExtraVBA.collection_has_key(tag, tags) Then
+                    tags.Add tag, tag
                 End If
             End If
         End If
@@ -243,7 +244,7 @@ Private Function create_example(example_head As String, example_name As String, 
     Set new_example = New TExample
     new_example.Head = example_head
     new_example.Name = example_name
-    new_example.Tags = example_tags
+    new_example.tags = example_tags
     new_example.OriginalHeadline = feature_line
     Set create_example = new_example
 End Function
