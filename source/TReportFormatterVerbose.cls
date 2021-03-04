@@ -165,7 +165,7 @@ Public Function get_code_templates_for_missing_steps() As String
     
     report_output = vbNullString
     For Each template In StepTemplates
-        report_output = vbLf & CStr(template)
+        report_output = report_output & vbLf & CStr(template) & vbLf
     Next
     If report_output <> vbNullString Then
         report_output = "You can implement step definitions for undefined steps with these snippets:" _

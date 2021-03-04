@@ -70,7 +70,7 @@
 * [Parse tags](read_features/parse_features/parse_tags.feature)
 
   Senfgurke will read feature specs from text
-  and identify tag assigned to the whole features or just examples
+  and identify tags assigned to the whole features or just examples
 
 ## Report
 

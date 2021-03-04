@@ -18,8 +18,7 @@ Public Function run_step(step_definition As TStep, Optional silent) As Variant
         step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions)
     Next
     If step_run_attempts = TConfig.StepImplementations.Count Then
-        run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING)
-        If Not silent Then TRun.Session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, step_definition.get_step_function_template
+        run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING, step_definition.get_step_function_template, silent)
     Else
         run_step = Array(STATUS_OK)
     End If
@@ -30,7 +29,7 @@ error_handler:
         step_run_attempts = step_run_attempts + 1
         Resume Next
     Else
-        run_step = fail_step(Err.Number, Err.Description)
+        run_step = fail_step(Err.Number, Err.Description, silent)
     End If
 End Function
 
@@ -46,8 +45,7 @@ Private Function try_step(step_implementation_class As Variant, step_function_na
     try_step = step_result
 End Function
 
-
-Public Function fail_step(err_id As Long, Optional err_msg) As Variant
+Public Function fail_step(err_id As Long, Optional err_msg, Optional silent) As Variant
  
     Dim err_desc As String
     
@@ -56,11 +54,13 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
     Else
         err_desc = err_msg
     End If
+    If IsMissing(silent) Then silent = False
     Select Case err_id
     Case ERR_ID_STEP_IS_STATUS_PENDING
         fail_step = Array(STATUS_PENDING, err_desc)
     Case ERR_ID_STEP_IS_STATUS_MISSING
-        fail_step = Array(STATUS_MISSING, err_desc)
+        fail_step = Array(STATUS_MISSING, vbNullString)
+        If Not silent Then TRun.Session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, err_desc
     Case Else
         fail_step = Array(STATUS_FAIL, err_desc & vbLf & TSpec.LastFailMsg)
     End Select
