@@ -5,24 +5,38 @@ Ability: parse step expressions
   (a multiline text embraced by """).
 
 
-  Rule: recognice strings and numbers as step expressions
+  Rule: text enclosed by double quotation marks should be a string expression
 
     Example: string expression
       Given a step definition "Given a step with a \"text parameter\""
        When the step definition is parsed
-       Then the step has one step expression type "string"
+       Then the step has one step expression with the data type "string"
         And the value of the expression is "text parameter"
 
-    Example: integer expression
+  Rule: any number that don't follows a character should be an long expression
+    #Todo: Given step(2)
+    #Todo: Given step[2]
+    #Todo: Given step{2}
+    #Todo: Given step #2
+
+    Example: integer expression after space character
       Given a step definition "Given a step with a number 1"
        When the step definition is parsed
-       Then the step has one step expression type "long"
+       Then the step has one step expression with the data type "long"
         And the value of the expression is 1
 
+    Example: integer expression after brace character
+      Given a step definition "Given the last paragraph is (2)"
+       When the step definition is parsed
+       Then the step has one step expression with the data type "long"
+        And the value of the expression is 2
+
+  Rule: any number that matches the int rule and encloses a single dot should be a double expression
+    #Todo: Given step .34
     Example: double expression
       Given a step definition "Given a step with the value of pi 3.14"
        When the step definition is parsed
-       Then the step has one step expression type "double"
+       Then the step has one step expression with the data type "double"
         And the value of the expression is 3.14
 
     Example: step with a date
