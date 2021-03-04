@@ -99,7 +99,7 @@ Private Function remove_non_ascii_chars(function_name As String) As String
     remove_non_ascii_chars = function_name
 End Function
 
-Private Sub disassemble_step_name(step_name As String)
+Private Sub find_step_expressions(step_name As String)
 
     Dim name_element As String
     Dim char_index As Long
@@ -118,7 +118,7 @@ Private Sub disassemble_step_name(step_name As String)
             name_element = name_element & Mid(step_name, char_index, char_index + 1)
         ElseIf current_char = """" Then
             Set expression = find_string_expression(step_name, char_index)
-        ElseIf (IsNumeric(current_char) Or current_char = ".") And previous_char = " " Then
+        ElseIf (IsNumeric(current_char) Or current_char = ".") And InStr(" ,([{", previous_char) > 0 Then
             Set expression = find_numeric_expression(step_name, char_index)
         End If
         If expression Is Nothing Then
@@ -128,7 +128,7 @@ Private Sub disassemble_step_name(step_name As String)
             name_element = vbNullString
             'add only a reference to the expression in the list of step name elements
             Me.Elements.Add Me.Expressions.Count + 1
-            Me.Expressions.Add expression.Value
+            Me.Expressions.Add expression.value
             char_index = expression.IndexEnd
             Set expression = Nothing
         End If
@@ -163,13 +163,14 @@ Private Function find_numeric_expression(step_name As String, start_index As Lon
         expression_name = expression_name & current_char
         search_index = search_index + 1
     Loop While (IsNumeric(current_char) Or current_char = ".") And search_index <= Len(step_name)
-    If (current_char = " " Or (IsNumeric(current_char)) And search_index > Len(step_name)) And expression_is_valid Then
+    If (InStr(" ,}])", current_char) > 0 Or (IsNumeric(current_char)) And search_index > Len(step_name)) And expression_is_valid Then
         If expression.TypeName = "integer" Then
-            expression.Value = CLng(Trim(expression_name))
+            If Not IsNumeric(current_char) Then expression_name = Left(expression_name, Len(expression_name) - 1)
+            expression.value = CLng(expression_name)
         Else
-            expression.Value = CDbl(Trim(expression_name))
+            expression.value = CDbl(Trim(expression_name))
         End If
-        If current_char = " " Then search_index = search_index - 1
+        If InStr(" ,}])", current_char) > 0 Then search_index = search_index - 1
         expression.IndexEnd = search_index
         Set find_numeric_expression = expression
     Else
@@ -201,8 +202,8 @@ Private Function find_string_expression(step_name As String, start_index As Long
         End If
     Loop While found_matching_quote = False And matching_position > 0
     If matching_position = 0 Then matching_position = Len(step_name)
-    expression.Value = Mid(step_name, start_index + 1, matching_position - start_index - 1)
-    expression.Value = Replace(expression.Value, "\""", """")
+    expression.value = Mid(step_name, start_index + 1, matching_position - start_index - 1)
+    expression.value = Replace(expression.value, "\""", """")
     expression.IndexEnd = matching_position
     Set find_string_expression = expression
 End Function
@@ -267,7 +268,7 @@ Public Sub parse_step_definition(step_definition As String)
             Me.SType = Me.Parent.Steps(Me.Parent.Steps.Count).SType
         End If
     End If
-    disassemble_step_name step_name
+    find_step_expressions step_name
 End Sub
 
 Public Property Get Elements() As Collection

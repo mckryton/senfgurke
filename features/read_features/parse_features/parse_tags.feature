@@ -10,10 +10,10 @@ Ability: parse tags
     Example: tags on the first example
       Given a feature
         """
-Feature: sample feature
+          Feature: sample feature
 
-  @wip @important @beta
-  Example: sample example
+            @wip @important @beta
+            Example: sample example
         """
       When the feature is parsed
       Then the parsed features contains an example
@@ -23,8 +23,8 @@ Feature: sample feature
     Example: feature tags
       Given a feature
        """
-@wip @important @beta
-Feature: sample feature
+          @wip @important @beta
+          Feature: sample feature
        """
       When the feature is parsed
       Then the parsed features contains the tags "@wip, @important, @beta"
@@ -33,12 +33,12 @@ Feature: sample feature
     Example: tags on the second example
       Given a feature
         """
-Feature: sample feature
+          Feature: sample feature
 
-  Example: first sample example
+            Example: first sample example
 
-  @wip @important @beta
-  Example: second sample example
+            @wip @important @beta
+            Example: second sample example
         """
       When the feature is parsed
       Then the parsed features contains 2 examples

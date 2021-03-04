@@ -14,11 +14,11 @@ Dim m_type_name As String
 Dim m_index_start As Long
 Dim m_index_end As Long
 
-Public Property Get Value() As Variant
-    Value = m_value
+Public Property Get value() As Variant
+    value = m_value
 End Property
 
-Public Property Let Value(ByVal new_value As Variant)
+Public Property Let value(ByVal new_value As Variant)
     m_value = new_value
 End Property
 
