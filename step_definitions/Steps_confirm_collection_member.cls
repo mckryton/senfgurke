@@ -13,19 +13,22 @@ Dim m_collection As Collection
 Dim m_expected_value As Variant
 Dim m_expectation_result As Boolean
 
-Public Sub Given_a_collection_has_2_members_array1a_and_array_275F9A660579()
-    'Given a collection has 2 members array(1,"a") and array(2,"b")
+Public Sub Given_a_collection_has_INT_members_array_INT__STR__22433998BB74(step_expressions As Collection)
+    'Given a collection has {integer} members array( {integer}, {string} ) and array( {integer}, {string} )
+    Dim index As Integer
+    
     Set m_collection = New Collection
-    m_collection.Add Array(1, "a")
-    m_collection.Add Array(2, "b")
+    For index = 1 To step_expressions(1) * 2 Step 2
+        m_collection.Add Array(step_expressions(index + 1), step_expressions(index + 2))
+    Next
 End Sub
 
-Public Sub Given_an_expected_value_is_an_array2b_575C1E51C6E9()
-    'Given an expected value is an array(2,"b")
-    m_expected_value = Array(2, "b")
+Public Sub Given_an_expected_value_is_an_array_INT__STR__C2EB84347C9F(step_expressions As Collection)
+    'And an expected value is an array( {integer}  {string} )
+    m_expected_value = Array(step_expressions(1), step_expressions(2))
 End Sub
 
-Public Sub When_the_expectation_validates_that_the_collection_E065A6F9253F()
+Public Sub When_the_expectation_validates_that_the_collection_808FE2AA1406()
     'When the expectation validates that the collection contains the expected value
     m_expectation_result = False
     On Error Resume Next
@@ -33,7 +36,7 @@ Public Sub When_the_expectation_validates_that_the_collection_E065A6F9253F()
     On Error GoTo 0
 End Sub
 
-Public Sub Then_the_expectation_is_confirmed_BCFEF2868622()
+Public Sub Then_the_expectation_is_confirmed_A341C2A69D10()
     'Then the expectation is confirmed
     TSpec.expect(m_expectation_result).to_be True
 End Sub
