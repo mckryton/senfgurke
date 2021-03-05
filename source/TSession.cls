@@ -161,7 +161,13 @@ Public Function get_step_statistics(run_statistics As Collection) As String
     step_results = Replace(step_results, STATUS_MISSING, "undefined")
     step_results = Replace(step_results, STATUS_PENDING, "pending")
     step_results = Replace(step_results, STATUS_SKIPPED, "skipped")
-    get_step_statistics = Left(step_results, Len(step_results) - 2) & ")"
+    If Right(step_results, 2) = ", " Then step_results = Left(step_results, Len(step_results) - 2)
+    If Right(step_results, 1) = "(" Then
+        step_results = Left(step_results, Len(step_results) - 1)
+    Else
+        step_results = step_results & ")"
+    End If
+    get_step_statistics = step_results
 End Function
 
 Public Sub report_statistics(run_statistics As Collection, run_duration As Long, Optional silent)
