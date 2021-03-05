@@ -63,7 +63,11 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
             current_step.Elements.Add current_step.Expressions.Count
             docstring_value = vbNullString
         ElseIf is_docstring Then
-            docstring_value = docstring_value & line & vbLf
+            If docstring_value = vbNullString Then
+                docstring_value = line
+            Else
+                docstring_value = docstring_value & vbLf & line
+            End If
         ElseIf Left(line, 3) = """""""" And Not is_docstring Then
             is_docstring = True
         ElseIf is_step_line(line) Then

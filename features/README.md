@@ -39,8 +39,13 @@
 
 * [Parse features](read_features/parse_features/parse_features.feature)
 
-  Senfgurke will read feature specs from text
-  and identify it's elements like descriptions, rules and examples
+  A Feature describes the functionality of a software that will solve some
+  specific problem of it's user. It does so by giving examples of how the
+  function works.
+  The content of a featured follows a nested structure. A feature can contain
+  one or more rules (see parse rules for more). While a rule can contain one
+  or more examples (see parse examples for more).
+  Simple features can contain just some few examples without any rule.
 
 * [Parse rules](read_features/parse_features/parse_rules.feature)
 
