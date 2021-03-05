@@ -1,61 +1,86 @@
 Ability: parse features
-  Senfgurke will read feature specs from text
-  and identify it's elements like descriptions, rules and examples
+  A Feature describes the functionality of a software that will solve some
+  specific problem of it's user. It does so by giving examples of how the
+  function works.
+  The content of a featured follows a nested structure. A feature can contain
+  one or more rules (see parse rules for more). While a rule can contain one
+  or more examples (see parse examples for more).
+  Simple features can contain just some few examples without any rule.
 
-  Rule: parse features spec only if it's starting with "Feature:" keyword or synonyms or has preceding tags
+
+  Rule: a feature should start with a valid keyword
+    Features are valid only if they start with a "Feature:" keyword or with its
+    synonyms. Preceding tags or comments don't break this rule.
 
     Example: feature spec without feature keyword
-      Given a feature "this is just some text <br> without a feature keyword"
+      Given a feature
+        """
+          this is just some text
+          without a feature keyword
+        """
       When the feature is parsed
       Then the parsing results in the error message "Feature lacks feature keyword at the beginning"
 
     Example: feature with tags
-      Given a feature "@tag1 @tag2<br>Feature: sample feature"
+      Given a feature
+        """
+          @tag1 @tag2
+          Feature: sample feature
+        """
       When the feature is parsed
       Then the parsed feature doesn't contain any error
 
 
-  Rule: feature clauses are limited by lines matching this format <optional whitespace><keyword>:<optional whitespace><name><optional whitespace>any optional whitespace is ignored
-
-    Example: feature contains one rule and one example
-      Given a feature named "sample feature"
-      And the feature includes a rule "this is a sample rule"
-      And the feature includes an example "this is an example"
-      When the feature is parsed
-      Then the parsed result contains a separate item for each of the given elements
+  Rule: leading and trailing whitespace in clause definitions should be ignored
+    Feature clauses are limited by lines matching this format
+    <optional whitespace><keyword>:<optional whitespace><name><optional whitespace>
 
     Example: keywords with whitespace
-      Given a feature starting with "  Feature: sample feature "
-      And the feature continues with the line "    Rule: this is a rule"
+      Given a feature
+        """
+          Feature: sample feature
+            Rule: sample rule
+              Example: sample example
+        """
       When the feature is parsed
-      Then the parsed result contains a feature with the name "sample feature"
-      And the  parsed result contains a rule with the name "this is a rule"
-
+      Then the parsed result contains a separate item for each of the given elements
 
   Rule: keyword values are single lines
     The name of rule or a feature is set in the same line as the corresponding
     keyword. Every following line not starting with <keyword>: is just description.
 
     Example: feature with 2 lines of description
-      Given a feature named "sample feature"
-      And the line with the feature keyword is followed by two lines "  this is<br>  the description"
-      When the feature is parsed
-      Then the feature description is set to those two lines
+      Given a feature
+        """
+          Feature: sample feature
+            this is
+            the feature description
+        """
+       When the feature is parsed
+       Then the feature description is set to those two lines
 
     Example: rule with description
-      Given a feature named "sample feature"
-      And the feature includes a rule "this is a sample rule"
-      And the rule is followed by a line "  this is a description"
-      When the feature is parsed
-      Then the parsed feature contains a rule
-      And the rules description is set to "this is a description"
+      Given a feature
+        """
+          Feature: sample feature
+            Rule: sample rule
+              description for the rule
+        """
+       When the feature is parsed
+       Then the parsed feature contains a rule
+        And the rules description is set to "description for the rule"
 
 
-  Rule: steps following a background clause are assigned to the feature
+  Rule: steps following a background clause should be assigned to the feature
+    A background clause summarizes repeating steps in all examples.
 
     Example: background with one Given step
-      Given a feature named "sample feature"
-      And the feature has a background clause containing a Given step
+      Given a feature
+        """
+          Feature: sample feature
+            Background:
+              Given one step
+        """
       When the feature is parsed
       Then the Given step is assigned to the feature
 
