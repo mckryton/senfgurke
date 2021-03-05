@@ -14,11 +14,6 @@ Public Sub Given_a_feature_STR_6A3547BB2524(step_expressions As Collection)
     TStepVars.gherkin_text = Replace(step_expressions(1), " <br> ", vbLf)
 End Sub
 
-Public Sub Given_a_feature_named_STR_D7FE0A9AB5B0(step_expressions As Collection)
-    'Given a feature named {string}
-    TStepVars.gherkin_text = "Feature: " & step_expressions(1)
-End Sub
-
 Public Sub Given_the_feature_includes_a_rule_STR_84B3E9B8CEAF(step_expressions As Collection)
     'Given the feature includes a rule {string}
     TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf & "Rule: " & step_expressions(1)
@@ -63,20 +58,6 @@ Public Sub Given_the_line_before_the_only_example_is___wip_im_FC1ACED9ED9D()
     'Given the line before the only example is "  @wip @important @beta"
     TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf & "  @wip @important @beta" & vbLf _
                         & "Example: sample example"
-End Sub
-
-Public Sub Given_the_first_line_of_the_feature_is__this_is_a__D211BCD22A79()
-    'Given the first line of the feature is "# this is a comment"
-    TStepVars.gherkin_text = "# this is a comment" & vbLf & TStepVars.gherkin_text
-End Sub
-
-Public Sub Given_the_feature_has_an_example_with_two_steps_an_C0F08DC30BAD()
-    'Given the feature has an example with two steps and a comment line between the steps
-    TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf _
-                        & "  Example: sample example" & vbLf _
-                        & "   Given step one" & vbLf _
-                        & " # this is a comment" & vbLf _
-                        & "   And step two"
 End Sub
 
 Public Sub Given_the_feature_has_a_background_clause_containi_4112AB2465A6()
@@ -142,7 +123,7 @@ Public Sub Then_the_parsed_feature_doesnt_contain_any_error_EB00DB92B133()
     TSpec.expect(m_parsed_feature.ErrorStatus).to_be vbNullString
 End Sub
 
-Public Sub Then_the_parsed_result_contains_an_example_with_tw_7F3806C826C5()
+Public Sub Then_the_parsed_result_contains_an_example_with_tw_5E84053FD2C3()
     'Then the parsed result contains an example with two steps
     TSpec.expect(m_parsed_feature.Clauses(1).Steps.Count).to_be 2
 End Sub

@@ -30,8 +30,8 @@
 
 * [Parse comments](read_features/parse_features/parse_comments.feature)
 
-  Senfgurke will read feature specs from text
-  and identify comments
+  To explain the intention of a feature it is possible to add a comment at any
+  position. Any line starting with a # is considered to be such a comment. 
 
 * [Parse examples](read_features/parse_features/parse_examples.feature)
 
