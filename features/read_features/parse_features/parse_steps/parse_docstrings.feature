@@ -7,7 +7,7 @@ Ability: parse docstrings
 
   Rule: add docstrings to the previous step
     A docstring is a multiline string that is related to the previous step.
-    Docstrings are embraced by a sequence of 3 double quotation marks """
+    Docstrings are embraced by a sequence of 3 double quotation marks
 
       Example: example with docstring
         Given an example definition
@@ -20,8 +20,8 @@ Ability: parse docstrings
       Example: example with multiline docstring
         Given an example definition
               """
-              Example: simple docstring
-                Given a first step
+                Example: simple docstring
+                  Given a first step
               """
           And this is followed by a docstring
               """
