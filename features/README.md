@@ -75,7 +75,11 @@
 
 * [Parse tags](read_features/parse_features/parse_tags.feature)
 
+  <<<<<<< HEAD
   Tags will help you to navigate through features and examples. For example it
+  =======
+  Tag will help you to navigate through features and examples. For example it
+  >>>>>>> f1bc461887479fc1a5bb5532ddeb9f5611672a3f
   is possible to run only examples marked with a specific tag.
   Examples will inherit their tags from the feature. If a tag is set for a
   feature, all examples will have this tag too.
