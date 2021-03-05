@@ -10,10 +10,13 @@ Ability: parse examples
     where <tep keyword> is one of those: Given, When, Then, And, But
 
     Example: simple example with Given, When, Then steps
-      Given an example "sample example"
-      And the example contains a step "    Given a precondition"
-      And the example contains a step "    When action happens"
-      And the example contains a step "    Then some result is expected"
+      Given an example
+        """
+          Example: sample example
+            Given a precondition
+             When action happens
+             Then some result is expected
+        """
       When the example is parsed
       Then the example clause from the parsed result contains all the steps
 

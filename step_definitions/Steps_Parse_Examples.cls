@@ -13,12 +13,7 @@ Dim m_parsed_background As TBackground
 
 Public Sub Given_an_example_STR_6A35400021EE(step_expressions As Collection)
     'Given an example {string}
-    TStepVars.gherkin_text = "Example: " & step_expressions(1)
-End Sub
-
-Public Sub Given_the_example_contains_a_step_STR_7D7301221369(step_expressions As Collection)
-    'Given the example contains a step {string}
-    TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf & step_expressions(1)
+    TStepVars.gherkin_text = step_expressions(1)
 End Sub
 
 Public Sub Given_this_line_is_followed_by_STR_A388704A4A7E(step_expressions As Collection)
@@ -45,11 +40,6 @@ Public Sub Given_a_background_6A351EBB4211()
     'Given a background
     TStepVars.gherkin_text = "Background:"
 End Sub
-
-'Public Sub Given_the_first_step_of_the_background_is_STR_BB1462E43AFA(step_expressions As Collection)
-'    'Given the first step of the background is {string}
-'    TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf & step_expressions(1)
-'End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_7B67C585A7A0()
     'Then the parsed result contains an example
@@ -78,13 +68,13 @@ Public Sub Then_the_example_clause_from_the_parsed_result_con_C8ADD15947E9()
     TSpec.expect(TStepVars.example.Steps.Count).to_be 3
     TSpec.expect(TStepVars.example.Steps(1).SType).to_be STEP_TYPE_GIVEN
     TSpec.expect(TStepVars.example.Steps(1).Name).to_be "a precondition"
-    TSpec.expect(TStepVars.example.Steps(1).Head).to_be "Given"
+    TSpec.expect(TStepVars.example.Steps(1).Elements(1)).to_be "Given"
     TSpec.expect(TStepVars.example.Steps(2).SType).to_be STEP_TYPE_WHEN
     TSpec.expect(TStepVars.example.Steps(2).Name).to_be "action happens"
-    TSpec.expect(TStepVars.example.Steps(2).Head).to_be "When"
+    TSpec.expect(TStepVars.example.Steps(2).Elements(1)).to_be "When"
     TSpec.expect(TStepVars.example.Steps(3).SType).to_be STEP_TYPE_THEN
     TSpec.expect(TStepVars.example.Steps(3).Name).to_be "some result is expected"
-    TSpec.expect(TStepVars.example.Steps(3).Head).to_be "Then"
+    TSpec.expect(TStepVars.example.Steps(3).Elements(1)).to_be "Then"
 End Sub
 
 Public Sub Then_the_type_of_the_second_step_is_set_to_STR_9CA91DFBD6DD(step_expressions As Collection)
