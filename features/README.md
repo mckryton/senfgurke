@@ -49,8 +49,9 @@
 
 * [Parse rules](read_features/parse_features/parse_rules.feature)
 
-  Senfgurke will read feature specs from text
-  and identify rules as counterpart for the following examples
+  A rule describes the logic or policy a feature shold follow. All examples
+  following a rule should explain this policy. A rule is limited by the start
+  of the next rule or by the end of the feature.
 
 * [Parse steps](read_features/parse_features/parse_steps.feature)
 
