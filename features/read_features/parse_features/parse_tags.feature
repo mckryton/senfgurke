@@ -1,6 +1,8 @@
 Ability: parse tags
-  Senfgurke will read feature specs from text
-  and identify tags assigned to the whole features or just examples
+  Tag will help you to navigate through features and examples. For example it
+  is possible to run only examples marked with a specific tag.
+  Examples will inherit their tags from the feature. If a tag is set for a
+  feature, all examples will have this tag too.
 
   #Todo: assign tags to rules
   Rule: any tag preceding a feature or an example should be assigned accordingly
