@@ -13,17 +13,42 @@ Dim m_doc_path As String
 Dim m_feature_path As String
 Dim m_features As Collection
 
-Public Sub Given_the_current_application_is_stored_under_User_7A25EDA8AE2B()
-    'Given the current application is stored under "/Users/cuke/source/senfgurke"
-    m_doc_path = Join(Split("/Users/cuke/source/senfgurke", "/"), ExtraVBA.get_path_separator)
+Public Sub Given_the_current_application_is_stored_under_STR_E4B6AFDB477F(step_expressions As Collection)
+    'Given the current application is stored under {string}
+    m_doc_path = Join(Split(step_expressions(1), "/"), ExtraVBA.get_path_separator)
 End Sub
 
-Public Sub When_the_location_for_features_is_requested_2F12A184CE3C()
+Public Sub Given_two_feature_files_in_the_feature_dir_8FB24F121954()
+    'Given two feature files in the feature dir
+    m_feature_path = ThisWorkbook.Path & ExtraVBA.get_path_separator & Join(Split("testdata/features_toplevel_pure", "/"), ExtraVBA.get_path_separator)
+End Sub
+
+Public Sub Given_one_feature_file_and_one_text_file_in_the_fe_98F5E94C9F0E()
+    'Given one feature file and one text file in the feature dir
+    m_feature_path = ThisWorkbook.Path & ExtraVBA.get_path_separator & Join(Split("testdata/features_toplevel_mixed", "/"), ExtraVBA.get_path_separator)
+End Sub
+
+Public Sub Given_one_feature_file_located_at_a_sub_directory__CA04B38A1CAE()
+    'Given one feature file located at a sub directory under the feature dir
+    m_feature_path = ThisWorkbook.Path & ExtraVBA.get_path_separator & Join(Split("testdata/features_subdir", "/"), ExtraVBA.get_path_separator)
+End Sub
+
+Public Sub When_the_location_for_features_is_requested_FB2BB390EAA5()
     'When the location for features is requested
     m_feature_path = TFeatureLoader.get_feature_dir(m_doc_path)
 End Sub
 
-Public Sub Then_the_feature_dir_is_set_to_Userscukesourcesenf_4E87ADCB5888()
-    'Then the feature dir is set to "/Users/cuke/source/senfgurke/features"
-    TSpec.expect(m_feature_path).to_be Join(Split("/Users/cuke/source/senfgurke/features", "/"), ExtraVBA.get_path_separator)
+Public Sub When_the_feature_dir_is_read_8C8F808B5CDF()
+    'When the feature dir is read
+    Set m_features = TFeatureLoader.load_features(m_feature_path)
+End Sub
+
+Public Sub Then_the_feature_dir_is_set_to_STR_5A81B06F4D5F(step_expressions As Collection)
+    'Then the feature dir is set to {string}
+    TSpec.expect(m_feature_path).to_be Join(Split(step_expressions(1), "/"), ExtraVBA.get_path_separator)
+End Sub
+
+Public Sub Then__INT_features_are_loaded_A59DDF6CC7D9(step_expressions As Collection)
+    'Then  {integer} feature(s) are loaded
+    TSpec.expect(m_features.Count).to_be step_expressions(1)
 End Sub
