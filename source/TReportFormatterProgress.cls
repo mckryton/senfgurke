@@ -60,14 +60,13 @@ Public Function format_step(step_name As String, status As String, err_msg As St
         Case STATUS_PENDING
             formatted_msg = "P"
         Case STATUS_FAIL
-            formatted_msg = "F"
+            formatted_msg = "F" & vbLf & "Err in step: " & step_name
         Case Else
             Debug.Print "unknown step status >" & status & "<"
     End Select
     'add err msg if available
     If err_msg <> vbNullString Then
-        'add feature name + example name
-        formatted_msg = formatted_msg & vbLf & Space$(10) & err_msg
+        formatted_msg = formatted_msg & vbLf & err_msg
     End If
     format_step = formatted_msg
 End Function

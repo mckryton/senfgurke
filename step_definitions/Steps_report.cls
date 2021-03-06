@@ -17,11 +17,15 @@ Public Sub Given_the_report_format_is_STR_94DE9139C9BF(step_expressions As Colle
 End Sub
 
 
-Public Sub Given_a_step_STR_with_the_status_STR_FAF1B1E8C8DC(step_expressions As Collection)
-    'Given a step {string} with the status {string}
+Public Sub Given_a_report_message_about_a_STR_with_the_status_F720FF76FEB9(step_expressions As Collection)
+    'Given a report message about a {string} with the status {string}
     Set TStepVars.ReportMsg = TRun.Session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), vbNullString)
 End Sub
 
+Public Sub Given_a_report_message_STR_with_status_STR_and_err_9EBC51E6C63C(step_expressions As Collection)
+    'Given a report message {string} with status {string} and error msg {string}
+    Set TStepVars.ReportMsg = TRun.Session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), step_expressions(3))
+End Sub
 
 Public Sub Given_a_code_template_for_a_missing_step_was_repor_E4A1AA906A81(step_expressions As Collection)
     'Given a code template for a missing step was reported as {string}

@@ -33,10 +33,13 @@ Ability: Report in verbose format
 
 
   Rule: format step results and names
-    A step will be preceded with it's result in capital letters initially
-    intendented by 5 spaces and step names following after 14 characters
-    from the left. Docstrings indicators are indented by 16 spaces while
-    docsting content is indented by 18 spaces.
+    Most actions during test execution are resulting in messages send to the
+    report. Depending on the report type those messages are formatted
+    accordingly.
+    For the verbose report a step will be preceded with it's result in capital
+    letters initially intendented by 5 spaces and step names following after
+    14 characters from the left. Docstrings indicators are indented by 16 spaces
+    while docstring content is indented by 18 spaces.
 
     Example: successful step
       Given a step "Given a sample step" with the status "OK"
@@ -44,22 +47,22 @@ Ability: Report in verbose format
        Then the resulting report output is "     OK       Given a sample step"
 
     Example: failed step
-      Given a step "Given a sample step" with the status "FAIL"
+      Given a report message about a "Given a sample step" with the status "FAIL"
        When the reported message is formatted
        Then the resulting report output is "     FAIL     Given a sample step"
 
     Example: missing step
-      Given a step "Given a sample step" with the status "MISSING"
+      Given a report message about a "Given a sample step" with the status "MISSING"
        When the reported message is formatted
        Then the resulting report output is "     MISSING  Given a sample step"
 
     Example: pending step
-      Given a step "Given a sample step" with the status "PENDING"
+      Given a report message about a "Given a sample step" with the status "PENDING"
        When the reported message is formatted
        Then the resulting report output is "     PENDING  Given a sample step"
 
     Example: successful step with a docstring
-      Given a step "Given a sample step" followed by a docstring "this is a docstring" with the status "OK"
+      Given a report message about a "Given a sample step" followed by a docstring "this is a docstring" with the status "OK"
        When the reported message is formatted
        Then the first line of the resulting output is "     OK       Given a sample step"
         And 2nd and 4th line are "                \"\"\""
@@ -69,7 +72,7 @@ Ability: Report in verbose format
   Rule: Failed steps will show the error message after the step indented
 
     Example: Step fails with an error message
-      Given a step "Given a sample step" fails with the error message "err: sample err msg"
+      Given a report message about a "Given a sample step" fails with the error message "err: sample err msg"
        When the reported message is formatted
        Then the first line of the resulting output is "     FAIL     Given a sample step"
         And the second line shows the indented error message

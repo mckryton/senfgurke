@@ -84,7 +84,7 @@
 
 * [Report in progress format](report/report_in_progress_format.feature)
 
-  When running examples form all features a verbose output would be confusing.
+  When running examples for all features, a verbose output would be confusing.
   Therefore the progress format will mark successul executed examples with
   a single dot to indicate the execution progress. Different results can be
   detected by a matching letter (e.g. F for failed steps).
