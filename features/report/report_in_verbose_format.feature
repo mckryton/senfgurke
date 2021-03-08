@@ -6,7 +6,7 @@ Ability: Report in verbose format
   Background:
     Given the report format is "verbose"
 
-  Rule: feature and rule  names and description are only shown when a following example is executed
+  Rule: feature and rule names should only appear before an example
 
     Example: rule without example
       Given a feature "sample feature" was reported
@@ -19,7 +19,7 @@ Ability: Report in verbose format
         And the report output doesn't contain "Rule: empty rule"
 
 
-  Rule: verbose report will indent the feature description by one tab
+  Rule: feature descriptions should be indented with a fixed space
 
     Example: feature description without leading whitespace
       Given a description line "description line"
@@ -42,7 +42,7 @@ Ability: Report in verbose format
     while docstring content is indented by 18 spaces.
 
     Example: successful step
-      Given a step "Given a sample step" with the status "OK"
+      Given a report message about a "Given a sample step" with the status "OK"
        When the reported message is formatted
        Then the resulting report output is "     OK       Given a sample step"
 
@@ -62,20 +62,19 @@ Ability: Report in verbose format
        Then the resulting report output is "     PENDING  Given a sample step"
 
     Example: successful step with a docstring
-      Given a report message about a "Given a sample step" followed by a docstring "this is a docstring" with the status "OK"
+      Given a report message "Given a sample step" with the status "OK" followed by a docstring "this is a docstring"
        When the reported message is formatted
-       Then the first line of the resulting output is "     OK       Given a sample step"
-        And 2nd and 4th line are "                \"\"\""
-        And the 3rd line is "                  this is a docstring"
+       Then line 1 of the resulting output is "     OK       Given a sample step"
+        And line 2 of the resulting output is "                  this is a docstring"
 
 
   Rule: Failed steps will show the error message after the step indented
 
     Example: Step fails with an error message
-      Given a report message about a "Given a sample step" fails with the error message "err: sample err msg"
+      Given a report message "Given a sample step" with status "FAIL" and error msg "sample err msg"
        When the reported message is formatted
-       Then the first line of the resulting output is "     FAIL     Given a sample step"
-        And the second line shows the indented error message
+       Then line 1 of the resulting output is "     FAIL     Given a sample step"
+        And line 2 of the resulting output is "          sample err msg"
 
 
   Rule: Code templates should be introduced with an explanation

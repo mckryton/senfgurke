@@ -83,11 +83,11 @@ Public Function format_step(step_name As String, status As String, err_msg As St
     formatted_msg = Space$(4) & " " & status & Space$(10 - 1 - Len(status)) & step_lines(0)
     'format docstring output if available
     If UBound(step_lines) > 0 Then
-        formatted_msg = formatted_msg & vbLf & Space$(16) & Trim(step_lines(1))
-        For line_index = 2 To UBound(step_lines) - 1
+        'formatted_msg = formatted_msg & vbLf & Space$(16) & Trim(step_lines(1))
+        For line_index = 1 To UBound(step_lines)
             formatted_msg = formatted_msg & vbLf & Space$(18) & Trim(step_lines(line_index))
         Next
-        formatted_msg = formatted_msg & vbLf & Space$(16) & Trim(step_lines(UBound(step_lines)))
+        'formatted_msg = formatted_msg & vbLf & Space$(16) & Trim(step_lines(UBound(step_lines)))
     End If
     'add err msg if available
     If err_msg <> vbNullString Then
@@ -113,13 +113,14 @@ Public Function format_feature_description(Description As String) As String
     formatted_desc = vbNullString
     desc_lines = Split(Description, vbLf)
     For Each line In desc_lines
-        formatted_desc = format_feature_description & Space$(4) & Trim(line) & vbLf
+        If Len(formatted_desc) > 0 Then formatted_desc = formatted_desc & vbLf
+        formatted_desc = formatted_desc & Space$(4) & Trim(line)
     Next
-    format_feature_description = Left(formatted_desc, Len(formatted_desc) - 1)
+    format_feature_description = formatted_desc
 End Function
 
 Public Function format_rule(rule As String) As String
-    format_rule = vbLf & Space$(2) & Join(Split(rule, vbLf), vbLf + Space$(7))
+    format_rule = Space$(2) & Join(Split(rule, vbLf), vbLf + Space$(7))
 End Function
 
 Private Property Get CurrentFeature() As String
@@ -165,11 +166,11 @@ Public Function get_code_templates_for_missing_steps() As String
     
     report_output = vbNullString
     For Each template In StepTemplates
-        report_output = report_output & vbLf & CStr(template) & vbLf
+        report_output = report_output & vbLf & vbLf & CStr(template)
     Next
     If report_output <> vbNullString Then
         report_output = "You can implement step definitions for undefined steps with these snippets:" _
-                            & vbLf & report_output
+                            & report_output
     End If
     get_code_templates_for_missing_steps = report_output
 End Function

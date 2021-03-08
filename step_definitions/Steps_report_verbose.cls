@@ -29,15 +29,13 @@ Public Sub Given_a_description_line_STR_6B57E8EB7A49(step_expressions As Collect
     TStepVars.gherkin_text = step_expressions(1)
 End Sub
 
-Public Sub Given_a_step_STR_followed_by_a_docstring_STR_with__B7F15CFA718B(step_expressions As Collection)
-    'Given a step {string} followed by a docstring {string} with the status {string}
+Public Sub Given_a_report_message_STR_with_the_status_STR_fol_D8320E1F6BB3(step_expressions As Collection)
+    'Given a report message {string} with the status {string} followed by a docstring {string}
     Dim docstring_step As String
     
     docstring_step = step_expressions(1) & vbLf _
-                        & """""""" & vbLf _
-                        & step_expressions(2) & vbLf _
-                        & """"""""
-    Set TStepVars.ReportMsg = TRun.Session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, docstring_step, step_expressions(3), vbNullString)
+                        & step_expressions(3)
+    Set TStepVars.ReportMsg = TRun.Session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, docstring_step, step_expressions(2))
 End Sub
 
 Public Sub When_the_execution_of_the_first_example_step_is_re_7D6F60A0AA78()
@@ -65,3 +63,10 @@ Public Sub Then_the_description_is_reported_as_STR_CA847D5BC6A5(step_expressions
     TSpec.expect(TStepVars.ReportOutput).to_be step_expressions(1)
 End Sub
 
+Public Sub Then_line_INT_of_the_resulting_output_is_STR_A434511445AD(step_expressions As Collection)
+    'Then line {integer} of the resulting output is {string}
+    Dim lines As Variant
+    
+    lines = Split(TStepVars.ReportOutput, vbLf)
+    TSpec.expect(lines(step_expressions(1) - 1)).to_be step_expressions(2)
+End Sub

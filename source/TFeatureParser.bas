@@ -24,6 +24,7 @@ Public Function parse_feature(gherkin_text As String) As TFeature
             line = Trim(lines(line_index))
             If is_clause_definition_line(line) Then
                 keyword_value = read_keyword_value(CStr(line))
+                If Not current_clause Is Nothing Then trim_description_linebreaks current_clause
                 Set current_clause = update_feature(parsed_feature, CStr(keyword_value(0)), CStr(keyword_value(1)), clause_tags, line)
                 If CStr(keyword_value(0)) = CLAUSE_TYPE_EXAMPLE Or CStr(keyword_value(0)) = CLAUSE_TYPE_BACKGROUND Then
                     line_index = parse_steps(lines, line_index, current_clause)
@@ -43,6 +44,16 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     Set parse_feature = parsed_feature
 End Function
 
+Private Sub trim_description_linebreaks(feature_clause)
+
+    Do While Right(feature_clause.Description, 1) = vbLf
+        feature_clause.Description = Left(feature_clause.Description, Len(feature_clause.Description) - 1)
+    Loop
+    Do While Left(feature_clause.Description, 1) = vbLf
+        feature_clause.Description = Right(feature_clause.Description, Len(feature_clause.Description) - 1)
+    Loop
+End Sub
+
 Public Function parse_steps(feature_lines As Variant, example_start_index As Long, current_clause As Variant) As Long
 
     Dim line_index As Long
@@ -54,6 +65,8 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
     is_docstring = False
     docstring_value = vbNullString
     For line_index = example_start_index + 1 To UBound(feature_lines)
+        'this normalizes dostrings by triming every line -> this way docstrings can be compared by content
+        '  but not by indention!
         line = Trim(feature_lines(line_index))
         If Right(line, 3) = """""""" And is_docstring Then
             is_docstring = False
