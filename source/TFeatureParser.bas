@@ -72,7 +72,7 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
             is_docstring = False
             Set current_step = current_clause.Steps(current_clause.Steps.Count)
             current_step.Docstring = Right(docstring_value, Len(docstring_value) - 1)
-            current_step.Expressions.Add docstring_value
+            current_step.Expressions.Add current_step.Docstring
             current_step.Elements.Add current_step.Expressions.Count
             docstring_value = vbNullString
         ElseIf is_docstring Then
