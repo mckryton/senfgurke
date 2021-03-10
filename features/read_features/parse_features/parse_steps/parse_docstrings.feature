@@ -23,13 +23,19 @@ Ability: parse docstrings
                 Example: simple docstring
                   Given a first step
               """
-          And this is followed by a docstring
+          And the step is followed by a docstring
               """
                 first line of docstring
                 second line of docstring
               """
          When the example is parsed
          Then the step has one string parameter with two lines
+
+      Example: docstring with leading linebreak
+        Given a step definition "Given a sample step"
+          And the step is followed by a docstring with a leading linebreak
+         When the step is parsed
+         Then line 1 of the steps docstring is empty
 
 
       Example: feature background with docstring

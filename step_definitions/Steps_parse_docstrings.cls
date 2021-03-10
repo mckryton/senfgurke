@@ -14,25 +14,33 @@ Public Sub Given_an_example_definition_2803C497D1D1()
     TStepVars.gherkin_text = "Example: docstring sample"
 End Sub
 
-Public Sub Given_this_step_is_followed_by_a_docstring_contain_C4061F67175D(step_expressions As Collection)
-    'Given this step is followed by a docstring containing "this is a docstring"
+Public Sub Given_the_step_is_followed_by_a_docstring_STR_FFEF53DE9EEE(step_expressions As Collection)
+    'And the step is followed by a docstring {string}
     TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf _
                                 & """""""" & vbLf _
                                 & step_expressions(1) & vbLf _
                                 & """"""""
 End Sub
 
-Public Sub Given_this_is_followed_by_a_docstring_STR_CC499A469EEE(step_expressions As Collection)
-    'And this is followed by a docstring {string}
-    TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf _
+Public Sub Given_the_step_is_followed_by_a_docstring_with_a_l_716F6D071657()
+    'And the step is followed by a docstring with a leading linebreak
+        TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf _
                                 & """""""" & vbLf _
-                                & step_expressions(1) & vbLf _
+                                & vbLf _
+                                & "sample docstring" & vbLf _
                                 & """"""""
 End Sub
 
 Public Sub Given_an_example_definition_STR_2AA8F75D1F34(step_expressions As Collection)
     'Given an example definition {string}
     TStepVars.gherkin_text = step_expressions(1)
+End Sub
+
+Public Sub When_the_step_is_parsed_317375497656()
+    'When the step is parsed
+    Set TStepVars.example = New TExample
+    TStepVars.gherkin_text = "Example: sample example" & vbLf & TStepVars.gherkin_text
+    TFeatureParser.parse_steps Split(TStepVars.gherkin_text, vbLf), 0, TStepVars.example
 End Sub
 
 Public Sub Then_the_first_step_has_an_expression_451F9158BDF6()
@@ -53,4 +61,9 @@ Public Sub Then_the_step_has_one_string_parameter_with_two_li_AD35FD5BD215()
     'Then the step has one string parameter with two lines
     TSpec.expect(TypeName(TStepVars.example.Steps(1).Expressions(1))).to_be "String"
     TSpec.expect(UBound(Split(TStepVars.example.Steps(1).Expressions(1), vbLf))).to_be 1
+End Sub
+
+Public Sub Then_line_INT_of_the_steps_docstring_is_empty_FBE59787C9D9(step_expressions As Collection)
+    'Then line {integer} of the steps docstring is empty
+    TSpec.expect(Split(TStepVars.example.Steps(1).Docstring, vbLf)(step_expressions(1) - 1)).to_be vbNullString
 End Sub

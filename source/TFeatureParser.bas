@@ -71,13 +71,14 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
         If Right(line, 3) = """""""" And is_docstring Then
             is_docstring = False
             Set current_step = current_clause.Steps(current_clause.Steps.Count)
-            current_step.Docstring = docstring_value
+            current_step.Docstring = Right(docstring_value, Len(docstring_value) - 1)
             current_step.Expressions.Add docstring_value
             current_step.Elements.Add current_step.Expressions.Count
             docstring_value = vbNullString
         ElseIf is_docstring Then
             If docstring_value = vbNullString Then
-                docstring_value = line
+                ' mark the start of the docstring with a # so that leading empty lines are recognized
+                docstring_value = "#" & line
             Else
                 docstring_value = docstring_value & vbLf & line
             End If

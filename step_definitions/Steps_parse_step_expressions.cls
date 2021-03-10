@@ -9,11 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_a_step_definition_STR_65172AC6DD8A(step_expressions As Collection)
-    'Given a step definition {string}
-    TStepVars.gherkin_text = step_expressions(1)
-End Sub
-
 Public Sub Then_the_step_has_one_step_expression_with_the_dat_90F0EF0E4524(step_expressions As Collection)
     'Then the step has one step expression with the data type {string}
     TSpec.expect(LCase(TypeName(TStepVars.step.Expressions(1)))).to_be step_expressions(1)
