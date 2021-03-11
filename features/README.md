@@ -121,8 +121,12 @@
 
 * [Run features](run_features/run_features.feature)
 
-  Senfgurke will locate the matching step implementation for each step
-  in a feature and execute it.
+  A features represents the business intention on a more abstract level. The
+  feature description should tell you why the feature was implemented in the
+  first place.
+  Senfgurke runs feature by finding all the examples (see run examples
+  feature for more) and executing all the steps from those examples (see run
+  steps feature for more).
 
 * [Run steps](run_features/run_steps.feature)
 
