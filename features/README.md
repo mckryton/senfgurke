@@ -130,8 +130,8 @@
 
 * [Run steps](run_features/run_steps.feature)
 
-  Senfgurke will locate the matching step implementation for each step
-  of an example and execute it.
+  Steps are the glue that connects features with code. Every step can have a
+  matching function (step implementation). Executing those functions will
 
 ## Support Functions
 

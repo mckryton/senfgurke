@@ -217,7 +217,7 @@ Public Function get_step_function_template() As String
         template = template & "step_expressions As Collection"
     End If
     template = template & ")" & vbLf
-    template = template & "    '" & get_step_comment_name & vbLf
+    template = template & Space$(4) & "'" & get_step_comment_name & vbLf
     template = template & Space$(4) & "pending" & vbLf
     template = template & "End Sub"
     get_step_function_template = template

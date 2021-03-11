@@ -13,20 +13,13 @@ Dim m_step_result As Variant
 Dim m_step_function_template As String
 Dim m_step_function_name As String
 
-Public Sub Given_a_step_returning_PENDING_without_a_pending_m_F201CAEBCFB1()
-    'Given a step returning PENDING without a pending message
-    Set TStepVars.example_step = New TStep
-    TStepVars.example_step.SType = STEP_TYPE_GIVEN
-    TStepVars.example_step.Name = "a pending step"
-    'won't create code dynamically, so step "Given a pending step" is hard coded below
-End Sub
-
 Public Sub Given_a_pending_step_6A3533BBBFE5()
     pending
 End Sub
 
-Public Sub Given_an_empty_step_8A7408D743D5()
-
+Public Sub Given_an_empty_step_6A35DCCE89C0()
+    'Given an empty step
+    
 End Sub
 
 Public Sub Given_a_valid_step_8A74152FD2F9()
@@ -37,62 +30,51 @@ Public Sub Given_an_invalid_step_CF4B201BCF1B()
     TSpec.expect(1).to_be 2
 End Sub
 
-Public Sub Given_a_step_with_an_empty_implementation_F776BB776C61()
+Public Sub Given_a_step_returning_PENDING_without_a_pending_m_F201CAEBCFB1()
+    'Given a step returning PENDING without a pending message
+    Set TStepVars.example_step = TFeatureParser.create_step("Given a pending step")
+    'won't create code dynamically, so step "Given a pending step" is hard coded
+End Sub
+
+Public Sub Given_a_step_with_an_empty_implementation_BC7B46584C5E()
     'Given a step with an empty implementation
-    Set TStepVars.example_step = New TStep
-    TStepVars.example_step.SType = STEP_TYPE_GIVEN
-    TStepVars.example_step.Name = "an empty step"
-    'the step function itself can't be created dynamically
+    Set TStepVars.example_step = TFeatureParser.create_step("Given an empty step")
+    'the step function itself can't be created dynamically and has to be available
 End Sub
 
-Public Sub Given_a_step_with_a_working_implementation_C0368FD3CAAA()
+Public Sub Given_a_step_with_a_working_implementation_05BC882CCAAA()
     'Given a step with a working implementation
-    Set TStepVars.example_step = New TStep
-    TStepVars.example_step.SType = STEP_TYPE_GIVEN
-    TStepVars.example_step.Name = "a valid step"
-    'the step function itself can't be created dynamically
+    Set TStepVars.example_step = TFeatureParser.create_step("Given a valid step")
+    'the step function itself can't be created dynamically and has to be available
 End Sub
 
-Public Sub Given_a_step_with_a_failing_implementation_C036A44ACAAA()
+Public Sub Given_a_step_with_a_failing_implementation_05BCA3B5CAAA()
     'Given a step with a failing implementation
-    Set TStepVars.example_step = New TStep
-    TStepVars.example_step.SType = STEP_TYPE_GIVEN
-    TStepVars.example_step.Name = "an invalid step"
-    'the step function itself can't be created dynamically
+    Set TStepVars.example_step = TFeatureParser.create_step("Given an invalid step")
+    'the step function itself can't be created dynamically and has to be available
 End Sub
 
-Public Sub Given_a_step_without_an_implementation_F76ADB85CAAA()
+Public Sub Given_a_step_without_an_implementation_FAF18488CAAA()
     'Given a step without an implementation
-    Set TStepVars.example_step = New TStep
-    TStepVars.example_step.SType = STEP_TYPE_GIVEN
-    TStepVars.example_step.Name = "a random step name " & CStr(Now())
+    Set TStepVars.example_step = TFeatureParser.create_step("Given a random step name " & CStr(Now()))
 End Sub
 
-Public Sub Given_a_step_Given_a_valid_step_EB3A0AE3CD52()
-    'Given a step "Given a valid step"
-    Set TStepVars.example_step = New TStep
-    TStepVars.example_step.SType = STEP_TYPE_GIVEN
-    TStepVars.example_step.Name = "a valid step"
-End Sub
-
-Public Sub Given_a_step_Given_a_step_812EA637D130()
-    'Given a step "Given a step"
-    Set TStepVars.example_step = New TStep
-    TStepVars.example_step.SType = STEP_TYPE_GIVEN
-    TStepVars.example_step.Name = "a step"
+Public Sub Given_a_step_STR_F5C6F4BA1D15(step_expressions As Collection)
+    'Given a step {string}
+    Set TStepVars.example_step = TFeatureParser.create_step(step_expressions(1))
 End Sub
 
 Public Sub When_the_step_is_executed_CEB06B444334()
     'When the step is executed
-    m_step_result = TStepRunner.run_step(TStepVars.example_step)
+    m_step_result = TStepRunner.run_step(TStepVars.example_step, silent:=True)
 End Sub
 
-Public Sub When_the_code_template_for_the_step_implementation_0EC5AFD47941()
+Public Sub When_the_code_template_for_the_step_implementation_7D39D6705DD8()
     'When the code template for the step implementation is requested
     m_step_function_template = TStepVars.example_step.get_step_function_template
 End Sub
 
-Public Sub When_the_step_is_translated_into_a_function_name_0F03C2292FFD()
+Public Sub When_the_step_is_translated_into_a_function_name_D820185C4AF6()
     'When the step is translated into a function name
     m_step_function_name = TStepVars.example_step.get_step_function_name
 End Sub
@@ -102,17 +84,21 @@ Public Sub Then_the_execution_result_is_STR_80FDCF952A5A(step_expressions As Col
     TSpec.expect(m_step_result(0)).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_code_template_for_the_step_implementation_46484D426FED()
-    'Then the code template for the step implementation is "Public Sub Given_a_valid_step_8A74152FD2F9()" & vblf & "    'Given a valid step" & vblf & "" & vblf & "End Sub"
-    TSpec.expect(m_step_function_template).to_be _
-        "Public Sub Given_a_valid_step_8A74152FD2F9()" & vbLf _
-        & "    'Given a valid step" & vbLf _
-        & vbLf _
-        & "End Sub"
+Public Sub Then_the_code_template_for_the_step_implementation_9C79C155DB8E(step_expressions As Collection)
+    'Then the code template for the step implementation is {string}
+    'trim template lines, because docstring parameter is normalized too
+    Dim line As Variant
+    Dim code_template As String
+    
+    For Each line In Split(m_step_function_template, vbLf)
+        If code_template <> vbNullString Then code_template = code_template & vbLf
+        code_template = code_template & Trim(line)
+    Next
+    TSpec.expect(code_template).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_name_of_the_resulting_function_is_Given_a_E0B741C87B98()
-    'Then the name of the resulting function is "Given_a_step_C7224E350E70"
-    TSpec.expect(m_step_function_name).to_be "Given_a_step_C7224E350E70"
+Public Sub Then_the_name_of_the_resulting_function_is_STR_C88DE530F4BA(step_expressions As Collection)
+    'Then the name of the resulting function is {string}
+    TSpec.expect(m_step_function_name).to_be step_expressions(1)
 End Sub
 
