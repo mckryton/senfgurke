@@ -1,6 +1,9 @@
 Ability: run examples
-    Senfgurke will locate the matching step implementation for each step
-    of an example and execute it.
+    Examples are the building blocks for describing the application under test.
+    Running examples means that Senfgurke will try to find and execute a
+    matching function for each step in an example (aka step implementation).
+    The result of the executed step will tell you if the application works as
+    expected (see feature "run steps" for more).
 
   Rule: steps follwing a step with a status other than "OK" should return "SKIPPED" or "MISSING"
 
