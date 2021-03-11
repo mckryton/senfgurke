@@ -6,7 +6,7 @@ Ability: Report in verbose format
   Background:
     Given the report format is "verbose"
 
-  Rule: feature and rule names should only appear before an example
+  Rule: feature and rule names should only appear when attached examples were executed
 
     Example: rule without example
       Given a feature "sample feature" was reported

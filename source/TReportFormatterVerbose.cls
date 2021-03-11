@@ -32,6 +32,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             CurrentExample = message & vbLf
         Case REPORT_MSG_TYPE_STEP
             message = Join(Split(CurrentFeature & CurrentRule & CurrentExample & message, vbLf), vbLf)
+            If CurrentFeature = vbNullString And (CurrentRule <> vbNullString Or CurrentExample <> vbNullString) Then message = vbLf & message
             'report feature names, rules and example titles only when example steps are reported
             Reporter.print_report message, silent:=silent
             process_msg = message
@@ -97,7 +98,7 @@ Public Function format_step(step_name As String, status As String, err_msg As St
 End Function
 
 Public Function format_example_title(example_title As String) As String
-    format_example_title = vbLf & Space$(4) & example_title
+    format_example_title = Space$(4) & example_title
 End Function
 
 Public Function format_feature_name(feature_name As String) As String
