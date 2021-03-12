@@ -53,8 +53,10 @@ Public Sub run_test(Optional filter_tag, Optional report_format, Optional featur
     If IsMissing(silent) Then silent = False
     Set parsed_features = TFeatureParser.parse_loaded_features(features_as_text)
     run_features parsed_features, CStr(filter_tag), silent
-    report_statistics RunStatistics, EndTime - StartTime
-    Reporter.report_code_templates_for_missing_steps
+    If Not silent Then
+        report_statistics RunStatistics, EndTime - StartTime
+        Reporter.report_code_templates_for_missing_steps
+    End If
     TConfig.StepImplementations = Nothing
 End Sub
 

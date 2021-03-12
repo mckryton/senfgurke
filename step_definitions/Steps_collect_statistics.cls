@@ -26,7 +26,7 @@ Public Sub Given_a_feature_with_an_example_with_a_missing_ste_63C4BE7D2E08()
     'Given a feature with an example with a missing step
     TStepVars.gherkin_text = "Feature: sample" & vbLf _
                                 & "Example: sample" & vbLf _
-                                & "Given a step"
+                                & "Given a missing step"
 End Sub
 
 Public Sub Given_an_example_with_INT_steps_was_executed_succe_B7CBEFE9F6DC(step_expressions As Collection)
@@ -76,6 +76,11 @@ Public Sub Then_start_and_end_time_for_the_test_run_are_set_262A8F19D7C7()
     'Then start and end time for the test run are set
     TSpec.expect(CLng(TStepVars.Session.StartTime)).not_to_be 0
     TSpec.expect(CLng(TStepVars.Session.EndTime)).not_to_be 0
+End Sub
+
+Public Sub Then_the_resulting_output_is_STR_8EBDD0FB2136(step_expressions As Collection)
+    'Then the resulting output is {string}
+    TSpec.expect(TStepVars.ReportOutput).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_one_step_with_its_result_was_counted_69B81E54CF8B()
