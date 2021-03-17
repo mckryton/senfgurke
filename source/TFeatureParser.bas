@@ -8,34 +8,34 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     Dim parsed_feature As TFeature
     Dim lines As Variant
     Dim line As String
-    Dim keyword_value As Variant
-    Dim current_clause As Variant
-    Dim step_head_name As Variant
+    Dim section_headline As Collection
+    Dim current_section As Variant
     Dim has_example_steps As Boolean
     Dim line_index As Long
-    Dim clause_tags As Collection
+    Dim section_tags As Collection
     
     Set parsed_feature = parse_feature_definition(gherkin_text)
-    Set current_clause = Nothing
+    Set current_section = Nothing
     lines = Split(Trim(gherkin_text), vbLf)
-    Set clause_tags = clone_tags(parsed_feature.tags)
+    Set section_tags = clone_tags(parsed_feature.tags)
     If parsed_feature.ErrorStatus = vbNullString Then
         For line_index = parsed_feature.ParsedLinesIndex + 1 To UBound(lines)
             line = Trim(lines(line_index))
-            If is_clause_definition_line(line) Then
-                keyword_value = read_keyword_value(CStr(line))
-                If Not current_clause Is Nothing Then trim_description_linebreaks current_clause
-                Set current_clause = update_feature(parsed_feature, CStr(keyword_value(0)), CStr(keyword_value(1)), clause_tags, line)
-                If CStr(keyword_value(0)) = CLAUSE_TYPE_EXAMPLE Or CStr(keyword_value(0)) = CLAUSE_TYPE_BACKGROUND Then
-                    line_index = parse_steps(lines, line_index, current_clause)
+            If is_section_definition_line(line) Then
+                Set section_headline = read_section_headline(CStr(line))
+                If Not current_section Is Nothing Then trim_description_linebreaks current_section
+                Set current_section = create_section(parsed_feature, section_headline, section_tags, line)
+                If Not section_headline("type") = SECTION_TYPE_BACKGROUND Then parsed_feature.sections.Add current_section
+                If section_headline("type") = SECTION_TYPE_EXAMPLE Or section_headline("type") = SECTION_TYPE_BACKGROUND Then
+                    line_index = parse_steps(lines, line_index, current_section)
                 End If
-                Set clause_tags = clone_tags(parsed_feature.tags)
+                Set section_tags = clone_tags(parsed_feature.tags)
             ElseIf is_tag_line(line) Then
-                add_tags line, clause_tags
+                add_tags line, section_tags
             ElseIf is_comment_line(line) Then
                 'ignore comments
             Else
-                If Not TypeName(current_clause) = "TExample" Or TypeName(current_clause) = "TBackground" Then
+                If Not TypeName(current_section) = "TExample" Or TypeName(current_section) = "TBackground" Then
                     add_description CStr(line), parsed_feature
                 End If
             End If
@@ -44,17 +44,17 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     Set parse_feature = parsed_feature
 End Function
 
-Private Sub trim_description_linebreaks(feature_clause)
+Private Sub trim_description_linebreaks(feature_section)
 
-    Do While Right(feature_clause.Description, 1) = vbLf
-        feature_clause.Description = Left(feature_clause.Description, Len(feature_clause.Description) - 1)
+    Do While Right(feature_section.Description, 1) = vbLf
+        feature_section.Description = Left(feature_section.Description, Len(feature_section.Description) - 1)
     Loop
-    Do While Left(feature_clause.Description, 1) = vbLf
-        feature_clause.Description = Right(feature_clause.Description, Len(feature_clause.Description) - 1)
+    Do While Left(feature_section.Description, 1) = vbLf
+        feature_section.Description = Right(feature_section.Description, Len(feature_section.Description) - 1)
     Loop
 End Sub
 
-Public Function parse_steps(feature_lines As Variant, example_start_index As Long, current_clause As Variant) As Long
+Public Function parse_steps(feature_lines As Variant, example_start_index As Long, current_section As Variant) As Long
 
     Dim line_index As Long
     Dim line As String
@@ -70,7 +70,7 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
         line = Trim(feature_lines(line_index))
         If Right(line, 3) = """""""" And is_docstring Then
             is_docstring = False
-            Set current_step = current_clause.Steps(current_clause.Steps.Count)
+            Set current_step = current_section.Steps(current_section.Steps.Count)
             current_step.Docstring = Right(docstring_value, Len(docstring_value) - 1)
             current_step.Expressions.Add current_step.Docstring
             current_step.Elements.Add current_step.Expressions.Count
@@ -85,8 +85,8 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
         ElseIf Left(line, 3) = """""""" And Not is_docstring Then
             is_docstring = True
         ElseIf is_step_line(line) Then
-            current_clause.Steps.Add create_step(line, current_clause)
-        ElseIf is_clause_definition_line(line) Or Trim(line) = "" Or is_tag_line(line) Then
+            current_section.Steps.Add create_step(line, current_section)
+        ElseIf is_section_definition_line(line) Or Trim(line) = "" Or is_tag_line(line) Then
             'example is finished either with next example, empty line or tag line
             parse_steps = line_index - 1
             Exit Function
@@ -101,7 +101,7 @@ Private Function parse_feature_definition(gherkin_text As String) As TFeature
     Dim line_index As Long
     Dim feature_lines As Variant
     Dim header_finished As Boolean
-    Dim feature_spec As Variant
+    Dim feature_spec As Collection
     Dim line As String
 
     Set parsed_feature = New TFeature
@@ -116,11 +116,11 @@ Private Function parse_feature_definition(gherkin_text As String) As TFeature
         ElseIf is_comment_line(line) Then
             line_index = line_index + 1
         Else
-            feature_spec = read_keyword_value(line)
-            If Not CStr(feature_spec(0)) = CLAUSE_TYPE_FEATURE Then
+            Set feature_spec = read_section_headline(line)
+            If Not CStr(feature_spec("type")) = SECTION_TYPE_FEATURE Then
                 parsed_feature.ErrorStatus = "Feature lacks feature keyword at the beginning"
             Else
-                parsed_feature.Name = CStr(feature_spec(1))
+                parsed_feature.Name = CStr(feature_spec("name"))
             End If
             header_finished = True
         End If
@@ -129,22 +129,22 @@ Private Function parse_feature_definition(gherkin_text As String) As TFeature
     Set parse_feature_definition = parsed_feature
 End Function
 
-Private Function is_clause_definition_line(feature_line As String) As Boolean
+Private Function is_section_definition_line(feature_line As String) As Boolean
     
     Dim keyword  As Variant
-    Dim clause_name As String
+    Dim section_name As String
     
-    'clause definition format is /^<keyword>:[^:]*$/
+    'section definition format is /^<keyword>:[^:]*$/
     If UBound(Split(Trim(feature_line), ":")) > 0 Then
-        clause_name = Split(Trim(feature_line), ":")(0)
+        section_name = Split(Trim(feature_line), ":")(0)
         For Each keyword In Split(KEYWORDS, ",")
-            If clause_name = CStr(keyword) Then
-               is_clause_definition_line = True
+            If section_name = CStr(keyword) Then
+               is_section_definition_line = True
                Exit Function
             End If
         Next
     End If
-    is_clause_definition_line = False
+    is_section_definition_line = False
 End Function
 
 Private Function is_comment_line(feature_line As String) As Boolean
@@ -195,55 +195,51 @@ Public Sub add_tags(feature_line As String, tags As Collection)
     Next
 End Sub
 
-Private Function update_feature(parsed_feature As TFeature, clause_keyword As String, clause_name As String, clause_tags As Collection, feature_line As String) As Variant
+Private Function create_section(parsed_feature As TFeature, section_headline As Collection, section_tags As Collection, feature_line As String) As Variant
 
-    Dim current_clause As Variant
+    Dim current_section As Variant
     
-    Select Case clause_keyword
-        Case CLAUSE_TYPE_RULE
-            Set current_clause = create_rule(rule_name:=clause_name)
-            parsed_feature.Clauses.Add current_clause
-        Case CLAUSE_TYPE_EXAMPLE
-            Set current_clause = create_example(example_head:=CStr(clause_keyword), example_name:=clause_name, example_tags:=clause_tags, feature_line:=feature_line)
-            parsed_feature.Clauses.Add current_clause
-        Case CLAUSE_TYPE_BACKGROUND
-            Set current_clause = parsed_feature.Background
+    Select Case section_headline("type")
+        Case SECTION_TYPE_RULE
+            Set current_section = create_rule(rule_name:=section_headline("name"))
+        Case SECTION_TYPE_EXAMPLE
+            Set current_section = create_example(example_head:=section_headline("type"), example_name:=section_headline("name"), example_tags:=section_tags, feature_line:=feature_line)
+        Case SECTION_TYPE_BACKGROUND
+            'background already exists as an attribute of the TFeature class
+            Set current_section = parsed_feature.Background
         Case Else
-            Debug.Print "PARSE ERROR: unknown clause >" & clause_keyword & "<"
+            Debug.Print "PARSE ERROR: unknown section >" & section_headline("type") & "<"
     End Select
-    Set update_feature = current_clause
+    Set create_section = current_section
 End Function
 
-Private Function read_keyword_value(text_line As String) As Variant
+Private Function read_section_headline(text_line As String) As Collection
 
     Dim line_items As Variant
-    Dim keyword As String
+    Dim section_headline As Collection
     
     line_items = Split(Trim(text_line), ":")
-    keyword = vbNullString
+    Set section_headline = New Collection
     If UBound(line_items) > 0 Then
         Select Case line_items(0)
-            Case "Feature"
-                keyword = CLAUSE_TYPE_FEATURE
-            Case "Ability"
-                keyword = CLAUSE_TYPE_FEATURE
-            Case "Business Need"
-                keyword = CLAUSE_TYPE_FEATURE
+            Case "Feature", "Ability", "Business Need"
+                section_headline.Add SECTION_TYPE_FEATURE, "type"
+            
             Case "Background"
-                keyword = CLAUSE_TYPE_BACKGROUND
+                section_headline.Add SECTION_TYPE_BACKGROUND, "type"
+            
             Case "Rule"
-                keyword = CLAUSE_TYPE_RULE
-            Case "Scenario"
-                keyword = CLAUSE_TYPE_EXAMPLE
-            Case "Scenario Outline"
-                keyword = CLAUSE_TYPE_EXAMPLE
-            Case "Example"
-                keyword = CLAUSE_TYPE_EXAMPLE
+                section_headline.Add SECTION_TYPE_RULE, "type"
+            
+            Case "Scenario", "Scenario Outline", "Example"
+                section_headline.Add SECTION_TYPE_EXAMPLE, "type"
+            
             Case Else
                 Debug.Print "PARSE ERROR: unknown keyword >" & line_items(0) & "<"
         End Select
     End If
-    read_keyword_value = Array(keyword, Trim(Right(text_line, Len(text_line) - InStr(text_line, ":"))))
+    section_headline.Add Trim(Right(text_line, Len(text_line) - InStr(text_line, ":"))), "name"
+    Set read_section_headline = section_headline
 End Function
 
 Private Function create_rule(rule_name As String) As TRule
@@ -269,20 +265,20 @@ End Function
 
 Private Sub add_description(line As String, feature As TFeature)
 
-    Dim clause As Variant
+    Dim section As Variant
     
-    If feature.Clauses.Count = 0 Then
+    If feature.sections.Count = 0 Then
         If feature.Description = vbNullString Then
             feature.Description = Trim(line)
         Else
             feature.Description = feature.Description & vbLf & Trim(line)
         End If
     Else
-        Set clause = feature.Clauses(feature.Clauses.Count)
-        If clause.Description = vbNullString Then
-            clause.Description = Trim(line)
+        Set section = feature.sections(feature.sections.Count)
+        If section.Description = vbNullString Then
+            section.Description = Trim(line)
         Else
-            clause.Description = clause.Description & vbLf & Trim(line)
+            section.Description = section.Description & vbLf & Trim(line)
         End If
     End If
 End Sub
@@ -327,13 +323,13 @@ Private Function clone_tags(source_tags As Collection) As Collection
     Set clone_tags = target_tags
 End Function
 
-Public Function create_step(step_definition As String, Optional parent_clause) As TStep
+Public Function create_step(step_definition As String, Optional parent_section) As TStep
 
     Dim new_step As TStep
     
-    If IsMissing(parent_clause) Then Set parent_clause = Nothing
+    If IsMissing(parent_section) Then Set parent_section = New TExample
     Set new_step = New TStep
-    new_step.Parent = parent_clause
+    new_step.Parent = parent_section
     new_step.parse_step_definition step_definition
     Set create_step = new_step
 End Function

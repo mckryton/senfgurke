@@ -18,7 +18,7 @@ Public Function run_feature(feature As TFeature, Optional filter_tag, Optional s
         TRun.Session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, feature.Name
         TRun.Session.Reporter.report REPORT_MSG_TYPE_DESC, feature.Description
     End If
-    For Each feature_clause In feature.Clauses
+    For Each feature_clause In feature.sections
         If TypeName(feature_clause) = "TExample" Then
             Set example = feature_clause
             If filter_tag = vbNullString Or ExtraVBA.collection_has_key(filter_tag, example.tags) = True Then

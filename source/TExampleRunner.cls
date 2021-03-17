@@ -44,6 +44,6 @@ Public Function run_example(example As TExample, Optional silent) As Collection
     
 error_handler:
     TRun.Session.Log.log_function_error "Runtime errror in TExampleRunner.run_example", _
-        example(CLAUSE_ATTR_TYPE) & " " & example(CLAUSE_ATTR_NAME)
+        example(SECTION_ATTR_TYPE) & " " & example(SECTION_ATTR_NAME)
 End Function
 

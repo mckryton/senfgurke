@@ -16,7 +16,7 @@ Public Sub Then_the_feature_contains_INT_rules_5A810804CB2F(step_expressions As 
     Dim feature_clause As Variant
     
     rule_count = 0
-    For Each feature_clause In m_parsed_feature.Clauses
+    For Each feature_clause In m_parsed_feature.sections
         If TypeName(feature_clause) = "TRule" Then
             rule_count = rule_count + 1
         End If

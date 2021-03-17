@@ -1,13 +1,13 @@
 Attribute VB_Name = "TConst"
 Option Explicit
 
-Public Const CLAUSE_TYPE_FEATURE = "feature"
-Public Const CLAUSE_TYPE_RULE = "rule"
-Public Const CLAUSE_TYPE_EXAMPLE = "example"
-Public Const CLAUSE_TYPE_BACKGROUND = "background"
+Public Const SECTION_TYPE_FEATURE = "feature"
+Public Const SECTION_TYPE_RULE = "rule"
+Public Const SECTION_TYPE_EXAMPLE = "example"
+Public Const SECTION_TYPE_BACKGROUND = "background"
 
-Public Const CLAUSE_ATTR_TYPE = "type"
-Public Const CLAUSE_ATTR_NAME = "name"
+Public Const SECTION_ATTR_TYPE = "type"
+Public Const SECTION_ATTR_NAME = "name"
 
 Public Const ERR_ID_SCENARIO_SYNTAX_ERROR = vbError + 6010
 Public Const ERR_ID_STEP_IS_STATUS_PENDING = vbError + 6020

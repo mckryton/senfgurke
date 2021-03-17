@@ -16,8 +16,12 @@
 
 * [Make steps executable](make_steps_executable.feature)
 
-  Senfgurke will derive step function names from example steps so that a
-  developer can add test code for each step.
+  Whenever a new step is added to a feature, Senfgurke will offer a matching
+  step implementation function. Senfgurke tries to make the function name as
+  similar to the step name as possible so that it's easy to identify the
+  matching step implemenation for any step.
+  But Function names in any programming language have to follow conventions.
+  Conventions for function and variable names in VBA are documented here:
 
 ## Read Features
 

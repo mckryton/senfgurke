@@ -12,7 +12,7 @@ Option Explicit
 Dim m_feature_head As String
 Dim m_feature_name As String
 Dim m_feature_description As String
-Dim m_clauses As Collection
+Dim m_sections As Collection
 Dim m_feature_tags As Collection
 Dim m_error_status As String
 Dim m_parsed_lines_index As Long
@@ -42,11 +42,11 @@ Public Property Let Description(ByVal feature_description As String)
     m_feature_description = feature_description
 End Property
 
-Public Property Get Clauses() As Collection
-    If m_clauses Is Nothing Then
-        Set m_clauses = New Collection
+Public Property Get sections() As Collection
+    If m_sections Is Nothing Then
+        Set m_sections = New Collection
     End If
-    Set Clauses = m_clauses
+    Set sections = m_sections
 End Property
 
 Public Property Get ErrorStatus() As String
@@ -111,7 +111,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Private Sub Class_Terminate()
-    Set m_clauses = Nothing
+    Set m_sections = Nothing
     Set m_feature_tags = Nothing
     Set m_background = Nothing
 End Sub

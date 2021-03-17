@@ -33,9 +33,9 @@ End Sub
 
 Public Sub Then_the_parsed_features_contains_INT_examples_013B39CEE3B0(step_expressions As Collection)
     'Then the parsed features contains {integer} examples
-    TSpec.expect(m_parsed_feature.Clauses.Count).to_be 2
-    TSpec.expect(TypeName(m_parsed_feature.Clauses(2))).to_be "TExample"
-    Set TStepVars.example = m_parsed_feature.Clauses(2)
+    TSpec.expect(m_parsed_feature.sections.Count).to_be 2
+    TSpec.expect(TypeName(m_parsed_feature.sections(2))).to_be "TExample"
+    Set TStepVars.example = m_parsed_feature.sections(2)
 End Sub
 
 Public Sub Then_the_parsed_second_example_contains_the_tags_S_E5AA0E4C4719(step_expressions As Collection)
