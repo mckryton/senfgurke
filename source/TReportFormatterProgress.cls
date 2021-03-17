@@ -59,6 +59,8 @@ Public Function format_step(step_name As String, status As String, err_msg As St
             formatted_msg = "M"
         Case STATUS_PENDING
             formatted_msg = "P"
+        Case STATUS_SKIPPED
+            formatted_msg = "S"
         Case STATUS_FAIL
             formatted_msg = "F" & vbLf & "Err in step: " & step_name
         Case Else

@@ -31,6 +31,11 @@ Ability: Report in progress format
       When the reported message is formatted
       Then the resulting report output is "P"
 
+    Example: skipped step
+      Given a report message about a "Given a sample step" with the status "SKIPPED"
+      When the reported message is formatted
+      Then the resulting report output is "S"
+
     Example: three successful steps
       Given 3 steps were reported as successful
        When step results are reported
