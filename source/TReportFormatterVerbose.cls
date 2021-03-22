@@ -12,7 +12,7 @@ Option Explicit
 Dim m_current_feature As String
 Dim m_current_rule As String
 Dim m_current_example As String
-Dim m_step_templates As Collection
+Dim m_step_implementation_templates As Collection
 Dim m_reporter As TReport
 
 Public Function process_msg(msg_package As Collection, Optional silent) As String
@@ -40,7 +40,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             CurrentRule = vbNullString
             CurrentExample = vbNullString
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
-            StepTemplates.Add message
+            step_implementation_templates.Add message
         Case REPORT_MSG_TYPE_STATS
             Reporter.print_report message, silent:=silent
         Case Else
@@ -148,16 +148,16 @@ Private Property Let CurrentExample(ByVal current_example As String)
     m_current_example = current_example
 End Property
 
-Private Property Get StepTemplates() As Collection
+Private Property Get step_implementation_templates() As Collection
     
-    If m_step_templates Is Nothing Then
-        Set m_step_templates = New Collection
+    If m_step_implementation_templates Is Nothing Then
+        Set m_step_implementation_templates = New Collection
     End If
-    Set StepTemplates = m_step_templates
+    Set step_implementation_templates = m_step_implementation_templates
 End Property
 
 Private Sub Class_Terminate()
-    Set m_step_templates = Nothing
+    Set m_step_implementation_templates = Nothing
 End Sub
 
 Public Function get_code_templates_for_missing_steps() As String
@@ -166,7 +166,7 @@ Public Function get_code_templates_for_missing_steps() As String
     Dim template As Variant
     
     report_output = vbNullString
-    For Each template In StepTemplates
+    For Each template In step_implementation_templates
         report_output = report_output & vbLf & vbLf & CStr(template)
     Next
     If report_output <> vbNullString Then
