@@ -33,6 +33,16 @@ Public Sub Given_a_code_template_for_a_missing_step_was_repor_E4A1AA906A81(step_
     TStepVars.Session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, TStepVars.CodeTemplate, silent:=True
 End Sub
 
+Public Sub Given_a_step_STR_was_reported_with_status_STR_and__6DDD4DF1A06C(step_expressions As Collection)
+    'Given a step {string} was reported with status {string} and error msg {string}
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), step_expressions(3), silent:=True
+End Sub
+
+Public Sub Given_a_step_STR_was_reported_with_status_STR_4E1E2C095DFA(step_expressions As Collection)
+    'And a step {string} was reported with status {string}
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), silent:=True
+End Sub
+
 Public Sub When_the_reported_message_is_formatted_84DF0DEABA43()
     'When the reported message is formatted
     TStepVars.ReportOutput = TStepVars.Session.Reporter.Report_Formatter.format_msg_content(TStepVars.ReportMsg)
@@ -54,6 +64,12 @@ End Sub
 Public Sub When_the_report_will_report_code_templates_for_the_B3C6D3155FBC()
     'When the report will report code templates for the missing steps
     TStepVars.ReportOutput = TStepVars.Session.Reporter.Report_Formatter.get_code_templates_for_missing_steps
+End Sub
+
+Public Sub When_all_steps_were_reported_and_the_report_is_fin_A68058ECE13A()
+    'When all steps were reported and the report is finished
+    TStepVars.Session.Reporter.finish_report silent:=True
+    TStepVars.ReportOutput = TStepVars.Session.Reporter.ConsoleOutput
 End Sub
 
 Public Sub Then_the_resulting_report_output_is_STR_4C01A19A67C4(step_expressions As Collection)

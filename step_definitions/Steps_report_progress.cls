@@ -16,7 +16,8 @@ Public Sub Given__INT_steps_were_reported_as_successful_53AEBD4A25F4(step_expres
     
     Set TStepVars.ReportMessages = New Collection
     For index = 1 To step_expressions(1)
-        TStepVars.ReportMessages.Add TRun.Session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, "Given a successful step", "OK", vbNullString)
+        'TStepVars.ReportMessages.Add TRun.Session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, "Given a successful step", "OK", vbNullString)
+        TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, "Given a valid step", STATUS_OK, silent:=True
     Next
 End Sub
 

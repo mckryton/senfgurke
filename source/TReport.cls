@@ -11,6 +11,24 @@ Option Explicit
 
 Dim m_report_formatter As Variant
 Dim m_console_output As String
+Dim m_err_buffer As String
+
+Public Sub add_err_msg_to_buffer(err_msg As String)
+    If Not m_err_buffer = vbNullString Then m_err_buffer = m_err_buffer & vbLf
+    m_err_buffer = m_err_buffer & err_msg
+End Sub
+
+Public Sub print_err_buffer(Optional silent)
+    
+    If IsMissing(silent) Then silent = False
+    If m_err_buffer <> vbNullString Then
+        If silent Then
+            ConsoleOutput = ConsoleOutput & vbLf & m_err_buffer & vbLf
+        Else
+            Debug.Print vbLf & m_err_buffer
+        End If
+    End If
+End Sub
 
 Public Sub report(message_type As String, message_content As String, Optional status, Optional err_msg, Optional silent)
 
@@ -28,13 +46,13 @@ Public Sub report(message_type As String, message_content As String, Optional st
         Else
             msg_package.Add err_msg, REPORT_MSG_ERR
         End If
-        Set msg_package = build_msg_package(message_type, message_content, CStr(status), CStr(err_msg))
+        Set msg_package = build_msg_package(message_type, message_content, status, err_msg)
         Report_Formatter.process_msg msg_package, silent:=silent
         Set msg_package = Nothing
     End If
 End Sub
 
-Public Function build_msg_package(message_type As String, message_content As String, Optional status As String, Optional err_msg As String) As Collection
+Public Function build_msg_package(message_type As String, message_content As String, Optional status, Optional err_msg) As Collection
 
     Dim msg_package As Collection
     
@@ -62,15 +80,20 @@ Public Property Let Report_Formatter(ByVal new_report_formatter As Variant)
     m_report_formatter.Reporter = Me
 End Property
 
-Public Sub report_code_templates_for_missing_steps()
+Public Sub print_code_templates_for_missing_steps(Optional silent)
 
     Dim code_templates As String
     
+    If IsMissing(silent) Then silent = False
     code_templates = Report_Formatter.get_code_templates_for_missing_steps
     If code_templates <> vbNullString Then
-        Debug.Print
-        Debug.Print
-        Debug.Print code_templates
+        If silent Then
+            ConsoleOutput = vbLf & vbLf & ConsoleOutput & code_templates & vbLf
+        Else
+            Debug.Print
+            Debug.Print
+            Debug.Print code_templates
+        End If
     End If
 End Sub
 
@@ -96,4 +119,11 @@ Public Sub print_report(report_output As String, Optional consecutive, Optional 
     Else
         Debug.Print report_output
     End If
+End Sub
+
+Public Sub finish_report(Optional silent)
+    
+    If IsMissing(silent) Then silent = False
+    print_err_buffer silent
+    print_code_templates_for_missing_steps silent
 End Sub

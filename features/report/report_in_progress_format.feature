@@ -67,12 +67,36 @@ Ability: Report in progress format
   Rule: Failed steps should show step name and error message
     #TODO: add feature name + example name
 
-    Example: Step fails with an error message
-      Given a report message "Given a sample step" with status "FAIL" and error msg "sample err msg"
-       When the reported message is formatted
+    Example: single failed step
+      Given a step "Given an invalid step" was reported with status "FAIL" and error msg "sample err msg"
+       When all steps were reported and the report is finished
        Then the resulting report output is
         """
           F
-          Err in step: Given a sample step
+          Err in step: Given an invalid step
             sample err msg
+
+        """
+
+    Example: failed step followed by passed step
+      Given a step "Given an invalid step" was reported with status "FAIL" and error msg "sample err msg"
+        And a step "And a valid step was" was reported with status "OK"
+       When all steps were reported and the report is finished
+       Then the resulting report output is
+        """
+          F.
+          Err in step: Given an invalid step
+            sample err msg
+
+        """
+
+  Rule: verbose formatter should add a line break before every 81st step
+@wip
+    Example: report 85 steps
+      Given 85 steps were reported as successful
+       When all steps were reported and the report is finished
+       Then the resulting report output is
+        """
+          ................................................................................
+          .....
         """
