@@ -25,6 +25,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             If step_counter Mod 80 = 0 And step_counter > 0 Then message = message & vbLf
             Reporter.print_report message, consecutive:=True, silent:=silent
         Case REPORT_MSG_TYPE_STATS
+            message = vbLf & message
             Reporter.print_report message, silent:=silent
     End Select
     process_msg = message
@@ -42,7 +43,6 @@ Public Function format_msg_content(msg_package As Collection, Optional silent) A
             step_implementation_templates.Add msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_STATS
             formatted_msg = vbLf & msg_package(REPORT_MSG_CONTENT)
-            Reporter.print_report formatted_msg, silent:=silent
         Case Else
             formatted_msg = vbNullString
     End Select

@@ -7,7 +7,7 @@ Ability: Report statistics
 
 
     Rule: statistics should appear as formatted text
-
+@wip
       Example: verbose report
         Given the report format is "verbose"
           And a test run took 22 ms
@@ -18,6 +18,7 @@ Ability: Report statistics
 
 7 steps (3 passed, 1 failed, 1 undefined, 2 pending)
 0m 0.022s
+
             """
 
       Example: zero steps
