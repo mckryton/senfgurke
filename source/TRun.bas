@@ -8,7 +8,7 @@ Option Explicit
 Dim m_session As TSession
 
 Public Sub test(Optional filter_tag, Optional report_format)
-        Set m_session = New TSession
+    Set m_session = New TSession
     Session.run_test filter_tag, report_format
     Set m_session = Nothing
 End Sub
@@ -18,9 +18,8 @@ Public Sub wip()
     test "@wip"
 End Sub
 
-Public Sub progress_all()
-    'wip = work in progress
-    test report_format:="progress"
+Public Sub progress(Optional filter_tag)
+    test filter_tag, report_format:="progress"
 End Sub
 
 Public Property Get Session() As TSession
