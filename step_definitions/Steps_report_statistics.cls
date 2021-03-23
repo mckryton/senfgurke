@@ -41,8 +41,3 @@ Public Sub When_the_statistics_are_reported_418C385A7E0B()
     TStepVars.Session.report_statistics TStepVars.RunStatistics, TStepVars.Duration, silent:=True
     TStepVars.ReportOutput = TStepVars.Session.Reporter.ConsoleOutput
 End Sub
-
-Public Sub Then_the_resulting_report_output_is_STR_4C01A19A67C4(step_expressions As Collection)
-    'Then the resulting report output is {string}
-    TSpec.expect(TStepVars.ReportOutput).to_be step_expressions(1)
-End Sub

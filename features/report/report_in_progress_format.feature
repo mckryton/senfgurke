@@ -12,33 +12,27 @@ Ability: Report in progress format
     report. Depending on the report type those messages are formatted accordingly.
 
     Example: successful step
-      Given a report message about a "Given a sample step" with the status "OK"
-      When the reported message is formatted
-      Then the resulting report output is "."
+       When a step "Given a sample step" is reported with status "OK"
+       Then the resulting report output is "."
 
     Example: failed step
-      Given a report message about a "Given a sample step" with the status "FAIL"
-      When the reported message is formatted
-      Then the resulting report output is "F"
+       When a step "Given a sample step" is reported with status "FAIL"
+       Then the resulting report output is "F"
 
     Example: missing step
-      Given a report message about a "Given a sample step" with the status "MISSING"
-      When the reported message is formatted
-      Then the resulting report output is "M"
+       When a step "Given a sample step" is reported with status "MISSING"
+       Then the resulting report output is "M"
 
     Example: pending step
-      Given a report message about a "Given a sample step" with the status "PENDING"
-      When the reported message is formatted
-      Then the resulting report output is "P"
+       When a step "Given a sample step" is reported with status "PENDING"
+       Then the resulting report output is "P"
 
     Example: skipped step
-      Given a report message about a "Given a sample step" with the status "SKIPPED"
-      When the reported message is formatted
-      Then the resulting report output is "S"
+       When a step "Given a sample step" is reported with status "SKIPPED"
+       Then the resulting report output is "S"
 
     Example: three successful steps
-      Given 3 steps were reported as successful
-       When step results are reported
+       When 3 steps are reported as successful
        Then the resulting report output is "..."
 
 
@@ -55,12 +49,15 @@ Ability: Report in progress format
        When the report will report code templates for the missing steps
        Then the resulting report output is
         """
+
+
           You can implement step definitions for undefined steps with these snippets:
 
           Public Sub Given_a_missing_step_6A350234BFE5()
             'And a missing step
             pending
           End Sub
+
         """
 
 
@@ -91,7 +88,7 @@ Ability: Report in progress format
         """
 
   Rule: verbose formatter should add a line break before every 81st step
-@wip
+
     Example: report 85 steps
       Given 85 steps were reported as successful
        When all steps were reported and the report is finished
