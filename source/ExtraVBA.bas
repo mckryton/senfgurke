@@ -70,10 +70,7 @@ Private Sub exportCode()
     Dim file_path As String
     Dim path_separator As String
     Dim file_suffix As String
-    Dim export_logger As Logger
 
-    On Error GoTo error_handler
-    Set export_logger = New Logger
     path_separator = get_path_separator
     #If APP_NAME = "Microsoft Powerpoint" Then
         base_path = ActivePresentation.Path
@@ -107,12 +104,8 @@ Private Sub exportCode()
         #Else
             vbe_source_object.Export file_path
         #End If
-        export_logger.Log "export code to " & file_path
+        Debug.Print "export code to " & file_path
     Next
-    Exit Sub
-
-error_handler:
-    export_logger.log_function_error "ExtraVBA.exportCode"
 End Sub
 
 Public Function get_path_separator() As String
@@ -182,4 +175,18 @@ Public Function get_unix_timestamp(in_date As Date, in_time As Single) As Long
     
     unix_ref_date = DateSerial(1970, 1, 1)
     get_unix_timestamp = CLng((in_date - unix_ref_date) * 86400 + (in_time * 1000))
+End Function
+
+Public Function trim_linebreaks(input_text As String) As String
+
+    Dim result_text As String
+    
+    result_text = input_text
+    Do While Left(result_text, 1) = vbLf
+        result_text = Right(result_text, Len(result_text) - 1)
+    Loop
+    Do While Right(result_text, 1) = vbLf
+        result_text = Left(result_text, Len(result_text) - 1)
+    Loop
+    trim_linebreaks = result_text
 End Function

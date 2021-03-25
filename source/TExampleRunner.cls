@@ -22,7 +22,6 @@ Public Function run_example(example As TExample, Optional silent) As Collection
     Set example_statistics = New Collection
     If Not silent Then TRun.Session.Reporter.report REPORT_MSG_TYPE_EXAMPLE_TITLE, example.OriginalHeadline
     example_statistics.Add example.OriginalHeadline, "example"
-    On Error GoTo error_handler
     For Each step In example.Steps
         err_msg = vbNullString
         last_step_result = step_result(0)
@@ -37,13 +36,8 @@ Public Function run_example(example As TExample, Optional silent) As Collection
             If step_result(0) = STATUS_PENDING Then err_msg = TSpec.LastFailMsg
         End If
         example_statistics.Add Array(step_result(0), step.OriginalStepDefinition)
-        If Not silent Then TRun.Session.Reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_result(0), err_msg
+        TRun.Session.Reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_result(0), err_msg, silent
     Next
     Set run_example = example_statistics
-    Exit Function
-    
-error_handler:
-    TRun.Session.Log.log_function_error "Runtime errror in TExampleRunner.run_example", _
-        example(SECTION_ATTR_TYPE) & " " & example(SECTION_ATTR_NAME)
 End Function
 

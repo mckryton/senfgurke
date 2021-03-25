@@ -21,6 +21,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
 
     If IsMissing(silent) Then silent = False
     message = format_msg_content(msg_package)
+    process_msg = vbNullString
     Select Case msg_package(REPORT_MSG_TYPE)
         Case REPORT_MSG_TYPE_FEATURE_NAME
             CurrentFeature = message & vbLf
@@ -43,9 +44,6 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             step_implementation_templates.Add message
         Case REPORT_MSG_TYPE_STATS
             Reporter.print_report message, silent:=silent
-        Case Else
-            TRun.Session.Log.debug_log "unknown report msg type >" & msg_package(REPORT_MSG_TYPE) & "<"
-            process_msg = vbNullString
     End Select
 End Function
 

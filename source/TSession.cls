@@ -9,18 +9,10 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_logger As Logger
 Dim m_reporter As TReport
 Dim m_start_time As Long
 Dim m_end_time As Long
 Dim m_run_statistics As Collection
-
-Public Property Get Log() As Logger
-    If m_logger Is Nothing Then
-        Set m_logger = New Logger
-    End If
-    Set Log = m_logger
-End Property
 
 Public Sub set_report_format(report_format As String)
     Select Case report_format
