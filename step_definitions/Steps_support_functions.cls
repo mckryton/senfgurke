@@ -13,8 +13,8 @@ Dim m_date As Date
 Dim m_seconds As Single
 Dim m_unix_timestamp As Long
 
-Public Sub Given_the_current_date_is_DBL_000001_18B10064814F(step_expressions As Collection)
-    'Given the current date is {double} 00:00:01
+Public Sub Given_the_current_date_is_01011970_000001_515850950AD6()
+    'Given the current date is 01.01.1970 00:00:01
     m_date = DateSerial(1970, 1, 1)
     m_seconds = 1
 End Sub
