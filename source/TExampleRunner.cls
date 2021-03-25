@@ -36,7 +36,7 @@ Public Function run_example(example As TExample, Optional silent) As Collection
             If step_result(0) = STATUS_PENDING Then err_msg = TSpec.LastFailMsg
         End If
         example_statistics.Add Array(step_result(0), step.OriginalStepDefinition)
-        TRun.Session.Reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_result(0), err_msg, silent
+        TRun.Session.Reporter.report REPORT_MSG_TYPE_STEP, example.Name & " > " & step.OriginalStepDefinition, step_result(0), err_msg, silent
     Next
     Set run_example = example_statistics
 End Function
