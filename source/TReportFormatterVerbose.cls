@@ -41,7 +41,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             CurrentRule = vbNullString
             CurrentExample = vbNullString
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
-            step_implementation_templates.Add message
+            Reporter.add_code_template_to_buffer message
         Case REPORT_MSG_TYPE_STATS
             Reporter.print_report message, silent:=silent
     End Select
@@ -62,12 +62,11 @@ Public Function format_msg_content(msg_package As Collection) As String
             formatted_msg = format_example_title(msg_package(REPORT_MSG_CONTENT))
         Case REPORT_MSG_TYPE_STEP
             formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))
-        Case REPORT_MSG_TYPE_CODE_TEMPLATE
-            formatted_msg = msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_STATS
             formatted_msg = vbLf & msg_package(REPORT_MSG_CONTENT)
         Case Else
-            formatted_msg = vbNullString
+            'msg doesn't need to be formatted
+            formatted_msg = msg_package(REPORT_MSG_CONTENT)
     End Select
     format_msg_content = formatted_msg
 End Function
@@ -157,22 +156,6 @@ End Property
 Private Sub Class_Terminate()
     Set m_step_implementation_templates = Nothing
 End Sub
-
-Public Function get_code_templates_for_missing_steps() As String
-
-    Dim report_output As String
-    Dim template As Variant
-    
-    report_output = vbNullString
-    For Each template In step_implementation_templates
-        report_output = report_output & vbLf & vbLf & CStr(template)
-    Next
-    If report_output <> vbNullString Then
-        report_output = "You can implement step definitions for undefined steps with these snippets:" _
-                            & report_output
-    End If
-    get_code_templates_for_missing_steps = report_output
-End Function
 
 Public Property Get Reporter() As TReport
     Set Reporter = m_reporter

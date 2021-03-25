@@ -12,10 +12,22 @@ Option Explicit
 Dim m_report_formatter As Variant
 Dim m_console_output As String
 Dim m_err_buffer As String
+Dim m_code_template_buffer As Collection
 
 Public Sub add_err_msg_to_buffer(err_msg As String)
     If Not m_err_buffer = vbNullString Then m_err_buffer = m_err_buffer & vbLf
     m_err_buffer = m_err_buffer & err_msg
+End Sub
+
+Public Sub add_code_template_to_buffer(code_template As String)
+    Dim template_signature As String
+    
+    If m_code_template_buffer Is Nothing Then Set m_code_template_buffer = New Collection
+    template_signature = ExtraVBA.hash12(code_template)
+    'detect template duplicates
+    If Not ExtraVBA.collection_has_key(template_signature, m_code_template_buffer) Then
+        m_code_template_buffer.Add code_template, template_signature
+    End If
 End Sub
 
 Public Sub print_err_buffer(Optional silent)
@@ -85,7 +97,7 @@ Public Sub print_code_templates_for_missing_steps(Optional silent)
     Dim code_templates As String
     
     If IsMissing(silent) Then silent = False
-    code_templates = Report_Formatter.get_code_templates_for_missing_steps
+    code_templates = get_code_templates_for_missing_steps
     If code_templates <> vbNullString Then
         If silent Then
             ConsoleOutput = vbLf & vbLf & ConsoleOutput & code_templates & vbLf
@@ -96,6 +108,22 @@ Public Sub print_code_templates_for_missing_steps(Optional silent)
         End If
     End If
 End Sub
+
+Public Function get_code_templates_for_missing_steps() As String
+
+    Dim report_output As String
+    Dim template As Variant
+
+    If m_code_template_buffer Is Nothing Then
+        report_output = vbNullString
+    Else
+        report_output = "You can implement step definitions for undefined steps with these snippets:"
+        For Each template In m_code_template_buffer
+            report_output = report_output & vbLf & vbLf & CStr(template)
+        Next
+    End If
+    get_code_templates_for_missing_steps = report_output
+End Function
 
 Public Property Get ConsoleOutput() As String
     'this is for testing and debugging only, because you can't read the content of the immediate window

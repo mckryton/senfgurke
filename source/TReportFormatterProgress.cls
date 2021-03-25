@@ -24,6 +24,8 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             count_step
             If step_counter Mod 80 = 0 And step_counter > 0 Then message = message & vbLf
             Reporter.print_report message, consecutive:=True, silent:=silent
+        Case REPORT_MSG_TYPE_CODE_TEMPLATE
+            Reporter.add_code_template_to_buffer msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_STATS
             message = vbLf & message
             Reporter.print_report message, silent:=silent
@@ -40,11 +42,12 @@ Public Function format_msg_content(msg_package As Collection, Optional silent) A
         Case REPORT_MSG_TYPE_STEP
             formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
-            step_implementation_templates.Add msg_package(REPORT_MSG_CONTENT)
+            Reporter.add_code_template_to_buffer msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_STATS
             formatted_msg = vbLf & msg_package(REPORT_MSG_CONTENT)
         Case Else
-            formatted_msg = vbNullString
+            'msg doesn't need to be formatted
+            formatted_msg = msg_package(REPORT_MSG_CONTENT)
     End Select
     format_msg_content = formatted_msg
 End Function
@@ -84,22 +87,6 @@ Private Property Get step_implementation_templates() As Collection
     End If
     Set step_implementation_templates = m_step_implementation_templates
 End Property
-
-Public Function get_code_templates_for_missing_steps() As String
-
-    Dim report_output As String
-    Dim template As Variant
-    
-    report_output = vbNullString
-    For Each template In step_implementation_templates
-        report_output = vbLf & CStr(template)
-    Next
-    If report_output <> vbNullString Then
-        report_output = "You can implement step definitions for undefined steps with these snippets:" _
-                            & vbLf & report_output
-    End If
-    get_code_templates_for_missing_steps = report_output
-End Function
 
 Public Property Get Reporter() As TReport
     Set Reporter = m_reporter
