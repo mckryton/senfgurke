@@ -61,7 +61,6 @@ Ability: Report in verbose format
        When a step "Given a sample step" is reported with status "SKIPPED"
        Then the trimmed report output is "     SKIPPED  Given a sample step"
 
-@wip
     Example: successful step with a docstring
        When a step "Given a sample step" followed by a docstring "this is a docstring" is reported with status "OK"
        Then line 1 of the resulting output is "     OK       Given a sample step"
