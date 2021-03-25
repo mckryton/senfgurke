@@ -32,11 +32,6 @@ Public Sub Given_a_step_STR_was_reported_with_status_STR_4E1E2C095DFA(step_expre
     TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), silent:=True
 End Sub
 
-'Public Sub When_the_reported_message_is_formatted_84DF0DEABA43()
-'    'When the reported message is formatted
-'    TStepVars.ReportOutput = TStepVars.Session.Reporter.Report_Formatter.format_msg_content(TStepVars.ReportMsg)
-'End Sub
-
 Public Sub When_a_step_STR_is_reported_with_status_STR_22E595BD5DFA(step_expressions As Collection)
     'When a step {string} is reported with status {string}
     TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), silent:=True
@@ -68,4 +63,8 @@ Public Sub Then_the_resulting_report_output_is_STR_4C01A19A67C4(step_expressions
     TSpec.expect(TStepVars.Session.Reporter.ConsoleOutput).to_be step_expressions(1)
 End Sub
 
+Public Sub Then_the_trimmed_report_output_is_STR_BBF5E2C067C4(step_expressions As Collection)
+    'Then the trimmed report output is {string}
+    TSpec.expect(ExtraVBA.trim_linebreaks(TStepVars.Session.Reporter.ConsoleOutput)).to_be step_expressions(1)
+End Sub
 

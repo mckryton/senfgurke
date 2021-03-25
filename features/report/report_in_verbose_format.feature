@@ -42,30 +42,30 @@ Ability: Report in verbose format
     while docstring content is indented by 18 spaces.
 
     Example: successful step
-      Given a report message about a "Given a sample step" with the status "OK"
-       When the reported message is formatted
-       Then the resulting report output is "     OK       Given a sample step"
+       When a step "Given a sample step" is reported with status "OK"
+       Then the trimmed report output is "     OK       Given a sample step"
 
     Example: failed step
-      Given a report message about a "Given a sample step" with the status "FAIL"
-       When the reported message is formatted
-       Then the resulting report output is "     FAIL     Given a sample step"
+       When a step "Given a sample step" is reported with status "FAIL"
+       Then the trimmed report output is "     FAIL     Given a sample step"
 
     Example: missing step
-      Given a report message about a "Given a sample step" with the status "MISSING"
-       When the reported message is formatted
-       Then the resulting report output is "     MISSING  Given a sample step"
+       When a step "Given a sample step" is reported with status "MISSING"
+       Then the trimmed report output is "     MISSING  Given a sample step"
 
     Example: pending step
-      Given a report message about a "Given a sample step" with the status "PENDING"
-       When the reported message is formatted
-       Then the resulting report output is "     PENDING  Given a sample step"
+       When a step "Given a sample step" is reported with status "PENDING"
+       Then the trimmed report output is "     PENDING  Given a sample step"
 
+    Example: skipped step
+       When a step "Given a sample step" is reported with status "SKIPPED"
+       Then the trimmed report output is "     SKIPPED  Given a sample step"
+
+@wip
     Example: successful step with a docstring
-      Given a report message "Given a sample step" with the status "OK" followed by a docstring "this is a docstring"
-       When the reported message is formatted
+       When a step "Given a sample step" followed by a docstring "this is a docstring" is reported with status "OK"
        Then line 1 of the resulting output is "     OK       Given a sample step"
-        And line 2 of the resulting output is "                  this is a docstring"
+        And line 3 of the resulting output is "                  this is a docstring"
 
 
   Rule: Failed steps will show the error message after the step indented
@@ -90,12 +90,15 @@ End Sub
        When the report will report code templates for the missing steps
        Then the resulting report output is
      """
+
+
 You can implement step definitions for undefined steps with these snippets:
 
 Public Sub Given_a_missing_step_6A350234BFE5()
  'And a missing step
  pending
 End Sub
+
      """
 
      #Todo: add example for multiple missing steps in more than one scenario
