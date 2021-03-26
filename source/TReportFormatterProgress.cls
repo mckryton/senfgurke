@@ -69,7 +69,7 @@ Public Function format_step(step_name As String, status As String, err_msg As St
             formatted_msg = "S"
         Case STATUS_FAIL
             formatted_msg = "F"
-            Reporter.add_err_msg_to_buffer "Error: " & step_name
+            Reporter.add_err_msg_to_buffer "Err in step: " & step_name
         Case Else
             Debug.Print "unknown step status >" & status & "<"
     End Select
