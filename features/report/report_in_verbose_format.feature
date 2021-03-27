@@ -70,8 +70,7 @@ Ability: Report in verbose format
   Rule: Failed steps will show the error message after the step indented
 
     Example: Step fails with an error message
-      Given a report message "Given a sample step" with status "FAIL" and error msg "sample err msg"
-       When the reported message is formatted
+       When a step "Given a sample step" is reported with status "FAIL" and error msg "sample err msg"
        Then line 1 of the resulting output is "     FAIL     Given a sample step"
         And line 2 of the resulting output is "          sample err msg"
 

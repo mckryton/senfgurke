@@ -37,6 +37,11 @@ Public Sub When_a_step_STR_is_reported_with_status_STR_22E595BD5DFA(step_express
     TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), silent:=True
 End Sub
 
+Public Sub When_a_step_STR_is_reported_with_status_STR_and_er_1F229896A06C(step_expressions As Collection)
+    'When a step {string} is reported with status {string} and error msg {string}
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), step_expressions(3), silent:=True
+End Sub
+
 Public Sub When__INT_steps_are_reported_as_successful_34289162846E(step_expressions As Collection)
     'When  {integer} steps are reported as successful
     Dim index As Integer
