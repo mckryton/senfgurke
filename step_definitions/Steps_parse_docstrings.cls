@@ -43,16 +43,31 @@ Public Sub When_the_step_is_parsed_317375497656()
     TFeatureParser.parse_steps Split(TStepVars.gherkin_text, vbLf), 0, TStepVars.example
 End Sub
 
+Public Sub When_the_feature_background_is_parsed_8C5FB8584F5D()
+    'When the feature background is parsed
+    Set TStepVars.Background = New TBackground
+    TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, TStepVars.Background
+    If TStepVars.Background.Steps.Count = 1 Then
+        Set TStepVars.first_step = TStepVars.Background.Steps(1)
+    End If
+End Sub
+
 Public Sub Then_the_first_step_has_an_expression_451F9158BDF6()
     'Then the first step has an expression
     TSpec.expect(TStepVars.first_step.Expressions.Count).to_be 1
+End Sub
+
+Public Sub Then_the_first_step_has_a_docstring_value_STR_B59597EF055B(step_expressions As Collection)
+    'And the first step has a docstring value {string}
+    TSpec.expect(TStepVars.first_step.Docstring).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_function_name_for_the_first_step_ends_wit_79EB11152D22(step_expressions As Collection)
     'And the function name for the first step ends with {string}
     Dim function_name As String
     
-    function_name = TStepVars.example.Steps(1).get_step_function_name
+    If TStepVars.first_step Is Nothing Then Set TStepVars.first_step = TStepVars.example.Steps(1)
+    function_name = TStepVars.first_step.get_step_function_name
     function_name = Left(function_name, Len(function_name) - 13)
     TSpec.expect(Right(function_name, 3)).to_be step_expressions(1)
 End Sub

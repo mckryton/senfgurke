@@ -55,14 +55,6 @@ Public Sub When_the_example_is_parsed_CEB09D77F01F()
     End If
 End Sub
 
-Public Sub When_the_feature_background_is_parsed_8C5FB8584F5D()
-    'When the feature background is parsed
-    TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, TStepVars.Background
-    If TStepVars.Background.Steps.Count = 1 Then
-        Set TStepVars.first_step = TStepVars.Background.Steps(1)
-    End If
-End Sub
-
 Public Sub Then_the_example_clause_from_the_parsed_result_con_C8ADD15947E9()
     'Then the example clause from the parsed result contains all the steps
     TSpec.expect(TStepVars.example.Steps.Count).to_be 3

@@ -12,7 +12,7 @@ Ability: parse docstrings
       Example: example with docstring
         Given an example definition
           And the first step is "Given a first step"
-          And this step is followed by a docstring containing "this is a docstring"
+          And the step is followed by a docstring "this is a docstring"
          When the example is parsed
          Then the first step has an expression
           And the function name for the first step ends with "STR"
@@ -37,11 +37,10 @@ Ability: parse docstrings
          When the step is parsed
          Then line 1 of the steps docstring is empty
 
-
       Example: feature background with docstring
         Given a background
           And the first step is "Given a first background step"
-          And this step is followed by a docstring containing "this is a docstring"
+          And the step is followed by a docstring "this is a docstring"
          When the feature background is parsed
          Then the first step has an expression
           And the function name for the first step ends with "STR"
