@@ -50,6 +50,11 @@ Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981()
     TSpec.expect(m_parsed_feature.sections(2).Name).to_be "sample example"
 End Sub
 
+Public Sub Then_the_parsed_result_contains_a_feature_with_the_5E84028445E3(step_expressions As Collection)
+    'Then the parsed result contains a feature with the name {string}
+    TSpec.expect(m_parsed_feature.Name).to_be step_expressions(1)
+End Sub
+
 Public Sub Then_the_feature_description_is_set_to_those_two_l_3759AF1F585B()
     'Then the feature description is set to those two lines
     TSpec.expect(m_parsed_feature.Description).to_be "this is" & vbLf & "the feature description"

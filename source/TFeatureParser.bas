@@ -237,6 +237,8 @@ Private Function read_section_headline(text_line As String) As Collection
             Case Else
                 Debug.Print "PARSE ERROR: unknown keyword >" & line_items(0) & "<"
         End Select
+    Else
+        section_headline.Add "undefined", "type"
     End If
     section_headline.Add Trim(Right(text_line, Len(text_line) - InStr(text_line, ":"))), "name"
     Set read_section_headline = section_headline

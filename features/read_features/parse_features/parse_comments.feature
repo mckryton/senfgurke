@@ -1,6 +1,6 @@
 Ability: parse comments
   To explain the intention of a feature it is possible to add a comment at any
-  position. Any line starting with a # is considered to be such a comment. 
+  position. Any line starting with a # is considered to be such a comment.
 
 
   Rule: every line starting with "#" is considered to be comment and will be ignored
