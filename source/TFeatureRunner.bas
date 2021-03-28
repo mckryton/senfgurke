@@ -3,7 +3,6 @@ Option Explicit
 
 Public Function run_feature(feature As TFeature, Optional filter_tag, Optional silent) As Collection
     
-    Dim all_features As Variant
     Dim feature_clause As Variant
     Dim example As TExample
     Dim example_runner As TExampleRunner

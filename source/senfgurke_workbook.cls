@@ -7,12 +7,3 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
-
-
-Public Sub dummy()
-
-    Dim x As New TStep
-    
-    x.parse_step_definition "Given a first step ""dummy"""
-    Debug.Print x.get_step_function_name
-End Sub

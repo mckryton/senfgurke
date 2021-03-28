@@ -50,10 +50,9 @@ Private Function arrays_are_equal(first_array As Variant, second_array As Varian
     first_value = Join(first_array, "#")
     second_value = Join(second_array, "#")
     On Error GoTo 0
+    arrays_are_equal = False
     If first_value = second_value Then
         arrays_are_equal = True
-    Else
-        arrays_are_equal = False
     End If
     Exit Function
     
@@ -127,8 +126,11 @@ Public Function hash12(s As String)
     ' source: https://stackoverflow.com/questions/14717526/vba-hash-string
     ' create a 12 character hash from string s
     
-    Dim l As Integer, l3 As Integer
-    Dim s1 As String, s2 As String, s3 As String
+    Dim l As Integer
+    Dim l3 As Integer
+    Dim s1 As String
+    Dim s2 As String
+    Dim s3 As String
     
     l = Len(s)
     l3 = Int(l / 3)
@@ -140,10 +142,12 @@ Public Function hash12(s As String)
 
 End Function
 
-Private Function hash4(txt)
+Private Function hash4(txt As String)
     ' source: https://stackoverflow.com/questions/14717526/vba-hash-string
-    Dim x As Long
-    Dim mask, i, j, nC, crc As Integer
+    Dim mask As Integer
+    Dim j As Integer
+    Dim nC As Integer
+    Dim crc As Integer
     Dim c As String
     
     crc = &HFFFF
@@ -162,9 +166,9 @@ Private Function hash4(txt)
     
     ' <<<<< new section: make sure returned string is always 4 characters long >>>>>
     ' pad to always have length 4:
-    While Len(c) < 4
+    Do While Len(c) < 4
       c = "0" & c
-    Wend
+    Loop
     
     hash4 = c
 End Function

@@ -76,6 +76,7 @@ Private Function get_step_comment_name() As String
     'TODO add docstring
     get_step_comment_name = Trim(function_name)
 End Function
+
 Private Function remove_non_ascii_chars(function_name As String) As String
 
     Dim current_char As String
@@ -316,3 +317,4 @@ End Property
 Public Property Let Docstring(ByVal new_docstring As String)
     m_docstring = new_docstring
 End Property
+

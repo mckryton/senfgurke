@@ -9,7 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-
 Public Sub Given_a_step_definition_STR_65172AC6DD8A(step_expressions As Collection)
     'Given a step definition {string}
     TStepVars.gherkin_text = step_expressions(1)

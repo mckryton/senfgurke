@@ -1,7 +1,7 @@
 Attribute VB_Name = "TFeatureParser"
 Option Explicit
 
-Const KEYWORDS = "Example,Scenario,Scenario Outline,Rule,Ability,Business Needs,Feature,Background"
+Const KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Ability,Business Needs,Feature,Background"
 
 Public Function parse_feature(gherkin_text As String) As TFeature
 
@@ -10,7 +10,6 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     Dim line As String
     Dim section_headline As Collection
     Dim current_section As Variant
-    Dim has_example_steps As Boolean
     Dim line_index As Long
     Dim section_tags As Collection
     
@@ -32,9 +31,8 @@ Public Function parse_feature(gherkin_text As String) As TFeature
                 Set section_tags = clone_tags(parsed_feature.tags)
             ElseIf is_tag_line(line) Then
                 add_tags line, section_tags
-            ElseIf is_comment_line(line) Then
+            ElseIf Not is_comment_line(line) Then
                 'ignore comments
-            Else
                 If Not TypeName(current_section) = "TExample" Or TypeName(current_section) = "TBackground" Then
                     add_description CStr(line), parsed_feature
                 End If
@@ -86,7 +84,7 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
             is_docstring = True
         ElseIf is_step_line(line) Then
             current_section.Steps.Add create_step(line, current_section)
-        ElseIf is_section_definition_line(line) Or Trim(line) = "" Or is_tag_line(line) Then
+        ElseIf is_section_definition_line(line) Or Trim(line) = vbNullString Or is_tag_line(line) Then
             'example is finished either with next example, empty line or tag line
             parse_steps = line_index - 1
             Exit Function
@@ -148,21 +146,11 @@ Private Function is_section_definition_line(feature_line As String) As Boolean
 End Function
 
 Private Function is_comment_line(feature_line As String) As Boolean
-
-    If Left(Trim(feature_line), 1) = "#" Then
-        is_comment_line = True
-    Else
-        is_comment_line = False
-    End If
+    is_comment_line = Left(Trim(feature_line), 1) = "#"
 End Function
 
 Private Function is_tag_line(feature_line As String) As Boolean
-
-    If Left(Trim(feature_line), 1) = "@" Then
-        is_tag_line = True
-    Else
-        is_tag_line = False
-    End If
+    is_tag_line = Left(Trim(feature_line), 1) = "@"
 End Function
 
 Private Function is_step_line(feature_line As String) As Boolean
@@ -170,17 +158,12 @@ Private Function is_step_line(feature_line As String) As Boolean
     Dim first_word As String
     
     first_word = Split(Trim(feature_line) & " ", " ")(0)
-    If InStr("Given When Then And But", first_word) > 0 And Len(first_word) > 2 Then
-        is_step_line = True
-    Else
-        is_step_line = False
-    End If
+    is_step_line = InStr("Given When Then And But", first_word) > 0 And Len(first_word) > 2
 End Function
 
 Public Sub add_tags(feature_line As String, tags As Collection)
 
     Dim tag_list As Variant
-    Dim index As Long
     Dim tag As Variant
     
     tag_list = Split(Trim(feature_line), " ")
@@ -284,22 +267,6 @@ Private Sub add_description(line As String, feature As TFeature)
         End If
     End If
 End Sub
-
-Private Function read_step_head_name(line As String) As Variant
-
-    Dim step_type As String
-    Dim trim_line As String
-
-    trim_line = Trim(line)
-    If Len(trim_line) > 0 Then
-        step_type = Split(trim_line, " ")(0)
-        If InStr("Given When Then And But", step_type) > 0 Then
-            read_step_head_name = Array(step_type, Right(trim_line, Len(trim_line) - InStr(trim_line, " ")))
-            Exit Function
-        End If
-    End If
-    read_step_head_name = Array(vbNullString, vbNullString)
-End Function
 
 Public Function parse_loaded_features(feature_list As Collection) As Collection
     

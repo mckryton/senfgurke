@@ -9,8 +9,8 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_parsed_feature As TFeature
-Dim m_feature_statistics As Collection
+Private m_parsed_feature As TFeature
+Private m_feature_statistics As Collection
 
 Public Sub Given_an_example_with_matching_step_implementation_B7CBC6F3337F(step_expressions As Collection)
     'Given an example with matching step implementations {string}
@@ -30,7 +30,6 @@ End Sub
 
 Public Sub Given_a_valid_step_6A35DF3A18EC()
     'Given a valid step
-    
 End Sub
 
 Public Sub Given_an_invalid_step_FF6BEF10050E()
@@ -57,10 +56,6 @@ End Sub
 
 Public Sub When_the_example_is_executed_8C8F015690BC()
     'When the example is executed
-    
-    Dim example_runner As TExampleRunner
-    
-    Set example_runner = New TExampleRunner
     Set m_feature_statistics = TFeatureRunner.run_feature(m_parsed_feature, silent:=True)
 End Sub
 
@@ -88,3 +83,4 @@ Public Sub Then_only_the_example_STR_is_executed_FD3BFD3B270C(step_expressions A
     TSpec.expect(m_feature_statistics.Count).to_be 1
     TSpec.expect(m_feature_statistics(1)("example")).to_be "Example: " & step_expressions(1)
 End Sub
+

@@ -90,7 +90,6 @@ End Property
 Public Sub add_tags(feature_line As String)
 
     Dim tag_list As Variant
-    Dim index As Long
     Dim tag As Variant
     
     tag_list = Split(Trim(feature_line), " ")

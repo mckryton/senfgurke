@@ -103,16 +103,13 @@ Public Property Let given_value(ByVal pvarGivenValue As Variant)
     On Error GoTo 0
 End Property
 
-Public Function contains(expected_member As Variant) As Boolean
+Public Sub contains(expected_member As Variant)
 
     Dim matcher_fail_msg As String
     Dim expected_member_text As String
 
-    contains = False
     If TypeName(Me.given_value) = "Collection" Then
-        If ExtraVBA.collection_has_value(expected_member, Me.given_value) Then
-            contains = True
-        Else
+        If Not ExtraVBA.collection_has_value(expected_member, Me.given_value) Then
             If IsArray(expected_member) Then
                 expected_member_text = Join(expected_member, "*")
             Else
@@ -126,9 +123,9 @@ Public Function contains(expected_member As Variant) As Boolean
     ElseIf IsArray(Me.given_value) Then
         Debug.Print "TSpecExpectation PENDING: contains matcher for array"
     End If
-End Function
+End Sub
 
-Public Function include(include_item As Variant) As Boolean
+Public Sub includes(include_item As Variant)
 
     Dim matcher_fail_msg As String
     
@@ -142,9 +139,9 @@ Public Function include(include_item As Variant) As Boolean
     Else
         Debug.Print "PENDING: include test for arrays"
     End If
-End Function
+End Sub
 
-Public Function not_to_include(include_item As Variant) As Boolean
+Public Sub does_not_include(include_item As Variant)
 
     Dim matcher_fail_msg As String
     
@@ -158,11 +155,12 @@ Public Function not_to_include(include_item As Variant) As Boolean
     Else
         Debug.Print "STATUS_PENDING: include test for arrays"
     End If
-End Function
+End Sub
 
 Private Sub raise_expectation_err(fail_msg)
     
     TSpec.LastFailMsg = fail_msg
     Err.Raise Number:=ERR_ID_EXPECTATION_STATUS_FAILED, Description:=fail_msg
 End Sub
+
 

@@ -7,7 +7,6 @@ Public Function run_step(step_definition As TStep, Optional silent) As Variant
     Dim step_implementation_class As Variant
     Dim step_function_name As String
     Dim step_run_attempts As Integer
-    Dim step_parameter_values As Variant
     
     On Error GoTo error_handler
     If IsMissing(silent) Then silent = False

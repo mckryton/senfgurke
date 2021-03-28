@@ -9,9 +9,9 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_date As Date
-Dim m_seconds As Single
-Dim m_unix_timestamp As Long
+Private m_date As Date
+Private m_seconds As Single
+Private m_unix_timestamp As Long
 
 Public Sub Given_the_current_date_is_01011970_000001_515850950AD6()
     'Given the current date is 01.01.1970 00:00:01

@@ -49,6 +49,7 @@ Public Property Let OriginalHeadline(original_headline As String)
 End Property
 
 Public Property Get Steps() As Collection
+
     If m_steps Is Nothing Then
         Set m_steps = New Collection
     End If

@@ -32,4 +32,3 @@ Public Sub Then_the_function_name_starts_with_STR_4C16558C4B9D(step_parameters A
     TSpec.expect(Left(m_step_function_name, Len(step_parameters(1)))).to_be step_parameters(1)
 End Sub
 
-

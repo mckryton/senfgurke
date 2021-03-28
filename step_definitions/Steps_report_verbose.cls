@@ -49,12 +49,12 @@ End Sub
 
 Public Sub Then_the_report_output_contains_STR_5A8ED3F2F3C6(step_expressions As Collection)
     'Then the report output contains {string}
-    TSpec.expect(TStepVars.Session.Reporter.ConsoleOutput).include step_expressions(1)
+    TSpec.expect(TStepVars.Session.Reporter.ConsoleOutput).includes step_expressions(1)
 End Sub
 
 Public Sub Then_the_report_output_doesnt_contain_STR_77804E212494(step_expressions As Collection)
     'Then the report output doesn't contain {string}
-    TSpec.expect(TStepVars.Session.Reporter.ConsoleOutput).not_to_include step_expressions(1)
+    TSpec.expect(TStepVars.Session.Reporter.ConsoleOutput).does_not_include step_expressions(1)
 End Sub
 
 Public Sub Then_the_description_is_reported_as_STR_CA847D5BC6A5(step_expressions As Collection)

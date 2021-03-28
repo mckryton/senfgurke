@@ -13,6 +13,7 @@ Dim m_step_implementation_templates As Collection
 Dim m_reporter As TReport
 Dim m_step_count As Long
 
+
 Public Function process_msg(msg_package As Collection, Optional silent) As String
 
     Dim message As String
@@ -55,8 +56,6 @@ End Function
 Public Function format_step(step_name As String, status As String, err_msg As String) As String
     
     Dim formatted_msg As String
-    Dim step_lines As Variant
-    Dim line_index As Integer
 
     Select Case status
         Case STATUS_OK

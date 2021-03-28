@@ -9,9 +9,9 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_doc_path As String
-Dim m_feature_path As String
-Dim m_features As Collection
+Private m_doc_path As String
+Private m_feature_path As String
+Private m_features As Collection
 
 Public Sub Given_the_current_application_is_stored_under_STR_E4B6AFDB477F(step_expressions As Collection)
     'Given the current application is stored under {string}

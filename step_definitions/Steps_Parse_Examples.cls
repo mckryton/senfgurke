@@ -9,8 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_parsed_background As TBackground
-
 Public Sub Given_an_example_STR_6A35400021EE(step_expressions As Collection)
     'Given an example {string}
     TStepVars.gherkin_text = step_expressions(1)
@@ -79,7 +77,3 @@ Public Sub Then_first_step_is_changed_to_STR_26F73CDF60C2(step_expressions As Co
     TSpec.expect(TStepVars.example.Steps(1).StepDefinition).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_first_step_of_the_background_is_changed_to_ST_43C166035DB0(step_expressions As Collection)
-    'Then first step of the background is changed to {string}
-    TSpec.expect(m_parsed_background.Steps(1).StepDefinition).to_be step_expressions(1)
-End Sub

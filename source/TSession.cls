@@ -89,7 +89,6 @@ End Sub
 
 Public Function get_duration_as_text(duration_in_ms As Long) As String
     
-    Dim formatted_duration As String
     Dim minutes As Long
     Dim seconds As Long
     Dim milliseconds As Long
@@ -171,3 +170,4 @@ Public Sub report_statistics(run_statistics As Collection, run_duration As Long,
                     & get_duration_as_text(run_duration)
     Reporter.report REPORT_MSG_TYPE_STATS, report_msg, silent:=silent
 End Sub
+

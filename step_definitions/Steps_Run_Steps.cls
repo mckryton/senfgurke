@@ -9,9 +9,9 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_step_result As Variant
-Dim m_step_function_template As String
-Dim m_step_function_name As String
+Private m_step_result As Variant
+Private m_step_function_template As String
+Private m_step_function_name As String
 
 Public Sub Given_a_pending_step_6A3533BBBFE5()
     pending
@@ -56,7 +56,7 @@ End Sub
 
 Public Sub Given_a_step_without_an_implementation_FAF18488CAAA()
     'Given a step without an implementation
-    Set TStepVars.example_step = TFeatureParser.create_step("Given a random step name " & CStr(Now()))
+    Set TStepVars.example_step = TFeatureParser.create_step("Given a random step name " & CStr(Now))
 End Sub
 
 Public Sub Given_a_step_STR_F5C6F4BA1D15(step_expressions As Collection)
@@ -78,6 +78,7 @@ Public Sub When_the_step_is_translated_into_a_function_name_D820185C4AF6()
     'When the step is translated into a function name
     m_step_function_name = TStepVars.example_step.get_step_function_name
 End Sub
+
 
 Public Sub Then_the_execution_result_is_STR_80FDCF952A5A(step_expressions As Collection)
     'Then the execution result is {string}

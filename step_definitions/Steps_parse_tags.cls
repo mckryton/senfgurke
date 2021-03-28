@@ -7,6 +7,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Option Explicit
+
 Public Sub Then_the_parsed_features_contains_the_tags_STR_013B39CE37F4(step_expressions As Collection)
     'Then the parsed features contains the tags {string}
     

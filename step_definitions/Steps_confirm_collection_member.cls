@@ -9,9 +9,9 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_collection As Collection
-Dim m_expected_value As Variant
-Dim m_expectation_result As Boolean
+Private m_collection As Collection
+Private m_expected_value As Variant
+Private m_expectation_result As Boolean
 
 Public Sub Given_a_collection_has_INT_members_array_INT__STR__22433998BB74(step_expressions As Collection)
     'Given a collection has {integer} members array( {integer}, {string} ) and array( {integer}, {string} )
@@ -30,10 +30,13 @@ End Sub
 
 Public Sub When_the_expectation_validates_that_the_collection_808FE2AA1406()
     'When the expectation validates that the collection contains the expected value
+    m_expectation_result = True
+    On Error GoTo expectation_failed
+    TSpec.expect(m_collection).contains m_expected_value
+    Exit Sub
+    
+expectation_failed:
     m_expectation_result = False
-    On Error Resume Next
-    m_expectation_result = TSpec.expect(m_collection).contains(m_expected_value)
-    On Error GoTo 0
 End Sub
 
 Public Sub Then_the_expectation_is_confirmed_A341C2A69D10()
