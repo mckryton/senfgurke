@@ -66,7 +66,12 @@ End Sub
 
 Public Sub When_the_step_is_executed_CEB06B444334()
     'When the step is executed
-    m_step_result = TStepRunner.run_step(TStepVars.example_step, silent:=True)
+    Dim step_runner As TStepRunner
+    
+    Set step_runner = New TStepRunner
+    Set TStepVars.Session = New TSession
+    step_runner.setup TStepVars.Session
+    m_step_result = step_runner.run_step(TStepVars.example_step, silent:=True)
 End Sub
 
 Public Sub When_the_code_template_for_the_step_implementation_7D39D6705DD8()

@@ -54,14 +54,17 @@ Public Sub run_features(parsed_features As Collection, Optional filter_tag, Opti
 
     Dim parsed_feature As Variant
     Dim feature As TFeature
+    Dim feature_runner As TFeatureRunner
     
     If IsMissing(filter_tag) Then filter_tag = vbNullString
     If IsMissing(silent) Then silent = False
+    Set feature_runner = New TFeatureRunner
+    feature_runner.setup Me
     StartTime = ExtraVBA.get_unix_timestamp(Now, Timer)
     For Each parsed_feature In parsed_features
         'cast Variant to TFeature
         Set feature = parsed_feature
-        RunStatistics.Add TFeatureRunner.run_feature(feature, filter_tag:=CStr(filter_tag), silent:=silent)
+        RunStatistics.Add feature_runner.run_feature(feature, filter_tag:=CStr(filter_tag), silent:=silent)
     Next
     EndTime = ExtraVBA.get_unix_timestamp(Now, Timer)
 End Sub

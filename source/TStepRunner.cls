@@ -1,5 +1,19 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
 Attribute VB_Name = "TStepRunner"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 Option Explicit
+
+Private m_session As TSession
+
+Public Sub setup(Session As TSession)
+    Set m_session = Session
+End Sub
 
 Public Function run_step(step_definition As TStep, Optional silent) As Variant
 
@@ -59,16 +73,8 @@ Public Function fail_step(err_id As Long, Optional err_msg, Optional silent) As 
         fail_step = Array(STATUS_PENDING, err_desc)
     Case ERR_ID_STEP_IS_STATUS_MISSING
         fail_step = Array(STATUS_MISSING, vbNullString)
-        If Not silent Then TRun.Session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, err_desc
+        If Not silent Then m_session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, err_desc
     Case Else
         fail_step = Array(STATUS_FAIL, err_desc & vbLf & TSpec.LastFailMsg)
     End Select
 End Function
-
-Public Sub pending(Optional pending_msg)
-
-    If IsMissing(pending_msg) Then pending_msg = vbNullString
-    TSpec.LastFailMsg = pending_msg
-    Err.Raise ERR_ID_STEP_IS_STATUS_PENDING, Description:=pending_msg
-End Sub
-

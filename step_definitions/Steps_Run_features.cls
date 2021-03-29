@@ -42,9 +42,13 @@ Public Sub When_the_feature_is_executed_8C8F454A90BC()
     'When the feature is executed
     
     Dim parsed_feature As TFeature
+    Dim feature_runner As TFeatureRunner
     
+    Set feature_runner = New TFeatureRunner
+    Set TStepVars.Session = New TSession
+    feature_runner.setup TStepVars.Session
     Set parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
-    Set TStepVars.feature_statistics = TFeatureRunner.run_feature(parsed_feature, silent:=True)
+    Set TStepVars.feature_statistics = feature_runner.run_feature(parsed_feature, silent:=True)
 End Sub
 
 Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE()

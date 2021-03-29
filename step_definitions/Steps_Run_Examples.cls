@@ -56,16 +56,25 @@ End Sub
 
 Public Sub When_the_example_is_executed_8C8F015690BC()
     'When the example is executed
-    Set m_feature_statistics = TFeatureRunner.run_feature(m_parsed_feature, silent:=True)
+    Dim feature_runner As TFeatureRunner
+    
+    Set feature_runner = New TFeatureRunner
+    Set TStepVars.Session = New TSession
+    feature_runner.setup TStepVars.Session
+    Set m_feature_statistics = feature_runner.run_feature(m_parsed_feature, silent:=True)
 End Sub
 
 Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(step_expressions As Collection)
     'When the feature is executed with tag parameter {string}
     
     Dim parsed_feature As TFeature
+    Dim feature_runner As TFeatureRunner
     
+    Set feature_runner = New TFeatureRunner
+    Set TStepVars.Session = New TSession
+    feature_runner.setup TStepVars.Session
     Set parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
-    Set m_feature_statistics = TFeatureRunner.run_feature(parsed_feature, filter_tag:=step_expressions(1), silent:=True)
+    Set m_feature_statistics = feature_runner.run_feature(parsed_feature, filter_tag:=step_expressions(1), silent:=True)
 End Sub
 
 Public Sub Then_step_statistics_is_STR_121A2677FC0F(step_expressions As Collection)
@@ -75,7 +84,7 @@ Public Sub Then_step_statistics_is_STR_121A2677FC0F(step_expressions As Collecti
     
     Set run_statistics = New Collection
     run_statistics.Add m_feature_statistics
-    TSpec.expect(TRun.Session.get_step_statistics(run_statistics)).to_be step_expressions(1)
+    TSpec.expect(TStepVars.Session.get_step_statistics(run_statistics)).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_only_the_example_STR_is_executed_FD3BFD3B270C(step_expressions As Collection)

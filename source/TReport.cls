@@ -83,6 +83,7 @@ End Function
 Public Property Get Report_Formatter() As Variant
     If Not IsObject(m_report_formatter) Then
         Set m_report_formatter = New TReportFormatterVerbose
+        m_report_formatter.Reporter = Me
     End If
     Set Report_Formatter = m_report_formatter
 End Property
