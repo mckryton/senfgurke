@@ -9,7 +9,8 @@ Public Const SECTION_TYPE_BACKGROUND$ = "background"
 Public Const SECTION_ATTR_TYPE$ = "type"
 Public Const SECTION_ATTR_NAME$ = "name"
 
-Public Const ERR_ID_SCENARIO_SYNTAX_ERROR& = vbError + 6010
+Public Const ERR_ID_FEATURE_SYNTAX_ERROR& = vbError + 6010
+Public Const ERR_ID_SCENARIO_SYNTAX_ERROR& = vbError + 6012
 Public Const ERR_ID_STEP_IS_STATUS_PENDING& = vbError + 6020
 Public Const ERR_ID_STEP_IS_STATUS_MISSING& = vbError + 6030
 Public Const ERR_ID_EXPECTATION_STATUS_FAILED& = vbObjectError + 6500

@@ -19,3 +19,4 @@ Public Session As TSession
 Public Duration As Long
 Public RunStatistics As Collection
 Public StatisticResults As String
+Public parse_error As String

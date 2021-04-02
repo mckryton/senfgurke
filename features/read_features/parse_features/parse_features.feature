@@ -19,7 +19,7 @@ Ability: parse features
           without a feature keyword
         """
       When the feature is parsed
-      Then the parsing results in the error message "Feature lacks feature keyword at the beginning"
+      Then the error "Feature lacks feature keyword at the beginning" was raised
 
     Example: feature with tags
       Given a feature
@@ -28,8 +28,26 @@ Ability: parse features
           Feature: sample feature
         """
       When the feature is parsed
-      Then the parsed feature doesn't contain any error
+      Then parsing didn't cause any errors
 
+    Example: feature with leading empty lines
+      Given a feature
+        """
+
+
+          Feature: sample feature
+        """
+      When the feature is parsed
+      Then parsing didn't cause any errors
+
+    Example: feature with leading comment line
+      Given a feature
+        """
+          # this is a comment
+          Feature: sample feature
+        """
+      When the feature is parsed
+      Then parsing didn't cause any errors
 
   Rule: leading and trailing whitespace in clause definitions should be ignored
     Feature clauses are limited by lines matching this format

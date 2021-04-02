@@ -32,12 +32,19 @@ End Sub
 
 Public Sub When_the_feature_is_parsed_CEB0ED59F01F()
     'When the feature is parsed
+    TStepVars.parse_error = vbNullString
+    On Error GoTo parse_error
     Set m_parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
+    Exit Sub
+    
+parse_error:
+    TStepVars.parse_error = Err.Description
+    Err.Clear
 End Sub
 
-Public Sub Then_the_parsing_results_in_the_error_message_STR_9AC7D885B797(step_expressions As Collection)
-    'Then the parsing results in the error message {string}
-    TSpec.expect(m_parsed_feature.ErrorStatus).to_be step_expressions(1)
+Public Sub Then_the_error_STR_was_raised_7C9B342540B8(step_expressions As Collection)
+    'Then the error {string} was raised
+    TSpec.expect(TStepVars.parse_error).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981()
@@ -76,9 +83,9 @@ Public Sub Then_the_parsed_features_contains_an_example_7B67F2AF5933()
     Set TStepVars.example = m_parsed_feature.sections(1)
 End Sub
 
-Public Sub Then_the_parsed_feature_doesnt_contain_any_error_EB00DB92B133()
-    'Then the parsed feature doesn't contain any error
-    TSpec.expect(m_parsed_feature.ErrorStatus).to_be vbNullString
+Public Sub Then_parsing_didnt_cause_any_errors_95DC5E1A0DA5()
+    'Then parsing didn't cause any errors
+    TSpec.expect(TStepVars.parse_error).to_be vbNullString
 End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_with_tw_5E84053FD2C3()
@@ -89,5 +96,10 @@ End Sub
 Public Sub Then_the_Given_step_is_assigned_to_the_feature_9078F8233D0D()
     'Then the Given step is assigned to the feature
     TSpec.expect(m_parsed_feature.Background.Steps(1).OriginalStepDefinition).to_be "Given one step"
+End Sub
+
+Public Sub Then_a_feature_named_STR_is_parsed_2E9486C04330(step_expressions As Collection)
+    'Then a feature named {string} is parsed
+    TSpec.expect(m_parsed_feature.Name).to_be step_expressions(1)
 End Sub
 

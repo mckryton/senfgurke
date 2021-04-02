@@ -14,7 +14,6 @@ Dim m_feature_name As String
 Dim m_feature_description As String
 Dim m_sections As Collection
 Dim m_feature_tags As Collection
-Dim m_error_status As String
 Dim m_parsed_lines_index As Long
 Dim m_background As TBackground
 
@@ -47,14 +46,6 @@ Public Property Get sections() As Collection
         Set m_sections = New Collection
     End If
     Set sections = m_sections
-End Property
-
-Public Property Get ErrorStatus() As String
-    ErrorStatus = m_error_status
-End Property
-
-Public Property Let ErrorStatus(ByVal error_status As String)
-    m_error_status = error_status
 End Property
 
 Public Property Get tags() As Collection
@@ -105,7 +96,6 @@ Public Sub add_tags(feature_line As String)
 End Sub
 
 Private Sub Class_Initialize()
-    m_error_status = vbNullString
     m_parsed_lines_index = 0
 End Sub
 

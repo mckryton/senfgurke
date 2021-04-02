@@ -43,7 +43,7 @@ Public Sub run_test(Optional filter_tag, Optional report_format, Optional featur
     set_report_format CStr(report_format)
     If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features
     If IsMissing(silent) Then silent = False
-    Set parsed_features = TFeatureParser.parse_loaded_features(features_as_text)
+    Set parsed_features = parse_loaded_features(features_as_text)
     run_features parsed_features, CStr(filter_tag), silent
     Reporter.finish_report silent
     report_statistics RunStatistics, EndTime - StartTime, silent
@@ -100,6 +100,28 @@ Public Function get_duration_as_text(duration_in_ms As Long) As String
     seconds = CLng(Int((duration_in_ms - (minutes * 60000)) / 1000))
     milliseconds = duration_in_ms - (minutes * 60000) - (seconds * 1000)
     get_duration_as_text = minutes & "m " & seconds & "." & Format(milliseconds, "000") & "s"
+End Function
+
+Public Function parse_loaded_features(feature_list As Collection) As Collection
+    
+    Dim gherkin_text As Variant
+    Dim parsed_features As Collection
+    Dim parsed_feature As TFeature
+
+    Set parsed_features = New Collection
+    On Error GoTo parse_error
+    For Each gherkin_text In feature_list
+        Set parsed_feature = parse_feature(CStr(gherkin_text))
+        If Not parsed_feature Is Nothing Then parsed_features.Add parsed_feature
+    Next
+    Set parse_loaded_features = parsed_features
+    Exit Function
+    
+parse_error:
+    If Err.Number = ERR_ID_FEATURE_SYNTAX_ERROR Then
+        'report syntax err
+    End If
+    Resume Next
 End Function
 
 Public Property Get RunStatistics() As Collection

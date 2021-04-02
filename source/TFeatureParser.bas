@@ -14,10 +14,10 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     Dim section_tags As Collection
     
     Set parsed_feature = parse_feature_definition(gherkin_text)
-    Set current_section = Nothing
-    lines = Split(Trim(gherkin_text), vbLf)
-    Set section_tags = clone_tags(parsed_feature.tags)
-    If parsed_feature.ErrorStatus = vbNullString Then
+    If Not parsed_feature Is Nothing Then
+        lines = Split(Trim(gherkin_text), vbLf)
+        Set section_tags = clone_tags(parsed_feature.tags)
+        Set current_section = Nothing
         For line_index = parsed_feature.ParsedLinesIndex + 1 To UBound(lines)
             line = Trim(lines(line_index))
             If is_section_definition_line(line) Then
@@ -111,12 +111,14 @@ Private Function parse_feature_definition(gherkin_text As String) As TFeature
         If is_tag_line(line) Then
             parsed_feature.add_tags line
             line_index = line_index + 1
-        ElseIf is_comment_line(line) Then
+        ElseIf is_comment_line(line) Or Trim(line) = vbNullString Then
             line_index = line_index + 1
         Else
             Set feature_spec = read_section_headline(line)
             If Not CStr(feature_spec("type")) = SECTION_TYPE_FEATURE Then
-                parsed_feature.ErrorStatus = "Feature lacks feature keyword at the beginning"
+                Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                            "TFeatureParser.parse_feature_definition", _
+                            "Feature lacks feature keyword at the beginning"
             Else
                 parsed_feature.Name = CStr(feature_spec("name"))
             End If
@@ -267,18 +269,6 @@ Private Sub add_description(line As String, feature As TFeature)
         End If
     End If
 End Sub
-
-Public Function parse_loaded_features(feature_list As Collection) As Collection
-    
-    Dim gherkin_text As Variant
-    Dim parsed_features As Collection
-
-    Set parsed_features = New Collection
-    For Each gherkin_text In feature_list
-        parsed_features.Add parse_feature(CStr(gherkin_text))
-    Next
-    Set parse_loaded_features = parsed_features
-End Function
 
 Private Function clone_tags(source_tags As Collection) As Collection
 
