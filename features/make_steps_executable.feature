@@ -32,17 +32,17 @@ Ability: make steps executable
        When the function name for the last step is calculated
        Then the function name starts with "When_no_sound_occurs"
 
-
+  @vba-specific
   Rule: step function names replaces not allowed characters from VBA spec with undersigns
 
     Example: basic step with white spaces
 
     Example: step uses special chars and umlauts
 
-
+  @vba-specific
   Rule: step function names end with a hashed value of the original step name
 
-
+  @vba-specific
   Rule: step expressions should appear as 3 uppercase letter abbreviation in function names
     Number and text values are used as parameters (expressions) for step
     function names.
