@@ -1,12 +1,5 @@
 # Features
 
-* [Collect statistics](collect_statistics.feature)
-
-  Several statistics are collected during a test run to learn more about
-  the success of the test run in general. E.g. duration will tell you about
-  the performance of the code under tests. Counting the excuted steps and
-  their results will help you to get an overview about the test run results.
-
 ## Confirm Expectations
 
 * [Confirm collection members](confirm_expectations/confirm_collection_members.feature)
@@ -114,6 +107,13 @@
   took.
 
 ## Run Features
+
+* [Collect statistics](run_features/collect_statistics.feature)
+
+  Several statistics are collected during a test run to learn more about
+  the success of the test run in general. E.g. duration will tell you about
+  the performance of the code under tests. Counting the excuted steps and
+  their results will help you to get an overview about the test run results.
 
 * [Run examples](run_features/run_examples.feature)
 
