@@ -103,7 +103,7 @@ Public Property Let given_value(ByVal pvarGivenValue As Variant)
     On Error GoTo 0
 End Property
 
-Public Sub contains(expected_member As Variant)
+Public Sub contains_member(expected_member As Variant)
 
     Dim matcher_fail_msg As String
     Dim expected_member_text As String
@@ -121,11 +121,11 @@ Public Sub contains(expected_member As Variant)
         
         End If
     ElseIf IsArray(Me.given_value) Then
-        Debug.Print "TSpecExpectation PENDING: contains matcher for array"
+        Debug.Print "TSpecExpectation PENDING: contains_member matcher for array"
     End If
 End Sub
 
-Public Sub includes(include_item As Variant)
+Public Sub includes_text(include_item As Variant)
 
     Dim matcher_fail_msg As String
     

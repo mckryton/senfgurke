@@ -32,7 +32,7 @@ Public Sub When_the_expectation_validates_that_the_collection_808FE2AA1406()
     'When the expectation validates that the collection contains the expected value
     m_expectation_result = True
     On Error GoTo expectation_failed
-    TSpec.expect(m_collection).contains m_expected_value
+    TSpec.expect(m_collection).contains_member m_expected_value
     Exit Sub
     
 expectation_failed:
