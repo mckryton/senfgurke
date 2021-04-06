@@ -9,18 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given__INT_steps_were_reported_as_successful_53AEBD4A25F4(step_expressions As Collection)
-    'Given  {integer} steps were reported as successful
-    
-    Dim index As Integer
-    
-    Set TStepVars.ReportMessages = New Collection
-    For index = 1 To step_expressions(1)
-        'TStepVars.ReportMessages.Add TRun.Session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, "Given a successful step", "OK", vbNullString)
-        TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, "Given a valid step", STATUS_OK, silent:=True
-    Next
-End Sub
-
 Public Sub Given_the_next_step_STR_was_reported_as_missing_07941E95CA02(step_expressions As Collection)
     'And the next step {string} was reported as missing
     TStepVars.ReportMessages.Add TRun.Session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, step_expressions(1), "MISSING", vbNullString)

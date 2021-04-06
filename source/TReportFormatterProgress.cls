@@ -14,33 +14,31 @@ Dim m_reporter As TReport
 Dim m_step_count As Long
 
 
-Public Function process_msg(msg_package As Collection, Optional silent) As String
+Public Function process_msg(msg_package As Collection) As String
 
     Dim message As String
 
-    If IsMissing(silent) Then silent = False
     message = format_msg_content(msg_package)
     Select Case msg_package(REPORT_MSG_TYPE)
         Case REPORT_MSG_TYPE_STEP
             count_step
             If step_counter Mod 80 = 0 And step_counter > 0 Then message = message & vbLf
-            Reporter.print_report message, consecutive:=True, silent:=silent
+            Reporter.print_report message, consecutive:=True
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             Reporter.add_code_template_to_buffer msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_PARSE_ERR
-            Reporter.print_report message, silent:=silent
+            Reporter.print_report message
         Case REPORT_MSG_TYPE_STATS
             message = vbLf & message
-            Reporter.print_report message, silent:=silent
+            Reporter.print_report message
     End Select
     process_msg = message
 End Function
 
-Public Function format_msg_content(msg_package As Collection, Optional silent) As String
+Public Function format_msg_content(msg_package As Collection) As String
     
     Dim formatted_msg As String
     
-    If IsMissing(silent) Then silent = False
     Select Case msg_package(REPORT_MSG_TYPE)
         Case REPORT_MSG_TYPE_STEP
             formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))

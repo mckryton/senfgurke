@@ -70,8 +70,9 @@ Public Sub When_the_step_is_executed_CEB06B444334()
     
     Set step_runner = New TStepRunner
     Set TStepVars.Session = New TSession
+    TStepVars.Session.Reporter.enable_silent_mode
     step_runner.setup TStepVars.Session
-    m_step_result = step_runner.run_step(TStepVars.example_step, silent:=True)
+    m_step_result = step_runner.run_step(TStepVars.example_step)
 End Sub
 
 Public Sub When_the_code_template_for_the_step_implementation_7D39D6705DD8()

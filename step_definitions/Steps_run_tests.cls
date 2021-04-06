@@ -24,7 +24,8 @@ End Sub
 Public Sub When_Senfgurke_executes_the_feature_7D772B9CDDDE()
     'When Senfgurke executes the feature
     Set TStepVars.Session = New TSession
-    TStepVars.Session.run_test features_as_text:=TStepVars.loaded_features, silent:=True
+    TStepVars.Session.Reporter.enable_silent_mode
+    TStepVars.Session.run_test features_as_text:=TStepVars.loaded_features
 End Sub
 
 Public Sub Then_the_error_STR_is_reported_80FDB77BCB22(step_expressions As Collection)

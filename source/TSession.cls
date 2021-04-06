@@ -34,7 +34,7 @@ Public Property Let Reporter(ByVal new_reporter As TReport)
     Set Reporter = new_reporter
 End Property
 
-Public Sub run_test(Optional filter_tag, Optional report_format, Optional features_as_text As Collection, Optional silent As Boolean)
+Public Sub run_test(Optional filter_tag, Optional report_format, Optional features_as_text As Collection)
 
     Dim parsed_features As Collection
 
@@ -42,29 +42,27 @@ Public Sub run_test(Optional filter_tag, Optional report_format, Optional featur
     If IsMissing(report_format) Then report_format = "verbose"
     set_report_format CStr(report_format)
     If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features
-    If IsMissing(silent) Then silent = False
-    Set parsed_features = parse_loaded_features(features_as_text, silent)
-    run_features parsed_features, CStr(filter_tag), silent
-    Reporter.finish_report silent
-    report_statistics RunStatistics, EndTime - StartTime, silent
+    Set parsed_features = parse_loaded_features(features_as_text)
+    run_features parsed_features, CStr(filter_tag)
+    Reporter.finish_report
+    report_statistics RunStatistics, EndTime - StartTime
     TConfig.StepImplementations = Nothing
 End Sub
 
-Public Sub run_features(parsed_features As Collection, Optional filter_tag, Optional silent)
+Public Sub run_features(parsed_features As Collection, Optional filter_tag)
 
     Dim parsed_feature As Variant
     Dim feature As TFeature
     Dim feature_runner As TFeatureRunner
     
     If IsMissing(filter_tag) Then filter_tag = vbNullString
-    If IsMissing(silent) Then silent = False
     Set feature_runner = New TFeatureRunner
     feature_runner.setup Me
     StartTime = ExtraVBA.get_unix_timestamp(Now, Timer)
     For Each parsed_feature In parsed_features
         'cast Variant to TFeature
         Set feature = parsed_feature
-        RunStatistics.Add feature_runner.run_feature(feature, filter_tag:=CStr(filter_tag), silent:=silent)
+        RunStatistics.Add feature_runner.run_feature(feature, filter_tag:=CStr(filter_tag))
     Next
     EndTime = ExtraVBA.get_unix_timestamp(Now, Timer)
 End Sub
@@ -102,13 +100,12 @@ Public Function get_duration_as_text(duration_in_ms As Long) As String
     get_duration_as_text = minutes & "m " & seconds & "." & Format(milliseconds, "000") & "s"
 End Function
 
-Public Function parse_loaded_features(feature_list As Collection, Optional silent As Boolean) As Collection
+Public Function parse_loaded_features(feature_list As Collection) As Collection
     
     Dim loaded_feature As Variant
     Dim parsed_features As Collection
     Dim parsed_feature As TFeature
 
-    If IsMissing(silent) Then silent = False
     Set parsed_features = New Collection
     On Error GoTo parse_error
     For Each loaded_feature In feature_list
@@ -121,7 +118,7 @@ Public Function parse_loaded_features(feature_list As Collection, Optional silen
 parse_error:
     If Err.Number = ERR_ID_FEATURE_SYNTAX_ERROR Then
         Reporter.report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
-                        & loaded_feature("origin") & "'", err_msg:=Err.Description, silent:=silent
+                        & loaded_feature("origin") & "'", err_msg:=Err.Description
     End If
     Resume Next
 End Function
@@ -188,13 +185,12 @@ Public Function get_step_statistics(run_statistics As Collection) As String
     get_step_statistics = step_results
 End Function
 
-Public Sub report_statistics(run_statistics As Collection, run_duration As Long, Optional silent)
+Public Sub report_statistics(run_statistics As Collection, run_duration As Long)
 
     Dim report_msg As String
     
-    If IsMissing(silent) Then silent = False
     report_msg = get_step_statistics(run_statistics) & vbLf _
                     & get_duration_as_text(run_duration)
-    Reporter.report REPORT_MSG_TYPE_STATS, report_msg, silent:=silent
+    Reporter.report REPORT_MSG_TYPE_STATS, report_msg
 End Sub
 

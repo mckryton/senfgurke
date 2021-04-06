@@ -9,10 +9,10 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_report_formatter As Variant
-Dim m_console_output As String
-Dim m_err_buffer As String
-Dim m_code_template_buffer As Collection
+Private report_out As Variant
+Private m_report_formatter As Variant
+Private m_err_buffer As String
+Private m_code_template_buffer As Collection
 
 Public Sub add_err_msg_to_buffer(err_msg As String)
     If Not m_err_buffer = vbNullString Then m_err_buffer = m_err_buffer & vbLf
@@ -30,19 +30,11 @@ Public Sub add_code_template_to_buffer(code_template As String)
     End If
 End Sub
 
-Public Sub print_err_buffer(Optional silent)
-    
-    If IsMissing(silent) Then silent = False
-    If m_err_buffer <> vbNullString Then
-        If silent Then
-            ConsoleOutput = ConsoleOutput & vbLf & m_err_buffer & vbLf
-        Else
-            Debug.Print vbLf & m_err_buffer
-        End If
-    End If
+Public Sub print_err_buffer()
+    report_out.print_out vbLf & m_err_buffer
 End Sub
 
-Public Sub report(message_type As String, message_content As String, Optional status, Optional err_msg, Optional silent)
+Public Sub report(message_type As String, message_content As String, Optional status, Optional err_msg)
 
     Dim msg_package As Collection
     
@@ -59,7 +51,7 @@ Public Sub report(message_type As String, message_content As String, Optional st
             msg_package.Add err_msg, REPORT_MSG_ERR
         End If
         Set msg_package = build_msg_package(message_type, message_content, status, err_msg)
-        Report_Formatter.process_msg msg_package, silent:=silent
+        Report_Formatter.process_msg msg_package
         Set msg_package = Nothing
     End If
 End Sub
@@ -93,21 +85,12 @@ Public Property Let Report_Formatter(ByVal new_report_formatter As Variant)
     m_report_formatter.Reporter = Me
 End Property
 
-Public Sub print_code_templates_for_missing_steps(Optional silent)
+Public Sub print_code_templates_for_missing_steps()
 
     Dim code_templates As String
     
-    If IsMissing(silent) Then silent = False
     code_templates = get_code_templates_for_missing_steps
-    If code_templates <> vbNullString Then
-        If silent Then
-            ConsoleOutput = vbLf & vbLf & ConsoleOutput & code_templates & vbLf
-        Else
-            Debug.Print
-            Debug.Print
-            Debug.Print code_templates
-        End If
-    End If
+    If code_templates <> vbNullString Then report_out.print_out code_templates
 End Sub
 
 Public Function get_code_templates_for_missing_steps() As String
@@ -128,31 +111,30 @@ End Function
 
 Public Property Get ConsoleOutput() As String
     'this is for testing and debugging only, because you can't read the content of the immediate window
-    ConsoleOutput = m_console_output
+    ConsoleOutput = report_out.console_output
 End Property
 
-Public Property Let ConsoleOutput(ByVal new_console_output As String)
-    'this is for testing and debugging only, because you can't read the content of the immediate window
-    m_console_output = new_console_output
-End Property
+Public Sub print_report(report_output As String, Optional consecutive As Boolean)
 
-Public Sub print_report(report_output As String, Optional consecutive, Optional silent)
-     
-    If IsMissing(silent) Then silent = False
     If IsMissing(consecutive) Then consecutive = False
-    If silent Then
-        ConsoleOutput = ConsoleOutput & report_output
-        If Not consecutive Then ConsoleOutput = ConsoleOutput & vbLf
-    ElseIf consecutive Then
-        Debug.Print report_output;
-    Else
-        Debug.Print report_output
-    End If
+    report_out.print_out report_output, consecutive
 End Sub
 
-Public Sub finish_report(Optional silent)
-    
-    If IsMissing(silent) Then silent = False
-    print_err_buffer silent
-    print_code_templates_for_missing_steps silent
+Public Sub finish_report()
+    print_err_buffer
+    print_code_templates_for_missing_steps
+End Sub
+
+Public Sub enable_silent_mode()
+    Set report_out = Nothing
+    Set report_out = New TReportOutMockConsole
+End Sub
+
+Private Sub Class_Initialize()
+    'send output to the direct window by default
+    Set report_out = New TReportOutDirectWindow
+End Sub
+
+Private Sub Class_Terminate()
+    Set report_out = Nothing
 End Sub

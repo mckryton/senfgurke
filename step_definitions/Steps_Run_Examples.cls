@@ -60,8 +60,9 @@ Public Sub When_the_example_is_executed_8C8F015690BC()
     
     Set feature_runner = New TFeatureRunner
     Set TStepVars.Session = New TSession
+    TStepVars.Session.Reporter.enable_silent_mode
     feature_runner.setup TStepVars.Session
-    Set m_feature_statistics = feature_runner.run_feature(m_parsed_feature, silent:=True)
+    Set m_feature_statistics = feature_runner.run_feature(m_parsed_feature)
 End Sub
 
 Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(step_expressions As Collection)
@@ -72,9 +73,10 @@ Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(step_
     
     Set feature_runner = New TFeatureRunner
     Set TStepVars.Session = New TSession
+    TStepVars.Session.Reporter.enable_silent_mode
     feature_runner.setup TStepVars.Session
     Set parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
-    Set m_feature_statistics = feature_runner.run_feature(parsed_feature, filter_tag:=step_expressions(1), silent:=True)
+    Set m_feature_statistics = feature_runner.run_feature(parsed_feature, filter_tag:=step_expressions(1))
 End Sub
 
 Public Sub Then_step_statistics_is_STR_121A2677FC0F(step_expressions As Collection)

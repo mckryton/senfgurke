@@ -11,17 +11,17 @@ Option Explicit
 
 Public Sub Given_a_feature_STR_was_reported_B5EB56508778(step_expressions As Collection)
     'Given a feature {string} was reported
-    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, "Feature: " & step_expressions(1), silent:=True
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, "Feature: " & step_expressions(1)
 End Sub
 
 Public Sub Given_a_rule_STR_was_reported_A5D68D23D5AE(step_expressions As Collection)
     'Given a rule {string} was reported
-    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_RULE, "Rule: " & step_expressions(1), silent:=True
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_RULE, "Rule: " & step_expressions(1)
 End Sub
 
 Public Sub Given_an_example_STR_was_reported_9C2B7078D5AE(step_expressions As Collection)
     'Given an example {string} was reported
-    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_EXAMPLE_TITLE, "Example: " & step_expressions(1), silent:=True
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_EXAMPLE_TITLE, "Example: " & step_expressions(1)
 End Sub
 
 Public Sub Given_a_description_line_STR_6B57E8EB7A49(step_expressions As Collection)
@@ -34,12 +34,12 @@ Public Sub When_a_step_STR_followed_by_a_docstring_STR_is_rep_8C80B341FF25(step_
     Dim step_name As String
     
     step_name = step_expressions(1) & vbLf & """""""" & vbLf & step_expressions(2) & vbLf & """"""""
-    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_name, step_expressions(3), silent:=True
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_name, step_expressions(3)
 End Sub
 
 Public Sub When_the_execution_of_the_first_example_step_is_re_7D6F60A0AA78()
     'When the execution of the first example step is reported
-    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, "Given sample step", STATUS_OK, silent:=True
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, "Given sample step", STATUS_OK
 End Sub
 
 Public Sub When_the_description_line_is_formatted_417E5E95BA43()

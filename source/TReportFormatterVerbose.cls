@@ -15,11 +15,10 @@ Dim m_current_example As String
 Dim m_step_implementation_templates As Collection
 Dim m_reporter As TReport
 
-Public Function process_msg(msg_package As Collection, Optional silent) As String
+Public Function process_msg(msg_package As Collection) As String
 
     Dim message As String
 
-    If IsMissing(silent) Then silent = False
     message = format_msg_content(msg_package)
     process_msg = vbNullString
     Select Case msg_package(REPORT_MSG_TYPE)
@@ -35,7 +34,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             message = Join(Split(CurrentFeature & CurrentRule & CurrentExample & message, vbLf), vbLf)
             If CurrentFeature = vbNullString And (CurrentRule <> vbNullString Or CurrentExample <> vbNullString) Then message = vbLf & message
             'report feature names, rules and example titles only when example steps are reported
-            Reporter.print_report message, silent:=silent
+            Reporter.print_report message
             process_msg = message
             CurrentFeature = vbNullString
             CurrentRule = vbNullString
@@ -43,7 +42,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             Reporter.add_code_template_to_buffer message
         Case REPORT_MSG_TYPE_STATS, REPORT_MSG_TYPE_PARSE_ERR
-            Reporter.print_report message, silent:=silent
+            Reporter.print_report message
     End Select
 End Function
 

@@ -46,12 +46,14 @@ End Sub
 Public Sub When_the_feature_is_executed_and_statistics_are_co_0BF6FCF4961B()
     'When the feature is executed and statistics are collected
     Set TStepVars.Session = New TSession
-    TStepVars.Session.run_features TStepVars.ParsedFeatures, silent:=True
+    TStepVars.Session.Reporter.enable_silent_mode
+    TStepVars.Session.run_features TStepVars.ParsedFeatures
 End Sub
 
 Public Sub When_the_duration_is_calculated_4FCC027398DA()
     'When the duration is calculated
     Set TStepVars.Session = New TSession
+    TStepVars.Session.Reporter.enable_silent_mode
     TStepVars.ReportOutput = TStepVars.Session.get_duration_as_text(TStepVars.Duration)
 End Sub
 
@@ -66,12 +68,14 @@ Public Sub When_a_test_runs_only_this_feature_B2921A6C96BB()
     Set loaded_features = New Collection
     loaded_features.Add loaded_feature
     Set TStepVars.Session = New TSession
-    TStepVars.Session.run_test features_as_text:=loaded_features, silent:=True
+    TStepVars.Session.Reporter.enable_silent_mode
+    TStepVars.Session.run_test features_as_text:=loaded_features
 End Sub
 
 Public Sub When_the_results_for_the_steps_are_summed_up_EE8E882F4756()
     'When the results for the steps are summed up
     Set TStepVars.Session = New TSession
+    TStepVars.Session.Reporter.enable_silent_mode
     TStepVars.StatisticResults = TStepVars.Session.get_step_statistics(TStepVars.RunStatistics)
 End Sub
 

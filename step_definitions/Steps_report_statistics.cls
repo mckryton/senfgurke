@@ -38,5 +38,5 @@ End Sub
 
 Public Sub When_the_statistics_are_reported_418C385A7E0B()
     'When the statistics are reported
-    TStepVars.Session.report_statistics TStepVars.RunStatistics, TStepVars.Duration, silent:=True
+    TStepVars.Session.report_statistics TStepVars.RunStatistics, TStepVars.Duration
 End Sub

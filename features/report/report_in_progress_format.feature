@@ -90,8 +90,7 @@ Ability: Report in progress format
   Rule: verbose formatter should add a line break before every 81st step
 
     Example: report 85 steps
-      Given 85 steps were reported as successful
-       When all steps were reported and the report is finished
+       When 85 steps are reported as successful
        Then the resulting report output is
         """
           ................................................................................

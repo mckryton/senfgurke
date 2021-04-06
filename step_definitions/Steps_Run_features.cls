@@ -46,9 +46,10 @@ Public Sub When_the_feature_is_executed_8C8F454A90BC()
     
     Set feature_runner = New TFeatureRunner
     Set TStepVars.Session = New TSession
+    TStepVars.Session.Reporter.enable_silent_mode
     feature_runner.setup TStepVars.Session
     Set parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
-    Set TStepVars.feature_statistics = feature_runner.run_feature(parsed_feature, silent:=True)
+    Set TStepVars.feature_statistics = feature_runner.run_feature(parsed_feature)
 End Sub
 
 Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE()
