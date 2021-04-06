@@ -53,6 +53,6 @@ End Sub
 
 Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE()
     'Then the background step is executed once before each example
-    TSpec.expect(TStepVars.feature_statistics(1)).contains Array("OK", "Given a background step")
-    TSpec.expect(TStepVars.feature_statistics(2)).contains Array("OK", "Given a background step")
+    TSpec.expect(TStepVars.feature_statistics(1)).contains_member Array("OK", "Given a background step")
+    TSpec.expect(TStepVars.feature_statistics(2)).contains_member Array("OK", "Given a background step")
 End Sub

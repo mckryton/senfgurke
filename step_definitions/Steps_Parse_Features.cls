@@ -32,19 +32,19 @@ End Sub
 
 Public Sub When_the_feature_is_parsed_CEB0ED59F01F()
     'When the feature is parsed
-    TStepVars.parse_error = vbNullString
+    Set TStepVars.parse_error = New Collection
     On Error GoTo parse_error
     Set m_parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
     Exit Sub
     
 parse_error:
-    TStepVars.parse_error = Err.Description
+    TStepVars.parse_error.Add Err.Description, "err_description"
     Err.Clear
 End Sub
 
 Public Sub Then_the_error_STR_was_raised_7C9B342540B8(step_expressions As Collection)
     'Then the error {string} was raised
-    TSpec.expect(TStepVars.parse_error).to_be step_expressions(1)
+    TSpec.expect(TStepVars.parse_error("err_description")).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981()
@@ -85,7 +85,7 @@ End Sub
 
 Public Sub Then_parsing_didnt_cause_any_errors_95DC5E1A0DA5()
     'Then parsing didn't cause any errors
-    TSpec.expect(TStepVars.parse_error).to_be vbNullString
+    TSpec.expect(TStepVars.parse_error.Count).to_be 0
 End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_with_tw_5E84053FD2C3()

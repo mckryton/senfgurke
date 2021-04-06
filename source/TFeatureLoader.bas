@@ -21,6 +21,7 @@ Public Function load_features(Optional feature_dir) As Collection
     Dim subdir_features As Collection
     Dim subdir As Variant
     Dim subdirs As Collection
+    Dim loaded_feature As Collection
     
     If IsMissing(feature_dir) Then
         feature_dir = get_feature_dir(senfgurke_workbook.Path)
@@ -33,7 +34,10 @@ Public Function load_features(Optional feature_dir) As Collection
     Do While dir_entry <> vbNullString
         attributes = GetAttr(feature_dir & dir_entry)
         If attributes <> vbHidden And attributes <> vbSystem And Right(dir_entry, 8) = ".feature" Then
-            features.Add read_feature(feature_dir & dir_entry)
+            Set loaded_feature = New Collection
+            loaded_feature.Add read_feature(feature_dir & dir_entry), "feature_text"
+            loaded_feature.Add feature_dir & dir_entry, "origin"
+            features.Add loaded_feature
         End If
         dir_entry = Dir()
     Loop

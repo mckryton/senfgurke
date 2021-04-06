@@ -34,7 +34,7 @@ Public Property Let Reporter(ByVal new_reporter As TReport)
     Set Reporter = new_reporter
 End Property
 
-Public Sub run_test(Optional filter_tag, Optional report_format, Optional features_as_text As Collection, Optional silent)
+Public Sub run_test(Optional filter_tag, Optional report_format, Optional features_as_text As Collection, Optional silent As Boolean)
 
     Dim parsed_features As Collection
 
@@ -43,7 +43,7 @@ Public Sub run_test(Optional filter_tag, Optional report_format, Optional featur
     set_report_format CStr(report_format)
     If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features
     If IsMissing(silent) Then silent = False
-    Set parsed_features = parse_loaded_features(features_as_text)
+    Set parsed_features = parse_loaded_features(features_as_text, silent)
     run_features parsed_features, CStr(filter_tag), silent
     Reporter.finish_report silent
     report_statistics RunStatistics, EndTime - StartTime, silent
@@ -102,16 +102,17 @@ Public Function get_duration_as_text(duration_in_ms As Long) As String
     get_duration_as_text = minutes & "m " & seconds & "." & Format(milliseconds, "000") & "s"
 End Function
 
-Public Function parse_loaded_features(feature_list As Collection) As Collection
+Public Function parse_loaded_features(feature_list As Collection, Optional silent As Boolean) As Collection
     
-    Dim gherkin_text As Variant
+    Dim loaded_feature As Variant
     Dim parsed_features As Collection
     Dim parsed_feature As TFeature
 
+    If IsMissing(silent) Then silent = False
     Set parsed_features = New Collection
     On Error GoTo parse_error
-    For Each gherkin_text In feature_list
-        Set parsed_feature = parse_feature(CStr(gherkin_text))
+    For Each loaded_feature In feature_list
+        Set parsed_feature = parse_feature(CStr(loaded_feature("feature_text")))
         If Not parsed_feature Is Nothing Then parsed_features.Add parsed_feature
     Next
     Set parse_loaded_features = parsed_features
@@ -119,7 +120,8 @@ Public Function parse_loaded_features(feature_list As Collection) As Collection
     
 parse_error:
     If Err.Number = ERR_ID_FEATURE_SYNTAX_ERROR Then
-        'report syntax err
+        Reporter.report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
+                        & loaded_feature("origin") & "'", err_msg:=Err.Description, silent:=silent
     End If
     Resume Next
 End Function

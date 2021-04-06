@@ -27,6 +27,8 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             Reporter.print_report message, consecutive:=True, silent:=silent
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             Reporter.add_code_template_to_buffer msg_package(REPORT_MSG_CONTENT)
+        Case REPORT_MSG_TYPE_PARSE_ERR
+            Reporter.print_report message, silent:=silent
         Case REPORT_MSG_TYPE_STATS
             message = vbLf & message
             Reporter.print_report message, silent:=silent
@@ -46,11 +48,19 @@ Public Function format_msg_content(msg_package As Collection, Optional silent) A
             Reporter.add_code_template_to_buffer msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_STATS
             formatted_msg = vbLf & msg_package(REPORT_MSG_CONTENT)
+        Case REPORT_MSG_TYPE_PARSE_ERR
+            formatted_msg = format_parse_error(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_ERR))
         Case Else
             'msg doesn't need to be formatted
             formatted_msg = msg_package(REPORT_MSG_CONTENT)
     End Select
     format_msg_content = formatted_msg
+End Function
+
+Public Function format_parse_error(err_msg As String, err_description As String) As String
+    format_parse_error = "Error: " & err_msg & vbLf _
+                             & err_description
+'                            & Space$(2) & err_description
 End Function
 
 Public Function format_step(step_name As String, status As String, err_msg As String) As String

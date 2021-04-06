@@ -42,7 +42,7 @@ Public Function process_msg(msg_package As Collection, Optional silent) As Strin
             CurrentExample = vbNullString
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             Reporter.add_code_template_to_buffer message
-        Case REPORT_MSG_TYPE_STATS
+        Case REPORT_MSG_TYPE_STATS, REPORT_MSG_TYPE_PARSE_ERR
             Reporter.print_report message, silent:=silent
     End Select
 End Function
@@ -60,6 +60,8 @@ Public Function format_msg_content(msg_package As Collection) As String
             formatted_msg = format_rule(msg_package(REPORT_MSG_CONTENT))
         Case REPORT_MSG_TYPE_EXAMPLE_TITLE
             formatted_msg = format_example_title(msg_package(REPORT_MSG_CONTENT))
+        Case REPORT_MSG_TYPE_PARSE_ERR
+            formatted_msg = format_parse_error(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_ERR))
         Case REPORT_MSG_TYPE_STEP
             formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))
         Case REPORT_MSG_TYPE_STATS
@@ -100,6 +102,12 @@ End Function
 
 Public Function format_feature_name(feature_name As String) As String
     format_feature_name = vbLf & "Feature: " & feature_name
+End Function
+
+Public Function format_parse_error(err_msg As String, err_description As String) As String
+    format_parse_error = "Error: " & err_msg & vbLf _
+                             & err_description
+'                            & Space$(2) & err_description
 End Function
 
 Public Function format_feature_description(Description As String) As String

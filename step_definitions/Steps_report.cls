@@ -32,6 +32,22 @@ Public Sub Given_a_step_STR_was_reported_with_status_STR_4E1E2C095DFA(step_expre
     TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), silent:=True
 End Sub
 
+Public Sub Given_a_parse_error_STR_FF6B36833425(step_expressions As Collection)
+    'Given a parse error {string}
+    Set TStepVars.parse_error = New Collection
+    TStepVars.parse_error.Add step_expressions(1), "err_msg"
+End Sub
+
+Public Sub Given_the_error_description_is_STR_73D44E8E84D9(step_expressions As Collection)
+    'And the error description is {string}
+    TStepVars.parse_error.Add step_expressions(1), "err_description"
+End Sub
+
+Public Sub When_the_parse_error_is_reported_40CCF87A8732()
+    'When the parse error is reported
+    TStepVars.Session.Reporter.report REPORT_MSG_TYPE_PARSE_ERR, TStepVars.parse_error("err_msg"), err_msg:=TStepVars.parse_error("err_description"), silent:=True
+End Sub
+
 Public Sub When_a_step_STR_is_reported_with_status_STR_22E595BD5DFA(step_expressions As Collection)
     'When a step {string} is reported with status {string}
     TStepVars.Session.Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), silent:=True

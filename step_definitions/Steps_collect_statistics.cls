@@ -58,12 +58,15 @@ End Sub
 Public Sub When_a_test_runs_only_this_feature_B2921A6C96BB()
     'When a test runs only this feature
     
-    Dim features_as_text As Collection
+    Dim loaded_features As Collection
+    Dim loaded_feature As Collection
     
-    Set features_as_text = New Collection
-    features_as_text.Add TStepVars.gherkin_text
+    Set loaded_feature = New Collection
+    loaded_feature.Add TStepVars.gherkin_text, "feature_text"
+    Set loaded_features = New Collection
+    loaded_features.Add loaded_feature
     Set TStepVars.Session = New TSession
-    TStepVars.Session.run_test features_as_text:=features_as_text, silent:=True
+    TStepVars.Session.run_test features_as_text:=loaded_features, silent:=True
 End Sub
 
 Public Sub When_the_results_for_the_steps_are_summed_up_EE8E882F4756()

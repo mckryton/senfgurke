@@ -137,6 +137,13 @@
   Steps are the glue that connects features with code. Every step can have a
   matching function (step implementation). Executing those functions will
 
+* [Run tests](run_tests.feature)
+
+  Executing or running tests using Senfgurke happens in 2 steps. First Senfgurke
+  will read all the features form text files using the suffix .feature. It will
+  turn the structured content of those files into an executable setup by
+  interpreting (parsing) the Gherkin language of the feature files.
+
 ## Support Functions
 
 * [Get unix time](support_functions/get_unix_time.feature)
