@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private report_out As Variant
+Private report_out As TReportOut
 Private m_report_formatter As Variant
 Private m_err_buffer As String
 Private m_code_template_buffer As Collection
@@ -31,7 +31,7 @@ Public Sub add_code_template_to_buffer(code_template As String)
 End Sub
 
 Public Sub print_err_buffer()
-    report_out.print_out vbLf & m_err_buffer
+    report_out.PrintOut vbLf & m_err_buffer
 End Sub
 
 Public Sub report(message_type As String, message_content As String, Optional status, Optional err_msg)
@@ -90,7 +90,7 @@ Public Sub print_code_templates_for_missing_steps()
     Dim code_templates As String
     
     code_templates = get_code_templates_for_missing_steps
-    If code_templates <> vbNullString Then report_out.print_out code_templates
+    If code_templates <> vbNullString Then report_out.PrintOut code_templates
 End Sub
 
 Public Function get_code_templates_for_missing_steps() As String
@@ -111,13 +111,12 @@ End Function
 
 Public Property Get ConsoleOutput() As String
     'this is for testing and debugging only, because you can't read the content of the immediate window
-    ConsoleOutput = report_out.console_output
+    ConsoleOutput = report_out.ConsoleOutput
 End Property
 
 Public Sub print_report(report_output As String, Optional consecutive As Boolean)
-
     If IsMissing(consecutive) Then consecutive = False
-    report_out.print_out report_output, consecutive
+    report_out.PrintOut report_output, consecutive
 End Sub
 
 Public Sub finish_report()
@@ -131,8 +130,8 @@ Public Sub enable_silent_mode()
 End Sub
 
 Private Sub Class_Initialize()
-    'send output to the direct window by default
-    Set report_out = New TReportOutDirectWindow
+    'send output to the immediate window by default
+    Set report_out = New TReportOutImmediateWindow
 End Sub
 
 Private Sub Class_Terminate()
