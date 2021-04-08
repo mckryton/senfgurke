@@ -106,16 +106,16 @@
   to make the next test run faster, it is also good to know how long the test
   took.
 
-## Run Features
+## Run Tests
 
-* [Collect statistics](run_features/collect_statistics.feature)
+* [Collect statistics](run_tests/collect_statistics.feature)
 
   Several statistics are collected during a test run to learn more about
   the success of the test run in general. E.g. duration will tell you about
   the performance of the code under tests. Counting the excuted steps and
   their results will help you to get an overview about the test run results.
 
-* [Run examples](run_features/run_examples.feature)
+* [Run examples](run_tests/run_examples.feature)
 
   Examples are the building blocks for describing the application under test.
   Running examples means that Senfgurke will try to find and execute a
@@ -123,7 +123,7 @@
   The result of the executed step will tell you if the application works as
   expected (see feature "run steps" for more).
 
-* [Run features](run_features/run_features.feature)
+* [Run features](run_tests/run_features.feature)
 
   A features represents the business intention on a more abstract level. The
   feature description should tell you why the feature was implemented in the
@@ -132,12 +132,12 @@
   feature for more) and executing all the steps from those examples (see run
   steps feature for more).
 
-* [Run steps](run_features/run_steps.feature)
+* [Run steps](run_tests/run_steps.feature)
 
   Steps are the glue that connects features with code. Every step can have a
   matching function (step implementation). Executing those functions will
 
-* [Run tests](run_tests.feature)
+* [Run tests](run_tests/run_tests.feature)
 
   Executing or running tests using Senfgurke happens in 2 steps. First Senfgurke
   will read all the features form text files using the suffix .feature. It will
