@@ -79,25 +79,29 @@ Ability: Report in verbose format
 
     Example: Missing step
       Given a code template for a missing step was reported as
-      """
-Public Sub Given_a_missing_step_6A350234BFE5()
-  'And a missing step
-  pending
-End Sub
-      """
+        """
+          Public Sub Given_a_missing_step_6A350234BFE5()
+            'And a missing step
+            pending
+          End Sub
+        """
        When the report will report code templates for the missing steps
        Then the resulting report output is
-     """
+        """
 
 
-You can implement step definitions for undefined steps with these snippets:
+        You can implement step definitions for undefined steps with these snippets:
 
-Public Sub Given_a_missing_step_6A350234BFE5()
- 'And a missing step
- pending
-End Sub
+        Public Sub Given_a_missing_step_6A350234BFE5()
+         'And a missing step
+         pending
+        End Sub
 
-     """
+        If the function is already in place, the cause for this message could be:
+        * the step implementation class is not registered in TConfig.StepImplementations
+        * the code inside the step function tries to access a non-existing method or property
+
+        """
 
      #Todo: add example for multiple missing steps in more than one scenario
 

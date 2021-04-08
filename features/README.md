@@ -128,9 +128,9 @@
   A features represents the business intention on a more abstract level. The
   feature description should tell you why the feature was implemented in the
   first place.
-  Senfgurke runs feature by finding all the examples (see run examples
-  feature for more) and executing all the steps from those examples (see run
-  steps feature for more).
+  Senfgurke runs features by finding all the examples (see the run examples
+  feature for more) and executes all the steps from those examples (see the
+  run steps feature for more).
 
 * [Run steps](run_tests/run_steps.feature)
 
