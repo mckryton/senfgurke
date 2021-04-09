@@ -18,25 +18,21 @@ Public Sub Given_one_example_in_this_run_had_INT_passed_INT_f_800581B31566(step_
     'And one example in this run had {integer} passed, {integer} failed, {integer} missing and {integer} pending steps
     Dim index As Integer
    
-    Set TStepVars.RunStatistics = New Collection
-    TStepVars.RunStatistics.Add New Collection          'log feature
-    TStepVars.RunStatistics(1).Add New Collection       'log example
-    TStepVars.RunStatistics(1)(1).Add "dummy example"   'log example name
     For index = 1 To step_expressions(1)
-        TStepVars.RunStatistics(1)(1).Add Array(STATUS_OK, "dummy step name")
+        TStepVars.Session.statistics.count_event LOG_TYPE_STEP, STATUS_OK
     Next
     For index = 1 To step_expressions(2)
-        TStepVars.RunStatistics(1)(1).Add Array(STATUS_FAIL, "dummy step name")
+        TStepVars.Session.statistics.count_event LOG_TYPE_STEP, STATUS_FAIL
     Next
     For index = 1 To step_expressions(3)
-        TStepVars.RunStatistics(1)(1).Add Array(STATUS_MISSING, "dummy step name")
+        TStepVars.Session.statistics.count_event LOG_TYPE_STEP, STATUS_MISSING
     Next
     For index = 1 To step_expressions(4)
-        TStepVars.RunStatistics(1)(1).Add Array(STATUS_PENDING, "dummy step name")
+        TStepVars.Session.statistics.count_event LOG_TYPE_STEP, STATUS_PENDING
     Next
 End Sub
 
 Public Sub When_the_statistics_are_reported_418C385A7E0B()
     'When the statistics are reported
-    TStepVars.Session.report_statistics TStepVars.RunStatistics, TStepVars.Duration
+    TStepVars.Session.report_statistics TStepVars.Duration
 End Sub

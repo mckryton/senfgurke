@@ -14,3 +14,17 @@ Ability: run tests
        When Senfgurke executes the feature
        Then the error "Feature lacks feature keyword at the beginning" is reported
         And the name of the feature file is reported as location of the error
+
+
+  Rule: for any given tag execute only those features assigned with the tag
+
+    Example: matching tag assigned to a feature
+      Given a feature tagged with "@sample_tag" with one example
+        And an un-tagged feature with one example
+       When a test is started with "@sample_tag" as parameter
+       Then only the tagged feature is executed
+
+    Example: non-matching tag assigned to a feature
+
+
+    Example: no tags assigned to a feature

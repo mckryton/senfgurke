@@ -181,6 +181,10 @@ Public Function get_unix_timestamp(in_date As Date, in_time As Single) As Long
     get_unix_timestamp = CLng((in_date - unix_ref_date) * 86400 + (in_time * 1000))
 End Function
 
+Public Function get_unix_timestamp_now()
+    get_unix_timestamp_now = get_unix_timestamp(Now, Timer)
+End Function
+
 Public Function trim_linebreaks(input_text As String) As String
 
     Dim result_text As String

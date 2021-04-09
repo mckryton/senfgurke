@@ -46,3 +46,8 @@ Public Const REPORT_MSG_TYPE_STEP$ = "msg_type_step"
 Public Const REPORT_MSG_TYPE_CODE_TEMPLATE$ = "msg_type_code_template"
 Public Const REPORT_MSG_TYPE_STATS$ = "msg_type_stats"
 Public Const REPORT_MSG_TYPE_PARSE_ERR$ = "msg_type_parse_err"
+
+Public Const LOG_TYPE_STEP$ = "log_step"
+Public Const LOG_TYPE_EXAMPLE$ = "log_example"
+Public Const LOG_TYPE_RULE$ = "log_rule"
+Public Const LOG_TYPE_FEATURE$ = "log_feature"

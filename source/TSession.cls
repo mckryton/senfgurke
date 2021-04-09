@@ -12,7 +12,7 @@ Option Explicit
 Dim m_reporter As TReport
 Dim m_start_time As Long
 Dim m_end_time As Long
-Dim m_run_statistics As Collection
+Dim m_statistics As TStatistics
 
 Public Sub set_report_format(report_format As String)
     Select Case report_format
@@ -45,7 +45,7 @@ Public Sub run_test(Optional filter_tag, Optional report_format, Optional featur
     Set parsed_features = parse_loaded_features(features_as_text)
     run_features parsed_features, CStr(filter_tag)
     Reporter.finish_report
-    report_statistics RunStatistics, EndTime - StartTime
+    report_statistics EndTime - StartTime
     TConfig.StepImplementations = Nothing
 End Sub
 
@@ -62,7 +62,7 @@ Public Sub run_features(parsed_features As Collection, Optional filter_tag)
     For Each parsed_feature In parsed_features
         'cast Variant to TFeature
         Set feature = parsed_feature
-        RunStatistics.Add feature_runner.run_feature(feature, filter_tag:=CStr(filter_tag))
+        feature_runner.run_feature feature, filter_tag:=CStr(filter_tag)
     Next
     EndTime = ExtraVBA.get_unix_timestamp(Now, Timer)
 End Sub
@@ -82,11 +82,6 @@ End Property
 Public Property Let EndTime(ByVal new_end_time As Long)
     m_end_time = new_end_time
 End Property
-
-Private Sub Class_Initialize()
-    m_start_time = 0
-    m_end_time = 0
-End Sub
 
 Public Function get_duration_as_text(duration_in_ms As Long) As String
     
@@ -123,74 +118,25 @@ parse_error:
     Resume Next
 End Function
 
-Public Property Get RunStatistics() As Collection
-    If m_run_statistics Is Nothing Then
-        Set m_run_statistics = New Collection
-    End If
-    Set RunStatistics = m_run_statistics
-End Property
-
-Public Property Let RunStatistics(ByVal new_run_statistics As Collection)
-    Set m_run_statistics = new_run_statistics
-End Property
-
-Public Function get_step_statistics(run_statistics As Collection) As String
-    
-    Dim index As Integer
-    Dim states As Variant
-    Dim step_statistics As Collection
-    Dim feature_log As Variant
-    Dim example_log As Variant
-    Dim step_log As Variant
-    Dim step_results As String
-    Dim counter As Long
-    
-    Set step_statistics = New Collection
-    states = Array(STATUS_OK, STATUS_FAIL, STATUS_MISSING, STATUS_PENDING, STATUS_SKIPPED)
-    For index = 0 To UBound(states)
-        step_statistics.Add 0, states(index)
-    Next
-    step_statistics.Add 0, "sum"
-    For Each feature_log In run_statistics
-        For Each example_log In feature_log
-            For Each step_log In example_log
-                If IsArray(step_log) Then
-                    counter = step_statistics(step_log(0)) + 1
-                    step_statistics.Remove step_log(0)
-                    step_statistics.Add counter, step_log(0)
-                    counter = step_statistics("sum") + 1
-                    step_statistics.Remove "sum"
-                    step_statistics.Add counter, "sum"
-                End If
-            Next
-        Next
-    Next
-    step_results = step_statistics("sum") & " steps ("
-    For index = 0 To UBound(states)
-        If step_statistics(states(index)) > 0 Then
-            step_results = step_results & step_statistics(states(index)) & " " & states(index) & ", "
-        End If
-    Next
-    step_results = Replace(step_results, STATUS_OK, "passed")
-    step_results = Replace(step_results, STATUS_FAIL, "failed")
-    step_results = Replace(step_results, STATUS_MISSING, "undefined")
-    step_results = Replace(step_results, STATUS_PENDING, "pending")
-    step_results = Replace(step_results, STATUS_SKIPPED, "skipped")
-    If Right(step_results, 2) = ", " Then step_results = Left(step_results, Len(step_results) - 2)
-    If Right(step_results, 1) = "(" Then
-        step_results = Left(step_results, Len(step_results) - 1)
-    Else
-        step_results = step_results & ")"
-    End If
-    get_step_statistics = step_results
-End Function
-
-Public Sub report_statistics(run_statistics As Collection, run_duration As Long)
+Public Sub report_statistics(run_duration As Long)
 
     Dim report_msg As String
     
-    report_msg = get_step_statistics(run_statistics) & vbLf _
+    report_msg = statistics.get_statistics_summary() & vbLf _
                     & get_duration_as_text(run_duration)
     Reporter.report REPORT_MSG_TYPE_STATS, report_msg
 End Sub
 
+Public Property Get statistics() As TStatistics
+    Set statistics = m_statistics
+End Property
+
+Private Sub Class_Initialize()
+    m_start_time = 0
+    m_end_time = 0
+    Set m_statistics = New TStatistics
+End Sub
+
+Private Sub Class_Terminate()
+    Set m_statistics = Nothing
+End Sub

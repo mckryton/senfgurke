@@ -75,6 +75,10 @@ Public Sub insert_background_steps(background_steps As Collection)
     
     For step_index = background_steps.Count To 1
         Set background_step = background_steps(step_index)
-        Me.Steps.Add background_step, before:=1
+        If Me.Steps.Count > 0 Then
+            Me.Steps.Add background_step, before:=1
+        Else
+            Me.Steps.Add background_step
+        End If
     Next
 End Sub

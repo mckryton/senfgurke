@@ -17,7 +17,6 @@ Public ReportMessages As Collection
 Public CodeTemplate As String
 Public Session As TSession
 Public Duration As Long
-Public RunStatistics As Collection
 Public StatisticResults As String
 Public parse_error As Collection
 Public loaded_features As Collection

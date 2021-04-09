@@ -4,6 +4,8 @@ Ability: Collect statistics
     the performance of the code under tests. Counting the excuted steps and
     their results will help you to get an overview about the test run results.
 
+  Background:
+    Given a new test run started collecting statistics
 
   Rule: collect start and end time for a test run
 
@@ -30,7 +32,7 @@ Ability: Collect statistics
 
     Example: single step
       Given a feature with an example with a missing step
-       When a test runs only this feature
+       When the feature is executed and statistics are collected
        Then one step with it's result was counted
 
 

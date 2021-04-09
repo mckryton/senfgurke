@@ -15,37 +15,39 @@ Public Sub setup(Session As TSession)
     Set m_session = Session
 End Sub
 
-Public Function run_example(example As TExample) As Collection
-
+Public Sub run_example(example As TExample)
+    
     Dim step_result As Variant
     Dim err_msg As String
     Dim step As TStep
-    Dim example_statistics As Collection
-    Dim last_step_result As String
+    Dim step_status As String
+    Dim previous_step_status As String
     Dim step_runner As TStepRunner
 
+    step_result = vbNullString
     Set step_runner = New TStepRunner
     step_runner.setup m_session
-    step_result = Array(vbNullString, vbNullString)
-    Set example_statistics = New Collection
+    step_status = vbNullString
     m_session.Reporter.report REPORT_MSG_TYPE_EXAMPLE_TITLE, example.OriginalHeadline
-    example_statistics.Add example.OriginalHeadline, "example"
     For Each step In example.Steps
         err_msg = vbNullString
-        last_step_result = step_result(0)
+        previous_step_status = step_status
         step_result = step_runner.run_step(step)
-        ' mark all steps as skipped when the last step wasn't OK
-        If last_step_result <> STATUS_OK And last_step_result <> vbNullString Then
-            If step_result(0) <> STATUS_MISSING Then step_result(0) = STATUS_SKIPPED
+        step_status = CStr(step_result(0))
+        If previous_step_status <> STATUS_OK And previous_step_status <> vbNullString Then
+            ' mark all steps as skipped when the last step wasn't OK
+            If step_status <> STATUS_MISSING Then step_status = STATUS_SKIPPED
         End If
-        If Not step_result(0) = STATUS_OK And Not step_result(0) = STATUS_SKIPPED Then
+        If Not step_status = STATUS_OK And Not step_status = STATUS_SKIPPED Then
+            'step failed -> get the failure message
             err_msg = step_result(1)
             'this is a hack because of the broken exception handling in vba (e.g. vba will overwrite custom err descriptions)
-            If step_result(0) = STATUS_PENDING Then err_msg = TSpec.LastFailMsg
+            If step_status = STATUS_PENDING Then err_msg = TSpec.LastFailMsg
         End If
-        example_statistics.Add Array(step_result(0), step.OriginalStepDefinition)
-        m_session.Reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_result(0), err_msg
+        m_session.statistics.count_event LOG_TYPE_STEP, step_status, step.OriginalStepDefinition, ExtraVBA.get_unix_timestamp_now
+        m_session.Reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_status, err_msg
     Next
-    Set run_example = example_statistics
-End Function
+    'the last step status sets the status for the example
+    m_session.statistics.count_event LOG_TYPE_EXAMPLE, step_status, example.OriginalHeadline, ExtraVBA.get_unix_timestamp_now
+End Sub
 

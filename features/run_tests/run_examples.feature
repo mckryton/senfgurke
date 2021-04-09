@@ -37,11 +37,3 @@ Ability: run examples
 
   # to detect missing steps, steps have to be executed even when they are skipped
   #TODO: add rule not to show err msg for skipped steps
-
-  Rule: for given tags only examples with a matching tag are executed
-
-    Example: feature with one matching and one non-matching example
-      Given a feature has a first example "tagged example" with the tag "@sample"
-      And the feature has a second example "un-tagged example" without any tag
-      When the feature is executed with tag parameter "@sample"
-      Then only the example "tagged example" is executed

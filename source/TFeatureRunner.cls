@@ -15,18 +15,15 @@ Public Sub setup(Session As TSession)
     Set m_session = Session
 End Sub
 
-Public Function run_feature(feature As TFeature, Optional filter_tag) As Collection
+Public Sub run_feature(feature As TFeature, Optional filter_tag)
     
     Dim feature_clause As Variant
     Dim example As TExample
     Dim example_runner As TExampleRunner
-    Dim feature_statistics As Collection
-    Dim example_statistics As Collection
 
     If IsMissing(filter_tag) Then filter_tag = vbNullString
     Set example_runner = New TExampleRunner
     example_runner.setup m_session
-    Set feature_statistics = New Collection
     m_session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, feature.Name
     m_session.Reporter.report REPORT_MSG_TYPE_DESC, feature.Description
     For Each feature_clause In feature.sections
@@ -34,13 +31,12 @@ Public Function run_feature(feature As TFeature, Optional filter_tag) As Collect
             Set example = feature_clause
             If filter_tag = vbNullString Or ExtraVBA.collection_has_key(filter_tag, example.tags) = True Then
                 If feature.Background.Steps.Count > 0 Then example.insert_background_steps feature.Background.Steps
-                Set example_statistics = example_runner.run_example(example)
-                feature_statistics.Add example_statistics
+                example_runner.run_example example
             End If
         ElseIf TypeName(feature_clause) = "TRule" Then
             m_session.Reporter.report REPORT_MSG_TYPE_RULE, feature_clause.WholeRule
         End If
     Next
-    Set run_feature = feature_statistics
-End Function
+    m_session.statistics.log_event LOG_TYPE_FEATURE, feature.Name, ExtraVBA.get_unix_timestamp_now
+End Sub
 

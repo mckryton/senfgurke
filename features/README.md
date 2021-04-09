@@ -115,6 +115,9 @@
   the performance of the code under tests. Counting the excuted steps and
   their results will help you to get an overview about the test run results.
 
+  Background:
+  Given a new test run started collecting statistics
+
 * [Run examples](run_tests/run_examples.feature)
 
   Examples are the building blocks for describing the application under test.
