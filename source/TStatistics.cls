@@ -60,6 +60,18 @@ Public Sub log_event(log_type As String, log_msg As String, log_time As Long, Op
     End If
 End Sub
 
+Public Function filter_events(event_type As String) As Collection
+
+    Dim log_event As Variant
+    Dim matched_events As Collection
+    
+    Set matched_events = New Collection
+    For Each log_event In m_event_log
+        If log_event("type") = event_type Then matched_events.Add log_event
+    Next
+    Set filter_events = matched_events
+End Function
+
 Public Property Get step_statistics() As Collection
     Set step_statistics = m_step_statistics
 End Property

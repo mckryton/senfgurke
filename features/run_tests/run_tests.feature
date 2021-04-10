@@ -10,21 +10,43 @@ Ability: run tests
     to find out how the error messages is displayed.
 
     Example: Feature doesn't start with a feature keyword
-      Given a feature starting with random text in "sample.feature"
+      Given a feature was loaded from a file "example.feature"
+        """
+          this is some random text
+          and not a feature
+        """
        When Senfgurke executes the feature
        Then the error "Feature lacks feature keyword at the beginning" is reported
         And the name of the feature file is reported as location of the error
 
 
-  Rule: for any given tag execute only those features assigned with the tag
+  Rule: tests started with tag as parameter should run only examples with matching tags
 
-    Example: matching tag assigned to a feature
-      Given a feature tagged with "@sample_tag" with one example
-        And an un-tagged feature with one example
+    Example: example inherits tag from feature
+      Given a feature was loaded as
+        """
+          @sample_tag
+          Feature: tagged feature
+            Example: sample from tagged feature
+              Given a step
+        """
+        And a feature was loaded as
+        """
+          Feature: un-tagged feature
+            Example: sample from un-tagged feature
+              Given a step
+        """
        When a test is started with "@sample_tag" as parameter
-       Then only the tagged feature is executed
+       Then only the example from the tagged feature was executed
 
-    Example: non-matching tag assigned to a feature
-
-
-    Example: no tags assigned to a feature
+    Example: tag doesn't match
+      Given a feature was loaded as
+        """
+          @one
+          Feature: tagged feature
+            @two
+            Example: sample from tagged feature
+              Given a step
+        """
+       When a test is started with "@three" as parameter
+       Then no example was executed

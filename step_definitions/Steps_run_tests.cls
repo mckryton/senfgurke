@@ -9,47 +9,24 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_a_feature_starting_with_random_text_in_STR_C4F336C986E5(step_expressions As Collection)
-    'Given a feature starting with random text in {string}
-    Dim loaded_feature As Collection
-    
+Public Sub Given_a_feature_was_loaded_as_STR_A7346B4E7CD1(step_expressions As Collection)
+    'Given a feature was loaded as {string}
+    If TStepVars.loaded_features Is Nothing Then Set TStepVars.loaded_features = New Collection
+    TSupport.load_feature_from_text step_expressions(1), TStepVars.loaded_features
+End Sub
+
+Public Sub Given_a_feature_was_loaded_from_a_file_STR_STR_725154F9143A(step_expressions As Collection)
+    'Given a feature was loaded from a file {string} {string}
     TStepVars.feature_origin = step_expressions(1)
-    Set loaded_feature = New Collection
-    loaded_feature.Add "some random text", "feature_text"
-    loaded_feature.Add TStepVars.feature_origin, "origin"
-    Set TStepVars.loaded_features = New Collection
-    TStepVars.loaded_features.Add loaded_feature
-End Sub
-
-Public Sub Given_a_feature_tagged_with_STR_with_one_example_C4F3ED80DA42(step_expressions As Collection)
-    'Given a feature tagged with {string} with one example
-    Dim loaded_feature As Collection
-    
-    Set loaded_feature = New Collection
-    loaded_feature.Add step_expressions(1) & vbLf _
-            & "Feature: tagged feature" & vbLf _
-            & "  Example: sample" & vbLf _
-            & "    Given a valid step", "feature_text"
-    Set TStepVars.loaded_features = New Collection
-    TStepVars.loaded_features.Add loaded_feature
-End Sub
-
-Public Sub Given_an_untagged_feature_with_one_example_E3F4277DD399()
-    'And an un-tagged feature with one example
-    Dim loaded_feature As Collection
-    
-    Set loaded_feature = New Collection
-    loaded_feature.Add "Feature: un-tagged feature" & vbLf _
-            & "  Example: sample" & vbLf _
-            & "    Given a valid step", "feature_text"
-    Set TStepVars.loaded_features = New Collection
-    TStepVars.loaded_features.Add loaded_feature
+    If TStepVars.loaded_features Is Nothing Then Set TStepVars.loaded_features = New Collection
+    TSupport.load_feature_from_text step_expressions(2), TStepVars.loaded_features, TStepVars.feature_origin
 End Sub
 
 Public Sub When_Senfgurke_executes_the_feature_7D772B9CDDDE()
     'When Senfgurke executes the feature
     Set TStepVars.Session = New TSession
     TStepVars.Session.Reporter.enable_silent_mode
+    TSpec.expect(TStepVars.loaded_features).not_to_be_nothing
     TStepVars.Session.run_test features_as_text:=TStepVars.loaded_features
 End Sub
 
@@ -57,7 +34,7 @@ Public Sub When_a_test_is_started_with_STR_as_parameter_EA8A08D9425A(step_expres
     'When a test is started with {string} as parameter
     Set TStepVars.Session = New TSession
     TStepVars.Session.Reporter.enable_silent_mode
-     TStepVars.Session.statistics.enable_event_log
+    TStepVars.Session.statistics.enable_event_log
     TStepVars.Session.run_test features_as_text:=TStepVars.loaded_features, filter_tag:=step_expressions(1)
 End Sub
 
@@ -71,15 +48,20 @@ Public Sub Then_the_name_of_the_feature_file_is_reported_as_l_1A076B1EB8D5()
     TSpec.expect(TStepVars.Session.Reporter.ConsoleOutput).includes_text TStepVars.feature_origin
 End Sub
 
-Public Sub Then_only_the_tagged_feature_is_executed_F87C2CEF089C()
-    'Then only the tagged feature is executed
-    Dim feature_events As Collection
-    Dim log_event As Variant
+Public Sub Then_only_the_example_from_the_tagged_feature_was__858E135D9F78()
+    'Then only the example from the tagged feature was executed
+    Dim example_events As Collection
     
-    Set feature_events = New Collection
-    For Each log_event In TStepVars.Session.statistics.event_log
-        If log_event("type") = LOG_TYPE_FEATURE Then feature_events.Add log_event
-    Next
-    TSpec.expect(feature_events.Count).to_be 1
-    TSpec.expect(feature_events(1)("msg")).includes_text "tagged feature"
+    Set example_events = TStepVars.Session.statistics.filter_events(LOG_TYPE_EXAMPLE)
+    TSpec.expect(example_events.Count).to_be 1
+    TSpec.expect(example_events(1)("msg")).includes_text "sample from tagged feature"
 End Sub
+
+Public Sub Then_no_example_was_executed_16BF2F2090BC()
+    'Then no example was executed
+    Dim example_events As Collection
+    
+    Set example_events = TStepVars.Session.statistics.filter_events(LOG_TYPE_EXAMPLE)
+    TSpec.expect(example_events.Count).to_be 0
+End Sub
+
