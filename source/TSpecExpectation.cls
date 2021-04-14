@@ -51,6 +51,44 @@ Public Sub not_to_be(pExpectedValue)
     End If
 End Sub
 
+Public Sub to_be_nothing()
+
+    Dim matcher_fail_msg As String
+    
+    If Not IsObject(Me.given_value) Then
+        matcher_fail_msg = vbTab & "expectation failed" & vbLf & _
+                                vbTab & "given value:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                                vbTab & "is not an object"
+            raise_expectation_err matcher_fail_msg
+    Else
+        If Not Me.given_value Is Nothing Then
+            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+                                vbTab & "found an object" & vbLf & _
+                                vbTab & "expected:" & vbTab & ">Nothing<"
+            raise_expectation_err matcher_fail_msg
+        End If
+    End If
+End Sub
+
+Public Sub not_to_be_nothing()
+
+    Dim matcher_fail_msg As String
+    
+    If Not IsObject(Me.given_value) Then
+        matcher_fail_msg = vbTab & "expectation failed" & vbLf & _
+                                vbTab & "given value:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                                vbTab & "is not an object"
+            raise_expectation_err matcher_fail_msg
+    Else
+        If Me.given_value Is Nothing Then
+            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+                                vbTab & "found nothing" & vbLf & _
+                                vbTab & "expected:" & vbTab & ">an object<"
+            raise_expectation_err matcher_fail_msg
+        End If
+    End If
+End Sub
+
 Private Sub test_comparability(pGivenValue As Variant, pExpectedValue As Variant)
     
     Dim matcher_fail_msg As String

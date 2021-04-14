@@ -1,6 +1,8 @@
 @vba-specific
 Ability: confirm collection members
-    Senfgurke offers expectation functions to validate if a collection contains
+    A collection in VBA is like a named array (see
+    https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/collection-object
+    for more information). This expectation validates if a collection contains
     certain members or not.
 
   Rule: contains expectation should confirm that an array is an item of a collection

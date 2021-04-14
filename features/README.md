@@ -1,11 +1,16 @@
 # Features
 
-## Confirm Expectations
+## Assure Expectations
 
-* [Confirm collection members](confirm_expectations/confirm_collection_members.feature)
+* [Check if objects exists](assure_expectations/check_if_objects_exists.feature)
 
-  Senfgurke offers expectation functions to validate if a collection contains
-  certain members or not.
+  VBA distinguishes beteween variables assigned to objects o variables assigned
+  to basic data types (e.g. string, intger, boolean). This expectation is
+  validates if avariable is assigned to an object or not.
+
+* [Confirm collection members](assure_expectations/confirm_collection_members.feature)
+
+  A collection in VBA is like a named array (see
 
 * [Make steps executable](make_steps_executable.feature)
 
