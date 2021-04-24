@@ -4,6 +4,10 @@ Ability: run tests
   turn the structured content of those files into an executable setup by
   interpreting (parsing) the Gherkin language of the feature files.
 
+  Background:
+    # this is to reset any settings a loaded features from previous test runs
+    Given a new test run
+
 
   Rule: any syntax error found when parsing feature files should be reported
     See the report_in_<format_type>_format features under /features/report
@@ -38,6 +42,25 @@ Ability: run tests
         """
        When a test is started with "@sample_tag" as parameter
        Then only the example from the tagged feature was executed
+
+     Example: example inherits tag from rule
+       Given a feature was loaded as
+         """
+           Feature: tagged feature
+             Example: example assigned to the feature
+               Given a step
+
+             @sample_tag
+             Rule: tagged rule
+               Example: example assigned to the rule
+                 Given a step
+
+             Rule: untagged rule
+               Example: some other example
+                 Given a step
+         """
+        When a test is started with "@sample_tag" as parameter
+        Then only the example from the tagged rule was executed
 
     Example: tag doesn't match
       Given a feature was loaded as

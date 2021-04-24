@@ -33,6 +33,7 @@ Ability: parse rules
       """
     When the feature is parsed
     Then the feature contains 2 rule(s)
+     And each rule has 1 example
 
   Rule: examples following a rule should be attached to this rule
     # this is not yet implemented - at the moment rules are just syntactic sugar

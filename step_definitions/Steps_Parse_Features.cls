@@ -38,7 +38,7 @@ Public Sub When_the_feature_is_parsed_CEB0ED59F01F()
     Exit Sub
     
 parse_error:
-    TStepVars.parse_error.Add Err.Description, "err_description"
+    TStepVars.parse_error.Add Err.description, "err_description"
     Err.Clear
 End Sub
 
@@ -49,22 +49,27 @@ End Sub
 
 Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981()
     'Then the parsed result contains a separate item for each of the given elements
-    TSpec.expect(m_parsed_feature.Name).to_be "sample feature"
-    TSpec.expect(m_parsed_feature.sections.Count).to_be 2
+    
+    Dim rule As TRule
+    
+    TSpec.expect(m_parsed_feature.name).to_be "sample feature"
+    TSpec.expect(m_parsed_feature.sections.Count).to_be 1
     TSpec.expect(TypeName(m_parsed_feature.sections(1))).to_be "TRule"
-    TSpec.expect(m_parsed_feature.sections(1).Name).to_be "sample rule"
-    TSpec.expect(TypeName(m_parsed_feature.sections(2))).to_be "TExample"
-    TSpec.expect(m_parsed_feature.sections(2).Name).to_be "sample example"
+    Set rule = m_parsed_feature.sections(1)
+    TSpec.expect(rule.name).to_be "sample rule"
+    TSpec.expect(rule.sections.Count).to_be 1
+    TSpec.expect(TypeName(rule.sections(1))).to_be "TExample"
+    TSpec.expect(rule.sections(1).name).to_be "sample example"
 End Sub
 
 Public Sub Then_the_parsed_result_contains_a_feature_with_the_5E84028445E3(step_expressions As Collection)
     'Then the parsed result contains a feature with the name {string}
-    TSpec.expect(m_parsed_feature.Name).to_be step_expressions(1)
+    TSpec.expect(m_parsed_feature.name).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_feature_description_is_set_to_those_two_l_3759AF1F585B()
     'Then the feature description is set to those two lines
-    TSpec.expect(m_parsed_feature.Description).to_be "this is" & vbLf & "the feature description"
+    TSpec.expect(m_parsed_feature.description).to_be "this is" & vbLf & "the feature description"
 End Sub
 
 Public Sub Then_the_parsed_feature_contains_a_rule_A7C0683CBA7A()
@@ -74,7 +79,7 @@ End Sub
 
 Public Sub Then_the_rules_description_is_set_to_STR_750959DF7853(step_expressions As Collection)
     'Then the rules description is set to {string}
-     TSpec.expect(m_parsed_feature.sections(1).Description).to_be step_expressions(1)
+     TSpec.expect(m_parsed_feature.sections(1).description).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_parsed_features_contains_an_example_7B67F2AF5933()
@@ -95,11 +100,11 @@ End Sub
 
 Public Sub Then_the_Given_step_is_assigned_to_the_feature_9078F8233D0D()
     'Then the Given step is assigned to the feature
-    TSpec.expect(m_parsed_feature.Background.Steps(1).OriginalStepDefinition).to_be "Given one step"
+    TSpec.expect(m_parsed_feature.background.Steps(1).OriginalStepDefinition).to_be "Given one step"
 End Sub
 
 Public Sub Then_a_feature_named_STR_is_parsed_2E9486C04330(step_expressions As Collection)
     'Then a feature named {string} is parsed
-    TSpec.expect(m_parsed_feature.Name).to_be step_expressions(1)
+    TSpec.expect(m_parsed_feature.name).to_be step_expressions(1)
 End Sub
 

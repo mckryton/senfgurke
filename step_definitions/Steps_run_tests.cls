@@ -9,6 +9,11 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+Public Sub Given_a_new_test_run_6A3558F7A1DD()
+    'Given a new test run
+    Set TStepVars.loaded_features = Nothing
+End Sub
+
 Public Sub Given_a_feature_was_loaded_as_STR_A7346B4E7CD1(step_expressions As Collection)
     'Given a feature was loaded as {string}
     If TStepVars.loaded_features Is Nothing Then Set TStepVars.loaded_features = New Collection
@@ -55,6 +60,15 @@ Public Sub Then_only_the_example_from_the_tagged_feature_was__858E135D9F78()
     Set example_events = TStepVars.Session.statistics.filter_events(LOG_TYPE_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 1
     TSpec.expect(example_events(1)("msg")).includes_text "sample from tagged feature"
+End Sub
+
+Public Sub Then_only_the_example_from_the_tagged_rule_was_exe_0F822B53DF54()
+    'Then only the example from the tagged rule was executed
+    Dim example_events As Collection
+    
+    Set example_events = TStepVars.Session.statistics.filter_events(LOG_TYPE_EXAMPLE)
+    TSpec.expect(example_events.Count).to_be 1
+    TSpec.expect(example_events(1)("msg")).includes_text "example assigned to the rule"
 End Sub
 
 Public Sub Then_no_example_was_executed_16BF2F2090BC()

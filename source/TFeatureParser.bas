@@ -5,37 +5,51 @@ Const KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Ability,Business Needs
 
 Public Function parse_feature(gherkin_text As String) As TFeature
 
+    Dim feature_definition As Collection
     Dim parsed_feature As TFeature
-    Dim lines As Variant
     Dim line As String
-    Dim section_headline As Collection
-    Dim current_section As Variant
+    Dim lines As Variant
     Dim line_index As Long
+    Dim current_section As Variant
+    Dim current_example_container As TExampleContainer
     Dim section_tags As Collection
     
-    Set parsed_feature = parse_feature_definition(gherkin_text)
+    Set current_section = Nothing
+    Set section_tags = New Collection
+    Set feature_definition = parse_feature_definition(gherkin_text)
+    Set parsed_feature = feature_definition("parsed_feature")
+    Set current_example_container = parsed_feature
     If Not parsed_feature Is Nothing Then
         lines = Split(Trim(gherkin_text), vbLf)
-        Set section_tags = clone_tags(parsed_feature.tags)
-        Set current_section = Nothing
-        For line_index = parsed_feature.ParsedLinesIndex + 1 To UBound(lines)
+        For line_index = feature_definition("line_index") + 1 To UBound(lines)
             line = Trim(lines(line_index))
             If is_section_definition_line(line) Then
-                Set section_headline = read_section_headline(CStr(line))
+                'start of a new section means last section is finished -> cleanup last sections description
                 If Not current_section Is Nothing Then trim_description_linebreaks current_section
-                Set current_section = create_section(parsed_feature, section_headline, section_tags, line)
-                If Not section_headline("type") = SECTION_TYPE_BACKGROUND Then parsed_feature.sections.Add current_section
-                If section_headline("type") = SECTION_TYPE_EXAMPLE Or section_headline("type") = SECTION_TYPE_BACKGROUND Then
+                Set current_section = create_section(parsed_feature, current_example_container, line, section_tags)
+                If TypeName(current_section) = "TRule" Then
+                    'assign the current rule to the feature
+                    parsed_feature.sections.Add current_section
+                    'declare the rule as the current container for following examples
+                    Set current_example_container = current_section
+                Else
+                    'assign the current example to the current container (feature or rule)
+                    ' except backgrounds - there is always a predefined (empty) background available
+                    If Not TypeName(current_section) = "TBackground" Then current_example_container.sections.Add current_section
+                End If
+                If TypeName(current_section) = "TBackground" Or TypeName(current_section) = "TExample" Then
+                    'parse all step definitions following the current example or background
+                    ' and assign those steps to the background or example
                     line_index = parse_steps(lines, line_index, current_section)
                 End If
-                Set section_tags = clone_tags(parsed_feature.tags)
+                'any tag after a section definition belongs to the next section
+                ' > so start a new tag collection
+                Set section_tags = New Collection
             ElseIf is_tag_line(line) Then
-                add_tags line, section_tags
+                parse_and_add_tags line, section_tags
             ElseIf Not is_comment_line(line) Then
                 'ignore comments
-                If Not TypeName(current_section) = "TExample" Or TypeName(current_section) = "TBackground" Then
-                    add_description CStr(line), parsed_feature
-                End If
+                add_description CStr(line), parsed_feature, current_section
             End If
         Next
     End If
@@ -43,12 +57,12 @@ Public Function parse_feature(gherkin_text As String) As TFeature
 End Function
 
 Private Sub trim_description_linebreaks(feature_section)
-
-    Do While Right(feature_section.Description, 1) = vbLf
-        feature_section.Description = Left(feature_section.Description, Len(feature_section.Description) - 1)
+    
+    Do While Right(feature_section.description, 1) = vbLf
+        feature_section.description = Left(feature_section.description, Len(feature_section.description) - 1)
     Loop
-    Do While Left(feature_section.Description, 1) = vbLf
-        feature_section.Description = Right(feature_section.Description, Len(feature_section.Description) - 1)
+    Do While Left(feature_section.description, 1) = vbLf
+        feature_section.description = Right(feature_section.description, Len(feature_section.description) - 1)
     Loop
 End Sub
 
@@ -93,8 +107,9 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
     parse_steps = line_index
 End Function
 
-Private Function parse_feature_definition(gherkin_text As String) As TFeature
+Private Function parse_feature_definition(gherkin_text As String) As Collection
     
+    Dim feature_definition As Collection
     Dim parsed_feature As TFeature
     Dim line_index As Long
     Dim feature_lines As Variant
@@ -102,6 +117,7 @@ Private Function parse_feature_definition(gherkin_text As String) As TFeature
     Dim feature_spec As Collection
     Dim line As String
 
+    Set feature_definition = New Collection
     Set parsed_feature = New TFeature
     header_finished = False
     line_index = 0
@@ -109,7 +125,7 @@ Private Function parse_feature_definition(gherkin_text As String) As TFeature
     Do While line_index <= UBound(feature_lines) And header_finished = False
         line = CStr(feature_lines(line_index))
         If is_tag_line(line) Then
-            parsed_feature.add_tags line
+            parse_and_add_tags line, parsed_feature.tags
             line_index = line_index + 1
         ElseIf is_comment_line(line) Or Trim(line) = vbNullString Then
             line_index = line_index + 1
@@ -120,13 +136,16 @@ Private Function parse_feature_definition(gherkin_text As String) As TFeature
                             "TFeatureParser.parse_feature_definition", _
                             "Feature lacks feature keyword at the beginning"
             Else
-                parsed_feature.Name = CStr(feature_spec("name"))
+                parsed_feature.name = CStr(feature_spec("name"))
             End If
             header_finished = True
         End If
     Loop
-    parsed_feature.ParsedLinesIndex = line_index
-    Set parse_feature_definition = parsed_feature
+    With feature_definition
+        .Add line_index, "line_index"
+        .Add parsed_feature, "parsed_feature"
+    End With
+    Set parse_feature_definition = feature_definition
 End Function
 
 Private Function is_section_definition_line(feature_line As String) As Boolean
@@ -163,7 +182,7 @@ Private Function is_step_line(feature_line As String) As Boolean
     is_step_line = InStr("Given When Then And But", first_word) > 0 And Len(first_word) > 2
 End Function
 
-Public Sub add_tags(feature_line As String, tags As Collection)
+Public Sub parse_and_add_tags(feature_line As String, tags As Collection)
 
     Dim tag_list As Variant
     Dim tag As Variant
@@ -180,23 +199,40 @@ Public Sub add_tags(feature_line As String, tags As Collection)
     Next
 End Sub
 
-Private Function create_section(parsed_feature As TFeature, section_headline As Collection, section_tags As Collection, feature_line As String) As Variant
+Private Function create_section(feature As TFeature, example_container As TExampleContainer, feature_line As String, section_tags As Collection) As Variant
 
-    Dim current_section As Variant
+    Dim new_section As Variant
+    Dim section_headline As Collection
     
+    Set section_headline = read_section_headline(feature_line)
     Select Case section_headline("type")
         Case SECTION_TYPE_RULE
-            Set current_section = create_rule(rule_name:=section_headline("name"))
+            Set new_section = create_rule(rule_name:=section_headline("name"), rule_tags:=section_tags, feature_parent:=feature)
+            'add tags set on the containing feature to the rule
+            add_tags feature.tags, new_section.tags
         Case SECTION_TYPE_EXAMPLE
-            Set current_section = create_example(example_head:=section_headline("type"), example_name:=section_headline("name"), example_tags:=section_tags, feature_line:=feature_line)
+            Set new_section = create_example(example_head:=section_headline("type"), example_name:=section_headline("name"), example_tags:=section_tags, feature_line:=feature_line)
+            'add tags set on the containing rule or feature to the example
+            add_tags example_container.tags, new_section.tags
         Case SECTION_TYPE_BACKGROUND
             'background already exists as an attribute of the TFeature class
-            Set current_section = parsed_feature.Background
+            Set new_section = example_container.background
         Case Else
             Debug.Print "PARSE ERROR: unknown section >" & section_headline("type") & "<"
     End Select
-    Set create_section = current_section
+    Set create_section = new_section
 End Function
+
+Private Sub add_tags(source_tags As Collection, target_tags As Collection)
+
+    Dim tag As Variant
+    
+    For Each tag In source_tags
+        If Not ExtraVBA.collection_has_value(tag, target_tags) Then
+            target_tags.Add tag, tag
+        End If
+    Next
+End Sub
 
 Private Function read_section_headline(text_line As String) As Collection
 
@@ -229,12 +265,14 @@ Private Function read_section_headline(text_line As String) As Collection
     Set read_section_headline = section_headline
 End Function
 
-Private Function create_rule(rule_name As String) As TRule
+Private Function create_rule(rule_name As String, rule_tags As Collection, feature_parent As TFeature) As TRule
 
     Dim new_rule As TRule
     
     Set new_rule = New TRule
-    new_rule.Name = rule_name
+    new_rule.name = rule_name
+    Set new_rule.tags = rule_tags
+    Set new_rule.parent = feature_parent
     Set create_rule = new_rule
 End Function
 
@@ -243,29 +281,26 @@ Private Function create_example(example_head As String, example_name As String, 
     Dim new_example As TExample
     
     Set new_example = New TExample
-    new_example.Head = example_head
-    new_example.Name = example_name
+    new_example.head = example_head
+    new_example.name = example_name
     new_example.tags = example_tags
     new_example.OriginalHeadline = feature_line
     Set create_example = new_example
 End Function
 
-Private Sub add_description(line As String, feature As TFeature)
+Private Sub add_description(line As String, feature As TFeature, section As Variant)
 
-    Dim section As Variant
-    
-    If feature.sections.Count = 0 Then
-        If feature.Description = vbNullString Then
-            feature.Description = Trim(line)
+    If section Is Nothing Then
+        If feature.description = vbNullString Then
+            feature.description = Trim(line)
         Else
-            feature.Description = feature.Description & vbLf & Trim(line)
+            feature.description = feature.description & vbLf & Trim(line)
         End If
     Else
-        Set section = feature.sections(feature.sections.Count)
-        If section.Description = vbNullString Then
-            section.Description = Trim(line)
+        If section.description = vbNullString Then
+            section.description = Trim(line)
         Else
-            section.Description = section.Description & vbLf & Trim(line)
+            section.description = section.description & vbLf & Trim(line)
         End If
     End If
 End Sub
@@ -288,7 +323,7 @@ Public Function create_step(step_definition As String, Optional parent_section) 
     
     If IsMissing(parent_section) Then Set parent_section = New TExample
     Set new_step = New TStep
-    new_step.Parent = parent_section
+    new_step.parent = parent_section
     new_step.parse_step_definition step_definition
     Set create_step = new_step
 End Function
