@@ -243,11 +243,11 @@ Private Sub Class_Terminate()
     Set m_expressions = Nothing
 End Sub
 
-Public Property Get Parent() As Variant
-    Set Parent = m_parent_clause
+Public Property Get parent() As Variant
+    Set parent = m_parent_clause
 End Property
 
-Public Property Let Parent(ByVal parent_clause As Variant)
+Public Property Let parent(ByVal parent_clause As Variant)
     Set m_parent_clause = parent_clause
 End Property
 
@@ -263,10 +263,10 @@ Public Sub parse_step_definition(step_definition As String)
         Me.SType = step_head
     Else
         'assume that this step is not yet added to it's parent clause
-        If Me.Parent.Steps.Count = 0 Then
+        If Me.parent.Steps.Count = 0 Then
             Me.SType = STEP_TYPE_GIVEN
         Else
-            Me.SType = Me.Parent.Steps(Me.Parent.Steps.Count).SType
+            Me.SType = Me.parent.Steps(Me.parent.Steps.Count).SType
         End If
     End If
     find_step_expressions step_name
@@ -281,10 +281,10 @@ Public Property Get Elements() As Collection
 End Property
 
 Public Property Get OriginalStepDefinition() As String
-    OriginalStepDefinition = Me.Elements(1) & " " & Me.Name
+    OriginalStepDefinition = Me.Elements(1) & " " & Me.name
 End Property
 
-Public Property Get Name() As Variant
+Public Property Get name() As Variant
 
     Dim step_name As String
     Dim step_element As Variant
@@ -307,7 +307,7 @@ Public Property Get Name() As Variant
             step_name = step_name & step_element
         End If
     Next
-    Name = Trim(step_name)
+    name = Trim(step_name)
 End Property
 
 Public Property Get Docstring() As String

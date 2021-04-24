@@ -41,7 +41,7 @@ error_handler:
         step_run_attempts = step_run_attempts + 1
         Resume Next
     Else
-        run_step = fail_step(Err.Number, Err.Description)
+        run_step = fail_step(Err.Number, Err.description)
     End If
 End Function
 

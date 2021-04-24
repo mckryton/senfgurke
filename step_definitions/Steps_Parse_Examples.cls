@@ -57,13 +57,13 @@ Public Sub Then_the_example_clause_from_the_parsed_result_con_C8ADD15947E9()
     'Then the example clause from the parsed result contains all the steps
     TSpec.expect(TStepVars.example.Steps.Count).to_be 3
     TSpec.expect(TStepVars.example.Steps(1).SType).to_be STEP_TYPE_GIVEN
-    TSpec.expect(TStepVars.example.Steps(1).Name).to_be "a precondition"
+    TSpec.expect(TStepVars.example.Steps(1).name).to_be "a precondition"
     TSpec.expect(TStepVars.example.Steps(1).Elements(1)).to_be "Given"
     TSpec.expect(TStepVars.example.Steps(2).SType).to_be STEP_TYPE_WHEN
-    TSpec.expect(TStepVars.example.Steps(2).Name).to_be "action happens"
+    TSpec.expect(TStepVars.example.Steps(2).name).to_be "action happens"
     TSpec.expect(TStepVars.example.Steps(2).Elements(1)).to_be "When"
     TSpec.expect(TStepVars.example.Steps(3).SType).to_be STEP_TYPE_THEN
-    TSpec.expect(TStepVars.example.Steps(3).Name).to_be "some result is expected"
+    TSpec.expect(TStepVars.example.Steps(3).name).to_be "some result is expected"
     TSpec.expect(TStepVars.example.Steps(3).Elements(1)).to_be "Then"
 End Sub
 

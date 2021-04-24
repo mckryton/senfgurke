@@ -89,12 +89,12 @@ Private Sub exportCode()
             Case Else
                 file_suffix = "txt"
         End Select
-        If Left(vbe_source_object.Name, 6) = "Steps_" Or Left(vbe_source_object.Name, 8) = "Support_" Then
+        If Left(vbe_source_object.name, 6) = "Steps_" Or Left(vbe_source_object.name, 8) = "Support_" Then
             sub_path = "step_definitions"
         Else
             sub_path = "source"
         End If
-        file_path = base_path & path_separator & sub_path & path_separator & vbe_source_object.Name & "." & file_suffix
+        file_path = base_path & path_separator & sub_path & path_separator & vbe_source_object.name & "." & file_suffix
         #If Mac Then
             'try not to change forms unless Microsoft offers full support for forms on the Mac!
             If Not file_suffix = "frm" Then

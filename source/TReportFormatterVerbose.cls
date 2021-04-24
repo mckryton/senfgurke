@@ -109,14 +109,14 @@ Public Function format_parse_error(err_msg As String, err_description As String)
 '                            & Space$(2) & err_description
 End Function
 
-Public Function format_feature_description(Description As String) As String
+Public Function format_feature_description(description As String) As String
 
     Dim desc_lines As Variant
     Dim line As Variant
     Dim formatted_desc As String
     
     formatted_desc = vbNullString
-    desc_lines = Split(Description, vbLf)
+    desc_lines = Split(description, vbLf)
     For Each line In desc_lines
         If Len(formatted_desc) > 0 Then formatted_desc = formatted_desc & vbLf
         formatted_desc = formatted_desc & Space$(4) & Trim(line)

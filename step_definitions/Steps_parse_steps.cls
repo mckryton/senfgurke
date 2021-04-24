@@ -47,6 +47,6 @@ End Sub
 
 Public Sub Then_the_name_of_the_step_is_STR_47BC4E071438(step_expressions As Collection)
     'Then the name of the step is "a step"
-    TSpec.expect(TStepVars.step.Name).to_be step_expressions(1)
+    TSpec.expect(TStepVars.step.name).to_be step_expressions(1)
 End Sub
 

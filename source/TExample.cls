@@ -16,27 +16,27 @@ Dim m_steps As Collection
 Dim m_example_tags As Collection
 Dim m_original_headline As String
 
-Public Property Get Head() As String
-    Head = m_example_head
+Public Property Get head() As String
+    head = m_example_head
 End Property
 
-Public Property Let Head(ByVal example_head As String)
+Public Property Let head(ByVal example_head As String)
     m_example_head = example_head
 End Property
 
-Public Property Get Name() As String
-    Name = m_example_name
+Public Property Get name() As String
+    name = m_example_name
 End Property
 
-Public Property Let Name(ByVal example_name As String)
+Public Property Let name(ByVal example_name As String)
     m_example_name = example_name
 End Property
 
-Public Property Get Description() As String
-    Description = m_example_description
+Public Property Get description() As String
+    description = m_example_description
 End Property
 
-Public Property Let Description(ByVal example_description As String)
+Public Property Let description(ByVal example_description As String)
     m_example_description = example_description
 End Property
 

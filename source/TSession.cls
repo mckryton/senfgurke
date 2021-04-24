@@ -113,7 +113,7 @@ Public Function parse_loaded_features(feature_list As Collection) As Collection
 parse_error:
     If Err.Number = ERR_ID_FEATURE_SYNTAX_ERROR Then
         Reporter.report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
-                        & loaded_feature("origin") & "'", err_msg:=Err.Description
+                        & loaded_feature("origin") & "'", err_msg:=Err.description
     End If
     Resume Next
 End Function

@@ -140,6 +140,10 @@
   feature for more) and executes all the steps from those examples (see the
   run steps feature for more).
 
+* [Run rules](run_tests/run_rules.feature)
+
+  _no description_
+
 * [Run steps](run_tests/run_steps.feature)
 
   Steps are the glue that connects features with code. Every step can have a
@@ -151,6 +155,9 @@
   will read all the features form text files using the suffix .feature. It will
   turn the structured content of those files into an executable setup by
   interpreting (parsing) the Gherkin language of the feature files.
+
+  Background:
+  Given a new test run
 
 ## Support Functions
 

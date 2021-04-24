@@ -9,7 +9,7 @@ Public m_parsed_feature As TFeature
 Public m_step_function_name As String
 Public step As TStep
 Public first_step As TStep
-Public Background As TBackground
+Public background As TBackground
 Public ParsedFeatures As Collection
 Public ReportOutput As String
 Public ReportFormatter As Variant

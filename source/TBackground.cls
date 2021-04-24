@@ -20,11 +20,11 @@ Public Property Get Steps() As Collection
     Set Steps = m_steps
 End Property
 
-Public Property Get Description() As String
-    Description = m_background_description
+Public Property Get description() As String
+    description = m_background_description
 End Property
 
-Public Property Let Description(ByVal background_description As String)
+Public Property Let description(ByVal background_description As String)
     m_background_description = background_description
 End Property
 
