@@ -144,10 +144,22 @@
 
   _no description_
 
-* [Run steps](run_tests/run_steps.feature)
+### Run Steps
+
+* [Run steps](run_tests/run_steps/run_steps.feature)
 
   Steps are the glue that connects features with code. Every step can have a
   matching function (step implementation). Executing those functions will
+
+* [Save variables in context](run_tests/run_steps/save_variables_in_context.feature)
+
+  Typically when implementing step definition functions there is a need to
+  access the values defined in Given steps in the step definition functions
+  of the When and Then steps. But steps for a single example can have theire
+  step definitions in different classes, for example if the same step appears
+  in more than one example. So to share values between step definition
+  functions Senfgurke provides a context object as parameter for each step
+  definition function.
 
 * [Run tests](run_tests/run_tests.feature)
 
