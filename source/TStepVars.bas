@@ -19,5 +19,4 @@ Public session As TSession
 Public Duration As Long
 Public StatisticResults As String
 Public parse_error As Collection
-Public loaded_features As Collection
-Public feature_origin As String
+

@@ -4,11 +4,6 @@ Ability: run tests
   turn the structured content of those files into an executable setup by
   interpreting (parsing) the Gherkin language of the feature files.
 
-  Background:
-    # this is to reset any settings a loaded features from previous test runs
-    Given a new test run
-
-
   Rule: any syntax error found when parsing feature files should be reported
     See the report_in_<format_type>_format features under /features/report
     to find out how the error messages is displayed.

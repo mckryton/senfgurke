@@ -169,9 +169,6 @@
   turn the structured content of those files into an executable setup by
   interpreting (parsing) the Gherkin language of the feature files.
 
-  Background:
-  Given a new test run
-
 ## Support Functions
 
 * [Get unix time](support_functions/get_unix_time.feature)

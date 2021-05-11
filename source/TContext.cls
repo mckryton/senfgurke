@@ -26,6 +26,14 @@ Public Sub set_value(new_value As Variant, value_name As String)
     context_value_collection.Add new_value, value_name
 End Sub
 
+Public Function value_exists(value_name As String) As Boolean
+    If ExtraVBA.collection_has_key(value_name, context_value_collection) Then
+        value_exists = True
+    Else
+        value_exists = False
+    End If
+End Function
+
 Public Function get_value(value_name As String) As Variant
     
     If ExtraVBA.collection_has_key(value_name, context_value_collection) Then
