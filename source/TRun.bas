@@ -9,7 +9,7 @@ Dim m_session As TSession
 
 Public Sub test(Optional filter_tag, Optional report_format)
     Set m_session = New TSession
-    Session.run_test filter_tag, report_format
+    session.run_test filter_tag, report_format
     Set m_session = Nothing
     cleanup_context
 End Sub
@@ -23,8 +23,8 @@ Public Sub progress(Optional filter_tag)
     test filter_tag, report_format:="progress"
 End Sub
 
-Public Property Get Session() As TSession
-    Set Session = m_session
+Public Property Get session() As TSession
+    Set session = m_session
 End Property
 
 Private Sub cleanup_context()

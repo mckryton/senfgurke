@@ -11,8 +11,8 @@ Option Explicit
 
 Private m_session As TSession
 
-Public Sub setup(Session As TSession)
-    Set m_session = Session
+Public Sub setup(session As TSession)
+    Set m_session = session
 End Sub
 
 Public Sub run_feature(example_container As TExampleContainer, Optional filter_tag)

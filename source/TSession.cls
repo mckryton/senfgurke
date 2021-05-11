@@ -9,10 +9,20 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Dim m_reporter As TReport
-Dim m_start_time As Long
-Dim m_end_time As Long
-Dim m_statistics As TStatistics
+Private m_reporter As TReport
+Private m_start_time As Long
+Private m_end_time As Long
+Private m_statistics As TStatistics
+
+Private Sub Class_Initialize()
+    m_start_time = 0
+    m_end_time = 0
+    Set m_statistics = New TStatistics
+End Sub
+
+Private Sub Class_Terminate()
+    Set m_statistics = Nothing
+End Sub
 
 Public Sub set_report_format(report_format As String)
     Select Case report_format
@@ -131,12 +141,3 @@ Public Property Get statistics() As TStatistics
     Set statistics = m_statistics
 End Property
 
-Private Sub Class_Initialize()
-    m_start_time = 0
-    m_end_time = 0
-    Set m_statistics = New TStatistics
-End Sub
-
-Private Sub Class_Terminate()
-    Set m_statistics = Nothing
-End Sub

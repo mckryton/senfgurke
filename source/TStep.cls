@@ -15,6 +15,7 @@ Dim m_parent_clause As Variant
 Dim m_elements As Collection
 Dim m_docstring As String
 
+
 Public Property Get SType() As String
     SType = m_step_type
 End Property
@@ -213,9 +214,9 @@ Public Function get_step_function_template() As String
 
     Dim template As String
     
-    template = "Public Sub " & Me.get_step_function_name & "("
+    template = "Public Sub " & Me.get_step_function_name & "(context as TContext"
     If Me.Expressions.Count > 0 Then
-        template = template & "step_expressions As Collection"
+        template = template & ", step_expressions As Collection"
     End If
     template = template & ")" & vbLf
     template = template & Space$(4) & "'" & get_step_comment_name & vbLf

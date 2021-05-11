@@ -15,7 +15,7 @@ Public ReportOutput As String
 Public ReportFormatter As Variant
 Public ReportMessages As Collection
 Public CodeTemplate As String
-Public Session As TSession
+Public session As TSession
 Public Duration As Long
 Public StatisticResults As String
 Public parse_error As Collection

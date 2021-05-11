@@ -159,7 +159,8 @@
   step definitions in different classes, for example if the same step appears
   in more than one example. So to share values between step definition
   functions Senfgurke provides a context object as parameter for each step
-  definition function.
+  definition function that keeps this variable during the execution of a
+  single example.
 
 * [Run tests](run_tests/run_tests.feature)
 

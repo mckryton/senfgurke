@@ -11,11 +11,15 @@ Option Explicit
 
 Private m_session As TSession
 
-Public Sub setup(Session As TSession)
-    Set m_session = Session
+Private Sub Class_Terminate()
+    Set m_session = Nothing
 End Sub
 
-Public Function run_step(step_definition As TStep) As Variant
+Public Sub setup(session As TSession)
+    Set m_session = session
+End Sub
+
+Public Function run_step(step_definition As TStep, context As TContext) As Variant
 
     Dim step_result As Variant
     Dim step_implementation_class As Variant
@@ -27,7 +31,7 @@ Public Function run_step(step_definition As TStep) As Variant
     step_function_name = step_definition.get_step_function_name
     For Each step_implementation_class In TConfig.StepImplementations
         TSpec.LastFailMsg = vbNullString
-        step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions)
+        step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions, context)
     Next
     If step_run_attempts = TConfig.StepImplementations.Count Then
         run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING, step_definition.get_step_function_template)
@@ -45,14 +49,14 @@ error_handler:
     End If
 End Function
 
-Private Function try_step(step_implementation_class As Variant, step_function_name As String, step_expressions As Collection) As Variant
+Private Function try_step(step_implementation_class As Variant, step_function_name As String, step_expressions As Collection, context As TContext) As Variant
 
     Dim step_result As String
     
     If step_expressions.Count > 0 Then
-        step_result = CallByName(step_implementation_class, step_function_name, VbMethod, step_expressions)
+        step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, step_expressions)
     Else
-        step_result = CallByName(step_implementation_class, step_function_name, VbMethod)
+        step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context)
     End If
     try_step = step_result
 End Function

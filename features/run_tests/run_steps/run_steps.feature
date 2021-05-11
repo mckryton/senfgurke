@@ -45,13 +45,24 @@ Ability: run steps
 
   Rule: missing steps should return a code template for the step implementation
 
-    Example: simple step function
+    Example: step function template without step expressions
       Given a step "Given a valid step"
       When the code template for the step implementation is requested
       Then the code template for the step implementation is
         """
-          Public Sub Given_a_valid_step_6A35DF3A18EC()
+          Public Sub Given_a_valid_step_6A35DF3A18EC(context as TContext)
             'Given a valid step
+            pending
+          End Sub
+        """
+
+    Example: step function template with step expressions
+      Given a step "Given a number 42"
+      When the code template for the step implementation is requested
+      Then the code template for the step implementation is
+        """
+          Public Sub Given_a_number_INT_6A352C3C78C6(context as TContext, step_expressions As Collection)
+            'Given a number {integer}
             pending
           End Sub
         """

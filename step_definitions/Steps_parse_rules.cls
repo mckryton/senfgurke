@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Then_the_feature_contains_INT_rules_5A810804CB2F(step_expressions As Collection)
+Public Sub Then_the_feature_contains_INT_rules_5A810804CB2F(context As TContext, step_expressions As Collection)
     'Then the feature contains {integer} rule(s)
     
     Dim rule_count As Integer
@@ -24,7 +24,7 @@ Public Sub Then_the_feature_contains_INT_rules_5A810804CB2F(step_expressions As 
     TSpec.expect(rule_count).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_each_rule_has_INT_example_3D7448C173EA(step_expressions As Collection)
+Public Sub Then_each_rule_has_INT_example_3D7448C173EA(context As TContext, step_expressions As Collection)
     'And each rule has {integer} example
         
     Dim feature_section As Variant
