@@ -50,7 +50,7 @@ Ability: run steps
       When the code template for the step implementation is requested
       Then the code template for the step implementation is
         """
-          Public Sub Given_a_valid_step_6A35DF3A18EC(context as TContext)
+          Public Sub Given_a_valid_step_6A35DF3A18EC(example_context as TContext)
             'Given a valid step
             pending
           End Sub
@@ -61,7 +61,7 @@ Ability: run steps
       When the code template for the step implementation is requested
       Then the code template for the step implementation is
         """
-          Public Sub Given_a_number_INT_6A352C3C78C6(context as TContext, step_expressions As Collection)
+          Public Sub Given_a_number_INT_6A352C3C78C6(example_context as TContext, step_expressions As Collection)
             'Given a number {integer}
             pending
           End Sub

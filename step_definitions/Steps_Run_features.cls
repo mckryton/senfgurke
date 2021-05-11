@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub When_the_feature_is_executed_8C8F454A90BC(context As TContext)
+Public Sub When_the_feature_is_executed_8C8F454A90BC(example_context As TContext)
     'When the feature is executed
     
     Dim parsed_feature As TFeature
@@ -24,7 +24,7 @@ Public Sub When_the_feature_is_executed_8C8F454A90BC(context As TContext)
     feature_runner.run_feature parsed_feature
 End Sub
 
-Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(context As TContext, step_expressions As Collection)
+Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(example_context As TContext, step_expressions As Collection)
     'When the feature is executed with tag parameter {string}
     
     Dim parsed_feature As TFeature
@@ -39,7 +39,7 @@ Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(conte
     feature_runner.run_feature parsed_feature, filter_tag:=step_expressions(1)
 End Sub
 
-Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE(context As TContext)
+Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE(example_context As TContext)
     'Then the background step is executed once before each example
     Dim step_events As Collection
     Dim log_event As Variant
@@ -53,7 +53,7 @@ Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE(conte
     TSpec.expect(step_events(3)("msg")).includes_text "background step"
 End Sub
 
-Public Sub Then_only_the_example_STR_is_executed_FD3BFD3B270C(context As TContext, step_expressions As Collection)
+Public Sub Then_only_the_example_STR_is_executed_FD3BFD3B270C(example_context As TContext, step_expressions As Collection)
     'Then only the example {string} is executed
     Dim example_events As Collection
     Dim log_event As Variant

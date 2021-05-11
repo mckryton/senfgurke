@@ -214,7 +214,7 @@ Public Function get_step_function_template() As String
 
     Dim template As String
     
-    template = "Public Sub " & Me.get_step_function_name & "(context as TContext"
+    template = "Public Sub " & Me.get_step_function_name & "(example_context as TContext"
     If Me.Expressions.Count > 0 Then
         template = template & ", step_expressions As Collection"
     End If

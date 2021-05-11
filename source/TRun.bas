@@ -11,7 +11,6 @@ Public Sub test(Optional filter_tag, Optional report_format)
     Set m_session = New TSession
     session.run_test filter_tag, report_format
     Set m_session = Nothing
-    cleanup_context
 End Sub
 
 Public Sub wip()
@@ -27,8 +26,3 @@ Public Property Get session() As TSession
     Set session = m_session
 End Property
 
-Private Sub cleanup_context()
-    'this is a workaround for using global variables
-    ' solution: use a context object as session property to share values between step functions
-    Set TStepVars.loaded_features = Nothing
-End Sub
