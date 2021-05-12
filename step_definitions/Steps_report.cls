@@ -71,7 +71,7 @@ End Sub
 Public Sub When_all_steps_were_reported_and_the_report_is_fin_A68058ECE13A(example_context As TContext)
     'When all steps were reported and the report is finished
     example_context.get_value("session").Reporter.finish_report
-    TStepVars.ReportOutput = example_context.get_value("session").Reporter.ConsoleOutput
+    example_context.set_value example_context.get_value("session").Reporter.ConsoleOutput, "report_output"
 End Sub
 
 Public Sub Then_the_resulting_report_output_is_STR_4C01A19A67C4(example_context As TContext, step_expressions As Collection)

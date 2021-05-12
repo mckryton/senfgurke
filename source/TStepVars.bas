@@ -9,6 +9,5 @@ Public m_parsed_feature As TFeature
 Public m_step_function_name As String
 Public step As TStep
 Public ParsedFeatures As Collection
-Public ReportOutput As String
 
 

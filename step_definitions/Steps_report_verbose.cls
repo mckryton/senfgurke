@@ -44,7 +44,7 @@ End Sub
 
 Public Sub When_the_description_line_is_formatted_417E5E95BA43(example_context As TContext)
     'When the description line is formatted
-    TStepVars.ReportOutput = example_context.get_value("session").Reporter.Report_Formatter.format_feature_description(TStepVars.gherkin_text)
+    example_context.set_value example_context.get_value("session").Reporter.Report_Formatter.format_feature_description(TStepVars.gherkin_text), "report_output"
 End Sub
 
 Public Sub Then_the_report_output_contains_STR_5A8ED3F2F3C6(example_context As TContext, step_expressions As Collection)
@@ -59,7 +59,7 @@ End Sub
 
 Public Sub Then_the_description_is_reported_as_STR_CA847D5BC6A5(example_context As TContext, step_expressions As Collection)
     'Then the description is reported as {string}
-    TSpec.expect(TStepVars.ReportOutput).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("report_output")).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_line_INT_of_the_resulting_output_is_STR_A434511445AD(example_context As TContext, step_expressions As Collection)

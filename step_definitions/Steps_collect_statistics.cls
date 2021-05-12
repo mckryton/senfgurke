@@ -53,7 +53,7 @@ End Sub
 
 Public Sub When_the_duration_is_calculated_4FCC027398DA(example_context As TContext)
     'When the duration is calculated
-    TStepVars.ReportOutput = example_context.get_value("session").get_duration_as_text(example_context.get_value("duration"))
+    example_context.set_value example_context.get_value("session").get_duration_as_text(example_context.get_value("duration")), "report_output"
 End Sub
 
 Public Sub When_the_results_for_the_steps_are_summed_up_EE8E882F4756(example_context As TContext)
@@ -69,7 +69,7 @@ End Sub
 
 Public Sub Then_the_resulting_output_is_STR_8EBDD0FB2136(example_context As TContext, step_expressions As Collection)
     'Then the resulting output is {string}
-    TSpec.expect(TStepVars.ReportOutput).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("report_output")).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_one_step_with_its_result_was_counted_69B81E54CF8B(example_context As TContext)
