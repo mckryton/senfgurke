@@ -9,10 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_step_result As Variant
-Private m_step_function_template As String
-Private m_step_function_name As String
-
 Public Sub Given_a_pending_step_6A3533BBBFE5(example_context As TContext)
     pending
 End Sub
@@ -72,22 +68,22 @@ Public Sub When_the_step_is_executed_CEB06B444334(example_context As TContext)
     example_context.set_value New TSession, "session"
     example_context.get_value("session").Reporter.enable_silent_mode
     step_runner.setup example_context.get_value("session")
-    m_step_result = step_runner.run_step(TStepVars.example_step, New TContext)
+    example_context.set_value step_runner.run_step(TStepVars.example_step, New TContext), "step_result"
 End Sub
 
 Public Sub When_the_code_template_for_the_step_implementation_7D39D6705DD8(example_context As TContext)
     'When the code template for the step implementation is requested
-    m_step_function_template = TStepVars.example_step.get_step_function_template
+    example_context.set_value TStepVars.example_step.get_step_function_template, "step_function_template"
 End Sub
 
 Public Sub When_the_step_is_translated_into_a_function_name_D820185C4AF6(example_context As TContext)
     'When the step is translated into a function name
-    m_step_function_name = TStepVars.example_step.get_step_function_name
+    example_context.set_value TStepVars.example_step.get_step_function_name, "step_function_name"
 End Sub
 
 Public Sub Then_the_execution_result_is_STR_80FDCF952A5A(example_context As TContext, step_expressions As Collection)
     'Then the execution result is {string}
-    TSpec.expect(m_step_result(0)).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("step_result")(0)).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_code_template_for_the_step_implementation_9C79C155DB8E(example_context As TContext, step_expressions As Collection)
@@ -96,7 +92,7 @@ Public Sub Then_the_code_template_for_the_step_implementation_9C79C155DB8E(examp
     Dim line As Variant
     Dim code_template As String
     
-    For Each line In Split(m_step_function_template, vbLf)
+    For Each line In Split(example_context.get_value("step_function_template"), vbLf)
         If code_template <> vbNullString Then code_template = code_template & vbLf
         code_template = code_template & Trim(line)
     Next
@@ -105,6 +101,6 @@ End Sub
 
 Public Sub Then_the_name_of_the_resulting_function_is_STR_C88DE530F4BA(example_context As TContext, step_expressions As Collection)
     'Then the name of the resulting function is {string}
-    TSpec.expect(m_step_function_name).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("step_function_name")).to_be step_expressions(1)
 End Sub
 
