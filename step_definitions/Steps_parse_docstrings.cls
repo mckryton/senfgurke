@@ -45,10 +45,12 @@ End Sub
 
 Public Sub When_the_feature_background_is_parsed_8C5FB8584F5D(example_context As TContext)
     'When the feature background is parsed
-    Set TStepVars.background = New TBackground
-    TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, TStepVars.background
-    If TStepVars.background.Steps.Count = 1 Then
-        Set TStepVars.first_step = TStepVars.background.Steps(1)
+    Dim background As TBackground
+    
+    Set background = New TBackground
+    TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, background
+    If background.Steps.Count = 1 Then
+        Set TStepVars.first_step = background.Steps(1)
     End If
 End Sub
 
