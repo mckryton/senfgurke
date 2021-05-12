@@ -58,7 +58,7 @@ End Sub
 
 Public Sub When_the_results_for_the_steps_are_summed_up_EE8E882F4756(example_context As TContext)
     'When the results for the steps are summed up
-    TStepVars.StatisticResults = TStepVars.session.statistics.get_statistics_summary
+    example_context.set_value TStepVars.session.statistics.get_statistics_summary, "statistic_results"
 End Sub
 
 Public Sub Then_start_and_end_time_for_the_test_run_are_set_262A8F19D7C7(example_context As TContext)
@@ -79,5 +79,5 @@ End Sub
 
 Public Sub Then_statistics_results_for_steps_is_STR_305CDE5C3438(example_context As TContext, step_expressions As Collection)
     'Then statistics results for steps is {string}
-    TSpec.expect(TStepVars.StatisticResults).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("statistic_results")).to_be step_expressions(1)
 End Sub
