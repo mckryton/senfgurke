@@ -49,7 +49,7 @@ Public Sub When_the_example_is_parsed_CEB09D77F01F(example_context As TContext)
     Set TStepVars.example = New TExample
     TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, TStepVars.example
     If TStepVars.example.Steps.Count = 1 Then
-        Set TStepVars.first_step = TStepVars.example.Steps(1)
+        example_context.set_value TStepVars.example.Steps(1), "first_step"
     End If
 End Sub
 

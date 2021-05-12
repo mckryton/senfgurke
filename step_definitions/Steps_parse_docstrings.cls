@@ -50,26 +50,26 @@ Public Sub When_the_feature_background_is_parsed_8C5FB8584F5D(example_context As
     Set background = New TBackground
     TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, background
     If background.Steps.Count = 1 Then
-        Set TStepVars.first_step = background.Steps(1)
+        example_context.set_value background.Steps(1), "first_step"
     End If
 End Sub
 
 Public Sub Then_the_first_step_has_an_expression_451F9158BDF6(example_context As TContext)
     'Then the first step has an expression
-    TSpec.expect(TStepVars.first_step.Expressions.Count).to_be 1
+    TSpec.expect(example_context.get_value("first_step").Expressions.Count).to_be 1
 End Sub
 
 Public Sub Then_the_first_step_has_a_docstring_value_STR_B59597EF055B(example_context As TContext, step_expressions As Collection)
     'And the first step has a docstring value {string}
-    TSpec.expect(TStepVars.first_step.Docstring).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("first_step").Docstring).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_function_name_for_the_first_step_ends_wit_79EB11152D22(example_context As TContext, step_expressions As Collection)
     'And the function name for the first step ends with {string}
     Dim function_name As String
     
-    If TStepVars.first_step Is Nothing Then Set TStepVars.first_step = TStepVars.example.Steps(1)
-    function_name = TStepVars.first_step.get_step_function_name
+    If Not example_context.value_exists("first_step") Then example_context.set_value TStepVars.example.Steps(1), "first_step"
+    function_name = example_context.get_value("first_step").get_step_function_name
     function_name = Left(function_name, Len(function_name) - 13)
     TSpec.expect(Right(function_name, 3)).to_be step_expressions(1)
 End Sub
