@@ -46,25 +46,25 @@ End Sub
 
 Public Sub When_the_example_is_parsed_CEB09D77F01F(example_context As TContext)
     'When the example is parsed
-    Set TStepVars.example = New TExample
-    TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, TStepVars.example
-    If TStepVars.example.Steps.Count = 1 Then
-        example_context.set_value TStepVars.example.Steps(1), "first_step"
+    example_context.set_value New TExample, "example"
+    TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, example_context.get_value("example")
+    If example_context.get_value("example").Steps.Count = 1 Then
+        example_context.set_value example_context.get_value("example").Steps(1), "first_step"
     End If
 End Sub
 
 Public Sub Then_the_example_clause_from_the_parsed_result_con_C8ADD15947E9(example_context As TContext)
     'Then the example clause from the parsed result contains all the steps
-    TSpec.expect(TStepVars.example.Steps.Count).to_be 3
-    TSpec.expect(TStepVars.example.Steps(1).SType).to_be STEP_TYPE_GIVEN
-    TSpec.expect(TStepVars.example.Steps(1).name).to_be "a precondition"
-    TSpec.expect(TStepVars.example.Steps(1).Elements(1)).to_be "Given"
-    TSpec.expect(TStepVars.example.Steps(2).SType).to_be STEP_TYPE_WHEN
-    TSpec.expect(TStepVars.example.Steps(2).name).to_be "action happens"
-    TSpec.expect(TStepVars.example.Steps(2).Elements(1)).to_be "When"
-    TSpec.expect(TStepVars.example.Steps(3).SType).to_be STEP_TYPE_THEN
-    TSpec.expect(TStepVars.example.Steps(3).name).to_be "some result is expected"
-    TSpec.expect(TStepVars.example.Steps(3).Elements(1)).to_be "Then"
+    TSpec.expect(example_context.get_value("example").Steps.Count).to_be 3
+    TSpec.expect(example_context.get_value("example").Steps(1).SType).to_be STEP_TYPE_GIVEN
+    TSpec.expect(example_context.get_value("example").Steps(1).name).to_be "a precondition"
+    TSpec.expect(example_context.get_value("example").Steps(1).Elements(1)).to_be "Given"
+    TSpec.expect(example_context.get_value("example").Steps(2).SType).to_be STEP_TYPE_WHEN
+    TSpec.expect(example_context.get_value("example").Steps(2).name).to_be "action happens"
+    TSpec.expect(example_context.get_value("example").Steps(2).Elements(1)).to_be "When"
+    TSpec.expect(example_context.get_value("example").Steps(3).SType).to_be STEP_TYPE_THEN
+    TSpec.expect(example_context.get_value("example").Steps(3).name).to_be "some result is expected"
+    TSpec.expect(example_context.get_value("example").Steps(3).Elements(1)).to_be "Then"
 End Sub
 
 Public Sub Then_the_type_of_the_second_step_is_set_to_STR_9CA91DFBD6DD(example_context As TContext, step_expressions As Collection)
@@ -74,6 +74,6 @@ End Sub
 
 Public Sub Then_first_step_is_changed_to_STR_26F73CDF60C2(example_context As TContext, step_expressions As Collection)
     'Then first step is changed to {string}
-    TSpec.expect(TStepVars.example.Steps(1).StepDefinition).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("example").Steps(1).StepDefinition).to_be step_expressions(1)
 End Sub
 

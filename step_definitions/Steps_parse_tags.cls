@@ -29,7 +29,7 @@ Public Sub Then_the_parsed_example_contains_the_tags_STR_013B99DC06E4(example_co
     
     tags = Split(step_expressions(1), ",")
     For Each tag In tags
-        TSpec.expect(TStepVars.example.tags).contains_member Trim(tag)
+        TSpec.expect(example_context.get_value("example").tags).contains_member Trim(tag)
     Next
 End Sub
 
@@ -37,7 +37,8 @@ Public Sub Then_the_parsed_features_contains_INT_examples_013B39CEE3B0(example_c
     'Then the parsed features contains {integer} examples
     TSpec.expect(example_context.get_value("parsed_feature").sections.Count).to_be 2
     TSpec.expect(TypeName(example_context.get_value("parsed_feature").sections(2))).to_be "TExample"
-    Set TStepVars.example = example_context.get_value("parsed_feature").sections(2)
+    
+    example_context.set_value example_context.get_value("parsed_feature").sections(2), "example"
 End Sub
 
 Public Sub Then_the_parsed_second_example_contains_the_tags_S_E5AA0E4C4719(example_context As TContext, step_expressions As Collection)
@@ -48,7 +49,7 @@ Public Sub Then_the_parsed_second_example_contains_the_tags_S_E5AA0E4C4719(examp
     
     tags = Split(step_expressions(1), ",")
     For Each tag In tags
-        TSpec.expect(TStepVars.example.tags).contains_member Trim(tag)
+        TSpec.expect(example_context.get_value("example").tags).contains_member Trim(tag)
     Next
 End Sub
 

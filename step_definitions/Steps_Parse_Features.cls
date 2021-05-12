@@ -85,7 +85,7 @@ End Sub
 Public Sub Then_the_parsed_features_contains_an_example_7B67F2AF5933(example_context As TContext)
     'Then the parsed features contains an example
     TSpec.expect(TypeName(example_context.get_value("parsed_feature").sections(1))).to_be "TExample"
-    Set TStepVars.example = example_context.get_value("parsed_feature").sections(1)
+    example_context.set_value example_context.get_value("parsed_feature").sections(1), "example"
 End Sub
 
 Public Sub Then_parsing_didnt_cause_any_errors_95DC5E1A0DA5(example_context As TContext)

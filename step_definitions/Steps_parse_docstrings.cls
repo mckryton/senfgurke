@@ -38,9 +38,9 @@ End Sub
 
 Public Sub When_the_step_is_parsed_317375497656(example_context As TContext)
     'When the step is parsed
-    Set TStepVars.example = New TExample
+    example_context.set_value New TExample, "example"
     TStepVars.gherkin_text = "Example: sample example" & vbLf & TStepVars.gherkin_text
-    TFeatureParser.parse_steps Split(TStepVars.gherkin_text, vbLf), 0, TStepVars.example
+    TFeatureParser.parse_steps Split(TStepVars.gherkin_text, vbLf), 0, example_context.get_value("example")
 End Sub
 
 Public Sub When_the_feature_background_is_parsed_8C5FB8584F5D(example_context As TContext)
@@ -68,7 +68,7 @@ Public Sub Then_the_function_name_for_the_first_step_ends_wit_79EB11152D22(examp
     'And the function name for the first step ends with {string}
     Dim function_name As String
     
-    If Not example_context.value_exists("first_step") Then example_context.set_value TStepVars.example.Steps(1), "first_step"
+    If Not example_context.value_exists("first_step") Then example_context.set_value example_context.get_value("example").Steps(1), "first_step"
     function_name = example_context.get_value("first_step").get_step_function_name
     function_name = Left(function_name, Len(function_name) - 13)
     TSpec.expect(Right(function_name, 3)).to_be step_expressions(1)
@@ -76,11 +76,11 @@ End Sub
 
 Public Sub Then_the_step_has_one_string_parameter_with_two_li_AD35FD5BD215(example_context As TContext)
     'Then the step has one string parameter with two lines
-    TSpec.expect(TypeName(TStepVars.example.Steps(1).Expressions(1))).to_be "String"
-    TSpec.expect(UBound(Split(TStepVars.example.Steps(1).Expressions(1), vbLf))).to_be 1
+    TSpec.expect(TypeName(example_context.get_value("example").Steps(1).Expressions(1))).to_be "String"
+    TSpec.expect(UBound(Split(example_context.get_value("example").Steps(1).Expressions(1), vbLf))).to_be 1
 End Sub
 
 Public Sub Then_line_INT_of_the_steps_docstring_is_empty_FBE59787C9D9(example_context As TContext, step_expressions As Collection)
     'Then line {integer} of the steps docstring is empty
-    TSpec.expect(Split(TStepVars.example.Steps(1).Docstring, vbLf)(step_expressions(1) - 1)).to_be vbNullString
+    TSpec.expect(Split(example_context.get_value("example").Steps(1).Docstring, vbLf)(step_expressions(1) - 1)).to_be vbNullString
 End Sub

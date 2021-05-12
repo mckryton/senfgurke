@@ -21,8 +21,8 @@ End Sub
 
 Public Sub Given_an_example_with_a_step_STR_2AA83F29F0BD(example_context As TContext, step_expressions As Collection)
     'Given an example with a step {string}
-    Set TStepVars.example = New TExample
-    TStepVars.example.Steps.Add TFeatureParser.create_step(step_expressions(1))
+    example_context.set_value New TExample, "example"
+    example_context.get_value("example").Steps.Add TFeatureParser.create_step(step_expressions(1))
 End Sub
 
 Public Sub Given_another_step_is_defined_as_STR_F14E826F5231(example_context As TContext, step_expressions As Collection)
@@ -37,7 +37,7 @@ End Sub
 
 Public Sub When_the_step_definition_is_parsed_as_part_of_this_E03DC3C99405(example_context As TContext)
     'When the step definition is parsed as part of this example
-    example_context.set_value TFeatureParser.create_step(TStepVars.gherkin_text, TStepVars.example), "step"
+    example_context.set_value TFeatureParser.create_step(TStepVars.gherkin_text, example_context.get_value("example")), "step"
 End Sub
 
 Public Sub Then_the_type_of_the_step_is_set_to_STR_3EC12192CDA4(example_context As TContext, step_expressions As Collection)
