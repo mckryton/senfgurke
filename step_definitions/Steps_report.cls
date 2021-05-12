@@ -14,7 +14,6 @@ Public Sub Given_the_report_format_is_STR_94DE9139C9BF(example_context As TConte
     example_context.set_value New TSession, "session"
     example_context.get_value("session").set_report_format step_expressions(1)
     example_context.get_value("session").Reporter.enable_silent_mode
-    Set TStepVars.ReportFormatter = example_context.get_value("session").Reporter.Report_Formatter
 End Sub
 
 Public Sub Given_a_code_template_for_a_missing_step_was_repor_E4A1AA906A81(example_context As TContext, step_expressions As Collection)

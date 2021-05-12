@@ -10,6 +10,5 @@ Public m_step_function_name As String
 Public step As TStep
 Public ParsedFeatures As Collection
 Public ReportOutput As String
-Public ReportFormatter As Variant
 
 
