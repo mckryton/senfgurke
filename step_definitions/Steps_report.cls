@@ -35,18 +35,22 @@ End Sub
 
 Public Sub Given_a_parse_error_STR_FF6B36833425(example_context As TContext, step_expressions As Collection)
     'Given a parse error {string}
-    Set TStepVars.parse_error = New Collection
-    TStepVars.parse_error.Add step_expressions(1), "err_msg"
+    example_context.set_value New Collection, "parse_error"
+    example_context.get_value("parse_error").Add step_expressions(1), "err_msg"
 End Sub
 
 Public Sub Given_the_error_description_is_STR_73D44E8E84D9(example_context As TContext, step_expressions As Collection)
     'And the error description is {string}
-    TStepVars.parse_error.Add step_expressions(1), "err_description"
+    example_context.get_value("parse_error").Add step_expressions(1), "err_description"
 End Sub
 
 Public Sub When_the_parse_error_is_reported_40CCF87A8732(example_context As TContext)
     'When the parse error is reported
-    TStepVars.session.Reporter.report REPORT_MSG_TYPE_PARSE_ERR, TStepVars.parse_error("err_msg"), err_msg:=TStepVars.parse_error("err_description")
+    Dim parse_error As Collection
+    
+    Set parse_error = example_context.get_value("parse_error")
+    TStepVars.session.Reporter.report REPORT_MSG_TYPE_PARSE_ERR, parse_error("err_msg") _
+                                    , err_msg:=parse_error("err_description")
 End Sub
 
 Public Sub When_a_step_STR_is_reported_with_status_STR_22E595BD5DFA(example_context As TContext, step_expressions As Collection)

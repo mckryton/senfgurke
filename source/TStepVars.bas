@@ -18,5 +18,4 @@ Public CodeTemplate As String
 Public session As TSession
 Public Duration As Long
 Public StatisticResults As String
-Public parse_error As Collection
 

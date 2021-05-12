@@ -32,19 +32,19 @@ End Sub
 
 Public Sub When_the_feature_is_parsed_CEB0ED59F01F(example_context As TContext)
     'When the feature is parsed
-    Set TStepVars.parse_error = New Collection
+    example_context.set_value New Collection, "parse_error"
     On Error GoTo parse_error
     Set m_parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
     Exit Sub
     
 parse_error:
-    TStepVars.parse_error.Add Err.description, "err_description"
+    example_context.get_value("parse_error").Add Err.description, "err_description"
     Err.Clear
 End Sub
 
 Public Sub Then_the_error_STR_was_raised_7C9B342540B8(example_context As TContext, step_expressions As Collection)
     'Then the error {string} was raised
-    TSpec.expect(TStepVars.parse_error("err_description")).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("parse_error")("err_description")).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981(example_context As TContext)
@@ -90,7 +90,7 @@ End Sub
 
 Public Sub Then_parsing_didnt_cause_any_errors_95DC5E1A0DA5(example_context As TContext)
     'Then parsing didn't cause any errors
-    TSpec.expect(TStepVars.parse_error.Count).to_be 0
+    TSpec.expect(example_context.get_value("parse_error").Count).to_be 0
 End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_with_tw_5E84053FD2C3(example_context As TContext)
