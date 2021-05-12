@@ -64,16 +64,6 @@ Public Sub When_a_step_STR_is_reported_with_status_STR_and_er_1F229896A06C(examp
     example_context.get_value("session").Reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), step_expressions(3)
 End Sub
 
-Public Sub When__INT_steps_are_reported_as_successful_34289162846E(example_context As TContext, step_expressions As Collection)
-    'When  {integer} steps are reported as successful
-    Dim index As Integer
-    
-    Set TStepVars.ReportMessages = New Collection
-    For index = 1 To step_expressions(1)
-        example_context.get_value("session").Reporter.report REPORT_MSG_TYPE_STEP, "Given a valid step", STATUS_OK
-    Next
-End Sub
-
 Public Sub When_the_report_will_report_code_templates_for_the_B3C6D3155FBC(example_context As TContext)
     'When the report will report code templates for the missing steps
     example_context.get_value("session").Reporter.finish_report

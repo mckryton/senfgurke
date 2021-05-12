@@ -9,10 +9,11 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_the_next_step_STR_was_reported_as_missing_07941E95CA02(example_context As TContext, step_expressions As Collection)
-    'And the next step {string} was reported as missing
-    Dim session As TSession
+Public Sub When__INT_steps_are_reported_as_successful_34289162846E(example_context As TContext, step_expressions As Collection)
+    'When  {integer} steps are reported as successful
+    Dim index As Integer
     
-    Set session = New TSession
-    TStepVars.ReportMessages.Add session.Reporter.build_msg_package(REPORT_MSG_TYPE_STEP, step_expressions(1), "MISSING", vbNullString)
+    For index = 1 To step_expressions(1)
+        example_context.get_value("session").Reporter.report REPORT_MSG_TYPE_STEP, "Given a valid step", STATUS_OK
+    Next
 End Sub
