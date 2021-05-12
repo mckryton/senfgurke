@@ -19,8 +19,7 @@ End Sub
 
 Public Sub Given_a_code_template_for_a_missing_step_was_repor_E4A1AA906A81(example_context As TContext, step_expressions As Collection)
     'Given a code template for a missing step was reported as {string}
-    TStepVars.CodeTemplate = step_expressions(1)
-    TStepVars.session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, TStepVars.CodeTemplate
+    TStepVars.session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, step_expressions(1)
 End Sub
 
 Public Sub Given_a_step_STR_was_reported_with_status_STR_and__6DDD4DF1A06C(example_context As TContext, step_expressions As Collection)
