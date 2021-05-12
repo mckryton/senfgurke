@@ -19,20 +19,20 @@ Public Sub Given_one_example_in_this_run_had_INT_passed_INT_f_800581B31566(examp
     Dim index As Integer
    
     For index = 1 To step_expressions(1)
-        TStepVars.session.statistics.count_event LOG_TYPE_STEP, STATUS_OK
+        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, STATUS_OK
     Next
     For index = 1 To step_expressions(2)
-        TStepVars.session.statistics.count_event LOG_TYPE_STEP, STATUS_FAIL
+        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, STATUS_FAIL
     Next
     For index = 1 To step_expressions(3)
-        TStepVars.session.statistics.count_event LOG_TYPE_STEP, STATUS_MISSING
+        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, STATUS_MISSING
     Next
     For index = 1 To step_expressions(4)
-        TStepVars.session.statistics.count_event LOG_TYPE_STEP, STATUS_PENDING
+        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, STATUS_PENDING
     Next
 End Sub
 
 Public Sub When_the_statistics_are_reported_418C385A7E0B(example_context As TContext)
     'When the statistics are reported
-    TStepVars.session.report_statistics example_context.get_value("duration")
+    example_context.get_value("session").report_statistics example_context.get_value("duration")
 End Sub

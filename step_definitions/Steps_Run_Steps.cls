@@ -69,9 +69,9 @@ Public Sub When_the_step_is_executed_CEB06B444334(example_context As TContext)
     Dim step_runner As TStepRunner
     
     Set step_runner = New TStepRunner
-    Set TStepVars.session = New TSession
-    TStepVars.session.Reporter.enable_silent_mode
-    step_runner.setup TStepVars.session
+    example_context.set_value New TSession, "session"
+    example_context.get_value("session").Reporter.enable_silent_mode
+    step_runner.setup example_context.get_value("session")
     m_step_result = step_runner.run_step(TStepVars.example_step, New TContext)
 End Sub
 

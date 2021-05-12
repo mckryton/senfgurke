@@ -12,6 +12,4 @@ Public ParsedFeatures As Collection
 Public ReportOutput As String
 Public ReportFormatter As Variant
 Public ReportMessages As Collection
-Public session As TSession
-
 

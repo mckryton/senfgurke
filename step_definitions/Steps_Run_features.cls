@@ -14,12 +14,14 @@ Public Sub When_the_feature_is_executed_8C8F454A90BC(example_context As TContext
     
     Dim parsed_feature As TFeature
     Dim feature_runner As TFeatureRunner
+    Dim session As TSession
     
     Set feature_runner = New TFeatureRunner
-    Set TStepVars.session = New TSession
-    TStepVars.session.Reporter.enable_silent_mode
-    TStepVars.session.statistics.enable_event_log
-    feature_runner.setup TStepVars.session
+    Set session = New TSession
+    example_context.set_value session, "session"
+    session.Reporter.enable_silent_mode
+    session.statistics.enable_event_log
+    feature_runner.setup session
     Set parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
     feature_runner.run_feature parsed_feature
 End Sub
@@ -29,12 +31,14 @@ Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(examp
     
     Dim parsed_feature As TFeature
     Dim feature_runner As TFeatureRunner
+    Dim session As TSession
     
     Set feature_runner = New TFeatureRunner
-    Set TStepVars.session = New TSession
-    TStepVars.session.Reporter.enable_silent_mode
-    TStepVars.session.statistics.enable_event_log
-    feature_runner.setup TStepVars.session
+    Set session = New TSession
+    example_context.set_value session, "session"
+    session.Reporter.enable_silent_mode
+    session.statistics.enable_event_log
+    feature_runner.setup session
     Set parsed_feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
     feature_runner.run_feature parsed_feature, filter_tag:=step_expressions(1)
 End Sub
@@ -45,7 +49,7 @@ Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE(examp
     Dim log_event As Variant
     
     Set step_events = New Collection
-    For Each log_event In TStepVars.session.statistics.event_log
+    For Each log_event In example_context.get_value("session").statistics.event_log
         If log_event("type") = LOG_TYPE_STEP Then step_events.Add log_event
     Next
     TSpec.expect(step_events.Count).to_be 4
@@ -59,7 +63,7 @@ Public Sub Then_only_the_example_STR_is_executed_FD3BFD3B270C(example_context As
     Dim log_event As Variant
     
     Set example_events = New Collection
-    For Each log_event In TStepVars.session.statistics.event_log
+    For Each log_event In example_context.get_value("session").statistics.event_log
         If log_event("type") = LOG_TYPE_EXAMPLE Then example_events.Add log_event
     Next
     TSpec.expect(example_events.Count).to_be 1

@@ -42,15 +42,15 @@ Public Sub When_the_example_is_executed_8C8F015690BC(example_context As TContext
     
     Set feature_runner = New TFeatureRunner
     Set parsed_feature = example_context.get_value("parsed_feature")
-    Set TStepVars.session = New TSession
-    TStepVars.session.Reporter.enable_silent_mode
-    feature_runner.setup TStepVars.session
+    example_context.set_value New TSession, "session"
+    example_context.get_value("session").Reporter.enable_silent_mode
+    feature_runner.setup example_context.get_value("session")
     feature_runner.run_feature parsed_feature
 End Sub
 
 Public Sub Then_step_statistics_is_STR_121A2677FC0F(example_context As TContext, step_expressions As Collection)
     'Then step statistics is {string}
-    TSpec.expect(TStepVars.session.statistics.get_statistics_summary).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("session").statistics.get_statistics_summary).to_be step_expressions(1)
 End Sub
 
 

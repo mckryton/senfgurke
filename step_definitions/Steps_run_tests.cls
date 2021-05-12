@@ -28,34 +28,38 @@ End Sub
 
 Public Sub When_Senfgurke_executes_the_feature_7D772B9CDDDE(example_context As TContext)
     'When Senfgurke executes the feature
-    Set TStepVars.session = New TSession
-    TStepVars.session.Reporter.enable_silent_mode
-    TStepVars.session.run_test features_as_text:=example_context.get_value("loaded_features")
+    example_context.set_value New TSession, "session"
+    With example_context.get_value("session")
+        .Reporter.enable_silent_mode
+        .run_test features_as_text:=example_context.get_value("loaded_features")
+    End With
 End Sub
 
 Public Sub When_a_test_is_started_with_STR_as_parameter_EA8A08D9425A(example_context As TContext, step_expressions As Collection)
     'When a test is started with {string} as parameter
-    Set TStepVars.session = New TSession
-    TStepVars.session.Reporter.enable_silent_mode
-    TStepVars.session.statistics.enable_event_log
-    TStepVars.session.run_test features_as_text:=example_context.get_value("loaded_features"), filter_tag:=step_expressions(1)
+    example_context.set_value New TSession, "session"
+    With example_context.get_value("session")
+        .Reporter.enable_silent_mode
+        .statistics.enable_event_log
+        .run_test features_as_text:=example_context.get_value("loaded_features"), filter_tag:=step_expressions(1)
+    End With
 End Sub
 
 Public Sub Then_the_error_STR_is_reported_80FDB77BCB22(example_context As TContext, step_expressions As Collection)
     'Then the error {string} is reported
-    TSpec.expect(TStepVars.session.Reporter.ConsoleOutput).includes_text step_expressions(1)
+    TSpec.expect(example_context.get_value("session").Reporter.ConsoleOutput).includes_text step_expressions(1)
 End Sub
 
 Public Sub Then_the_name_of_the_feature_file_is_reported_as_l_1A076B1EB8D5(example_context As TContext)
     'And the name of the feature file is reported as location of the error
-    TSpec.expect(TStepVars.session.Reporter.ConsoleOutput).includes_text example_context.get_value("feature_origin")
+    TSpec.expect(example_context.get_value("session").Reporter.ConsoleOutput).includes_text example_context.get_value("feature_origin")
 End Sub
 
 Public Sub Then_only_the_example_from_the_tagged_feature_was__858E135D9F78(example_context As TContext)
     'Then only the example from the tagged feature was executed
     Dim example_events As Collection
     
-    Set example_events = TStepVars.session.statistics.filter_events(LOG_TYPE_EXAMPLE)
+    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_TYPE_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 1
     TSpec.expect(example_events(1)("msg")).includes_text "sample from tagged feature"
 End Sub
@@ -64,7 +68,7 @@ Public Sub Then_only_the_example_from_the_tagged_rule_was_exe_0F822B53DF54(examp
     'Then only the example from the tagged rule was executed
     Dim example_events As Collection
     
-    Set example_events = TStepVars.session.statistics.filter_events(LOG_TYPE_EXAMPLE)
+    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_TYPE_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 1
     TSpec.expect(example_events(1)("msg")).includes_text "example assigned to the rule"
 End Sub
@@ -73,7 +77,7 @@ Public Sub Then_no_example_was_executed_16BF2F2090BC(example_context As TContext
     'Then no example was executed
     Dim example_events As Collection
     
-    Set example_events = TStepVars.session.statistics.filter_events(LOG_TYPE_EXAMPLE)
+    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_TYPE_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 0
 End Sub
 
