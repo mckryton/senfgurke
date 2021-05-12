@@ -41,7 +41,7 @@ End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_7B67C585A7A0(example_context As TContext)
     'Then the parsed result contains an example
-    TSpec.expect(TypeName(m_parsed_feature.sections(1))).to_be "TExample"
+    TSpec.expect(TypeName(example_context.get_value("parsed_feature").sections(1))).to_be "TExample"
 End Sub
 
 Public Sub When_the_example_is_parsed_CEB09D77F01F(example_context As TContext)
@@ -69,7 +69,7 @@ End Sub
 
 Public Sub Then_the_type_of_the_second_step_is_set_to_STR_9CA91DFBD6DD(example_context As TContext, step_expressions As Collection)
     'Then the type of the second step is set to {string}
-    TSpec.expect(m_parsed_feature.sections(1).Steps(2).SType).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("parsed_feature").sections(1).Steps(2).SType).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_first_step_is_changed_to_STR_26F73CDF60C2(example_context As TContext, step_expressions As Collection)

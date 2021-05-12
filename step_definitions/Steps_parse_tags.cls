@@ -17,7 +17,7 @@ Public Sub Then_the_parsed_features_contains_the_tags_STR_013B39CE37F4(example_c
     
     tags = Split(step_expressions(1), ",")
     For Each tag In tags
-        TSpec.expect(m_parsed_feature.tags).contains_member Trim(tag)
+        TSpec.expect(example_context.get_value("parsed_feature").tags).contains_member Trim(tag)
     Next
 End Sub
 
@@ -35,9 +35,9 @@ End Sub
 
 Public Sub Then_the_parsed_features_contains_INT_examples_013B39CEE3B0(example_context As TContext, step_expressions As Collection)
     'Then the parsed features contains {integer} examples
-    TSpec.expect(m_parsed_feature.sections.Count).to_be 2
-    TSpec.expect(TypeName(m_parsed_feature.sections(2))).to_be "TExample"
-    Set TStepVars.example = m_parsed_feature.sections(2)
+    TSpec.expect(example_context.get_value("parsed_feature").sections.Count).to_be 2
+    TSpec.expect(TypeName(example_context.get_value("parsed_feature").sections(2))).to_be "TExample"
+    Set TStepVars.example = example_context.get_value("parsed_feature").sections(2)
 End Sub
 
 Public Sub Then_the_parsed_second_example_contains_the_tags_S_E5AA0E4C4719(example_context As TContext, step_expressions As Collection)
@@ -59,7 +59,7 @@ Public Sub Then_the_parsed_rule_contains_the_tags_STR_7B67E25E94E1(example_conte
     Dim tags As Variant
     Dim tag As Variant
     
-    Set rule = m_parsed_feature.sections(1)
+    Set rule = example_context.get_value("parsed_feature").sections(1)
     tags = Split(step_expressions(1), ",")
     For Each tag In tags
         TSpec.expect(rule.tags).contains_member Trim(tag)
@@ -73,12 +73,12 @@ Public Sub Then_the_included_example_contains_the_tags_STR_33546FCE3943(example_
     Dim tags As Variant
     Dim tag As Variant
     
-    If TypeName(m_parsed_feature.sections(1)) = "TExample" Then
+    If TypeName(example_context.get_value("parsed_feature").sections(1)) = "TExample" Then
         'example is 1st section of the feature
-        Set included_example = m_parsed_feature.sections(1)
+        Set included_example = example_context.get_value("parsed_feature").sections(1)
     Else
         '1st section of the feature is a rule with one example
-        Set included_example = m_parsed_feature.sections(1).sections(1)
+        Set included_example = example_context.get_value("parsed_feature").sections(1).sections(1)
     End If
     tags = Split(step_expressions(1), ",")
     For Each tag In tags
