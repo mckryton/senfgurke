@@ -26,7 +26,7 @@ End Sub
 
 Public Sub Given_a_description_line_STR_6B57E8EB7A49(example_context As TContext, step_expressions As Collection)
     'Given a description line {string}
-    TStepVars.gherkin_text = step_expressions(1)
+    example_context.set_value step_expressions(1), "gherkin_text"
 End Sub
 
 Public Sub When_a_step_STR_followed_by_a_docstring_STR_is_rep_8C80B341FF25(example_context As TContext, step_expressions As Collection)
@@ -44,7 +44,7 @@ End Sub
 
 Public Sub When_the_description_line_is_formatted_417E5E95BA43(example_context As TContext)
     'When the description line is formatted
-    example_context.set_value example_context.get_value("session").Reporter.Report_Formatter.format_feature_description(TStepVars.gherkin_text), "report_output"
+    example_context.set_value example_context.get_value("session").Reporter.Report_Formatter.format_feature_description(example_context.get_value("gherkin_text")), "report_output"
 End Sub
 
 Public Sub Then_the_report_output_contains_STR_5A8ED3F2F3C6(example_context As TContext, step_expressions As Collection)

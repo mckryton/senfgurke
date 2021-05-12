@@ -11,12 +11,12 @@ Option Explicit
 
 Public Sub Given_a_step_definition_STR_65172AC6DD8A(example_context As TContext, step_expressions As Collection)
     'Given a step definition {string}
-    TStepVars.gherkin_text = step_expressions(1)
+    example_context.set_value step_expressions(1), "gherkin_text"
 End Sub
 
 Public Sub Given_a_step_is_defined_as_STR_2925BEC1427D(example_context As TContext, step_expressions As Collection)
     'Given a step is defined as "Given a step"
-    TStepVars.gherkin_text = step_expressions(1)
+    example_context.set_value step_expressions(1), "gherkin_text"
 End Sub
 
 Public Sub Given_an_example_with_a_step_STR_2AA83F29F0BD(example_context As TContext, step_expressions As Collection)
@@ -27,17 +27,17 @@ End Sub
 
 Public Sub Given_another_step_is_defined_as_STR_F14E826F5231(example_context As TContext, step_expressions As Collection)
     'Given another step is defined as {string}
-    TStepVars.gherkin_text = step_expressions(1)
+    example_context.set_value step_expressions(1), "gherkin_text"
 End Sub
 
 Public Sub When_the_step_definition_is_parsed_8240391A8855(example_context As TContext)
     'When the step definition is parsed
-    example_context.set_value TFeatureParser.create_step(TStepVars.gherkin_text), "step"
+    example_context.set_value TFeatureParser.create_step(example_context.get_value("gherkin_text")), "step"
 End Sub
 
 Public Sub When_the_step_definition_is_parsed_as_part_of_this_E03DC3C99405(example_context As TContext)
     'When the step definition is parsed as part of this example
-    example_context.set_value TFeatureParser.create_step(TStepVars.gherkin_text, example_context.get_value("example")), "step"
+    example_context.set_value TFeatureParser.create_step(example_context.get_value("gherkin_text"), example_context.get_value("example")), "step"
 End Sub
 
 Public Sub Then_the_type_of_the_step_is_set_to_STR_3EC12192CDA4(example_context As TContext, step_expressions As Collection)

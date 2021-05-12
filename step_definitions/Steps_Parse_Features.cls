@@ -11,30 +11,30 @@ Option Explicit
 
 Public Sub Given_a_feature_STR_6A3547BB2524(example_context As TContext, step_expressions As Collection)
     'Given a feature {string}
-    TStepVars.gherkin_text = Replace(step_expressions(1), " <br> ", vbLf)
+    example_context.set_value Replace(step_expressions(1), " <br> ", vbLf), "gherkin_text"
 End Sub
 
 Public Sub Given_a_feature_F5C67A506977(example_context As TContext)
     'Given a feature
-    TStepVars.gherkin_text = "Feature: sample feature"
+    example_context.set_value "Feature: sample feature", "gherkin_text"
 End Sub
 
 Public Sub Given_the_first_line_of_the_feature_is___wip_impor_D41303270416(example_context As TContext)
     'Given the first line of the feature is "  @wip @important @beta"
-    TStepVars.gherkin_text = "  @wip @important @beta" & vbLf & TStepVars.gherkin_text
+    example_context.set_value "  @wip @important @beta" & vbLf & example_context.get_value("gherkin_text"), "gherkin_text"
 End Sub
 
 Public Sub Given_the_line_before_the_only_example_is___wip_im_FC1ACED9ED9D(example_context As TContext)
     'Given the line before the only example is "  @wip @important @beta"
-    TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf & "  @wip @important @beta" & vbLf _
-                        & "Example: sample example"
+    example_context.set_value example_context.get_value("gherkin_text") & vbLf & "  @wip @important @beta" & vbLf _
+                        & "Example: sample example", "gherkin_text"
 End Sub
 
 Public Sub When_the_feature_is_parsed_CEB0ED59F01F(example_context As TContext)
     'When the feature is parsed
     example_context.set_value New Collection, "parse_error"
     On Error GoTo parse_error
-    example_context.set_value TFeatureParser.parse_feature(TStepVars.gherkin_text), "parsed_feature"
+    example_context.set_value TFeatureParser.parse_feature(example_context.get_value("gherkin_text")), "parsed_feature"
     Exit Sub
     
 parse_error:

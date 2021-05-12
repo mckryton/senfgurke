@@ -15,8 +15,8 @@ Public Sub When_the_function_name_for_the_last_step_is_calcul_3D1B9F9C0F3D(examp
     Dim example As TExample
     Dim last_step As TStep
     
-    TStepVars.gherkin_text = "Feature: sample" & vbLf & TStepVars.gherkin_text
-    Set feature = TFeatureParser.parse_feature(TStepVars.gherkin_text)
+    example_context.set_value "Feature: sample" & vbLf & example_context.get_value("gherkin_text"), "gherkin_text"
+    Set feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
     Set example = feature.sections(1)
     Set last_step = example.Steps(example.Steps.Count)
     example_context.set_value last_step.get_step_function_name, "step_function_name"

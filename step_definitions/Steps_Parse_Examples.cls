@@ -11,32 +11,32 @@ Option Explicit
 
 Public Sub Given_an_example_STR_6A35400021EE(example_context As TContext, step_expressions As Collection)
     'Given an example {string}
-    TStepVars.gherkin_text = step_expressions(1)
+    example_context.set_value step_expressions(1), "gherkin_text"
 End Sub
 
 Public Sub Given_this_line_is_followed_by_STR_A388704A4A7E(example_context As TContext, step_expressions As Collection)
     'Given this line is followed by "    Given a precondition"
-    TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf & step_expressions(1)
+    example_context.set_value example_context.get_value("gherkin_text") & vbLf & step_expressions(1), "gherkin_text"
 End Sub
 
 Public Sub Given_an_example_with_two_steps_STR_and_STR_A2651FF47542(example_context As TContext, step_expressions As Collection)
     'Given an example with two steps {string} and {string}
-    TStepVars.gherkin_text = "Feature: sample feature" & vbLf _
+    example_context.set_value "Feature: sample feature" & vbLf _
                         & vbLf _
                         & "  Example: sample example" & vbLf _
                         & step_expressions(1) & vbLf _
-                        & step_expressions(2)
+                        & step_expressions(2), "gherkin_text"
 End Sub
 
 Public Sub Given_the_first_step_is_STR_5F91EBC94964(example_context As TContext, step_expressions As Collection)
     'Given the first step is "Given a first step"
-    TStepVars.gherkin_text = TStepVars.gherkin_text & vbLf _
-                                & step_expressions(1)
+    example_context.set_value example_context.get_value("gherkin_text") & vbLf _
+                                & step_expressions(1), "gherkin_text"
 End Sub
 
 Public Sub Given_a_background_6A351EBB4211(example_context As TContext)
     'Given a background
-    TStepVars.gherkin_text = "Background:"
+    example_context.set_value "Background:", "gherkin_text"
 End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_7B67C585A7A0(example_context As TContext)
@@ -47,7 +47,7 @@ End Sub
 Public Sub When_the_example_is_parsed_CEB09D77F01F(example_context As TContext)
     'When the example is parsed
     example_context.set_value New TExample, "example"
-    TFeatureParser.parse_steps Split(Trim(TStepVars.gherkin_text), vbLf), 0, example_context.get_value("example")
+    TFeatureParser.parse_steps Split(Trim(example_context.get_value("gherkin_text")), vbLf), 0, example_context.get_value("example")
     If example_context.get_value("example").Steps.Count = 1 Then
         example_context.set_value example_context.get_value("example").Steps(1), "first_step"
     End If
