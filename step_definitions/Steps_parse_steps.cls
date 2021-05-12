@@ -32,21 +32,21 @@ End Sub
 
 Public Sub When_the_step_definition_is_parsed_8240391A8855(example_context As TContext)
     'When the step definition is parsed
-    Set TStepVars.step = TFeatureParser.create_step(TStepVars.gherkin_text)
+    example_context.set_value TFeatureParser.create_step(TStepVars.gherkin_text), "step"
 End Sub
 
 Public Sub When_the_step_definition_is_parsed_as_part_of_this_E03DC3C99405(example_context As TContext)
     'When the step definition is parsed as part of this example
-    Set TStepVars.step = TFeatureParser.create_step(TStepVars.gherkin_text, TStepVars.example)
+    example_context.set_value TFeatureParser.create_step(TStepVars.gherkin_text, TStepVars.example), "step"
 End Sub
 
 Public Sub Then_the_type_of_the_step_is_set_to_STR_3EC12192CDA4(example_context As TContext, step_expressions As Collection)
     'Then the type of the step is set to {string}
-    TSpec.expect(TStepVars.step.SType).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("step").SType).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_name_of_the_step_is_STR_47BC4E071438(example_context As TContext, step_expressions As Collection)
     'Then the name of the step is "a step"
-    TSpec.expect(TStepVars.step.name).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("step").name).to_be step_expressions(1)
 End Sub
 
