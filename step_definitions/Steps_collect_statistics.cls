@@ -17,8 +17,8 @@ End Sub
 
 Public Sub Given_a_feature_description_with_a_step_9DB173A5EA30(example_context As TContext)
     'Given a feature description with a step
-    Set TStepVars.ParsedFeatures = New Collection
-    TStepVars.ParsedFeatures.Add TFeatureParser.parse_feature("Feature: sample" & vbLf _
+    example_context.set_value New Collection, "parsed_features"
+    example_context.get_value("parsed_features").Add TFeatureParser.parse_feature("Feature: sample" & vbLf _
                                                                 & "Example: sample" & vbLf _
                                                                 & "Given a missing step")
 End Sub
@@ -30,8 +30,8 @@ End Sub
 
 Public Sub Given_a_feature_with_an_example_with_a_missing_ste_63C4BE7D2E08(example_context As TContext)
     'Given a feature with an example with a missing step
-    Set TStepVars.ParsedFeatures = New Collection
-    TStepVars.ParsedFeatures.Add TFeatureParser.parse_feature("Feature: sample" & vbLf _
+    example_context.set_value New Collection, "parsed_features"
+    example_context.get_value("parsed_features").Add TFeatureParser.parse_feature("Feature: sample" & vbLf _
                                                                 & "Example: sample" & vbLf _
                                                                 & "Given a missing step")
 End Sub
@@ -48,7 +48,7 @@ End Sub
 
 Public Sub When_the_feature_is_executed_and_statistics_are_co_0BF6FCF4961B(example_context As TContext)
     'When the feature is executed and statistics are collected
-    example_context.get_value("session").run_features TStepVars.ParsedFeatures
+    example_context.get_value("session").run_features example_context.get_value("parsed_features")
 End Sub
 
 Public Sub When_the_duration_is_calculated_4FCC027398DA(example_context As TContext)
