@@ -24,7 +24,7 @@ End Sub
 
 Public Sub When_the_function_for_the_step_is_calculated_41249A4C9E7F(example_context As TContext)
     'When the function for the step is calculated
-    example_context.set_value TStepVars.example_step.get_step_function_name, "step_function_name"
+    example_context.set_value example_context.get_value("example_step").get_step_function_name, "step_function_name"
 End Sub
 
 Public Sub Then_the_function_name_starts_with_STR_4C16558C4B9D(example_context As TContext, step_parameters As Collection)
