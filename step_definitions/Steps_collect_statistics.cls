@@ -25,7 +25,7 @@ End Sub
 
 Public Sub Given_duration_of_a_test_run_is_INT_ms_CB357F7BA1F9(example_context As TContext, step_expressions As Collection)
     'Given duration of a test run is {integer} ms
-    TStepVars.Duration = step_expressions(1)
+    example_context.set_value step_expressions(1), "duration"
 End Sub
 
 Public Sub Given_a_feature_with_an_example_with_a_missing_ste_63C4BE7D2E08(example_context As TContext)
@@ -53,7 +53,7 @@ End Sub
 
 Public Sub When_the_duration_is_calculated_4FCC027398DA(example_context As TContext)
     'When the duration is calculated
-    TStepVars.ReportOutput = TStepVars.session.get_duration_as_text(TStepVars.Duration)
+    TStepVars.ReportOutput = TStepVars.session.get_duration_as_text(example_context.get_value("duration"))
 End Sub
 
 Public Sub When_the_results_for_the_steps_are_summed_up_EE8E882F4756(example_context As TContext)

@@ -16,6 +16,5 @@ Public ReportFormatter As Variant
 Public ReportMessages As Collection
 Public CodeTemplate As String
 Public session As TSession
-Public Duration As Long
-Public StatisticResults As String
+
 

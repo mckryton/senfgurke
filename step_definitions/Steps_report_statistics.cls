@@ -11,7 +11,7 @@ Option Explicit
 
 Public Sub Given_a_test_run_took_INT_ms_A7563698E569(example_context As TContext, step_expressions As Collection)
     'And a test run took {integer} ms
-    TStepVars.Duration = CInt(step_expressions(1))
+    example_context.set_value CInt(step_expressions(1)), "duration"
 End Sub
 
 Public Sub Given_one_example_in_this_run_had_INT_passed_INT_f_800581B31566(example_context As TContext, step_expressions As Collection)
@@ -34,5 +34,5 @@ End Sub
 
 Public Sub When_the_statistics_are_reported_418C385A7E0B(example_context As TContext)
     'When the statistics are reported
-    TStepVars.session.report_statistics TStepVars.Duration
+    TStepVars.session.report_statistics example_context.get_value("duration")
 End Sub
