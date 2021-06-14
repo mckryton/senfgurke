@@ -21,15 +21,14 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
     Dim example As TExample
     Dim example_runner As TExampleRunner
     Dim current_rule As TExampleContainer
-
+    
     If IsMissing(filter_tag) Then filter_tag = vbNullString
     Set example_runner = New TExampleRunner
     example_runner.setup m_session
-    If TypeName(feature_section) = "TFeature" Then
+    If example_container.containerType = "feature" Then
+        m_session.statistics.log_event LOG_EVENT_RUN_FEATURE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
         m_session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, example_container.name
         m_session.Reporter.report REPORT_MSG_TYPE_DESC, example_container.description
-    Else
-        m_session.Reporter.report REPORT_MSG_TYPE_RULE, example_container.wholeName
     End If
     For Each feature_section In example_container.sections
         If TypeName(feature_section) = "TExample" Then
@@ -49,12 +48,9 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
             Set current_rule = feature_section
             ' a rule can contain  examples like a feature > so run it like a feature
             run_feature current_rule, filter_tag
+            m_session.statistics.log_event LOG_EVENT_RUN_RULE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
+            m_session.Reporter.report REPORT_MSG_TYPE_RULE, feature_section.wholeName
         End If
     Next
-    If TypeName(feature_section) = "TFeature" Then
-        m_session.statistics.log_event LOG_TYPE_FEATURE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
-    Else
-        m_session.statistics.log_event LOG_TYPE_RULE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
-    End If
 End Sub
 

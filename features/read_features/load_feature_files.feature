@@ -31,6 +31,23 @@ Ability: load feature files
       Then 1 feature(s) are loaded
 
 
+  Rule: for a given filter only feature files with a matching name should be loaded
+    Comparison starts from the left. Filter matches when the leftmost characters
+    from the feature file name matches the filter.
+
+    Example: file name matches filter completely
+      Given a feature file "play.feature"
+        And a feature file "plug.feature"
+       When a test is started with "play" as filter for feature names
+       Then only "play.feature" is loaded and executed
+
+    Example: file names are matching partially
+      Given a feature file "play.feature"
+        And a feature file "plug.feature"
+       When a test is started with "pl" as filter for feature names
+       Then both features are loaded and executed
+
+
   Rule: return error message if feature files are not accessible
 #    Example: feature dir is unavailable
 #      Given feature dir is set to "/this/path/does/not/exist/features"

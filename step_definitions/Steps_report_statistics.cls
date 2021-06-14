@@ -19,16 +19,16 @@ Public Sub Given_one_example_in_this_run_had_INT_passed_INT_f_800581B31566(examp
     Dim index As Integer
    
     For index = 1 To step_expressions(1)
-        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, STATUS_OK
+        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, STATUS_OK
     Next
     For index = 1 To step_expressions(2)
-        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, STATUS_FAIL
+        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, STATUS_FAIL
     Next
     For index = 1 To step_expressions(3)
-        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, STATUS_MISSING
+        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, STATUS_MISSING
     Next
     For index = 1 To step_expressions(4)
-        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, STATUS_PENDING
+        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, STATUS_PENDING
     Next
 End Sub
 

@@ -13,7 +13,7 @@ Public Function get_feature_dir(this_doc_path As String) As String
     End If
 End Function
 
-Public Function load_features(Optional feature_dir) As Collection
+Public Function load_features(Optional feature_dir, Optional file_filter, Optional session) As Collection
 
     Dim dir_entry As String
     Dim attributes As Integer
@@ -21,7 +21,6 @@ Public Function load_features(Optional feature_dir) As Collection
     Dim subdir_features As Collection
     Dim subdir As Variant
     Dim subdirs As Collection
-    Dim loaded_feature As Collection
     
     If IsMissing(feature_dir) Then
         feature_dir = get_feature_dir(senfgurke_workbook.Path)
@@ -34,28 +33,33 @@ Public Function load_features(Optional feature_dir) As Collection
     Do While dir_entry <> vbNullString
         attributes = GetAttr(feature_dir & dir_entry)
         If attributes <> vbHidden And attributes <> vbSystem And Right(dir_entry, 8) = ".feature" Then
-            Set loaded_feature = New Collection
-            loaded_feature.Add read_feature(feature_dir & dir_entry), "feature_text"
-            loaded_feature.Add feature_dir & dir_entry, "origin"
-            features.Add loaded_feature
+            If Not IsMissing(file_filter) Then
+                If Left(dir_entry, Len(file_filter)) = CStr(file_filter) Then
+                    features.Add read_feature(feature_dir & dir_entry, session)
+                End If
+            Else
+                features.Add read_feature(feature_dir & dir_entry)
+            End If
         End If
         dir_entry = Dir()
     Loop
     Set subdirs = get_subdirs(CStr(feature_dir))
     For Each subdir In subdirs
-        Set subdir_features = TFeatureLoader.load_features(feature_dir & subdir)
+        Set subdir_features = TFeatureLoader.load_features(feature_dir & subdir, file_filter)
         merge_features features, subdir_features
         Set subdir_features = Nothing
     Next
     Set load_features = features
 End Function
 
-Private Function read_feature(feature_file As String) As String
+Private Function read_feature(feature_file As String, Optional session) As Collection
     
+    Dim feature_data As Collection
     Dim feature As String
     Dim text_line As String
     Dim file_id As Integer
     
+    Set feature_data = New Collection
     file_id = FreeFile
     Open feature_file For Input As #file_id
     Do Until EOF(1)
@@ -63,7 +67,10 @@ Private Function read_feature(feature_file As String) As String
         feature = feature & text_line & vbLf
     Loop
     Close #file_id
-    read_feature = feature
+    feature_data.Add feature, "feature_text"
+    feature_data.Add feature_file, "origin"
+    If Not IsMissing(session) Then session.statistics.log_event LOG_EVENT_LOAD_FEATURE, feature_file, ExtraVBA.get_unix_timestamp_now
+    Set read_feature = feature_data
 End Function
 
 Private Sub merge_features(target_features As Collection, source_features As Collection)
@@ -94,3 +101,4 @@ Private Function get_subdirs(feature_dir As String) As Collection
     Loop
     Set get_subdirs = subdirs
 End Function
+

@@ -42,13 +42,13 @@ Public Sub Given_an_example_with_INT_steps_was_executed_succe_B7CBEFE9F6DC(examp
     Dim index As Integer
    
     For index = 1 To step_expressions(1)
-        example_context.get_value("session").statistics.count_event LOG_TYPE_STEP, "OK"
+        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, "OK"
     Next
 End Sub
 
 Public Sub When_the_feature_is_executed_and_statistics_are_co_0BF6FCF4961B(example_context As TContext)
     'When the feature is executed and statistics are collected
-    example_context.get_value("session").run_features example_context.get_value("parsed_features")
+    example_context.get_value("session").run_parsed_features example_context.get_value("parsed_features")
 End Sub
 
 Public Sub When_the_duration_is_calculated_4FCC027398DA(example_context As TContext)

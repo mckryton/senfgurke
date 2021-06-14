@@ -11,12 +11,15 @@ Option Explicit
 
 Implements TExampleContainer
 
-Dim m_feature_head As String
-Dim m_feature_name As String
-Dim m_feature_description As String
-Dim m_sections As Collection
-Dim m_feature_tags As Collection
-Dim m_background As TBackground
+Const CONTAINER_TYPE_FEATURE = "feature"
+
+Private m_feature_head As String
+Private m_feature_name As String
+Private m_feature_description As String
+Private m_sections As Collection
+Private m_feature_tags As Collection
+Private m_background As TBackground
+Private m_container_type As String
 
 Private Sub Class_Terminate()
     Set m_sections = Nothing
@@ -70,6 +73,10 @@ End Property
 
 Public Property Get wholeName() As String
     wholeName = TExampleContainer_wholeName
+End Property
+
+Public Property Get containerType() As String
+    containerType = TExampleContainer_containerType
 End Property
 
 '--- start of the implementation of the TExampleContainer interface ---
@@ -152,3 +159,14 @@ Private Property Let TExampleContainer_wholeName(ByVal new_name As String)
     'VBA interface requires full property declaration even for read-only properties
     Debug.Print "DEBUG: can't assign new value > Tfeature.wholeName is read only"
 End Property
+
+Private Property Get TExampleContainer_containerType() As String
+    TExampleContainer_containerType = CONTAINER_TYPE_FEATURE
+End Property
+
+Private Property Let TExampleContainer_containerType(ByVal new_container_type As String)
+    'VBA interface requires full property declaration even for read-only properties
+    Debug.Print "DEBUG: can't assign new value > TFeature.containerType is read only"
+End Property
+
+

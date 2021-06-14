@@ -50,9 +50,9 @@ Public Sub run_example(example As TExample)
             'this is a hack because of the broken exception handling in vba (e.g. vba will overwrite the custom err descriptions)
             If step_status = STATUS_PENDING Then err_msg = TSpec.LastFailMsg
         End If
-        m_session.statistics.count_event LOG_TYPE_STEP, step_status, step.OriginalStepDefinition, ExtraVBA.get_unix_timestamp_now
+        m_session.statistics.count_event LOG_EVENT_RUN_STEP, step_status, step.OriginalStepDefinition, ExtraVBA.get_unix_timestamp_now
         m_session.Reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_status, err_msg
     Next
     'the last step status sets the status for the example
-    m_session.statistics.count_event LOG_TYPE_EXAMPLE, step_status, example.OriginalHeadline, ExtraVBA.get_unix_timestamp_now
+    m_session.statistics.count_event LOG_EVENT_RUN_EXAMPLE, step_status, example.OriginalHeadline, ExtraVBA.get_unix_timestamp_now
 End Sub

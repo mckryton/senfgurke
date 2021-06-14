@@ -11,6 +11,8 @@ Option Explicit
 
 Implements TExampleContainer
 
+Const CONTAINER_TYPE_RULE = "rule"
+
 Private m_rule_name As String
 Private m_rule_description As String
 Private m_rule_head As String
@@ -79,7 +81,17 @@ Public Property Get wholeName() As String
     wholeName = TExampleContainer_wholeName
 End Property
 
+Public Property Get parent() As TFeature
+    Set parent = TExampleContainer_parent
+End Property
 
+Public Property Set parent(ByVal new_parent As Variant)
+    Set TExampleContainer_parent = new_parent
+End Property
+
+Public Property Get containerType() As String
+    containerType = TExampleContainer_containerType
+End Property
 
 '--- start of the implementation of the TExampleContainer interface ---
 ' see https://docs.microsoft.com/en-us/office/vba/Language/Reference/User-Interface-Help/implements-statement
@@ -160,10 +172,12 @@ Private Property Set TExampleContainer_parent(ByVal new_parent As TFeature)
     Set m_feature_parent = new_parent
 End Property
 
-Public Property Get parent() As TFeature
-    Set parent = TExampleContainer_parent
+Private Property Get TExampleContainer_containerType() As String
+    TExampleContainer_containerType = CONTAINER_TYPE_RULE
 End Property
 
-Public Property Set parent(ByVal new_parent As Variant)
-    Set TExampleContainer_parent = new_parent
+Private Property Let TExampleContainer_containerType(ByVal new_container_type As String)
+    'VBA interface requires full property declaration even for read-only properties
+    Debug.Print "DEBUG: can't assign new value > TFeature.containerType is read only"
 End Property
+

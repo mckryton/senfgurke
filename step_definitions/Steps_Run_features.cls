@@ -50,7 +50,7 @@ Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE(examp
     
     Set step_events = New Collection
     For Each log_event In example_context.get_value("session").statistics.event_log
-        If log_event("type") = LOG_TYPE_STEP Then step_events.Add log_event
+        If log_event("type") = LOG_EVENT_RUN_STEP Then step_events.Add log_event
     Next
     TSpec.expect(step_events.Count).to_be 4
     TSpec.expect(step_events(1)("msg")).includes_text "background step"
@@ -64,7 +64,7 @@ Public Sub Then_only_the_example_STR_is_executed_FD3BFD3B270C(example_context As
     
     Set example_events = New Collection
     For Each log_event In example_context.get_value("session").statistics.event_log
-        If log_event("type") = LOG_TYPE_EXAMPLE Then example_events.Add log_event
+        If log_event("type") = LOG_EVENT_RUN_EXAMPLE Then example_events.Add log_event
     Next
     TSpec.expect(example_events.Count).to_be 1
     TSpec.expect(example_events(1)("msg")).includes_text "tagged example"

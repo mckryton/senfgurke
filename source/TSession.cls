@@ -44,22 +44,23 @@ Public Property Let Reporter(ByVal new_reporter As TReport)
     Set Reporter = new_reporter
 End Property
 
-Public Sub run_test(Optional filter_tag, Optional report_format, Optional features_as_text As Collection)
+Public Sub run_test(Optional filter_tag, Optional feature_filter, Optional report_format, Optional features_as_text As Collection, Optional feature_dir)
 
     Dim parsed_features As Collection
 
     If IsMissing(filter_tag) Then filter_tag = vbNullString
     If IsMissing(report_format) Then report_format = "verbose"
     set_report_format CStr(report_format)
-    If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features
+    If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features(feature_dir, feature_filter, Me)
     Set parsed_features = parse_loaded_features(features_as_text)
-    run_features parsed_features, CStr(filter_tag)
+    If parsed_features.Count > 0 Then run_parsed_features parsed_features, CStr(filter_tag)
     Reporter.finish_report
     report_statistics EndTime - StartTime
+    'ensure that this setting is refreshed even without any re-compile:
     TConfig.StepImplementations = Nothing
 End Sub
 
-Public Sub run_features(parsed_features As Collection, Optional filter_tag)
+Public Sub run_parsed_features(parsed_features As Collection, Optional filter_tag)
 
     Dim parsed_feature As Variant
     Dim feature As TFeature

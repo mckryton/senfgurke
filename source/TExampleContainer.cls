@@ -20,3 +20,4 @@ Public tags As Collection
 Public background As TBackground
 Public wholeName As String
 Public parent As TFeature
+Public containerType As String

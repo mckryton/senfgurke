@@ -26,9 +26,9 @@ Public Sub count_event(event_type As String, Optional event_status As String, Op
     If IsMissing(log_time) Then log_time = ExtraVBA.get_unix_timestamp_now
     status_count = 1
     Select Case event_type
-        Case LOG_TYPE_STEP
+        Case LOG_EVENT_RUN_STEP
             Set event_statistics = step_statistics
-        Case LOG_TYPE_EXAMPLE
+        Case LOG_EVENT_RUN_EXAMPLE
             Set event_statistics = example_statistics
     End Select
     If ExtraVBA.collection_has_key(event_status, event_statistics) Then

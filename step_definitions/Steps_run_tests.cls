@@ -59,7 +59,7 @@ Public Sub Then_only_the_example_from_the_tagged_feature_was__858E135D9F78(examp
     'Then only the example from the tagged feature was executed
     Dim example_events As Collection
     
-    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_TYPE_EXAMPLE)
+    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_EVENT_RUN_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 1
     TSpec.expect(example_events(1)("msg")).includes_text "sample from tagged feature"
 End Sub
@@ -68,7 +68,7 @@ Public Sub Then_only_the_example_from_the_tagged_rule_was_exe_0F822B53DF54(examp
     'Then only the example from the tagged rule was executed
     Dim example_events As Collection
     
-    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_TYPE_EXAMPLE)
+    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_EVENT_RUN_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 1
     TSpec.expect(example_events(1)("msg")).includes_text "example assigned to the rule"
 End Sub
@@ -77,7 +77,6 @@ Public Sub Then_no_example_was_executed_16BF2F2090BC(example_context As TContext
     'Then no example was executed
     Dim example_events As Collection
     
-    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_TYPE_EXAMPLE)
+    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_EVENT_RUN_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 0
 End Sub
-

@@ -136,6 +136,7 @@ Private Function parse_feature_definition(gherkin_text As String) As Collection
                             "TFeatureParser.parse_feature_definition", _
                             "Feature lacks feature keyword at the beginning"
             Else
+                parsed_feature.head = CStr(feature_spec("head"))
                 parsed_feature.name = CStr(feature_spec("name"))
             End If
             header_finished = True
@@ -211,7 +212,7 @@ Private Function create_section(feature As TFeature, example_container As TExamp
             'add tags set on the containing feature to the rule
             add_tags feature.tags, new_section.tags
         Case SECTION_TYPE_EXAMPLE
-            Set new_section = create_example(example_head:=section_headline("type"), example_name:=section_headline("name"), example_tags:=section_tags, feature_line:=feature_line)
+            Set new_section = create_example(example_head:=section_headline("head"), example_name:=section_headline("name"), example_tags:=section_tags, feature_line:=feature_line)
             'add tags set on the containing rule or feature to the example
             add_tags example_container.tags, new_section.tags
         Case SECTION_TYPE_BACKGROUND
@@ -242,19 +243,16 @@ Private Function read_section_headline(text_line As String) As Collection
     line_items = Split(Trim(text_line), ":")
     Set section_headline = New Collection
     If UBound(line_items) > 0 Then
+        section_headline.Add Trim(line_items(0)), "head"
         Select Case line_items(0)
             Case "Feature", "Ability", "Business Need"
                 section_headline.Add SECTION_TYPE_FEATURE, "type"
-            
             Case "Background"
                 section_headline.Add SECTION_TYPE_BACKGROUND, "type"
-            
             Case "Rule"
                 section_headline.Add SECTION_TYPE_RULE, "type"
-            
             Case "Scenario", "Scenario Outline", "Example"
                 section_headline.Add SECTION_TYPE_EXAMPLE, "type"
-            
             Case Else
                 Debug.Print "PARSE ERROR: unknown keyword >" & line_items(0) & "<"
         End Select
@@ -270,6 +268,7 @@ Private Function create_rule(rule_name As String, rule_tags As Collection, featu
     Dim new_rule As TRule
     
     Set new_rule = New TRule
+    new_rule.head = "Rule"
     new_rule.name = rule_name
     Set new_rule.tags = rule_tags
     Set new_rule.parent = feature_parent
