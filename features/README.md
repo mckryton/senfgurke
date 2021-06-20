@@ -162,6 +162,12 @@
   definition function that keeps this variable during the execution of a
   single example.
 
+* [Show step function templates](run_tests/run_steps/show_step_function_templates.feature)
+
+  Whenever a step is executed and no matching step function is found Senfgurke
+  will generate a code snippet for a new step function. This way it should be
+  easy to assign code to the given step.
+
 * [Run tests](run_tests/run_tests.feature)
 
   Executing or running tests using Senfgurke happens in 2 steps. First Senfgurke

@@ -41,7 +41,11 @@ Public Sub When_the_example_is_executed_8C8F015690BC(example_context As TContext
     Dim parsed_feature As TFeature
     
     Set feature_runner = New TFeatureRunner
-    Set parsed_feature = example_context.get_value("parsed_feature")
+    If Not example_context.value_exists("parsed_feature") Then
+        Set parsed_feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
+    Else
+        Set parsed_feature = example_context.get_value("parsed_feature")
+    End If
     example_context.set_value New TSession, "session"
     example_context.get_value("session").Reporter.enable_silent_mode
     feature_runner.setup example_context.get_value("session")

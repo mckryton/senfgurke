@@ -16,7 +16,8 @@ Public Property Get StepImplementations() As Collection
                         New Steps_make_steps_executable, New Steps_parse_steps, New Steps_parse_step_expressions, _
                         New Steps_parse_docstrings, New Steps_parse_tags, New Steps_parse_rules, _
                         New Steps_report, New Steps_report_progress, New Steps_report_statistics, _
-                        New Steps_collect_statistics, New Steps_support_functions, New Steps_save_vars_in_context)
+                        New Steps_collect_statistics, New Steps_support_functions, New Steps_save_vars_in_context, _
+                        New Steps_show_step_template)
             m_step_implementations.Add step_implementation_class
         Next
     End If

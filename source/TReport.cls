@@ -20,13 +20,15 @@ Public Sub add_err_msg_to_buffer(err_msg As String)
 End Sub
 
 Public Sub add_code_template_to_buffer(code_template As String)
-    Dim template_signature As String
+    Dim function_name As String
     
     If m_code_template_buffer Is Nothing Then Set m_code_template_buffer = New Collection
-    template_signature = ExtraVBA.hash12(code_template)
+    function_name = Trim(Split(code_template, vbLf)(0))
+    'ignore function parameters
+    function_name = Left(function_name, InStr(function_name, "(") - 1)
     'detect template duplicates
-    If Not ExtraVBA.collection_has_key(template_signature, m_code_template_buffer) Then
-        m_code_template_buffer.Add code_template, template_signature
+    If Not ExtraVBA.collection_has_key(function_name, m_code_template_buffer) Then
+        m_code_template_buffer.Add code_template, function_name
     End If
 End Sub
 
@@ -118,6 +120,10 @@ Public Property Get ConsoleOutput() As String
     ConsoleOutput = report_out.ConsoleOutput
 End Property
 
+Public Property Get CodeTemplateBuffer() As Collection
+    Set CodeTemplateBuffer = m_code_template_buffer
+End Property
+
 Public Sub print_report(report_output As String, Optional consecutive As Boolean)
     If IsMissing(consecutive) Then consecutive = False
     report_out.PrintOut report_output, consecutive
@@ -140,4 +146,5 @@ End Sub
 
 Private Sub Class_Terminate()
     Set report_out = Nothing
+    Set m_code_template_buffer = Nothing
 End Sub
