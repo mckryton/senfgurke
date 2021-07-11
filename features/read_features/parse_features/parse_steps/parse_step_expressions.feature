@@ -1,8 +1,8 @@
 Ability: parse step expressions
   To match a step with it's step definition it has to be disassembled into its
-  parts: type (Given, When or Then) name (everything but the type) including
-  any parameter values (step expressions) and an optional following docstring
-  (a multiline text embraced by 3 double quotation marks in a row).
+  parts: type ("Given", "When" or "Then") name (everything but the type)
+  including any parameter values (step expressions) and an optional following
+  docstring (a multiline text embraced by 3 double quotation marks in a row).
 
 
   Rule: text enclosed by double quotation marks should be a string expression
@@ -25,7 +25,7 @@ Ability: parse step expressions
        Then the step has one step expression with the data type "long"
         And the value of the expression is 1
 
-    Example: integer expression after brace character
+    Example: integer expression surrounded by braces
       Given a step definition "Given the last paragraph is (2)"
        When the step definition is parsed
        Then the step has one step expression with the data type "long"
@@ -48,7 +48,10 @@ Ability: parse step expressions
        Then the step has one step expression with the data type "double"
         And the value of the expression is 3.14
 
-    Example: step with a date
+    # for now there is no step expression for dates available
+    Example: step with a german date format
       Given a step definition "Given 01.01.2021 as a date"
        When the step definition is parsed
        Then the step has no step expressions
+
+    #TODO: add example with an international date format "yyyy-mm-dd"

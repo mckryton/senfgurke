@@ -1,6 +1,6 @@
 Ability: parse docstrings
   Sometimes steps refer to a larger text strucure having multiple lines (e.g.
-  describing a feature in a single step). Therefor step can be expanded by one
+  describing a feature in a single step). Therefore steps can be expanded by one
   docstring following the step directly. Docstrings are embraced by three double
   quotation marks
 

@@ -42,7 +42,7 @@ Ability: show step function templates
 
 
   Rule: steps of the same type deviating only by keyword should show only one code template
-    @wip
+    
     Example: Two steps using Given and And
       Given an example
         """

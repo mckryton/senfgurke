@@ -4,12 +4,12 @@ Ability: parse examples
   Parsing examples will translate plain text into structures that set the right
   relation between examples and rules as well as steps and examples.
 
-  Rule: ignore leading whitespace befor steps
+  Rule: ignore leading whitespace before steps
     Every line in a example clause starting with
     "<optional whitespace><step keyword><space>" is considered to be a step
-    where <tep keyword> is one of those: Given, When, Then, And, But
+    where <step keyword> is one of those: "Given", "When", "Then", "And", "But"
 
-    Example: simple example with Given, When, Then steps
+    Example: simple example with "Given", "When", "Then" steps
       Given an example
         """
           Example: sample example
@@ -20,7 +20,7 @@ Ability: parse examples
       When the example is parsed
       Then the example clause from the parsed result contains all the steps
 
-#    Rule: Steps not starting with Given, When, Then or And will produce a Gherkin syntax error
+#    Rule: Steps not starting with "Given", "When", "Then" or "And" will produce a Gherkin syntax error
 #    Example: missing step type
 #      Given an example with a step "bla bla bla"
 #      When the step is read

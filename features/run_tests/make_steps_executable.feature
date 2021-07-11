@@ -3,16 +3,16 @@ Ability: make steps executable
     step implementation function. Senfgurke tries to make the function name as
     similar to the step name as possible so that it's easy to identify the
     matching step implemenation for any step.
-    But Function names in any programming language have to follow conventions.
+    But function names in any programming language have to follow conventions.
     Conventions for function and variable names in VBA are documented here:
     https://docs.microsoft.com/en-us/office/vba/language/concepts/getting-started/visual-basic-naming-rules
 
 
-  Rule: step function names should replace any "and" and "but" with a previos Given, When or Then
+  Rule: step function names should replace any "And" and "But" with a previous "Given", "When" or "Then"
     While looking at any step implementation function it should be obvious if
     it's a pre-condition, an action or a result.
 
-    Example: And as synonym for Given
+    Example: "And" as synonym for "Given"
       Given an example
         """
           Example: sample
@@ -22,7 +22,7 @@ Ability: make steps executable
       When the function name for the last step is calculated
       Then the function name starts with "Given_another_step"
 
-    Example: But as synonym for Then
+    Example: "But" as synonym for "Then"
       Given an example
         """
           Example: sample
@@ -33,7 +33,7 @@ Ability: make steps executable
        Then the function name starts with "When_no_sound_occurs"
 
   @vba-specific
-  Rule: step function names replaces not allowed characters from VBA spec with undersigns
+  Rule: step function names replaces not allowed characters from VBA spec with underscores
 
     Example: basic step with white spaces
 

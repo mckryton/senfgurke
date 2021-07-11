@@ -41,8 +41,8 @@ Public Sub Then_the_parsed_features_contains_INT_examples_013B39CEE3B0(example_c
     example_context.set_value example_context.get_value("parsed_feature").sections(2), "example"
 End Sub
 
-Public Sub Then_the_parsed_second_example_contains_the_tags_S_E5AA0E4C4719(example_context As TContext, step_expressions As Collection)
-    'And the parsed second example contains the tags {string}
+Public Sub Then_the_parsed_second_example_is_tagged_with_STR_EB00E4656DAE(example_context As TContext, step_expressions As Collection)
+    'And the parsed second example is tagged with {string}
         
     Dim tags As Variant
     Dim tag As Variant
