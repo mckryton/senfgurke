@@ -39,10 +39,11 @@ Public Sub count_event(event_type As String, Optional event_status As String, Op
     log_event event_type, event_name, log_time, event_status
 End Sub
 
-Public Sub log_event(log_type As String, log_msg As String, log_time As Long, Optional log_status As String)
+Public Sub log_event(log_type As String, log_msg As String, Optional log_time As Long, Optional log_status As String)
 
     Dim log_event As Collection
     
+    If IsMissing(log_time) Then log_time = ExtraVBA.get_unix_timestamp_now
     'event log will collect single log events for debugging and profiling - this is disabled by default
     If Not m_event_log Is Nothing Then
         Set log_event = New Collection
