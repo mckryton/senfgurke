@@ -20,6 +20,11 @@ Private m_sections As Collection
 Private m_feature_tags As Collection
 Private m_background As TBackground
 Private m_container_type As String
+Private m_parsed_lines As Long
+
+Private Sub Class_Initialize()
+    m_parsed_lines = 0
+End Sub
 
 Private Sub Class_Terminate()
     Set m_sections = Nothing
@@ -29,6 +34,14 @@ End Sub
 
 Public Property Get head() As String
     head = TExampleContainer_head
+End Property
+
+Public Property Get parsed_lines() As Long
+    parsed_lines = m_parsed_lines
+End Property
+
+Public Property Let parsed_lines(ByVal line_index As Long)
+    m_parsed_lines = line_index
 End Property
 
 Public Property Let head(ByVal new_head As String)
@@ -168,5 +181,3 @@ Private Property Let TExampleContainer_containerType(ByVal new_container_type As
     'VBA interface requires full property declaration even for read-only properties
     Debug.Print "DEBUG: can't assign new value > TFeature.containerType is read only"
 End Property
-
-

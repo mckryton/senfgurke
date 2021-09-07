@@ -1,11 +1,18 @@
 Attribute VB_Name = "TFeatureParser"
 Option Explicit
 
-Const KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Ability,Business Needs,Feature,Background"
+Const START_FEATURE_KEYWORDS$ = "Ability,Business Needs,Feature"
+Const START_SECTION_KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Background"
+
+Const LINE_TYPE_FEATURE_START = "feature start"
+Const LINE_TYPE_SECTION_START = "section start"
+Const LINE_TYPE_TAGS = "tag line"
+Const LINE_TYPE_STEP = "step line"
+Const LINE_TYPE_DESCRIPTION = "description line"
+Const LINE_TYPE_COMMENT = "comment line"
 
 Public Function parse_feature(gherkin_text As String) As TFeature
 
-    Dim feature_definition As Collection
     Dim parsed_feature As TFeature
     Dim line As String
     Dim lines As Variant
@@ -16,12 +23,12 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     
     Set current_section = Nothing
     Set section_tags = New Collection
-    Set feature_definition = parse_feature_definition(gherkin_text)
-    Set parsed_feature = feature_definition("parsed_feature")
+    Set parsed_feature = parse_feature_definition(gherkin_text)
     Set current_example_container = parsed_feature
+    On Error GoTo parse_error
     If Not parsed_feature Is Nothing Then
         lines = Split(Trim(gherkin_text), vbLf)
-        For line_index = feature_definition("line_index") + 1 To UBound(lines)
+        For line_index = parsed_feature.parsed_lines + 1 To UBound(lines)
             line = Trim(lines(line_index))
             If is_section_definition_line(line) Then
                 'start of a new section means last section is finished -> cleanup last sections description
@@ -48,12 +55,16 @@ Public Function parse_feature(gherkin_text As String) As TFeature
             ElseIf is_tag_line(line) Then
                 parse_and_add_tags line, section_tags
             ElseIf Not is_comment_line(line) Then
-                'ignore comments
                 add_description CStr(line), parsed_feature, current_section
+            'ignore comments
             End If
         Next
     End If
     Set parse_feature = parsed_feature
+    Exit Function
+    
+parse_error:
+    Debug.Print "Parse Error:", Err.description
 End Function
 
 Private Sub trim_description_linebreaks(feature_section)
@@ -107,57 +118,92 @@ Public Function parse_steps(feature_lines As Variant, example_start_index As Lon
     parse_steps = line_index
 End Function
 
-Private Function parse_feature_definition(gherkin_text As String) As Collection
+
+Public Function parse_feature_definition(gherkin_text As String) As TFeature
     
-    Dim feature_definition As Collection
     Dim parsed_feature As TFeature
     Dim line_index As Long
     Dim feature_lines As Variant
-    Dim header_finished As Boolean
     Dim feature_spec As Collection
     Dim line As String
 
-    Set feature_definition = New Collection
     Set parsed_feature = New TFeature
-    header_finished = False
-    line_index = 0
     feature_lines = Split(gherkin_text, vbLf)
-    Do While line_index <= UBound(feature_lines) And header_finished = False
+    line_index = 0
+    '>>> parse feature above feature name (tags and comments)
+    Do While line_index <= UBound(feature_lines)
         line = CStr(feature_lines(line_index))
-        If is_tag_line(line) Then
-            parse_and_add_tags line, parsed_feature.tags
-            line_index = line_index + 1
-        ElseIf is_comment_line(line) Or Trim(line) = vbNullString Then
-            line_index = line_index + 1
-        Else
-            Set feature_spec = read_section_headline(line)
-            If Not CStr(feature_spec("type")) = SECTION_TYPE_FEATURE Then
-                Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                            "TFeatureParser.parse_feature_definition", _
-                            "Feature lacks feature keyword at the beginning"
-            Else
-                parsed_feature.head = CStr(feature_spec("head"))
-                parsed_feature.name = CStr(feature_spec("name"))
-            End If
-            header_finished = True
-        End If
+        Select Case get_line_type(line)
+            Case LINE_TYPE_COMMENT
+                'ignore comments
+            Case LINE_TYPE_TAGS
+                 parse_and_add_tags line, parsed_feature.tags
+            Case LINE_TYPE_FEATURE_START
+                Exit Do
+            Case Else
+                'ignore empty lines
+                If Not Trim(line) = "" Then
+                    Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                    "TFeatureParser.parse_feature_definition", _
+                    "Feature lacks feature keyword at the beginning"
+                End If
+        End Select
+        line_index = line_index + 1
     Loop
-    With feature_definition
-        .Add line_index, "line_index"
-        .Add parsed_feature, "parsed_feature"
-    End With
-    Set parse_feature_definition = feature_definition
+    '>>> parse feature name <keyword>:<name>
+    If line_index <= UBound(feature_lines) Then
+        Set feature_spec = read_section_headline(line)
+        parsed_feature.head = CStr(feature_spec("head"))
+        parsed_feature.name = CStr(feature_spec("name"))
+    Else
+        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                "TFeatureParser.parse_feature_definition", _
+                "Feature file lacks a feature name"
+    End If
+    line_index = line_index + 1
+    '>>> parse description below feature name
+    Do While line_index <= UBound(feature_lines)
+        line = CStr(feature_lines(line_index))
+        Select Case get_line_type(line)
+            Case LINE_TYPE_DESCRIPTION
+                add_description line, parsed_feature
+            Case LINE_TYPE_COMMENT
+                'ignore comments
+            Case Else
+                Exit Do
+        End Select
+        line_index = line_index + 1
+    Loop
+    parsed_feature.parsed_lines = line_index - 1
+    Set parse_feature_definition = parsed_feature
 End Function
 
-Private Function is_section_definition_line(feature_line As String) As Boolean
+Private Function get_line_type(line As String)
+    If is_step_line(line) Then
+        get_line_type = LINE_TYPE_STEP
+    ElseIf is_comment_line(line) Then
+        get_line_type = LINE_TYPE_COMMENT
+    ElseIf is_tag_line(line) Then
+        get_line_type = LINE_TYPE_TAGS
+    ElseIf is_section_definition_line(line) Then
+        get_line_type = LINE_TYPE_SECTION_START
+    ElseIf is_section_definition_line(line, START_FEATURE_KEYWORDS) Then
+        get_line_type = LINE_TYPE_FEATURE_START
+    Else
+        get_line_type = LINE_TYPE_DESCRIPTION
+    End If
+End Function
+
+Private Function is_section_definition_line(feature_line As String, Optional keywords) As Boolean
     
     Dim keyword  As Variant
     Dim section_name As String
     
+    If IsMissing(keywords) Then keywords = START_SECTION_KEYWORDS
     'section definition format is /^<keyword>:[^:]*$/
     If UBound(Split(Trim(feature_line), ":")) > 0 Then
         section_name = Split(Trim(feature_line), ":")(0)
-        For Each keyword In Split(KEYWORDS, ",")
+        For Each keyword In Split(keywords, ",")
             If section_name = CStr(keyword) Then
                is_section_definition_line = True
                Exit Function
@@ -287,8 +333,9 @@ Private Function create_example(example_head As String, example_name As String, 
     Set create_example = new_example
 End Function
 
-Private Sub add_description(line As String, feature As TFeature, section As Variant)
+Private Sub add_description(line As String, feature As TFeature, Optional section As Variant)
 
+    If IsMissing(section) Then Set section = Nothing
     If section Is Nothing Then
         If feature.description = vbNullString Then
             feature.description = Trim(line)

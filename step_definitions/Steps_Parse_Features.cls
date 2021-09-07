@@ -42,6 +42,18 @@ parse_error:
     Err.Clear
 End Sub
 
+Public Sub When_the_feature_definition_is_parsed_8C5F7D6808AE(example_context As TContext)
+    'When the feature definition is parsed
+    example_context.set_value New Collection, "parse_error"
+    On Error GoTo parse_error
+    example_context.set_value TFeatureParser.parse_feature_definition(example_context.get_value("gherkin_text")), "parsed_feature"
+    Exit Sub
+    
+parse_error:
+    example_context.get_value("parse_error").Add Err.description, "err_description"
+    Err.Clear
+End Sub
+
 Public Sub Then_the_error_STR_was_raised_7C9B342540B8(example_context As TContext, step_expressions As Collection)
     'Then the error {string} was raised
     TSpec.expect(example_context.get_value("parse_error")("err_description")).to_be step_expressions(1)

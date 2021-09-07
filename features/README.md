@@ -23,6 +23,18 @@
   input is accepted as plain text. Therefore Senfgurke will import features
   from plain text files using the .feature suffix.
 
+* [Parse features](read_features/parse_features.feature)
+
+  A feature describes the functionality of a software that will solve some
+  specific problem of it's user. It does so by giving examples of how the
+  function works.
+  For a better understanding a featured follows a nested structure. A feature
+  can contain zero or more rules (see parse rules for more). While a rule can
+  contain zero or more examples (see parse examples for more). Of course only
+  examples can be executed. So a feature or or rule without any assigned
+  example will have no further effect on execution.
+  Simple features can contain just some few examples without any rule.
+
 ### Parse Features
 
 * [Parse comments](read_features/parse_features/parse_comments.feature)
@@ -34,17 +46,13 @@
 
   Examples (aka scenarios) are the executable part of a feature. An example
 
-* [Parse features](read_features/parse_features/parse_features.feature)
+* [Parse feature definition](read_features/parse_features/parse_feature_definition.feature)
 
-  A feature describes the functionality of a software that will solve some
-  specific problem of it's user. It does so by giving examples of how the
-  function works.
-  For a better understanding a featured follows a nested structure. A feature
-  can contain zero or more rules (see parse rules for more). While a rule can
-  contain zero or more examples (see parse examples for more). Of course only
-  examples can be executed. So a feature or or rule without any assigned
-  example will have no further effect on execution.
-  Simple features can contain just some few examples without any rule.
+  To distinct feature file from other text files a feature files shows its name
+  on the top. Only tags, comments and empty lines are allowd above the feature
+  name. Any description has to put below the feature name.
+  The feature name is marked with any of the keywords reserved by Gherkin for
+  features like feature, Abilty or Business Needs and a colon.
 
 * [Parse rules](read_features/parse_features/parse_rules.feature)
 
