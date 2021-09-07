@@ -5,12 +5,13 @@ Attribute VB_Name = "TRun"
 
 Option Explicit
 
-Dim m_session As TSession
-
 Public Sub test(Optional filter_tag, Optional feature_filter, Optional report_format)
-    Set m_session = New TSession
+
+    Dim session As TSession
+    
+    Set session = New TSession
     session.run_test filter_tag, feature_filter, report_format
-    Set m_session = Nothing
+    Set session = Nothing
 End Sub
 
 Public Sub wip()
@@ -21,8 +22,3 @@ End Sub
 Public Sub progress(Optional filter_tag)
     test filter_tag, report_format:="progress"
 End Sub
-
-Public Property Get session() As TSession
-    Set session = m_session
-End Property
-
