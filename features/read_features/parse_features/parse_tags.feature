@@ -3,7 +3,8 @@ Ability: parse tags
   possible to run only examples marked with a specific tag.
   Examples inherit all tags from their features. If a tag is set for a
   feature, all examples in that feature will have this tag too.
-
+  Any line starting with an @ sign is a tag line where tags are starting
+  with @ and ending with space or linebreak.
 
   Rule: tags preceeding an example should be assigned to this example
 
@@ -13,9 +14,11 @@ Ability: parse tags
           Feature: sample feature
 
             Example: first sample example
+              Given one step
 
             @wip @important @beta
             Example: second sample example
+              Given one step
         """
        When the feature is parsed
        Then the parsed features contains 2 examples
@@ -29,6 +32,7 @@ Ability: parse tags
             @wip @important @beta
             # this is a comment
             Example: sample example
+              Given one Step
         """
        When the feature is parsed
        Then the parsed features contains an example
@@ -42,6 +46,7 @@ Ability: parse tags
             @wip @important @beta
 
             Example: sample example
+              Given one step
         """
       When the feature is parsed
       Then the parsed features contains an example
@@ -49,9 +54,7 @@ Ability: parse tags
 
 
   Rule: examples should inherit tags from the enclosing section
-    Any tag preceding a feature or an example should be assigned accordingly
-    any line starting with an @ sign is a tag line where tags are starting
-    with @ and ending with space.
+    Any tag preceding a feature or an example should be assigned accordingly.
 
     Example: add inherited tags from a feature to an untagged example
       Given a feature
@@ -59,6 +62,7 @@ Ability: parse tags
           @wip @important @beta
           Feature: sample feature
             Example: an untagged example
+              Given one step
        """
       When the feature is parsed
       Then the parsed features contains the tags "@wip, @important, @beta"
@@ -73,6 +77,7 @@ Ability: parse tags
             Rule: a rule with tags
 
               Example: an untagged example
+                Given one step
        """
       When the feature is parsed
       Then the parsed rule contains the tags "@wip, @important, @beta"
@@ -88,6 +93,7 @@ Ability: parse tags
             Rule: a rule with tags
 
               Example: an untagged example
+                Given one step
        """
       When the feature is parsed
       Then the parsed rule contains the tags "@alpha, @wip, @important, @beta"

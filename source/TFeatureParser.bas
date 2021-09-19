@@ -1,123 +1,245 @@
 Attribute VB_Name = "TFeatureParser"
 Option Explicit
 
-Const START_FEATURE_KEYWORDS$ = "Ability,Business Needs,Feature"
-Const START_SECTION_KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Background"
+Const START_SECTION_KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Background,Ability,Business Needs,Feature"
 
-Const LINE_TYPE_FEATURE_START = "feature start"
-Const LINE_TYPE_SECTION_START = "section start"
-Const LINE_TYPE_TAGS = "tag line"
-Const LINE_TYPE_STEP = "step line"
-Const LINE_TYPE_DESCRIPTION = "description line"
-Const LINE_TYPE_COMMENT = "comment line"
+Const LINE_TYPE_FEATURE_START$ = "feature start"
+Const LINE_TYPE_RULE_START$ = "rule start"
+Const LINE_TYPE_EXAMPLE_START$ = "example start"
+Const LINE_TYPE_BACKGROUND_START$ = "background start"
+Const LINE_TYPE_TAGS$ = "tag line"
+Const LINE_TYPE_STEP$ = "step line"
+Const LINE_TYPE_DESCRIPTION$ = "description line"
+Const LINE_TYPE_COMMENT$ = "comment line"
 
-Public Function parse_feature(gherkin_text As String) As TFeature
+Public Function parse_feature_new(gherkin_text As String) As TFeature
 
-    Dim parsed_feature As TFeature
+    Dim new_feature As TFeature
     Dim line As String
-    Dim lines As Variant
-    Dim line_index As Long
-    Dim current_section As Variant
-    Dim current_example_container As TExampleContainer
+    Dim feature_lines As Variant
     Dim section_tags As Collection
+    Dim new_rule As TRule
+    Dim new_example As TExample
+    Dim new_background As TBackground
     
-    Set current_section = Nothing
+    'On Error GoTo parsing_failed
     Set section_tags = New Collection
-    Set parsed_feature = parse_feature_definition(gherkin_text)
-    Set current_example_container = parsed_feature
-    On Error GoTo parse_error
-    If Not parsed_feature Is Nothing Then
-        lines = Split(Trim(gherkin_text), vbLf)
-        For line_index = parsed_feature.parsed_lines + 1 To UBound(lines)
-            line = Trim(lines(line_index))
-            If is_section_definition_line(line) Then
-                'start of a new section means last section is finished -> cleanup last sections description
-                If Not current_section Is Nothing Then trim_description_linebreaks current_section
-                Set current_section = create_section(parsed_feature, current_example_container, line, section_tags)
-                If TypeName(current_section) = "TRule" Then
-                    'assign the current rule to the feature
-                    parsed_feature.sections.Add current_section
-                    'declare the rule as the current container for following examples
-                    Set current_example_container = current_section
-                Else
-                    'assign the current example to the current container (feature or rule)
-                    ' except backgrounds - there is always a predefined (empty) background available
-                    If Not TypeName(current_section) = "TBackground" Then current_example_container.sections.Add current_section
-                End If
-                If TypeName(current_section) = "TBackground" Or TypeName(current_section) = "TExample" Then
-                    'parse all step definitions following the current example or background
-                    ' and assign those steps to the background or example
-                    line_index = parse_steps(lines, line_index, current_section)
-                End If
-                'any tag after a section definition belongs to the next section
-                ' > so start a new tag collection
-                Set section_tags = New Collection
-            ElseIf is_tag_line(line) Then
-                parse_and_add_tags line, section_tags
-            ElseIf Not is_comment_line(line) Then
-                add_description CStr(line), parsed_feature, current_section
-            'ignore comments
-            End If
-        Next
+    Set new_feature = parse_feature_definition(gherkin_text)
+    If new_feature Is Nothing Then
+        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                    "TFeatureParser.parse_feature", _
+                    "can't find feature definition"
     End If
-    Set parse_feature = parsed_feature
+    feature_lines = Split(gherkin_text, vbLf)
+    Do While new_feature.parsed_lines < UBound(feature_lines)
+        new_feature.parsed_lines = new_feature.parsed_lines + 1
+        line = CStr(feature_lines(new_feature.parsed_lines))
+        Select Case get_line_type(line)
+            Case LINE_TYPE_COMMENT
+                'ignore comments
+            Case LINE_TYPE_TAGS
+                parse_and_add_tags line, section_tags
+            Case LINE_TYPE_BACKGROUND_START
+                Set new_background = parse_background(gherkin_text, new_feature)
+                Set new_feature.background = new_background
+                'ignore any tags set before the background section
+                Set section_tags = New Collection
+            Case LINE_TYPE_RULE_START
+                Set new_rule = parse_rule(gherkin_text, new_feature, section_tags)
+                'ignore rules without examples
+                If new_rule.sections.Count > 0 Then
+                    new_rule.description = trim_description_linebreaks_new(new_rule.description)
+                    new_feature.sections.Add new_rule
+                    add_tags new_feature.tags, new_rule.tags
+                End If
+                Set section_tags = New Collection
+            Case LINE_TYPE_EXAMPLE_START
+                Set new_example = parse_example(gherkin_text, new_feature, section_tags)
+                'ignore example without steps
+                If new_example.steps.Count > 0 Then
+                    new_example.description = trim_description_linebreaks_new(new_example.description)
+                    new_feature.sections.Add new_example
+                    add_tags new_feature.tags, new_example.tags
+                End If
+                Set section_tags = New Collection
+            Case LINE_TYPE_DESCRIPTION
+                new_feature.description = add_description_new(new_feature.description, line)
+            Case Else
+                'ignore empty lines after the first section (background, rule, or example)
+                If Not Trim(line) = "" Then
+                    Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                    "TFeatureParser.parse_feature", _
+                    "unexpected text at line " & new_feature.parsed_lines & ": >" & line & "<"
+                End If
+        End Select
+    Loop
+    new_feature.description = trim_description_linebreaks_new(new_feature.description)
+    Set parse_feature_new = new_feature
     Exit Function
     
-parse_error:
-    Debug.Print "Parse Error:", Err.description
+parsing_failed:
+    'TODO handle exception one level up to get access to the feature file name
+    Debug.Print "DEBUG parsing failed: " & Err.description
+    Err.Clear
 End Function
 
-Private Sub trim_description_linebreaks(feature_section)
-    
-    Do While Right(feature_section.description, 1) = vbLf
-        feature_section.description = Left(feature_section.description, Len(feature_section.description) - 1)
-    Loop
-    Do While Left(feature_section.description, 1) = vbLf
-        feature_section.description = Right(feature_section.description, Len(feature_section.description) - 1)
-    Loop
-End Sub
+'NEW
+Public Function parse_background(gherkin_text As String, parent_feature As TFeature) As TBackground
 
-Public Function parse_steps(feature_lines As Variant, example_start_index As Long, current_section As Variant) As Long
-
-    Dim line_index As Long
+    Dim feature_lines As Variant
     Dim line As String
-    Dim is_docstring As Boolean
-    Dim docstring_value As String
-    Dim current_step As TStep
-    
-    is_docstring = False
-    docstring_value = vbNullString
-    For line_index = example_start_index + 1 To UBound(feature_lines)
-        'this normalizes dostrings by triming every line -> this way docstrings can be compared by content
-        '  but not by indention!
-        line = Trim(feature_lines(line_index))
-        If Right(line, 3) = """""""" And is_docstring Then
-            is_docstring = False
-            Set current_step = current_section.Steps(current_section.Steps.Count)
-            current_step.Docstring = Right(docstring_value, Len(docstring_value) - 1)
-            current_step.Expressions.Add current_step.Docstring
-            current_step.Elements.Add current_step.Expressions.Count
-            docstring_value = vbNullString
-        ElseIf is_docstring Then
-            If docstring_value = vbNullString Then
-                ' mark the start of the docstring with a # so that leading empty lines are recognized
-                docstring_value = "#" & line
-            Else
-                docstring_value = docstring_value & vbLf & line
-            End If
-        ElseIf Left(line, 3) = """""""" And Not is_docstring Then
-            is_docstring = True
-        ElseIf is_step_line(line) Then
-            current_section.Steps.Add create_step(line, current_section)
-        ElseIf is_section_definition_line(line) Or Trim(line) = vbNullString Or is_tag_line(line) Then
-            'example is finished either with next example, empty line or tag line
-            parse_steps = line_index - 1
-            Exit Function
-        End If
-    Next
-    parse_steps = line_index
+    Dim new_background As TBackground
+
+    feature_lines = Split(gherkin_text, vbLf)
+    Set new_background = New TBackground
+    Do While parent_feature.parsed_lines < UBound(feature_lines)
+        parent_feature.parsed_lines = parent_feature.parsed_lines + 1
+        line = CStr(feature_lines(parent_feature.parsed_lines))
+        Select Case get_line_type(line)
+            Case LINE_TYPE_COMMENT
+                'ignore comments
+            Case LINE_TYPE_STEP
+                parent_feature.parsed_lines = parse_steps_new(gherkin_text, parent_feature.parsed_lines, new_background.steps)
+                'steps will complete the background
+                Set parse_background = new_background
+                Exit Function
+            Case LINE_TYPE_EXAMPLE_START, LINE_TYPE_RULE_START, LINE_TYPE_TAGS
+                'new rules, examples or tags will also complete the background
+                Set parse_background = new_background
+                parent_feature.parsed_lines = parent_feature.parsed_lines - 1
+                Exit Function
+            Case LINE_TYPE_DESCRIPTION
+                If new_background.steps.Count = 0 Then
+                    new_background.description = add_description_new(new_background.description, line)
+                Else
+                    'ignore empty lines after the steps
+                    If Not Trim(line) = "" Then
+                        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                            "TFeatureParser.parse_feature", _
+                            "unexpected description after background steps at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                    End If
+                End If
+            Case Else
+                Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                    "TFeatureParser.parse_feature", _
+                    "unexpected line in background at line " & parent_feature.parsed_lines & ": >" & line & "<"
+        End Select
+    Loop
+    Set parse_background = new_background
 End Function
 
+Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, rule_tags As Collection) As TRule
+
+    Dim feature_lines As Variant
+    Dim line As String
+    Dim new_example As TExample
+    Dim new_rule As TRule
+    Dim example_tags As Collection
+
+    Set example_tags = New Collection
+    feature_lines = Split(gherkin_text, vbLf)
+    line = CStr(feature_lines(parent_feature.parsed_lines))
+    Set new_rule = create_rule_new(CStr(feature_lines(parent_feature.parsed_lines)), rule_tags, parent_feature)
+    Do While parent_feature.parsed_lines < UBound(feature_lines)
+        parent_feature.parsed_lines = parent_feature.parsed_lines + 1
+        line = CStr(feature_lines(parent_feature.parsed_lines))
+        Select Case get_line_type(line)
+            Case LINE_TYPE_COMMENT
+                'ignore comments
+            Case LINE_TYPE_STEP
+                'rules are not expected to have steps, they can have only examples
+                Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                    "TFeatureParser.parse_feature", _
+                    "rules are not allowed to have steps: found step definition at line " & parent_feature.parsed_lines & ": >" & line & "<"
+            Case LINE_TYPE_TAGS
+                parse_and_add_tags line, example_tags
+            Case LINE_TYPE_EXAMPLE_START
+                Set new_example = parse_example(gherkin_text, parent_feature, example_tags)
+                Set example_tags = New Collection
+                'ignore examples without steps
+                If new_example.steps.Count > 0 Then
+                    new_example.description = trim_description_linebreaks_new(new_example.description)
+                    new_rule.sections.Add new_example
+                    add_tags parent_feature.tags, new_example.tags
+                    add_tags new_rule.tags, new_example.tags
+                End If
+            Case LINE_TYPE_RULE_START
+                'another rule will finish this rule
+                Set parse_rule = new_rule
+                parent_feature.parsed_lines = parent_feature.parsed_lines - 1
+                Exit Function
+            Case LINE_TYPE_DESCRIPTION
+                If new_rule.sections.Count = 0 Then
+                    new_rule.description = add_description_new(new_rule.description, line)
+                Else
+                    'ignore empty lines after the first example
+                    If Not Trim(line) = "" Then
+                        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                            "TFeatureParser.parse_feature", _
+                            "unexpected line in a rule section at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                    End If
+                End If
+        End Select
+    Loop
+    Set parse_rule = new_rule
+End Function
+
+Public Function parse_example(gherkin_text As String, parent_feature As TFeature, example_tags As Collection) As TExample
+    'example is a synonym for scenario
+
+    Dim feature_lines As Variant
+    Dim line As String
+    Dim new_example As TExample
+
+    feature_lines = Split(gherkin_text, vbLf)
+    line = CStr(feature_lines(parent_feature.parsed_lines))
+    Set new_example = create_example_new(line, example_tags)
+    Do While parent_feature.parsed_lines < UBound(feature_lines)
+        parent_feature.parsed_lines = parent_feature.parsed_lines + 1
+        line = CStr(feature_lines(parent_feature.parsed_lines))
+        Select Case get_line_type(line)
+            Case LINE_TYPE_COMMENT
+                'ignore comments
+            Case LINE_TYPE_STEP
+                parent_feature.parsed_lines = TStepParser.parse_steps_new(gherkin_text, parent_feature.parsed_lines, new_example.steps)
+            Case LINE_TYPE_EXAMPLE_START, LINE_TYPE_RULE_START, LINE_TYPE_TAGS
+                ' a new section or tags indicating the beginning of a new section will terminate the example definition
+                parent_feature.parsed_lines = parent_feature.parsed_lines - 1
+                Set parse_example = new_example
+                Exit Function
+            Case LINE_TYPE_DESCRIPTION
+                If new_example.steps.Count = 0 Then
+                    new_example.description = add_description_new(new_example.description, line)
+                Else
+                    'ignore empty lines after the  example
+                    If Not Trim(line) = "" Then
+                        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                            "TFeatureParser.parse_feature", _
+                            "found example description after steps at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                    End If
+                End If
+            Case Else
+                Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                    "TFeatureParser.parse_feature", _
+                    "unexpected line in a example (scenario) section at line " & parent_feature.parsed_lines & ": >" & line & "<"
+        End Select
+    Loop
+    Set parse_example = new_example
+End Function
+
+Private Function trim_description_linebreaks_new(section_description As String) As String
+    
+    Dim trimmed_description As String
+    
+    trimmed_description = section_description
+    Do While Right(trimmed_description, 1) = vbLf
+        trimmed_description = Left(trimmed_description, Len(trimmed_description) - 1)
+    Loop
+    Do While Left(trimmed_description, 1) = vbLf
+        trimmed_description = Right(trimmed_description, Len(trimmed_description) - 1)
+    Loop
+    trim_description_linebreaks_new = trimmed_description
+End Function
 
 Public Function parse_feature_definition(gherkin_text As String) As TFeature
     
@@ -144,8 +266,8 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
                 'ignore empty lines
                 If Not Trim(line) = "" Then
                     Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                    "TFeatureParser.parse_feature_definition", _
-                    "Feature lacks feature keyword at the beginning"
+                        "TFeatureParser.parse_feature_definition", _
+                        "Feature lacks feature keyword at the beginning"
                 End If
         End Select
         line_index = line_index + 1
@@ -166,7 +288,7 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
         line = CStr(feature_lines(line_index))
         Select Case get_line_type(line)
             Case LINE_TYPE_DESCRIPTION
-                add_description line, parsed_feature
+                parsed_feature.description = add_description_new(parsed_feature.description, line)
             Case LINE_TYPE_COMMENT
                 'ignore comments
             Case Else
@@ -179,6 +301,9 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
 End Function
 
 Private Function get_line_type(line As String)
+
+    Dim section_definition As Collection
+    
     If is_step_line(line) Then
         get_line_type = LINE_TYPE_STEP
     ElseIf is_comment_line(line) Then
@@ -186,24 +311,32 @@ Private Function get_line_type(line As String)
     ElseIf is_tag_line(line) Then
         get_line_type = LINE_TYPE_TAGS
     ElseIf is_section_definition_line(line) Then
-        get_line_type = LINE_TYPE_SECTION_START
-    ElseIf is_section_definition_line(line, START_FEATURE_KEYWORDS) Then
-        get_line_type = LINE_TYPE_FEATURE_START
+        Set section_definition = read_section_headline(line)
+        Select Case section_definition("type")
+            Case SECTION_TYPE_RULE
+                get_line_type = LINE_TYPE_RULE_START
+            Case SECTION_TYPE_EXAMPLE
+                get_line_type = LINE_TYPE_EXAMPLE_START
+            Case SECTION_TYPE_BACKGROUND
+                get_line_type = LINE_TYPE_BACKGROUND_START
+            Case SECTION_TYPE_FEATURE
+                get_line_type = LINE_TYPE_FEATURE_START
+        End Select
     Else
         get_line_type = LINE_TYPE_DESCRIPTION
     End If
 End Function
 
-Private Function is_section_definition_line(feature_line As String, Optional keywords) As Boolean
+'TODO reset to private after refactoring parse steps
+Public Function is_section_definition_line(feature_line As String) As Boolean
     
     Dim keyword  As Variant
     Dim section_name As String
     
-    If IsMissing(keywords) Then keywords = START_SECTION_KEYWORDS
     'section definition format is /^<keyword>:[^:]*$/
     If UBound(Split(Trim(feature_line), ":")) > 0 Then
         section_name = Split(Trim(feature_line), ":")(0)
-        For Each keyword In Split(keywords, ",")
+        For Each keyword In Split(START_SECTION_KEYWORDS, ",")
             If section_name = CStr(keyword) Then
                is_section_definition_line = True
                Exit Function
@@ -217,16 +350,18 @@ Private Function is_comment_line(feature_line As String) As Boolean
     is_comment_line = Left(Trim(feature_line), 1) = "#"
 End Function
 
-Private Function is_tag_line(feature_line As String) As Boolean
+'TODO reset to private after refactoring parse steps
+Public Function is_tag_line(feature_line As String) As Boolean
     is_tag_line = Left(Trim(feature_line), 1) = "@"
 End Function
 
-Private Function is_step_line(feature_line As String) As Boolean
+'TODO reset to private after refactoring parse steps
+Public Function is_step_line(feature_line As String) As Boolean
 
     Dim first_word As String
     
     first_word = Split(Trim(feature_line) & " ", " ")(0)
-    is_step_line = InStr("Given When Then And But", first_word) > 0 And Len(first_word) > 2
+    is_step_line = InStr(" Given When Then And But ", " " & first_word & " ") > 0 And Len(first_word) > 2
 End Function
 
 Public Sub parse_and_add_tags(feature_line As String, tags As Collection)
@@ -245,30 +380,6 @@ Public Sub parse_and_add_tags(feature_line As String, tags As Collection)
         End If
     Next
 End Sub
-
-Private Function create_section(feature As TFeature, example_container As TExampleContainer, feature_line As String, section_tags As Collection) As Variant
-
-    Dim new_section As Variant
-    Dim section_headline As Collection
-    
-    Set section_headline = read_section_headline(feature_line)
-    Select Case section_headline("type")
-        Case SECTION_TYPE_RULE
-            Set new_section = create_rule(rule_name:=section_headline("name"), rule_tags:=section_tags, feature_parent:=feature)
-            'add tags set on the containing feature to the rule
-            add_tags feature.tags, new_section.tags
-        Case SECTION_TYPE_EXAMPLE
-            Set new_section = create_example(example_head:=section_headline("head"), example_name:=section_headline("name"), example_tags:=section_tags, feature_line:=feature_line)
-            'add tags set on the containing rule or feature to the example
-            add_tags example_container.tags, new_section.tags
-        Case SECTION_TYPE_BACKGROUND
-            'background already exists as an attribute of the TFeature class
-            Set new_section = example_container.background
-        Case Else
-            Debug.Print "PARSE ERROR: unknown section >" & section_headline("type") & "<"
-    End Select
-    Set create_section = new_section
-End Function
 
 Private Sub add_tags(source_tags As Collection, target_tags As Collection)
 
@@ -309,67 +420,46 @@ Private Function read_section_headline(text_line As String) As Collection
     Set read_section_headline = section_headline
 End Function
 
-Private Function create_rule(rule_name As String, rule_tags As Collection, feature_parent As TFeature) As TRule
+Private Function create_rule_new(line As String, rule_tags As Collection, feature_parent As TFeature) As TRule
 
     Dim new_rule As TRule
+    Dim section_definition As Collection
     
     Set new_rule = New TRule
-    new_rule.head = "Rule"
-    new_rule.name = rule_name
     Set new_rule.tags = rule_tags
     Set new_rule.parent = feature_parent
-    Set create_rule = new_rule
+    Set section_definition = read_section_headline(line)
+    new_rule.name = section_definition("head")
+    new_rule.name = section_definition("name")
+    Set create_rule_new = new_rule
 End Function
 
-Private Function create_example(example_head As String, example_name As String, example_tags As Collection, feature_line As String) As TExample
+Private Function create_example_new(line As String, example_tags As Collection) As TExample
 
     Dim new_example As TExample
+    Dim section_definition As Collection
     
     Set new_example = New TExample
-    new_example.head = example_head
-    new_example.name = example_name
     new_example.tags = example_tags
-    new_example.OriginalHeadline = feature_line
-    Set create_example = new_example
+    Set section_definition = read_section_headline(line)
+    new_example.head = section_definition("head")
+    new_example.name = section_definition("name")
+    new_example.OriginalHeadline = Trim(line)
+    Set create_example_new = new_example
 End Function
 
-Private Sub add_description(line As String, feature As TFeature, Optional section As Variant)
+Private Function add_description_new(section_description As String, line As String) As String
 
-    If IsMissing(section) Then Set section = Nothing
-    If section Is Nothing Then
-        If feature.description = vbNullString Then
-            feature.description = Trim(line)
+    'ignore empty lines at description start
+    If section_description <> vbNullString Or Trim(line) <> vbNullString Then
+        'add linebreak starting with the second line
+        If section_description <> vbNullString Then
+            add_description_new = section_description & vbLf & Trim(line)
         Else
-            feature.description = feature.description & vbLf & Trim(line)
+            add_description_new = Trim(line)
         End If
     Else
-        If section.description = vbNullString Then
-            section.description = Trim(line)
-        Else
-            section.description = section.description & vbLf & Trim(line)
-        End If
+        add_description_new = vbNullString
     End If
-End Sub
-
-Private Function clone_tags(source_tags As Collection) As Collection
-
-    Dim tag As Variant
-    Dim target_tags As Collection
-    
-    Set target_tags = New Collection
-    For Each tag In source_tags
-        target_tags.Add tag, tag
-    Next
-    Set clone_tags = target_tags
 End Function
 
-Public Function create_step(step_definition As String, Optional parent_section) As TStep
-
-    Dim new_step As TStep
-    
-    If IsMissing(parent_section) Then Set parent_section = New TExample
-    Set new_step = New TStep
-    new_step.parent = parent_section
-    new_step.parse_step_definition step_definition
-    Set create_step = new_step
-End Function

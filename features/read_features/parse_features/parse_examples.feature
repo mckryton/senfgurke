@@ -18,7 +18,7 @@ Ability: parse examples
              Then some result is expected
         """
       When the example is parsed
-      Then the example clause from the parsed result contains all the steps
+      Then the parsed example contains all the steps
 
 #    Rule: Steps not starting with "Given", "When", "Then" or "And" will produce a Gherkin syntax error
 #    Example: missing step type

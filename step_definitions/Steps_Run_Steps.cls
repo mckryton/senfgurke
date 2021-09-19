@@ -28,36 +28,36 @@ End Sub
 
 Public Sub Given_a_step_returning_PENDING_without_a_pending_m_F201CAEBCFB1(example_context As TContext)
     'Given a step returning PENDING without a pending message
-    example_context.set_value TFeatureParser.create_step("Given a pending step"), "example_step"
+    example_context.set_value TStepParser.parse_step_line("Given a pending step", New Collection), "example_step"
     'won't create code dynamically, so step "Given a pending step" is hard coded
 End Sub
 
 Public Sub Given_a_step_with_an_empty_implementation_BC7B46584C5E(example_context As TContext)
     'Given a step with an empty implementation
-    example_context.set_value TFeatureParser.create_step("Given an empty step"), "example_step"
+    example_context.set_value TStepParser.parse_step_line("Given an empty step", New Collection), "example_step"
     'the step function itself can't be created dynamically and has to be available
 End Sub
 
 Public Sub Given_a_step_with_a_working_implementation_05BC882CCAAA(example_context As TContext)
     'Given a step with a working implementation
-    example_context.set_value TFeatureParser.create_step("Given a valid step"), "example_step"
+    example_context.set_value TStepParser.parse_step_line("Given a valid step", New Collection), "example_step"
     'the step function itself can't be created dynamically and has to be available
 End Sub
 
 Public Sub Given_a_step_with_a_failing_implementation_05BCA3B5CAAA(example_context As TContext)
     'Given a step with a failing implementation
-    example_context.set_value TFeatureParser.create_step("Given an invalid step"), "example_step"
+    example_context.set_value TStepParser.parse_step_line("Given an invalid step", New Collection), "example_step"
     'the step function itself can't be created dynamically and has to be available
 End Sub
 
 Public Sub Given_a_step_without_an_implementation_FAF18488CAAA(example_context As TContext)
     'Given a step without an implementation
-    example_context.set_value TFeatureParser.create_step("Given a random step name " & CStr(Now)), "example_step"
+    example_context.set_value TStepParser.parse_step_line("Given a random step name " & CStr(Now), New Collection), "example_step"
 End Sub
 
 Public Sub Given_a_step_STR_F5C6F4BA1D15(example_context As TContext, step_expressions As Collection)
     'Given a step {string}
-    example_context.set_value TFeatureParser.create_step(step_expressions(1)), "example_step"
+    example_context.set_value TStepParser.parse_step_line(step_expressions(1), New Collection), "example_step"
 End Sub
 
 Public Sub When_the_step_is_executed_CEB06B444334(example_context As TContext)

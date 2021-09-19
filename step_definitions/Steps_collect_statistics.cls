@@ -18,7 +18,7 @@ End Sub
 Public Sub Given_a_feature_description_with_a_step_9DB173A5EA30(example_context As TContext)
     'Given a feature description with a step
     example_context.set_value New Collection, "parsed_features"
-    example_context.get_value("parsed_features").Add TFeatureParser.parse_feature("Feature: sample" & vbLf _
+    example_context.get_value("parsed_features").Add TFeatureParser.parse_feature_new("Feature: sample" & vbLf _
                                                                 & "Example: sample" & vbLf _
                                                                 & "Given a missing step")
 End Sub
@@ -31,7 +31,7 @@ End Sub
 Public Sub Given_a_feature_with_an_example_with_a_missing_ste_63C4BE7D2E08(example_context As TContext)
     'Given a feature with an example with a missing step
     example_context.set_value New Collection, "parsed_features"
-    example_context.get_value("parsed_features").Add TFeatureParser.parse_feature("Feature: sample" & vbLf _
+    example_context.get_value("parsed_features").Add TFeatureParser.parse_feature_new("Feature: sample" & vbLf _
                                                                 & "Example: sample" & vbLf _
                                                                 & "Given a missing step")
 End Sub

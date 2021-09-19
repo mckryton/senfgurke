@@ -68,3 +68,5 @@ Ability: run tests
         """
        When a test is started with "@three" as parameter
        Then no example was executed
+
+#TODO: explain all available parameters for running tests

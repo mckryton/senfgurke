@@ -31,13 +31,19 @@ Ability: parse steps
     as the previous step.
 
     Example: "And" as synonym for "Given"
-      Given an example with a step "Given x is 1"
-        And another step is defined as "And y is 2"
-       When the step definition is parsed as part of this example
-       Then the type of the step is set to "Given"
+      Given a list of steps
+          """
+            Given x is 1
+              And y is 2
+          """
+       When the step list is parsed
+       Then the type of step 2 is set to "Given"
 
-    Example: "But" as synonym for "When"
-      Given an example with a step "When some action happens"
-        And another step is defined as "But it doesn't matter"
-       When the step definition is parsed as part of this example
-       Then the type of the step is set to "When"
+     Example: "But" as synonym for "When"
+       Given a list of steps
+           """
+             When some action happens
+              But it doesn't matter
+           """
+        When the step list is parsed
+        Then the type of step 2 is set to "When"

@@ -48,12 +48,12 @@ Public Property Let OriginalHeadline(original_headline As String)
     m_original_headline = original_headline
 End Property
 
-Public Property Get Steps() As Collection
+Public Property Get steps() As Collection
 
     If m_steps Is Nothing Then
         Set m_steps = New Collection
     End If
-    Set Steps = m_steps
+    Set steps = m_steps
 End Property
 
 Public Property Get tags() As Collection
@@ -75,10 +75,10 @@ Public Sub insert_background_steps(background_steps As Collection)
     
     For step_index = background_steps.Count To 1
         Set background_step = background_steps(step_index)
-        If Me.Steps.Count > 0 Then
-            Me.Steps.Add background_step, before:=1
+        If Me.steps.Count > 0 Then
+            Me.steps.Add background_step, before:=1
         Else
-            Me.Steps.Add background_step
+            Me.steps.Add background_step
         End If
     Next
 End Sub

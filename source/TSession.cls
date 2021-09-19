@@ -115,7 +115,7 @@ Public Function parse_loaded_features(feature_list As Collection) As Collection
     Set parsed_features = New Collection
     On Error GoTo parse_error
     For Each loaded_feature In feature_list
-        Set parsed_feature = parse_feature(CStr(loaded_feature("feature_text")))
+        Set parsed_feature = parse_feature_new(CStr(loaded_feature("feature_text")))
         If Not parsed_feature Is Nothing Then parsed_features.Add parsed_feature
     Next
     Set parse_loaded_features = parsed_features

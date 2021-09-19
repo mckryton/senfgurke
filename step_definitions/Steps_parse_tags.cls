@@ -37,8 +37,6 @@ Public Sub Then_the_parsed_features_contains_INT_examples_013B39CEE3B0(example_c
     'Then the parsed features contains {integer} examples
     TSpec.expect(example_context.get_value("parsed_feature").sections.Count).to_be 2
     TSpec.expect(TypeName(example_context.get_value("parsed_feature").sections(2))).to_be "TExample"
-    
-    example_context.set_value example_context.get_value("parsed_feature").sections(2), "example"
 End Sub
 
 Public Sub Then_the_parsed_second_example_is_tagged_with_STR_EB00E4656DAE(example_context As TContext, step_expressions As Collection)
@@ -46,10 +44,12 @@ Public Sub Then_the_parsed_second_example_is_tagged_with_STR_EB00E4656DAE(exampl
         
     Dim tags As Variant
     Dim tag As Variant
+    Dim second_example As TExample
     
     tags = Split(step_expressions(1), ",")
+    Set second_example = example_context.get_value("parsed_feature").sections(2)
     For Each tag In tags
-        TSpec.expect(example_context.get_value("example").tags).contains_member Trim(tag)
+        TSpec.expect(second_example.tags).contains_member Trim(tag)
     Next
 End Sub
 

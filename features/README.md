@@ -59,7 +59,7 @@
   Quite often a feature has more than one aspect. E.g. most feature will follow
   several business policies. A rule will help you to reflect those aspects in
   the feature description. A rule describes the logic or policy a feature should
-  follow. All examples following a rule should explain this policy. 
+  follow. All examples following a rule should explain this policy.
 
 * [Parse steps](read_features/parse_features/parse_steps.feature)
 
@@ -87,12 +87,15 @@
   possible to run only examples marked with a specific tag.
   Examples inherit all tags from their features. If a tag is set for a
   feature, all examples in that feature will have this tag too.
+  Any line starting with an @ sign is a tag line where tags are starting
+  with @ and ending with space or linebreak.
 
 ## Report
 
 * [Report in progress format](report/report_in_progress_format.feature)
 
-  When running examples for all features, a verbose output would be confusing.
+  Running examples for all features would be confusing because of the amount
+  of details for all the steps.
   Therefore the progress format will mark successul executed examples with
   a single dot to indicate the execution progress. Different results can be
   detected by a matching letter (e.g. F for failed steps).
@@ -134,8 +137,8 @@
   Whenever a new step is added to a feature, Senfgurke will offer a matching
   step implementation function. Senfgurke tries to make the function name as
   similar to the step name as possible so that it's easy to identify the
-  matching step implemenation for any step.
-  But function names in any programming language have to follow conventions.
+  matching step implemenation for any step. But function names in any
+  programming language have to follow conventions.
   Conventions for function and variable names in VBA are documented here:
 
 * [Run examples](run_tests/run_examples.feature)

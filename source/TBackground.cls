@@ -11,13 +11,12 @@ Option Explicit
 
 Dim m_background_description As String
 Dim m_steps As Collection
-Dim m_docstring As String
 
-Public Property Get Steps() As Collection
+Public Property Get steps() As Collection
     If m_steps Is Nothing Then
         Set m_steps = New Collection
     End If
-    Set Steps = m_steps
+    Set steps = m_steps
 End Property
 
 Public Property Get description() As String
@@ -28,11 +27,4 @@ Public Property Let description(ByVal background_description As String)
     m_background_description = background_description
 End Property
 
-Public Property Get Docstring() As String
-    Docstring = m_docstring
-End Property
-
-Public Property Let Docstring(ByVal new_docstring As String)
-    m_docstring = new_docstring
-End Property
 

@@ -35,7 +35,7 @@ Public Sub run_example(example As TExample)
     step_runner.setup m_session
     step_status = vbNullString
     m_session.Reporter.report REPORT_MSG_TYPE_EXAMPLE_TITLE, example.OriginalHeadline
-    For Each step In example.Steps
+    For Each step In example.steps
         err_msg = vbNullString
         previous_step_status = step_status
         step_result = step_runner.run_step(step, context)

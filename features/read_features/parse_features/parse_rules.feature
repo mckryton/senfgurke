@@ -2,19 +2,22 @@ Ability: parse rules
   Quite often a feature has more than one aspect. E.g. most feature will follow
   several business policies. A rule will help you to reflect those aspects in
   the feature description. A rule describes the logic or policy a feature should
-  follow. All examples following a rule should explain this policy. 
+  follow. All examples following a rule should explain this policy.
   A "Rule:" clause is limited by the start of the next rule or by the end of the
   feature.
 
 
-  Rule: the rule keyword should mark the beginning of a "Rule:" clause
-    The clause ends with the next "Rule:" clause or with the end of the feature
+  Rule: add rules to the parent feature only if they include examples
+    A rule ends before the line containing another "Rule:" keyword or with the
+    end of the feature
 
     Example: single rule
       Given a feature
         """
           Feature: sample feature
             Rule: sample rule
+              Example: sample example
+                Given one step
         """
       When the feature is parsed
       Then the feature contains 1 rule(s)

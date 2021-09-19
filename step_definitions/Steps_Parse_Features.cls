@@ -34,7 +34,7 @@ Public Sub When_the_feature_is_parsed_CEB0ED59F01F(example_context As TContext)
     'When the feature is parsed
     example_context.set_value New Collection, "parse_error"
     On Error GoTo parse_error
-    example_context.set_value TFeatureParser.parse_feature(example_context.get_value("gherkin_text")), "parsed_feature"
+    example_context.set_value TFeatureParser.parse_feature_new(example_context.get_value("gherkin_text")), "parsed_feature"
     Exit Sub
     
 parse_error:
@@ -62,16 +62,20 @@ End Sub
 Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981(example_context As TContext)
     'Then the parsed result contains a separate item for each of the given elements
     
+    Dim parsed_feature As TFeature
     Dim rule As TRule
+    Dim example As TExample
     
-    TSpec.expect(example_context.get_value("parsed_feature").name).to_be "sample feature"
-    TSpec.expect(example_context.get_value("parsed_feature").sections.Count).to_be 1
-    TSpec.expect(TypeName(example_context.get_value("parsed_feature").sections(1))).to_be "TRule"
-    Set rule = example_context.get_value("parsed_feature").sections(1)
+    Set parsed_feature = example_context.get_value("parsed_feature")
+    TSpec.expect(parsed_feature.name).to_be "sample feature"
+    TSpec.expect(parsed_feature.sections.Count).to_be 1
+    TSpec.expect(TypeName(parsed_feature.sections(1))).to_be "TRule"
+    Set rule = parsed_feature.sections(1)
     TSpec.expect(rule.name).to_be "sample rule"
     TSpec.expect(rule.sections.Count).to_be 1
-    TSpec.expect(TypeName(rule.sections(1))).to_be "TExample"
-    TSpec.expect(rule.sections(1).name).to_be "sample example"
+    Set example = rule.sections(1)
+    TSpec.expect(TypeName(example)).to_be "TExample"
+    TSpec.expect(example.name).to_be "sample example"
 End Sub
 
 Public Sub Then_the_parsed_result_contains_a_feature_with_the_5E84028445E3(example_context As TContext, step_expressions As Collection)
@@ -107,12 +111,12 @@ End Sub
 
 Public Sub Then_the_parsed_result_contains_an_example_with_tw_5E84053FD2C3(example_context As TContext)
     'Then the parsed result contains an example with two steps
-    TSpec.expect(example_context.get_value("parsed_feature").sections(1).Steps.Count).to_be 2
+    TSpec.expect(example_context.get_value("parsed_feature").sections(1).steps.Count).to_be 2
 End Sub
 
 Public Sub Then_the_Given_step_is_assigned_to_the_feature_9078F8233D0D(example_context As TContext)
     'Then the Given step is assigned to the feature
-    TSpec.expect(example_context.get_value("parsed_feature").background.Steps(1).OriginalStepDefinition).to_be "Given one step"
+    TSpec.expect(example_context.get_value("parsed_feature").background.steps(1).OriginalStepDefinition).to_be "Given one step"
 End Sub
 
 Public Sub Then_a_feature_named_STR_is_parsed_2E9486C04330(example_context As TContext, step_expressions As Collection)
@@ -120,3 +124,20 @@ Public Sub Then_a_feature_named_STR_is_parsed_2E9486C04330(example_context As TC
     TSpec.expect(example_context.get_value("parsed_feature").name).to_be step_expressions(1)
 End Sub
 
+Public Sub Then_no_parsed_feature_is_created_8F49EB33AFB0(example_context As TContext)
+    'Then no parsed feature is created
+    TSpec.expect(example_context.get_value("parsed_feature")).to_be_nothing
+End Sub
+
+Public Sub Then_a_parsed_feature_is_created_9DBF3201C55E(example_context As TContext)
+    'Then a parsed feature is created
+    TSpec.expect(example_context.get_value("parsed_feature")).not_to_be_nothing
+End Sub
+
+Public Sub Then_the_parsed_feature_has_INT_tags_41F92DEB0B62(example_context As TContext, step_expressions As Collection)
+    'And the parsed feature has {integer} tags
+    Dim parsed_feature As TFeature
+    
+    Set parsed_feature = example_context.get_value("parsed_feature")
+    TSpec.expect(parsed_feature.tags.Count).to_be step_expressions(1)
+End Sub
