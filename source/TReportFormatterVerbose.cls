@@ -24,8 +24,6 @@ Public Function process_msg(msg_package As Collection) As String
     Select Case msg_package(REPORT_MSG_TYPE)
         Case REPORT_MSG_TYPE_FEATURE_NAME
             CurrentFeature = message & vbLf
-        Case REPORT_MSG_TYPE_DESC
-            CurrentFeature = CurrentFeature & message & vbLf
         Case REPORT_MSG_TYPE_RULE
             CurrentRule = message & vbLf
         Case REPORT_MSG_TYPE_EXAMPLE_TITLE

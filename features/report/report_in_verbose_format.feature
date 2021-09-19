@@ -18,18 +18,28 @@ Ability: Report in verbose format
         And the report output contains "Rule: has example"
         And the report output doesn't contain "Rule: empty rule"
 
+  Rule: descriptions shouldn't appear in verbose reports
+    Verbose reports are provided for detailed feedback during devlopemnt and not
+    for living documentation. To keep the feedback comprehensible any
+    description text will be left out.
 
-  Rule: feature descriptions should be indented with a fixed space
+    Example: feature with example has description
+      Given a feature
+        """
+          Feature: sample
+            This feature has some description.
 
-    Example: feature description without leading whitespace
-      Given a description line "description line"
-       When the description line is formatted
-       Then the description is reported as "    description line"
-
-    Example: feature description with leading whitespace
-      Given a description line "             description line"
-       When the description line is formatted
-       Then the description is reported as "    description line"
+            Example: sample
+              Given one step
+        """
+      When the execution of the feature is reported
+       And the example is reported with the step result "OK"
+      Then the report ouput is
+        """
+          Feature: sample
+            Example: sample
+              OK       Given one step
+        """
 
 
   Rule: format step results and names

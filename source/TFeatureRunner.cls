@@ -35,21 +35,21 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
             Set example = feature_section
             If filter_tag = vbNullString Or ExtraVBA.collection_has_key(filter_tag, example.tags) = True Then
                 If Not example_container.parent Is Nothing Then
-                    If example_container.parent.background.Steps.Count > 0 Then
+                    If example_container.parent.background.steps.Count > 0 Then
                         'if the examplecontainer is a rule then consider also the background
                         ' steps from the parent feature
-                        example.insert_background_steps example_container.parent.background.Steps
+                        example.insert_background_steps example_container.parent.background.steps
                     End If
                 End If
-                If example_container.background.Steps.Count > 0 Then example.insert_background_steps example_container.background.Steps
+                If example_container.background.steps.Count > 0 Then example.insert_background_steps example_container.background.steps
                 example_runner.run_example example
             End If
         ElseIf TypeName(feature_section) = "TRule" Then
             Set current_rule = feature_section
             ' a rule can contain  examples like a feature > so run it like a feature
+            m_session.Reporter.report REPORT_MSG_TYPE_RULE, feature_section.wholeName
             run_feature current_rule, filter_tag
             m_session.statistics.log_event LOG_EVENT_RUN_RULE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
-            m_session.Reporter.report REPORT_MSG_TYPE_RULE, feature_section.wholeName
         End If
     Next
 End Sub
