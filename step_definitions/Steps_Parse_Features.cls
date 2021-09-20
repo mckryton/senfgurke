@@ -34,7 +34,7 @@ Public Sub When_the_feature_is_parsed_CEB0ED59F01F(example_context As TContext)
     'When the feature is parsed
     example_context.set_value New Collection, "parse_error"
     On Error GoTo parse_error
-    example_context.set_value TFeatureParser.parse_feature_new(example_context.get_value("gherkin_text")), "parsed_feature"
+    example_context.set_value TFeatureParser.parse_feature(example_context.get_value("gherkin_text")), "parsed_feature"
     Exit Sub
     
 parse_error:

@@ -43,7 +43,7 @@ Public Sub When_the_execution_of_the_feature_is_reported_7A6F8A00CA5C(example_co
     Dim session As TSession
     
     Set session = example_context.get_value("session")
-    Set parsed_feature = TFeatureParser.parse_feature_new(example_context.get_value("gherkin_text"))
+    Set parsed_feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
     example_context.set_value parsed_feature, "parsed_feature"
     session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, parsed_feature.name
     session.Reporter.report REPORT_MSG_TYPE_DESC, parsed_feature.description

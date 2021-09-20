@@ -1,7 +1,7 @@
 Attribute VB_Name = "TStepParser"
 Option Explicit
 
-Public Function parse_steps_new(feature_text As String, step_list_start_index As Long, step_list As Collection) As Long
+Public Function parse_steps(feature_text As String, step_list_start_index As Long, step_list As Collection) As Long
 
     Dim line_index As Long
     Dim line As String
@@ -37,11 +37,11 @@ Public Function parse_steps_new(feature_text As String, step_list_start_index As
             step_list.Add parse_step_line(line, step_list)
         ElseIf TFeatureParser.is_section_definition_line(line) Or Trim(line) = vbNullString Or TFeatureParser.is_tag_line(line) Then
             'example is finished either with next example, empty line or tag line
-            parse_steps_new = line_index - 1
+            parse_steps = line_index - 1
             Exit Function
         End If
     Next
-    parse_steps_new = line_index
+    parse_steps = line_index
 End Function
 
 Public Function parse_step_line(step_line As String, step_list As Collection) As TStep

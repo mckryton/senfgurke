@@ -12,7 +12,7 @@ Const LINE_TYPE_STEP$ = "step line"
 Const LINE_TYPE_DESCRIPTION$ = "description line"
 Const LINE_TYPE_COMMENT$ = "comment line"
 
-Public Function parse_feature_new(gherkin_text As String) As TFeature
+Public Function parse_feature(gherkin_text As String) As TFeature
 
     Dim new_feature As TFeature
     Dim line As String
@@ -48,7 +48,7 @@ Public Function parse_feature_new(gherkin_text As String) As TFeature
                 Set new_rule = parse_rule(gherkin_text, new_feature, section_tags)
                 'ignore rules without examples
                 If new_rule.sections.Count > 0 Then
-                    new_rule.description = trim_description_linebreaks_new(new_rule.description)
+                    new_rule.description = trim_description_linebreaks(new_rule.description)
                     new_feature.sections.Add new_rule
                     add_tags new_feature.tags, new_rule.tags
                 End If
@@ -57,13 +57,13 @@ Public Function parse_feature_new(gherkin_text As String) As TFeature
                 Set new_example = parse_example(gherkin_text, new_feature, section_tags)
                 'ignore example without steps
                 If new_example.steps.Count > 0 Then
-                    new_example.description = trim_description_linebreaks_new(new_example.description)
+                    new_example.description = trim_description_linebreaks(new_example.description)
                     new_feature.sections.Add new_example
                     add_tags new_feature.tags, new_example.tags
                 End If
                 Set section_tags = New Collection
             Case LINE_TYPE_DESCRIPTION
-                new_feature.description = add_description_new(new_feature.description, line)
+                new_feature.description = add_description(new_feature.description, line)
             Case Else
                 'ignore empty lines after the first section (background, rule, or example)
                 If Not Trim(line) = "" Then
@@ -73,8 +73,8 @@ Public Function parse_feature_new(gherkin_text As String) As TFeature
                 End If
         End Select
     Loop
-    new_feature.description = trim_description_linebreaks_new(new_feature.description)
-    Set parse_feature_new = new_feature
+    new_feature.description = trim_description_linebreaks(new_feature.description)
+    Set parse_feature = new_feature
     Exit Function
     
 parsing_failed:
@@ -99,7 +99,7 @@ Public Function parse_background(gherkin_text As String, parent_feature As TFeat
             Case LINE_TYPE_COMMENT
                 'ignore comments
             Case LINE_TYPE_STEP
-                parent_feature.parsed_lines = parse_steps_new(gherkin_text, parent_feature.parsed_lines, new_background.steps)
+                parent_feature.parsed_lines = parse_steps(gherkin_text, parent_feature.parsed_lines, new_background.steps)
                 'steps will complete the background
                 Set parse_background = new_background
                 Exit Function
@@ -110,7 +110,7 @@ Public Function parse_background(gherkin_text As String, parent_feature As TFeat
                 Exit Function
             Case LINE_TYPE_DESCRIPTION
                 If new_background.steps.Count = 0 Then
-                    new_background.description = add_description_new(new_background.description, line)
+                    new_background.description = add_description(new_background.description, line)
                 Else
                     'ignore empty lines after the steps
                     If Not Trim(line) = "" Then
@@ -139,7 +139,7 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
     Set example_tags = New Collection
     feature_lines = Split(gherkin_text, vbLf)
     line = CStr(feature_lines(parent_feature.parsed_lines))
-    Set new_rule = create_rule_new(CStr(feature_lines(parent_feature.parsed_lines)), rule_tags, parent_feature)
+    Set new_rule = create_rule(CStr(feature_lines(parent_feature.parsed_lines)), rule_tags, parent_feature)
     Do While parent_feature.parsed_lines < UBound(feature_lines)
         parent_feature.parsed_lines = parent_feature.parsed_lines + 1
         line = CStr(feature_lines(parent_feature.parsed_lines))
@@ -158,7 +158,7 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
                 Set example_tags = New Collection
                 'ignore examples without steps
                 If new_example.steps.Count > 0 Then
-                    new_example.description = trim_description_linebreaks_new(new_example.description)
+                    new_example.description = trim_description_linebreaks(new_example.description)
                     new_rule.sections.Add new_example
                     add_tags parent_feature.tags, new_example.tags
                     add_tags new_rule.tags, new_example.tags
@@ -170,7 +170,7 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
                 Exit Function
             Case LINE_TYPE_DESCRIPTION
                 If new_rule.sections.Count = 0 Then
-                    new_rule.description = add_description_new(new_rule.description, line)
+                    new_rule.description = add_description(new_rule.description, line)
                 Else
                     'ignore empty lines after the first example
                     If Not Trim(line) = "" Then
@@ -193,7 +193,7 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
 
     feature_lines = Split(gherkin_text, vbLf)
     line = CStr(feature_lines(parent_feature.parsed_lines))
-    Set new_example = create_example_new(line, example_tags)
+    Set new_example = create_example(line, example_tags)
     Do While parent_feature.parsed_lines < UBound(feature_lines)
         parent_feature.parsed_lines = parent_feature.parsed_lines + 1
         line = CStr(feature_lines(parent_feature.parsed_lines))
@@ -201,7 +201,7 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
             Case LINE_TYPE_COMMENT
                 'ignore comments
             Case LINE_TYPE_STEP
-                parent_feature.parsed_lines = TStepParser.parse_steps_new(gherkin_text, parent_feature.parsed_lines, new_example.steps)
+                parent_feature.parsed_lines = TStepParser.parse_steps(gherkin_text, parent_feature.parsed_lines, new_example.steps)
             Case LINE_TYPE_EXAMPLE_START, LINE_TYPE_RULE_START, LINE_TYPE_TAGS
                 ' a new section or tags indicating the beginning of a new section will terminate the example definition
                 parent_feature.parsed_lines = parent_feature.parsed_lines - 1
@@ -209,7 +209,7 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
                 Exit Function
             Case LINE_TYPE_DESCRIPTION
                 If new_example.steps.Count = 0 Then
-                    new_example.description = add_description_new(new_example.description, line)
+                    new_example.description = add_description(new_example.description, line)
                 Else
                     'ignore empty lines after the  example
                     If Not Trim(line) = "" Then
@@ -227,7 +227,7 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
     Set parse_example = new_example
 End Function
 
-Private Function trim_description_linebreaks_new(section_description As String) As String
+Private Function trim_description_linebreaks(section_description As String) As String
     
     Dim trimmed_description As String
     
@@ -238,7 +238,7 @@ Private Function trim_description_linebreaks_new(section_description As String) 
     Do While Left(trimmed_description, 1) = vbLf
         trimmed_description = Right(trimmed_description, Len(trimmed_description) - 1)
     Loop
-    trim_description_linebreaks_new = trimmed_description
+    trim_description_linebreaks = trimmed_description
 End Function
 
 Public Function parse_feature_definition(gherkin_text As String) As TFeature
@@ -288,7 +288,7 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
         line = CStr(feature_lines(line_index))
         Select Case get_line_type(line)
             Case LINE_TYPE_DESCRIPTION
-                parsed_feature.description = add_description_new(parsed_feature.description, line)
+                parsed_feature.description = add_description(parsed_feature.description, line)
             Case LINE_TYPE_COMMENT
                 'ignore comments
             Case Else
@@ -420,7 +420,7 @@ Private Function read_section_headline(text_line As String) As Collection
     Set read_section_headline = section_headline
 End Function
 
-Private Function create_rule_new(line As String, rule_tags As Collection, feature_parent As TFeature) As TRule
+Private Function create_rule(line As String, rule_tags As Collection, feature_parent As TFeature) As TRule
 
     Dim new_rule As TRule
     Dim section_definition As Collection
@@ -431,10 +431,10 @@ Private Function create_rule_new(line As String, rule_tags As Collection, featur
     Set section_definition = read_section_headline(line)
     new_rule.name = section_definition("head")
     new_rule.name = section_definition("name")
-    Set create_rule_new = new_rule
+    Set create_rule = new_rule
 End Function
 
-Private Function create_example_new(line As String, example_tags As Collection) As TExample
+Private Function create_example(line As String, example_tags As Collection) As TExample
 
     Dim new_example As TExample
     Dim section_definition As Collection
@@ -445,21 +445,21 @@ Private Function create_example_new(line As String, example_tags As Collection) 
     new_example.head = section_definition("head")
     new_example.name = section_definition("name")
     new_example.OriginalHeadline = Trim(line)
-    Set create_example_new = new_example
+    Set create_example = new_example
 End Function
 
-Private Function add_description_new(section_description As String, line As String) As String
+Private Function add_description(section_description As String, line As String) As String
 
     'ignore empty lines at description start
     If section_description <> vbNullString Or Trim(line) <> vbNullString Then
         'add linebreak starting with the second line
         If section_description <> vbNullString Then
-            add_description_new = section_description & vbLf & Trim(line)
+            add_description = section_description & vbLf & Trim(line)
         Else
-            add_description_new = Trim(line)
+            add_description = Trim(line)
         End If
     Else
-        add_description_new = vbNullString
+        add_description = vbNullString
     End If
 End Function
 

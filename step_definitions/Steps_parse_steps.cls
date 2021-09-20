@@ -36,7 +36,7 @@ End Sub
 Public Sub When_the_step_list_is_parsed_8C8F753FF01F(example_context As TContext)
     'When the step list is parsed
     example_context.set_value New Collection, "step_list"
-    TStepParser.parse_steps_new example_context.get_value("gherkin_text"), 0, example_context.get_value("step_list")
+    TStepParser.parse_steps example_context.get_value("gherkin_text"), 0, example_context.get_value("step_list")
 End Sub
 
 Public Sub Then_the_type_of_the_step_is_set_to_STR_3EC12192CDA4(example_context As TContext, step_expressions As Collection)
