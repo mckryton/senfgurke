@@ -39,6 +39,11 @@ Public Sub When_the_step_list_is_parsed_8C8F753FF01F(example_context As TContext
     TStepParser.parse_steps example_context.get_value("gherkin_text"), 0, example_context.get_value("step_list")
 End Sub
 
+Public Sub When_the_type_of_the_step_line_is_evaluated_ABBCD0B4A184(example_context As TContext)
+    'When the type of the step line is evaluated
+    example_context.set_value TFeatureParser.get_line_type(example_context.get_value("gherkin_text")), "line_type"
+End Sub
+
 Public Sub Then_the_type_of_the_step_is_set_to_STR_3EC12192CDA4(example_context As TContext, step_expressions As Collection)
     'Then the type of the step is set to {string}
     TSpec.expect(example_context.get_value("step").SType).to_be step_expressions(1)
@@ -57,4 +62,24 @@ Public Sub Then_the_type_of_step_INT_is_set_to_STR_3EC1B545CDA4(example_context 
     Set step_list = example_context.get_value("step_list")
     Set step = step_list(step_expressions(1) - 1)
     TSpec.expect(step.SType).to_be step_expressions(2)
+End Sub
+
+Public Sub Then_the_resulting_line_type_is_not_STR_4C0165DE378D(example_context As TContext, step_expressions As Collection)
+    'Then the resulting line type is not {string}
+    TSpec.expect(example_context.get_value("line_type")).not_to_be step_expressions(1)
+End Sub
+
+Public Sub Then_the_resulting_step_list_contains_only_INT_ste_DD326A098DF8(example_context As TContext, step_expressions As Collection)
+    'Then the resulting step list contains only {integer} steps
+    TSpec.expect(example_context.get_value("step_list").Count).to_be step_expressions(1)
+End Sub
+
+Public Sub Then_the_name_of_step_INT_is_STR_47BC4FBE3041(example_context As TContext, step_expressions As Collection)
+    'And the name of step {integer} is {string}
+    Dim step_list As Collection
+    Dim step As TStep
+    
+    Set step_list = example_context.get_value("step_list")
+    Set step = step_list(step_expressions(1))
+    TSpec.expect(step.name).to_be step_expressions(2)
 End Sub

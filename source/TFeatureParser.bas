@@ -300,7 +300,7 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
     Set parse_feature_definition = parsed_feature
 End Function
 
-Private Function get_line_type(line As String)
+Public Function get_line_type(line As String)
 
     Dim section_definition As Collection
     
