@@ -1,17 +1,6 @@
 Attribute VB_Name = "TFeatureParser"
 Option Explicit
 
-Const START_SECTION_KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Background,Ability,Business Needs,Feature"
-
-Const LINE_TYPE_FEATURE_START$ = "feature start"
-Const LINE_TYPE_RULE_START$ = "rule start"
-Const LINE_TYPE_EXAMPLE_START$ = "example start"
-Const LINE_TYPE_BACKGROUND_START$ = "background start"
-Const LINE_TYPE_TAGS$ = "tag line"
-Const LINE_TYPE_STEP$ = "step line"
-Const LINE_TYPE_DESCRIPTION$ = "description line"
-Const LINE_TYPE_COMMENT$ = "comment line"
-
 Public Function parse_feature(gherkin_text As String) As TFeature
 
     Dim new_feature As TFeature
@@ -83,7 +72,6 @@ parsing_failed:
     Err.Clear
 End Function
 
-'NEW
 Public Function parse_background(gherkin_text As String, parent_feature As TFeature) As TBackground
 
     Dim feature_lines As Variant
@@ -99,7 +87,9 @@ Public Function parse_background(gherkin_text As String, parent_feature As TFeat
             Case LINE_TYPE_COMMENT
                 'ignore comments
             Case LINE_TYPE_STEP
-                parent_feature.parsed_lines = parse_steps(gherkin_text, parent_feature.parsed_lines, new_background.steps)
+                'parent_feature.parsed_lines = parse_steps(gherkin_text, parent_feature.parsed_lines, new_background.steps)
+                parent_feature.parsed_lines = parent_feature.parsed_lines - 1
+                Set new_background.steps = parse_step_list(gherkin_text, parent_feature)
                 'steps will complete the background
                 Set parse_background = new_background
                 Exit Function
@@ -201,7 +191,9 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
             Case LINE_TYPE_COMMENT
                 'ignore comments
             Case LINE_TYPE_STEP
-                parent_feature.parsed_lines = TStepParser.parse_steps(gherkin_text, parent_feature.parsed_lines, new_example.steps)
+                'parent_feature.parsed_lines = TStepParser.parse_steps(gherkin_text, parent_feature.parsed_lines, new_example.steps)
+                parent_feature.parsed_lines = parent_feature.parsed_lines - 1
+                Set new_example.steps = TStepParser.parse_step_list(gherkin_text, parent_feature)
             Case LINE_TYPE_EXAMPLE_START, LINE_TYPE_RULE_START, LINE_TYPE_TAGS
                 ' a new section or tags indicating the beginning of a new section will terminate the example definition
                 parent_feature.parsed_lines = parent_feature.parsed_lines - 1
@@ -306,6 +298,8 @@ Public Function get_line_type(line As String)
     
     If is_step_line(line) Then
         get_line_type = LINE_TYPE_STEP
+    ElseIf Trim(line) = """""""" Then
+        get_line_type = LINE_TYPE_DOCSTRING_LIMIT
     ElseIf is_comment_line(line) Then
         get_line_type = LINE_TYPE_COMMENT
     ElseIf is_tag_line(line) Then

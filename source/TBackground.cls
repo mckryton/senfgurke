@@ -19,6 +19,11 @@ Public Property Get steps() As Collection
     Set steps = m_steps
 End Property
 
+Public Property Set steps(new_step_list As Collection)
+    Set m_steps = new_step_list
+End Property
+
+
 Public Property Get description() As String
     description = m_background_description
 End Property

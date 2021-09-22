@@ -165,8 +165,8 @@ Public Property Get name() As Variant
     For index = 2 To Me.Elements.Count
         step_name = step_name & " "
         step_element = Me.Elements(index)
-        If index = Me.Elements.Count And Me.Docstring <> vbNullString Then
-            step_name = step_name & vbLf & """""""" & vbLf & Me.Docstring & vbLf & """"""""
+        If index = Me.Elements.Count And Me.docstring <> vbNullString Then
+            step_name = step_name & vbLf & """""""" & vbLf & Me.docstring & vbLf & """"""""
         ElseIf IsNumeric(step_element) Then
             Select Case TypeName(Me.Expressions(step_element))
                 Case "String"
@@ -181,11 +181,11 @@ Public Property Get name() As Variant
     name = Trim(step_name)
 End Property
 
-Public Property Get Docstring() As String
-    Docstring = m_docstring
+Public Property Get docstring() As String
+    docstring = m_docstring
 End Property
 
-Public Property Let Docstring(ByVal new_docstring As String)
+Public Property Let docstring(ByVal new_docstring As String)
     m_docstring = new_docstring
 End Property
 

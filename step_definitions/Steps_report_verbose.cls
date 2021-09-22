@@ -77,23 +77,3 @@ Public Sub Then_line_INT_of_the_resulting_output_is_STR_A434511445AD(example_con
     lines = Split(example_context.get_value("session").Reporter.ConsoleOutput, vbLf)
     TSpec.expect(lines(step_expressions(1) - 1)).to_be step_expressions(2)
 End Sub
-
-Public Sub Then_the_report_ouput_is_STR_7C9B2337A6D0(example_context As TContext, step_expressions As Collection)
-    'Then the report ouput is {string}
-    Dim session As TSession
-    Dim report_lines As Variant
-    Dim expected_lines As Variant
-    Dim trimmed_output As String
-    Dim lines As Variant
-    Dim line As Variant
-    
-    Set session = example_context.get_value("session")
-    trimmed_output = vbNullString
-    lines = Split(session.Reporter.ConsoleOutput, vbLf)
-    For Each line In lines
-        If trimmed_output <> vbNullString Then trimmed_output = trimmed_output & vbLf
-        trimmed_output = trimmed_output & Trim(line)
-    Next
-    'Debug.Print session.Reporter.ConsoleOutput
-    TSpec.expect(ExtraVBA.trim_linebreaks(trimmed_output)).to_be step_expressions(1)
-End Sub

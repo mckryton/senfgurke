@@ -88,15 +88,7 @@ End Sub
 
 Public Sub Then_the_code_template_for_the_step_implementation_9C79C155DB8E(example_context As TContext, step_expressions As Collection)
     'Then the code template for the step implementation is {string}
-    'trim template lines, because docstring parameter is normalized too
-    Dim line As Variant
-    Dim code_template As String
-    
-    For Each line In Split(example_context.get_value("step_function_template"), vbLf)
-        If code_template <> vbNullString Then code_template = code_template & vbLf
-        code_template = code_template & Trim(line)
-    Next
-    TSpec.expect(code_template).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("step_function_template")).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_name_of_the_resulting_function_is_STR_C88DE530F4BA(example_context As TContext, step_expressions As Collection)

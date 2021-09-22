@@ -56,6 +56,11 @@ Public Property Get steps() As Collection
     Set steps = m_steps
 End Property
 
+Public Property Set steps(new_step_list As Collection)
+    Set m_steps = new_step_list
+End Property
+
+
 Public Property Get tags() As Collection
     If m_example_tags Is Nothing Then
         Set m_example_tags = New Collection

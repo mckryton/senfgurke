@@ -42,5 +42,5 @@ Public Sub Then_the_first_line_of_the_steps_docstring_is_empt_C94363C3329C(examp
     Dim first_step As TStep
     
     Set first_step = example_context.get_value("step_list")(1)
-    TSpec.expect(Split(first_step.Docstring, vbLf)(0)).to_be vbNullString
+    TSpec.expect(Split(first_step.docstring, vbLf)(0)).to_be vbNullString
 End Sub

@@ -50,8 +50,6 @@ Ability: Report in progress format
        When the report will report code templates for the missing steps
        Then the resulting report output is
         """
-
-
           You can implement step definitions for undefined steps with these snippets:
 
           Public Sub Given_a_missing_step_6A350234BFE5()
@@ -62,7 +60,6 @@ Ability: Report in progress format
           If the function is already in place, the cause for this message could be:
           * the step implementation class is not registered in TConfig.StepImplementations
           * the code inside the step function tries to access a non-existing method or property
-
         """
 
 
@@ -77,7 +74,6 @@ Ability: Report in progress format
           F
           Err in step: Given an invalid step
             sample err msg
-
         """
 
     Example: failed step followed by passed step
@@ -89,7 +85,6 @@ Ability: Report in progress format
           F.
           Err in step: Given an invalid step
             sample err msg
-
         """
 
   Rule: verbose formatter should add a line break before every 81st step
@@ -112,5 +107,4 @@ Ability: Report in progress format
          """
           Error: Found syntax error while parsing feature 'sample.feature'
             Feature lacks feature keyword at the beginning
-
          """

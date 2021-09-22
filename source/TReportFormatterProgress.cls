@@ -55,10 +55,10 @@ Public Function format_msg_content(msg_package As Collection) As String
     format_msg_content = formatted_msg
 End Function
 
+'TODO check if this function is unused
 Public Function format_parse_error(err_msg As String, err_description As String) As String
     format_parse_error = "Error: " & err_msg & vbLf _
-                             & err_description
-'                            & Space$(2) & err_description
+                            & Space$(2) & err_description
 End Function
 
 Public Function format_step(step_name As String, status As String, err_msg As String) As String
@@ -82,7 +82,7 @@ Public Function format_step(step_name As String, status As String, err_msg As St
     End Select
     'add err msg if available
     If err_msg <> vbNullString Then
-        Reporter.add_err_msg_to_buffer err_msg
+        Reporter.add_err_msg_to_buffer Space(2) & err_msg
     End If
     format_step = formatted_msg
 End Function

@@ -34,11 +34,11 @@ Ability: Report in verbose format
         """
       When the execution of the feature is reported
        And the example is reported with the step result "OK"
-      Then the report ouput is
+      Then the resulting report output is
         """
           Feature: sample
-            Example: sample
-              OK       Given one step
+              Example: sample
+               OK       Given one step
         """
 
 
@@ -98,19 +98,16 @@ Ability: Report in verbose format
        When the report will report code templates for the missing steps
        Then the resulting report output is
         """
+          You can implement step definitions for undefined steps with these snippets:
 
+          Public Sub Given_a_missing_step_6A350234BFE5()
+            'And a missing step
+            pending
+          End Sub
 
-        You can implement step definitions for undefined steps with these snippets:
-
-        Public Sub Given_a_missing_step_6A350234BFE5()
-         'And a missing step
-         pending
-        End Sub
-
-        If the function is already in place, the cause for this message could be:
-        * the step implementation class is not registered in TConfig.StepImplementations
-        * the code inside the step function tries to access a non-existing method or property
-
+          If the function is already in place, the cause for this message could be:
+          * the step implementation class is not registered in TConfig.StepImplementations
+          * the code inside the step function tries to access a non-existing method or property
         """
 
      #Todo: add example for multiple missing steps in more than one scenario
@@ -126,5 +123,4 @@ Ability: Report in verbose format
          """
           Error: Found syntax error while parsing feature 'sample.feature'
             Feature lacks feature keyword at the beginning
-
          """

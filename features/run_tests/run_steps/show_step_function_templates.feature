@@ -1,3 +1,4 @@
+@wip
 Ability: show step function templates
   Whenever a step is executed and no matching step function is found Senfgurke
   will generate a code snippet for a new step function. This way it should be
@@ -12,8 +13,8 @@ Ability: show step function templates
       Then the code template for the step implementation is
         """
           Public Sub Given_a_valid_step_6A35DF3A18EC(example_context as TContext)
-            'Given a valid step
-            pending
+              'Given a valid step
+              pending
           End Sub
         """
 
@@ -23,8 +24,8 @@ Ability: show step function templates
       Then the code template for the step implementation is
         """
           Public Sub Given_a_number_INT_6A352C3C78C6(example_context as TContext, step_expressions As Collection)
-            'Given a number {integer}
-            pending
+              'Given a number {integer}
+              pending
           End Sub
         """
 
@@ -42,7 +43,7 @@ Ability: show step function templates
 
 
   Rule: steps of the same type deviating only by keyword should show only one code template
-    
+
     Example: Two steps using Given and And
       Given an example
         """

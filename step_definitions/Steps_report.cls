@@ -76,7 +76,11 @@ End Sub
 
 Public Sub Then_the_resulting_report_output_is_STR_4C01A19A67C4(example_context As TContext, step_expressions As Collection)
     'Then the resulting report output is {string}
-    TSpec.expect(example_context.get_value("session").Reporter.ConsoleOutput).to_be step_expressions(1)
+    Dim output As String
+    
+    output = ExtraVBA.trim_linebreaks(example_context.get_value("session").Reporter.ConsoleOutput)
+    'TSpec.expect(example_context.get_value("session").Reporter.ConsoleOutput).to_be step_expressions(1)
+    TSpec.expect(output).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_trimmed_report_output_is_STR_BBF5E2C067C4(example_context As TContext, step_expressions As Collection)

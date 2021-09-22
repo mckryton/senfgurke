@@ -54,3 +54,15 @@ Public Const LOG_EVENT_RUN_FEATURE$ = "log_run_feature"
 Public Const LOG_EVENT_LOAD_FEATURE$ = "log_load_feature"
 
 
+'------- Parser Constants -------
+Public Const START_SECTION_KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Background,Ability,Business Needs,Feature"
+
+Public Const LINE_TYPE_FEATURE_START$ = "feature start"
+Public Const LINE_TYPE_RULE_START$ = "rule start"
+Public Const LINE_TYPE_EXAMPLE_START$ = "example start"
+Public Const LINE_TYPE_BACKGROUND_START$ = "background start"
+Public Const LINE_TYPE_TAGS$ = "tag line"
+Public Const LINE_TYPE_STEP$ = "step line"
+Public Const LINE_TYPE_DESCRIPTION$ = "description line"
+Public Const LINE_TYPE_COMMENT$ = "comment line"
+Public Const LINE_TYPE_DOCSTRING_LIMIT$ = "docstring limit"

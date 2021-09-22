@@ -35,8 +35,12 @@ End Sub
 
 Public Sub When_the_step_list_is_parsed_8C8F753FF01F(example_context As TContext)
     'When the step list is parsed
-    example_context.set_value New Collection, "step_list"
-    TStepParser.parse_steps example_context.get_value("gherkin_text"), 0, example_context.get_value("step_list")
+    Dim parent_feature As TFeature
+
+    Set parent_feature = New TFeature
+    'parser should have parsed the feature text up to the line before the step list
+    parent_feature.parsed_lines = -1
+    example_context.set_value TStepParser.parse_step_list(example_context.get_value("gherkin_text"), parent_feature), "step_list"
 End Sub
 
 Public Sub When_the_type_of_the_step_line_is_evaluated_ABBCD0B4A184(example_context As TContext)

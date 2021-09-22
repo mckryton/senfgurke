@@ -15,10 +15,8 @@ Ability: Report statistics
          When the statistics are reported
          Then the resulting report output is
             """
-
-7 steps (3 passed, 1 failed, 1 undefined, 2 pending)
-0m 0.022s
-
+              7 steps (3 passed, 1 failed, 1 undefined, 2 pending)
+              0m 0.022s
             """
 
       Example: zero steps

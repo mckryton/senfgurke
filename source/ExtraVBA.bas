@@ -198,25 +198,3 @@ Public Function trim_linebreaks(input_text As String) As String
     Loop
     trim_linebreaks = result_text
 End Function
-
-Public Function trim_textblock(indented_text As String) As String
-    
-    Dim trimmed_text As String
-    Dim min_indention As Integer
-    Dim lines As Variant
-    Dim line As Variant
-    Dim indention As Long
-
-    min_indention = -1
-    lines = Split(indented_text, vbLf)
-    For Each line In lines
-        indention = Len(line) - Len(LTrim(line))
-        If min_indention = -1 Or indention < min_indention Then min_indention = indention
-    Next
-    trimmed_text = vbNullString
-    For Each line In lines
-        If trimmed_text <> vbNullString Then trimmed_text = trimmed_text & vbLf
-        trimmed_text = trimmed_text & Right(line, Len(line) - min_indention)
-    Next
-    trim_textblock = trimmed_text
-End Function
