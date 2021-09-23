@@ -14,6 +14,9 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     'On Error GoTo parsing_failed
     Set section_tags = New Collection
     Set new_feature = parse_feature_definition(gherkin_text)
+    'all subsequent functions will take new_feature as parameter
+    ' to determine and update the current parse/read position
+    ' from the new_feature.parsed_lines property
     If new_feature Is Nothing Then
         Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
                     "TFeatureParser.parse_feature", _

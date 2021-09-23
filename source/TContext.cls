@@ -7,6 +7,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
+'This is a container for data exchange between steps in an example. E.g. you may assign a value
+' to a variable in one step, add it to the context and retrieve the value in another step.
+
 Option Explicit
 
 Private context_value_collection As Collection

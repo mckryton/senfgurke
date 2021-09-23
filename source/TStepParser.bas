@@ -1,51 +1,6 @@
 Attribute VB_Name = "TStepParser"
 Option Explicit
 
-''OLD
-'Public Function parse_steps(feature_text As String, step_list_start_index As Long, step_list As Collection) As Long
-'
-'    Dim line_index As Long
-'    Dim line As String
-'    Dim is_docstring As Boolean
-'    Dim docstring_value As String
-'    Dim current_step As TStep
-'    Dim feature_lines As Variant
-'
-'    feature_lines = Split(Trim(feature_text), vbLf)
-'    is_docstring = False
-'    docstring_value = vbNullString
-'    For line_index = step_list_start_index To UBound(feature_lines)
-'        'this normalizes docstrings by triming every line -> this way docstrings can be compared by content
-'        '  but not by indention!
-'        line = Trim(feature_lines(line_index))
-'        If Right(line, 3) = """""""" And is_docstring Then
-'            is_docstring = False
-'            Set current_step = step_list(step_list.Count)
-'            current_step.docstring = Right(docstring_value, Len(docstring_value) - 1)
-'            current_step.Expressions.Add current_step.docstring
-'            current_step.Elements.Add current_step.Expressions.Count
-'            docstring_value = vbNullString
-'        ElseIf is_docstring Then
-'            If docstring_value = vbNullString Then
-'                ' mark the start of the docstring with a # so that leading empty lines are recognized
-'                docstring_value = "#" & line
-'            Else
-'                docstring_value = docstring_value & vbLf & line
-'            End If
-'        ElseIf Left(line, 3) = """""""" And Not is_docstring Then
-'            is_docstring = True
-'        ElseIf TFeatureParser.is_step_line(line) Then
-'            step_list.Add parse_step_line(line, step_list)
-'        ElseIf TFeatureParser.is_section_definition_line(line) Or Trim(line) = vbNullString Or TFeatureParser.is_tag_line(line) Then
-'            'example is finished either with next example, empty line or tag line
-'            parse_steps = line_index - 1
-'            Exit Function
-'        End If
-'    Next
-'    parse_steps = line_index
-'End Function
-
-'NEW
 Public Function parse_step_list(feature_text As String, parent_feature As TFeature) As Collection
 
     Dim line As String
