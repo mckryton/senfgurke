@@ -3,14 +3,14 @@ Senfgurke is example driven test framework for VBA. What does this mean? Using S
 
 **BEWARE!** This is work in progress. Future versions might break your test automation code from older versions!
 
-For example someone ask you ask you to write a new sum function wich adds the value of 1 to the result by giving you this example:
+For example someone asks you to write a new sum function wich adds the value of 1 to the result by giving you this example:
 
 ```
 Example: add +1 to sum
   Given a is 2
-  And b is 3
-  When sum+1 is applied to a and b
-  Then the result is 5
+    And b is 3
+   When sum+1 is applied to a and b
+   Then the result is 5
 ```
 
 You add this example to a feature and save everything in file named 'sum_plus_one.feature' to a directory named 'features'. The directory should be in the same location as your office file containing your VBA code.
