@@ -17,7 +17,7 @@ Ability: parse feature definition
           without a feature keyword
         """
       When the feature definition is parsed
-      Then the error "Feature lacks feature keyword at the beginning" was raised
+      Then the error "feature lacks Feature keyword at the beginning" was raised
 
     Example: feature with tags
       Given a feature

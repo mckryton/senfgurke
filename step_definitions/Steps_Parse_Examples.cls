@@ -48,8 +48,13 @@ Public Sub When_the_example_is_parsed_CEB09D77F01F(example_context As TContext)
     'When the example is parsed
     Dim example As TExample
      
+    On Error GoTo exception_handler
     Set example = TFeatureParser.parse_example(example_context.get_value("gherkin_text"), New TFeature, Nothing)
     example_context.set_value example, "parsed_example"
+    Exit Sub
+    
+exception_handler:
+    example_context.set_value Err.description, "err_msg"
 End Sub
 
 Public Sub Then_the_parsed_example_contains_all_the_steps_013B99DC739C(example_context As TContext)

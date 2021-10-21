@@ -32,15 +32,15 @@ Public Function process_msg(msg_package As Collection) As String
             message = Join(Split(CurrentFeature & CurrentRule & CurrentExample & message, vbLf), vbLf)
             If CurrentFeature = vbNullString And (CurrentRule <> vbNullString Or CurrentExample <> vbNullString) Then message = vbLf & message
             'report feature names, rules and example titles only when example steps are reported
-            Reporter.print_report message
+            reporter.print_report message
             process_msg = message
             CurrentFeature = vbNullString
             CurrentRule = vbNullString
             CurrentExample = vbNullString
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
-            Reporter.add_code_template_to_buffer message
+            reporter.add_code_template_to_buffer message
         Case REPORT_MSG_TYPE_STATS, REPORT_MSG_TYPE_PARSE_ERR
-            Reporter.print_report message
+            reporter.print_report message
     End Select
 End Function
 
@@ -161,11 +161,11 @@ Private Sub Class_Terminate()
     Set m_step_implementation_templates = Nothing
 End Sub
 
-Public Property Get Reporter() As TReport
-    Set Reporter = m_reporter
+Public Property Get reporter() As TReport
+    Set reporter = m_reporter
 End Property
 
-Public Property Let Reporter(ByVal new_reporter As TReport)
+Public Property Let reporter(ByVal new_reporter As TReport)
     Set m_reporter = new_reporter
 End Property
 

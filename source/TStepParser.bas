@@ -7,6 +7,7 @@ Public Function parse_step_list(feature_text As String, parent_feature As TFeatu
     Dim current_step As TStep
     Dim feature_lines As Variant
     Dim new_step_list As Collection
+    Dim data_table As TDataTable
     
     Set new_step_list = New Collection
     feature_lines = Split(Trim(feature_text), vbLf)
@@ -23,6 +24,15 @@ Public Function parse_step_list(feature_text As String, parent_feature As TFeatu
                 current_step.docstring = parse_docstring(feature_text, parent_feature)
                 current_step.Expressions.Add current_step.docstring
                 current_step.Elements.Add current_step.Expressions.Count
+            Case LINE_TYPE_TABLE_ROW
+                If new_step_list.Count = 0 Then
+                    TError.raise ERR_ID_STEP_SYNTAX_TABLE_WITHOUT_STEP, _
+                        "TStepParser.parse_step_list"
+                End If
+                parent_feature.parsed_lines = parent_feature.parsed_lines - 1
+                Set data_table = parse_table(feature_text, parent_feature)
+                Set current_step = new_step_list(new_step_list.Count)
+                Set current_step.data_table = data_table
             Case LINE_TYPE_EXAMPLE_START, LINE_TYPE_RULE_START, LINE_TYPE_TAGS
                 'new rules, examples or tags will complete the step list
                 Set parse_step_list = new_step_list
@@ -31,9 +41,9 @@ Public Function parse_step_list(feature_text As String, parent_feature As TFeatu
             Case Else
                 'ignore empty lines
                 If Not Trim(line) = "" Then
-                    Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                    "TStepParser.parse_step_list", _
-                    "unexpected text in step list at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                    TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                        "TStepParser.parse_step_list", _
+                        Array(parent_feature.parsed_lines, line)
                 End If
         End Select
     Loop
@@ -63,6 +73,58 @@ Public Function parse_docstring(feature_text As String, parent_feature As TFeatu
     'remove the last linebreak
     docstring = Left(docstring, Len(docstring) - 1)
     parse_docstring = align_textblock(docstring)
+End Function
+
+Public Function parse_table(feature_text As String, parent_feature As TFeature) As TDataTable
+
+    Dim line As String
+    Dim data_table As TDataTable
+    Dim feature_lines As Variant
+
+    Set data_table = Nothing
+    feature_lines = Split(Trim(feature_text), vbLf)
+    Do While parent_feature.parsed_lines < UBound(feature_lines)
+        parent_feature.parsed_lines = parent_feature.parsed_lines + 1
+        line = CStr(feature_lines(parent_feature.parsed_lines))
+        Select Case TFeatureParser.get_line_type(line)
+            Case LINE_TYPE_COMMENT
+                'ignore comments
+            Case LINE_TYPE_TABLE_ROW
+                If data_table Is Nothing Then
+                    Set data_table = create_data_table(line)
+                Else
+                    data_table.add_row line
+                End If
+            Case Else
+                Set parse_table = data_table
+                parent_feature.parsed_lines = parent_feature.parsed_lines - 1
+            Exit Function
+        End Select
+    Loop
+    Set parse_table = data_table
+End Function
+
+Private Function create_data_table(table_header_line As String) As TDataTable
+
+    Dim data_table As TDataTable
+    Dim column_name As String
+    Dim column_names As Variant
+    Dim column_index As Integer
+    Dim was_added As Boolean
+
+    table_header_line = Trim(table_header_line)
+    Set data_table = New TDataTable
+    column_names = Split(table_header_line, "|")
+    For column_index = 1 To UBound(column_names) - 1
+        column_name = Trim(CStr(column_names(column_index)))
+        was_added = data_table.add_column_name(column_name)
+        If Not was_added Then
+            TError.raise ERR_ID_STEP_SYNTAX_TABLE_DUPLICATE_COLUMN, _
+                "TStepParser.create_data_table", _
+                Array(column_name)
+        End If
+    Next
+    Set create_data_table = data_table
 End Function
 
 Public Function align_textblock(indented_text As String) As String

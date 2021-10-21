@@ -27,21 +27,21 @@ End Sub
 Public Sub set_report_format(report_format As String)
     Select Case report_format
         Case "verbose", "v"
-            Reporter.Report_Formatter = New TReportFormatterVerbose
+            reporter.Report_Formatter = New TReportFormatterVerbose
         Case "progress", "p"
-            Reporter.Report_Formatter = New TReportFormatterProgress
+            reporter.Report_Formatter = New TReportFormatterProgress
     End Select
 End Sub
 
-Public Property Get Reporter() As TReport
+Public Property Get reporter() As TReport
     If m_reporter Is Nothing Then
         Set m_reporter = New TReport
     End If
-    Set Reporter = m_reporter
+    Set reporter = m_reporter
 End Property
 
-Public Property Let Reporter(ByVal new_reporter As TReport)
-    Set Reporter = new_reporter
+Public Property Let reporter(ByVal new_reporter As TReport)
+    Set reporter = new_reporter
 End Property
 
 Public Sub run_test(Optional filter_tag, Optional feature_filter, Optional report_format, Optional features_as_text As Collection, Optional feature_dir)
@@ -54,7 +54,7 @@ Public Sub run_test(Optional filter_tag, Optional feature_filter, Optional repor
     If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features(feature_dir, feature_filter, Me)
     Set parsed_features = parse_loaded_features(features_as_text)
     If parsed_features.Count > 0 Then run_parsed_features parsed_features, CStr(filter_tag)
-    Reporter.finish_report
+    reporter.finish_report
     report_statistics EndTime - StartTime
     'ensure that this setting is refreshed even without any re-compile:
     TConfig.StepImplementations = Nothing
@@ -122,8 +122,8 @@ Public Function parse_loaded_features(feature_list As Collection) As Collection
     Exit Function
     
 parse_error:
-    If Err.Number = ERR_ID_FEATURE_SYNTAX_ERROR Then
-        Reporter.report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
+    If Err.Number >= 6000 And Err.Number < 7000 Then
+        reporter.report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
                         & loaded_feature("origin") & "'", err_msg:=Err.description
     End If
     Resume Next
@@ -135,7 +135,7 @@ Public Sub report_statistics(run_duration As Long)
     
     report_msg = statistics.get_statistics_summary() & vbLf _
                     & get_duration_as_text(run_duration)
-    Reporter.report REPORT_MSG_TYPE_STATS, report_msg
+    reporter.report REPORT_MSG_TYPE_STATS, report_msg
 End Sub
 
 Public Property Get statistics() As TStatistics

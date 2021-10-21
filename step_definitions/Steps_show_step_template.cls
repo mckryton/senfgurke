@@ -15,6 +15,6 @@ Public Sub Then_the_resulting_report_will_show_the_code_templ_6F55B6204642(examp
     Dim code_template_buffer As Collection
 
     Set session = example_context.get_value("session")
-    Set code_template_buffer = session.Reporter.CodeTemplateBuffer
+    Set code_template_buffer = session.reporter.CodeTemplateBuffer
     TSpec.expect(code_template_buffer.Count).to_be 1
 End Sub

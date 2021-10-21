@@ -77,14 +77,14 @@ End Function
 Public Property Get Report_Formatter() As Variant
     If Not IsObject(m_report_formatter) Then
         Set m_report_formatter = New TReportFormatterVerbose
-        m_report_formatter.Reporter = Me
+        m_report_formatter.reporter = Me
     End If
     Set Report_Formatter = m_report_formatter
 End Property
 
 Public Property Let Report_Formatter(ByVal new_report_formatter As Variant)
     Set m_report_formatter = new_report_formatter
-    m_report_formatter.Reporter = Me
+    m_report_formatter.reporter = Me
 End Property
 
 Public Sub print_code_templates_for_missing_steps()

@@ -87,3 +87,45 @@ Public Sub Then_the_included_example_contains_the_tags_STR_33546FCE3943(example_
     Next
 End Sub
 
+Public Sub Then_the_rule_STR_contains_the_tags_STR_7509E2DBCD3B(example_context As TContext, step_expressions As Collection)
+    'Then the rule {string} contains the tags {string}
+    Dim feature As TFeature
+    Dim section As Variant
+    Dim rule As TRule
+    Dim tags As Variant
+    Dim tag As Variant
+    
+    Set feature = example_context.get_value("parsed_feature")
+    For Each section In feature.sections
+        If TypeName(section) = "TRule" And section.name = step_expressions(1) Then
+            Set rule = section
+            example_context.set_value rule, "tagged_rule"
+            Exit For
+        End If
+    Next
+    tags = Split(step_expressions(2), ",")
+    For Each tag In tags
+        TSpec.expect(rule.tags).contains_member Trim(tag)
+    Next
+End Sub
+
+Public Sub Then_the_example_STR_contains_the_tags_STR_too_D24FF6AC6B64(example_context As TContext, step_expressions As Collection)
+    'And the example {string} contains the tags {string} too
+    Dim rule As TRule
+    Dim section As Variant
+    Dim example As TExample
+    Dim tags As Variant
+    Dim tag As Variant
+    
+    Set rule = example_context.get_value("tagged_rule")
+    For Each section In rule.sections
+        If TypeName(section) = "TExample" And section.name = step_expressions(1) Then
+            Set example = section
+            Exit For
+        End If
+    Next
+    tags = Split(step_expressions(2), ",")
+    For Each tag In tags
+        TSpec.expect(example.tags).contains_member Trim(tag)
+    Next
+End Sub

@@ -8,7 +8,7 @@ Ability: parse examples
     Every line in a example clause starting with
     "<optional whitespace><step keyword><space>" is considered to be a step
     where <step keyword> is one of those: "Given", "When", "Then", "And", "But"
-
+  
     Example: simple example with "Given", "When", "Then" steps
       Given an example
         """

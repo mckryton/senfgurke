@@ -15,7 +15,7 @@ Ability: run tests
           and not a feature
         """
        When Senfgurke executes the feature
-       Then the error "Feature lacks feature keyword at the beginning" is reported
+       Then the error "feature lacks Feature keyword at the beginning" is reported
         And the name of the feature file is reported as location of the error
 
 

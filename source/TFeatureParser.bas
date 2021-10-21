@@ -14,13 +14,9 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     'On Error GoTo parsing_failed
     Set section_tags = New Collection
     Set new_feature = parse_feature_definition(gherkin_text)
-    'all subsequent functions will take new_feature as parameter
-    ' to determine and update the current parse/read position
-    ' from the new_feature.parsed_lines property
     If new_feature Is Nothing Then
-        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                    "TFeatureParser.parse_feature", _
-                    "can't find feature definition"
+        TError.raise ERR_ID_FEATURE_SYNTAX_MISSING_DEFINITION, _
+            "TFeatureParser.parse_feature"
     End If
     feature_lines = Split(gherkin_text, vbLf)
     Do While new_feature.parsed_lines < UBound(feature_lines)
@@ -59,9 +55,9 @@ Public Function parse_feature(gherkin_text As String) As TFeature
             Case Else
                 'ignore empty lines after the first section (background, rule, or example)
                 If Not Trim(line) = "" Then
-                    Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                    "TFeatureParser.parse_feature", _
-                    "unexpected text at line " & new_feature.parsed_lines & ": >" & line & "<"
+                    TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                        "TFeatureParser.parse_feature", _
+                        Array(new_feature.parsed_lines, line)
                 End If
         End Select
     Loop
@@ -107,15 +103,15 @@ Public Function parse_background(gherkin_text As String, parent_feature As TFeat
                 Else
                     'ignore empty lines after the steps
                     If Not Trim(line) = "" Then
-                        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                            "TFeatureParser.parse_feature", _
-                            "unexpected description after background steps at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                        TError.raise ERR_ID_SECTION_SYNTAX_DESCRIPTION_AFTER_STEPS, _
+                            "TFeatureParser.parse_background", _
+                            Array(parent_feature.parsed_lines, line)
                     End If
                 End If
             Case Else
-                Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
+                TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
                     "TFeatureParser.parse_feature", _
-                    "unexpected line in background at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                    Array(parent_feature.parsed_lines, line)
         End Select
     Loop
     Set parse_background = new_background
@@ -128,8 +124,10 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
     Dim new_example As TExample
     Dim new_rule As TRule
     Dim example_tags As Collection
+    Dim parsed_tag_lines As Long
 
     Set example_tags = New Collection
+    parsed_tag_lines = 0
     feature_lines = Split(gherkin_text, vbLf)
     line = CStr(feature_lines(parent_feature.parsed_lines))
     Set new_rule = create_rule(CStr(feature_lines(parent_feature.parsed_lines)), rule_tags, parent_feature)
@@ -141,14 +139,16 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
                 'ignore comments
             Case LINE_TYPE_STEP
                 'rules are not expected to have steps, they can have only examples
-                Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                    "TFeatureParser.parse_feature", _
-                    "rules are not allowed to have steps: found step definition at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                TError.raise ERR_ID_SECTION_SYNTAX_STEPS_IN_RULE, _
+                    "TFeatureParser.parse_rule", _
+                    Array(parent_feature.parsed_lines, line)
             Case LINE_TYPE_TAGS
                 parse_and_add_tags line, example_tags
+                parsed_tag_lines = parsed_tag_lines + 1
             Case LINE_TYPE_EXAMPLE_START
                 Set new_example = parse_example(gherkin_text, parent_feature, example_tags)
                 Set example_tags = New Collection
+                parsed_tag_lines = 0
                 'ignore examples without steps
                 If new_example.steps.Count > 0 Then
                     new_example.description = trim_description_linebreaks(new_example.description)
@@ -159,7 +159,7 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
             Case LINE_TYPE_RULE_START
                 'another rule will finish this rule
                 Set parse_rule = new_rule
-                parent_feature.parsed_lines = parent_feature.parsed_lines - 1
+                parent_feature.parsed_lines = parent_feature.parsed_lines - 1 - parsed_tag_lines
                 Exit Function
             Case LINE_TYPE_DESCRIPTION
                 If new_rule.sections.Count = 0 Then
@@ -167,9 +167,9 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
                 Else
                     'ignore empty lines after the first example
                     If Not Trim(line) = "" Then
-                        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                            "TFeatureParser.parse_feature", _
-                            "unexpected line in a rule section at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                        TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                            "TFeatureParser.parse_rule", _
+                            Array(parent_feature.parsed_lines, line)
                     End If
                 End If
         End Select
@@ -194,7 +194,6 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
             Case LINE_TYPE_COMMENT
                 'ignore comments
             Case LINE_TYPE_STEP
-                'parent_feature.parsed_lines = TStepParser.parse_steps(gherkin_text, parent_feature.parsed_lines, new_example.steps)
                 parent_feature.parsed_lines = parent_feature.parsed_lines - 1
                 Set new_example.steps = TStepParser.parse_step_list(gherkin_text, parent_feature)
             Case LINE_TYPE_EXAMPLE_START, LINE_TYPE_RULE_START, LINE_TYPE_TAGS
@@ -208,15 +207,18 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
                 Else
                     'ignore empty lines after the  example
                     If Not Trim(line) = "" Then
-                        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                            "TFeatureParser.parse_feature", _
-                            "found example description after steps at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                        TError.raise ERR_ID_SECTION_SYNTAX_DESCRIPTION_AFTER_STEPS, _
+                            "TFeatureParser.parse_example", _
+                            Array(parent_feature.parsed_lines, line)
                     End If
                 End If
+            Case LINE_TYPE_TABLE_ROW
+                TError.raise ERR_ID_STEP_SYNTAX_TABLE_WITHOUT_STEP, _
+                    "TStepParser.parse_example"
             Case Else
-                Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                    "TFeatureParser.parse_feature", _
-                    "unexpected line in a example (scenario) section at line " & parent_feature.parsed_lines & ": >" & line & "<"
+                TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                    "TFeatureParser.parse_example", _
+                    Array(parent_feature.parsed_lines, line)
         End Select
     Loop
     Set parse_example = new_example
@@ -260,9 +262,8 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
             Case Else
                 'ignore empty lines
                 If Not Trim(line) = "" Then
-                    Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                        "TFeatureParser.parse_feature_definition", _
-                        "Feature lacks feature keyword at the beginning"
+                    TError.raise ERR_ID_FEATURE_SYNTAX_MISSING_FEATURE_KEYWORD, _
+                        "TFeatureParser.parse_feature_definition"
                 End If
         End Select
         line_index = line_index + 1
@@ -273,9 +274,8 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
         parsed_feature.head = CStr(feature_spec("head"))
         parsed_feature.name = CStr(feature_spec("name"))
     Else
-        Err.Raise ERR_ID_FEATURE_SYNTAX_ERROR, _
-                "TFeatureParser.parse_feature_definition", _
-                "Feature file lacks a feature name"
+        TError.raise ERR_ID_FEATURE_SYNTAX_MISSING_FEATURE_NAME, _
+                "TFeatureParser.parse_feature_definition"
     End If
     line_index = line_index + 1
     '>>> parse description below feature name
@@ -301,6 +301,8 @@ Public Function get_line_type(line As String)
     
     If is_step_line(line) Then
         get_line_type = LINE_TYPE_STEP
+    ElseIf is_table_row(line) Then
+        get_line_type = LINE_TYPE_TABLE_ROW
     ElseIf Trim(line) = """""""" Then
         get_line_type = LINE_TYPE_DOCSTRING_LIMIT
     ElseIf is_comment_line(line) Then
@@ -324,8 +326,7 @@ Public Function get_line_type(line As String)
     End If
 End Function
 
-'TODO reset to private after refactoring parse steps
-Public Function is_section_definition_line(feature_line As String) As Boolean
+Private Function is_section_definition_line(feature_line As String) As Boolean
     
     Dim keyword  As Variant
     Dim section_name As String
@@ -347,18 +348,28 @@ Private Function is_comment_line(feature_line As String) As Boolean
     is_comment_line = Left(Trim(feature_line), 1) = "#"
 End Function
 
-'TODO reset to private after refactoring parse steps
-Public Function is_tag_line(feature_line As String) As Boolean
+Private Function is_tag_line(feature_line As String) As Boolean
     is_tag_line = Left(Trim(feature_line), 1) = "@"
 End Function
 
-'TODO reset to private after refactoring parse steps
-Public Function is_step_line(feature_line As String) As Boolean
+Private Function is_step_line(feature_line As String) As Boolean
 
     Dim first_word As String
     
     first_word = Split(Trim(feature_line) & " ", " ")(0)
     is_step_line = InStr(" Given When Then And But ", " " & first_word & " ") > 0 And Len(first_word) > 2
+End Function
+
+Private Function is_table_row(feature_line As String) As Boolean
+    is_table_row = False
+    If Left(Trim(feature_line), 1) = "|" Then
+        If Right(Trim(feature_line), 1) <> "|" Then
+            TError.raise ERR_ID_STEP_SYNTAX_INCOMPLETE_TABLE_ROW, _
+                "TFeatureParser.is_table_row", _
+                Array(Trim(feature_line))
+        End If
+        is_table_row = True
+    End If
 End Function
 
 Public Sub parse_and_add_tags(feature_line As String, tags As Collection)

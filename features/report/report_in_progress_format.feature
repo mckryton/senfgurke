@@ -1,9 +1,9 @@
 Ability: Report in progress format
-    Running examples for all features would be confusing because of the amount
-    of details for all the steps.
-    Therefore the progress format will mark successul executed examples with
-    a single dot to indicate the execution progress. Different results can be
-    detected by a matching letter (e.g. F for failed steps).
+  Running examples for all features would be confusing because of the amount
+  of details for all the steps.
+  Therefore the progress format will mark successul executed examples with
+  a single dot to indicate the execution progress. Different results can be
+  detected by a matching letter (e.g. F for failed steps).
 
   Background:
     Given the report format is "progress"
@@ -67,7 +67,9 @@ Ability: Report in progress format
     #TODO: add feature name + example name
 
     Example: single failed step
-      Given a step "Given an invalid step" was reported with status "FAIL" and error msg "sample err msg"
+      Given steps were reported as
+          | step_name             | status | err_msg        |
+          | Given an invalid step | FAIL   | sample err msg |
        When all steps were reported and the report is finished
        Then the resulting report output is
         """
@@ -77,8 +79,10 @@ Ability: Report in progress format
         """
 
     Example: failed step followed by passed step
-      Given a step "Given an invalid step" was reported with status "FAIL" and error msg "sample err msg"
-        And a step "And a valid step was" was reported with status "OK"
+      Given steps were reported as
+          | step_name             | status | err_msg        |
+          | Given an invalid step | FAIL   | sample err msg |
+          | And a valid step      | OK     |                |
        When all steps were reported and the report is finished
        Then the resulting report output is
         """
@@ -96,6 +100,7 @@ Ability: Report in progress format
           ................................................................................
           .....
         """
+
 
   Rule: Parse errors should be reported as-is
 

@@ -64,7 +64,7 @@ Public Sub When_a_test_is_started_with_STR_as_filter_for_feat_E1CA0BEA4B3F(examp
     'When a test is started with {string} as filter for feature names
     example_context.set_value New TSession, "session"
     With example_context.get_value("session")
-        .Reporter.enable_silent_mode
+        .reporter.enable_silent_mode
         .statistics.enable_event_log
         .run_test feature_filter:=step_expressions(1), feature_dir:=example_context.get_value("feature_dir")
     End With

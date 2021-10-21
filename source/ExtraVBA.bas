@@ -58,7 +58,7 @@ Private Function arrays_are_equal(first_array As Variant, second_array As Varian
     
 UNSUPPORTED_ARRAY_ERROR:
     Debug.Print "ExtraVBA ERROR: can't compare arrays with non-primitive values"
-    Err.Raise ERR_ID_UNSUPPORTED_ARRAY_ERROR, "ExtraVBA.arrays_are_equal", "can't compare arrays with non-primitive values"
+    Err.raise ERR_ID_UNSUPPORTED_ARRAY_ERROR, "ExtraVBA.arrays_are_equal", "can't compare arrays with non-primitive values"
 End Function
 
 Private Sub exportCode()

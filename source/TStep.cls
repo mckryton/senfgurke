@@ -14,7 +14,16 @@ Dim m_expressions As Collection
 Dim m_parent_clause As Variant
 Dim m_elements As Collection
 Dim m_docstring As String
+Dim m_data_table As TDataTable
 
+Private Sub Class_Initialize()
+    m_docstring = vbNullString
+End Sub
+
+Private Sub Class_Terminate()
+    Set m_expressions = Nothing
+    Set m_data_table = Nothing
+End Sub
 
 Public Property Get SType() As String
     SType = m_step_type
@@ -109,6 +118,9 @@ Public Function get_step_function_template() As String
     If Me.Expressions.Count > 0 Then
         template = template & ", step_expressions As Collection"
     End If
+    If Not Me.data_table Is Nothing Then
+        template = template & ", data_table as TDataTable"
+    End If
     template = template & ")" & vbLf
     template = template & Space$(4) & "'" & get_step_comment_name & vbLf
     template = template & Space$(4) & "pending" & vbLf
@@ -126,14 +138,6 @@ End Property
 Public Property Let Expressions(ByVal new_expressions As Collection)
     Set m_expressions = new_expressions
 End Property
-
-Private Sub Class_Initialize()
-    m_docstring = vbNullString
-End Sub
-
-Private Sub Class_Terminate()
-    Set m_expressions = Nothing
-End Sub
 
 Public Property Get parent() As Variant
     Set parent = m_parent_clause
@@ -187,5 +191,13 @@ End Property
 
 Public Property Let docstring(ByVal new_docstring As String)
     m_docstring = new_docstring
+End Property
+
+Public Property Get data_table() As TDataTable
+    Set data_table = m_data_table
+End Property
+
+Public Property Set data_table(ByVal new_data_table As TDataTable)
+    Set m_data_table = new_data_table
 End Property
 

@@ -12,7 +12,7 @@ Option Explicit
 Public Sub Given_a_new_test_run_started_collecting_statistics_152BAB44CFC9(example_context As TContext)
     'Given a new test run started collecting statistics
     example_context.set_value New TSession, "session"
-    example_context.get_value("session").Reporter.enable_silent_mode
+    example_context.get_value("session").reporter.enable_silent_mode
 End Sub
 
 Public Sub Given_a_feature_description_with_a_step_9DB173A5EA30(example_context As TContext)

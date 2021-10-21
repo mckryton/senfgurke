@@ -34,7 +34,7 @@ Public Sub run_example(example As TExample)
     Set context = New TContext
     step_runner.setup m_session
     step_status = vbNullString
-    m_session.Reporter.report REPORT_MSG_TYPE_EXAMPLE_TITLE, example.OriginalHeadline
+    m_session.reporter.report REPORT_MSG_TYPE_EXAMPLE_TITLE, example.OriginalHeadline
     For Each step In example.steps
         err_msg = vbNullString
         previous_step_status = step_status
@@ -51,7 +51,7 @@ Public Sub run_example(example As TExample)
             If step_status = STATUS_PENDING Then err_msg = TSpec.LastFailMsg
         End If
         m_session.statistics.count_event LOG_EVENT_RUN_STEP, step_status, step.OriginalStepDefinition, ExtraVBA.get_unix_timestamp_now
-        m_session.Reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_status, err_msg
+        m_session.reporter.report REPORT_MSG_TYPE_STEP, step.OriginalStepDefinition, step_status, err_msg
     Next
     'the last step status sets the status for the example
     m_session.statistics.count_event LOG_EVENT_RUN_EXAMPLE, step_status, example.OriginalHeadline, ExtraVBA.get_unix_timestamp_now

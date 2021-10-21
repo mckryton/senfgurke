@@ -19,7 +19,7 @@ Public Sub When_the_feature_is_executed_8C8F454A90BC(example_context As TContext
     Set feature_runner = New TFeatureRunner
     Set session = New TSession
     example_context.set_value session, "session"
-    session.Reporter.enable_silent_mode
+    session.reporter.enable_silent_mode
     session.statistics.enable_event_log
     feature_runner.setup session
     Set parsed_feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
@@ -36,7 +36,7 @@ Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(examp
     Set feature_runner = New TFeatureRunner
     Set session = New TSession
     example_context.set_value session, "session"
-    session.Reporter.enable_silent_mode
+    session.reporter.enable_silent_mode
     session.statistics.enable_event_log
     feature_runner.setup session
     Set parsed_feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))

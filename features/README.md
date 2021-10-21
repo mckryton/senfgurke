@@ -81,6 +81,18 @@
 
   To match a step with it's step definition it has to be disassembled into its
 
+* [Parse tables](read_features/parse_features/parse_tables.feature)
+
+  Tables are a good way to keep examples concise and compact. Tables can be used
+  as data table to extend steps or as outlines to extend examples.
+
+#### Parse Tables
+
+* [Parse data table](read_features/parse_features/parse_tables/parse_data_table.feature)
+
+  If examples require more extensive pre-conditions, brevity of the Given steps
+  can be improved by using a data table instead of a lot of single steps.
+
 * [Parse tags](read_features/parse_features/parse_tags.feature)
 
   Tags help you navigate through features and examples. For example it is

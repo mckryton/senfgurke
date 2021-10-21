@@ -27,8 +27,8 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
     example_runner.setup m_session
     If example_container.containerType = "feature" Then
         m_session.statistics.log_event LOG_EVENT_RUN_FEATURE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
-        m_session.Reporter.report REPORT_MSG_TYPE_FEATURE_NAME, example_container.name
-        m_session.Reporter.report REPORT_MSG_TYPE_DESC, example_container.description
+        m_session.reporter.report REPORT_MSG_TYPE_FEATURE_NAME, example_container.name
+        m_session.reporter.report REPORT_MSG_TYPE_DESC, example_container.description
     End If
     For Each feature_section In example_container.sections
         If TypeName(feature_section) = "TExample" Then
@@ -47,7 +47,7 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
         ElseIf TypeName(feature_section) = "TRule" Then
             Set current_rule = feature_section
             ' a rule can contain  examples like a feature > so run it like a feature
-            m_session.Reporter.report REPORT_MSG_TYPE_RULE, feature_section.wholeName
+            m_session.reporter.report REPORT_MSG_TYPE_RULE, feature_section.wholeName
             run_feature current_rule, filter_tag
             m_session.statistics.log_event LOG_EVENT_RUN_RULE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
         End If

@@ -31,7 +31,7 @@ Public Function run_step(step_definition As TStep, context As TContext) As Varia
     step_function_name = step_definition.get_step_function_name
     For Each step_implementation_class In TConfig.StepImplementations
         TSpec.LastFailMsg = vbNullString
-        step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions, context)
+        step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions, context, step_definition.data_table)
     Next
     If step_run_attempts = TConfig.StepImplementations.Count Then
         run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING, step_definition.get_step_function_template)
@@ -49,14 +49,22 @@ error_handler:
     End If
 End Function
 
-Private Function try_step(step_implementation_class As Variant, step_function_name As String, step_expressions As Collection, context As TContext) As Variant
+Public Function try_step(step_implementation_class As Variant, step_function_name As String, step_expressions As Collection, context As TContext, data_table As TDataTable) As Variant
 
     Dim step_result As String
     
     If step_expressions.Count > 0 Then
-        step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, step_expressions)
+        If data_table Is Nothing Then
+            step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, step_expressions)
+        Else
+            step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, step_expressions, data_table)
+        End If
     Else
-        step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context)
+        If data_table Is Nothing Then
+            step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context)
+        Else
+            step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, data_table)
+        End If
     End If
     try_step = step_result
 End Function
@@ -75,7 +83,7 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
         fail_step = Array(STATUS_PENDING, err_desc)
     Case ERR_ID_STEP_IS_STATUS_MISSING
         fail_step = Array(STATUS_MISSING, vbNullString)
-        m_session.Reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, err_desc
+        m_session.reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, err_desc
     Case Else
         fail_step = Array(STATUS_FAIL, err_desc & vbLf & TSpec.LastFailMsg)
     End Select

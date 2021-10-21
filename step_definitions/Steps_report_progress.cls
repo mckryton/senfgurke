@@ -14,6 +14,6 @@ Public Sub When__INT_steps_are_reported_as_successful_34289162846E(example_conte
     Dim index As Integer
     
     For index = 1 To step_expressions(1)
-        example_context.get_value("session").Reporter.report REPORT_MSG_TYPE_STEP, "Given a valid step", STATUS_OK
+        example_context.get_value("session").reporter.report REPORT_MSG_TYPE_STEP, "Given a valid step", STATUS_OK
     Next
 End Sub

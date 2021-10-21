@@ -68,7 +68,7 @@ Ability: parse tags
       Then the parsed features contains the tags "@wip, @important, @beta"
        And the included example contains the tags "@wip, @important, @beta"
 
-    Example: add inherited tags from a rule to an untagged example
+    Example: add inherited tags from a rule to an untagged example for a feature with a single rule
       Given a feature
        """
           Feature: sample feature
@@ -82,6 +82,23 @@ Ability: parse tags
       When the feature is parsed
       Then the parsed rule contains the tags "@wip, @important, @beta"
        And the included example contains the tags "@wip, @important, @beta"
+
+    Example: add inherited tags from a rule to an untagged example for a feature with multiple rules
+     Given a feature
+      """
+         Feature: sample feature
+
+           Rule: dummy rule
+            Example: dummy example
+
+           @wip @important @beta
+           Rule: rule with tags
+             Example: untagged example
+               Given one step
+      """
+     When the feature is parsed
+     Then the rule "rule with tags" contains the tags "@wip, @important, @beta"
+      And the example "untagged example" contains the tags "@wip, @important, @beta" too
 
     Example: add inherited tags from a feature and a rule to an untagged example
       Given a feature
