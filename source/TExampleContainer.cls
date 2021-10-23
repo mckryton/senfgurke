@@ -6,7 +6,7 @@ Attribute VB_Name = "TExampleContainer"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 'This is the interface definition for classes holding example objects: TFeature and TRule.
 ' It helps TFeatureParser to add assign examples to differenttypes of containers (features or rules).
 

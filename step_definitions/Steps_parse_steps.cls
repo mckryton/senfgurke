@@ -37,7 +37,7 @@ Public Sub When_the_step_list_is_parsed_8C8F753FF01F(example_context As TContext
     'When the step list is parsed
     Dim parent_feature As TFeature
 
-    Set parent_feature = New TFeature
+    Set parent_feature = THelper.new_TFeature
     'parser should have parsed the feature text up to the line before the step list
     parent_feature.parsed_lines = -1
     On Error GoTo error_raised

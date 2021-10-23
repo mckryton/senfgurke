@@ -28,20 +28,30 @@ End Sub
 
 Public Sub When_Senfgurke_executes_the_feature_7D772B9CDDDE(example_context As TContext)
     'When Senfgurke executes the feature
-    example_context.set_value New TSession, "session"
-    With example_context.get_value("session")
+    Dim step_classes As Collection
+    Dim session As TSession
+    
+    Set step_classes = New Collection
+    Set session = THelper.new_TSession
+    example_context.set_value session, "session"
+    With session
         .reporter.enable_silent_mode
-        .run_test features_as_text:=example_context.get_value("loaded_features")
+        .run_test step_classes, features_as_text:=example_context.get_value("loaded_features")
     End With
 End Sub
 
 Public Sub When_a_test_is_started_with_STR_as_parameter_EA8A08D9425A(example_context As TContext, step_expressions As Collection)
     'When a test is started with {string} as parameter
-    example_context.set_value New TSession, "session"
-    With example_context.get_value("session")
+    Dim step_classes As Collection
+    Dim session As TSession
+    
+    Set step_classes = New Collection
+    Set session = THelper.new_TSession
+    example_context.set_value session, "session"
+    With session
         .reporter.enable_silent_mode
         .statistics.enable_event_log
-        .run_test features_as_text:=example_context.get_value("loaded_features"), filter_tag:=step_expressions(1)
+        .run_test step_classes, features_as_text:=example_context.get_value("loaded_features"), filter_tag:=step_expressions(1)
     End With
 End Sub
 

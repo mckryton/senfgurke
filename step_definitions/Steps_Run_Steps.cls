@@ -9,23 +9,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_a_pending_step_6A3533BBBFE5(example_context As TContext)
-    pending
-End Sub
-
-Public Sub Given_an_empty_step_6A35DCCE89C0(example_context As TContext)
-    'Given an empty step
-    
-End Sub
-
-Public Sub Given_a_valid_step_8A74152FD2F9(example_context As TContext)
-    TSpec.expect(1).to_be 1
-End Sub
-
-Public Sub Given_an_invalid_step_CF4B201BCF1B(example_context As TContext)
-    TSpec.expect(1).to_be 2
-End Sub
-
 Public Sub Given_a_list_of_numbers_FF6B22C2A68F(example_context As TContext, data_table As TDataTable)
     ' this is not an actual step but a step inside the example "calling step function for a step with a data_table"
     ' the step is about validating that data_table is set as step function parameter
@@ -67,7 +50,7 @@ Public Sub Given_a_step_STR_F5C6F4BA1D15(example_context As TContext, step_expre
     Dim parent_feature As TFeature
     Dim step As TStep
     
-    Set parent_feature = New TFeature
+    Set parent_feature = THelper.new_TFeature
     parent_feature.parsed_lines = -1
     Set step = TStepParser.parse_step_list(step_expressions(1), parent_feature)(1)
     example_context.set_value step, "example_step"
@@ -76,12 +59,20 @@ End Sub
 Public Sub When_the_step_is_executed_CEB06B444334(example_context As TContext)
     'When the step is executed
     Dim step_runner As TStepRunner
+    Dim session As TSession
+    Dim step_classes As Collection
     
-    Set step_runner = New TStepRunner
-    example_context.set_value New TSession, "session"
-    example_context.get_value("session").reporter.enable_silent_mode
-    step_runner.setup example_context.get_value("session")
-    example_context.set_value step_runner.run_step(example_context.get_value("example_step"), New TContext), "step_result"
+    Set step_runner = THelper.new_TStepRunner
+    Set step_classes = New Collection
+    step_classes.Add New Steps_predefined_steps
+    Set session = THelper.new_TSession
+    With session
+        .reporter.enable_silent_mode
+        .StepImplementations = step_classes
+    End With
+    example_context.set_value session, "session"
+    step_runner.setup session
+    example_context.set_value step_runner.run_step(example_context.get_value("example_step"), THelper.new_TContext), "step_result"
 End Sub
 
 Public Sub When_the_code_template_for_the_step_implementation_7D39D6705DD8(example_context As TContext)
@@ -100,7 +91,7 @@ Public Sub When_the_step_function_is_called_418C5F83C560(example_context As TCon
     Dim step_runner As TStepRunner
     Dim step_result As Variant
     
-    Set step_runner = New TStepRunner
+    Set step_runner = THelper.new_TStepRunner
     Set step = example_context.get_value("example_step")
     step_runner.try_step Me, step.get_step_function_name, step.Expressions, example_context, step.data_table
     Set step_runner = Nothing

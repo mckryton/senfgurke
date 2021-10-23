@@ -6,13 +6,14 @@ Attribute VB_Name = "TSession"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 Option Explicit
 
 Private m_reporter As TReport
 Private m_start_time As Long
 Private m_end_time As Long
 Private m_statistics As TStatistics
+Private m_step_implementations As Collection
 
 Private Sub Class_Initialize()
     m_start_time = 0
@@ -22,7 +23,22 @@ End Sub
 
 Private Sub Class_Terminate()
     Set m_statistics = Nothing
+    Set m_step_implementations = Nothing
 End Sub
+
+Public Property Get StepImplementations() As Collection
+    
+    Dim step_implementation_class As Variant
+    
+    If m_step_implementations Is Nothing Then
+        Set m_step_implementations = New Collection
+    End If
+    Set StepImplementations = m_step_implementations
+End Property
+
+Public Property Let StepImplementations(step_classes As Collection)
+    Set m_step_implementations = step_classes
+End Property
 
 Public Sub set_report_format(report_format As String)
     Select Case report_format
@@ -44,20 +60,22 @@ Public Property Let reporter(ByVal new_reporter As TReport)
     Set reporter = new_reporter
 End Property
 
-Public Sub run_test(Optional filter_tag, Optional feature_filter, Optional report_format, Optional features_as_text As Collection, Optional feature_dir)
+Public Sub run_test(step_classes As Collection, Optional filter_tag, Optional feature_filter, Optional report_format, _
+                        Optional features_as_text As Collection, Optional application_dir)
 
     Dim parsed_features As Collection
+    Dim feature_dir As String
 
+    Me.StepImplementations = step_classes
     If IsMissing(filter_tag) Then filter_tag = vbNullString
     If IsMissing(report_format) Then report_format = "verbose"
+    If Not IsMissing(application_dir) Then feature_dir = application_dir & ExtraVBA.get_path_separator & "features"
     set_report_format CStr(report_format)
     If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features(feature_dir, feature_filter, Me)
     Set parsed_features = parse_loaded_features(features_as_text)
     If parsed_features.Count > 0 Then run_parsed_features parsed_features, CStr(filter_tag)
     reporter.finish_report
     report_statistics EndTime - StartTime
-    'ensure that this setting is refreshed even without any re-compile:
-    TConfig.StepImplementations = Nothing
 End Sub
 
 Public Sub run_parsed_features(parsed_features As Collection, Optional filter_tag)

@@ -33,14 +33,16 @@ Public Sub Given_a_feature_file_STR_D7FE0A9A5327(example_context As TContext, st
     'Given a feature file {string}
     Dim dir_entry As String
     Dim file_names As String
+    Dim application_dir As String
+    Dim feature_dir As String
     
-    If Not example_context.value_exists("feature_dir") Then
-        example_context.set_value senfgurke_workbook.Path & ExtraVBA.get_path_separator _
-            & "testdata" & ExtraVBA.get_path_separator _
-            & "filter_for_loading_features" & ExtraVBA.get_path_separator _
-            , "feature_dir"
-    End If
-    dir_entry = Dir(example_context.get_value("feature_dir"))
+    application_dir = senfgurke_steps_workbook.Path & ExtraVBA.get_path_separator _
+        & "testdata" & ExtraVBA.get_path_separator _
+        & "filter_for_loading_features" '& ExtraVBA.get_path_separator
+    example_context.set_value application_dir, "application_dir"
+    feature_dir = application_dir & ExtraVBA.get_path_separator & "features" & ExtraVBA.get_path_separator
+    example_context.set_value feature_dir, "feature_dir"
+    dir_entry = Dir(feature_dir)
     Do While dir_entry <> vbNullString
         If Not file_names = vbNullString Then file_names = file_names & "|"
         file_names = file_names & dir_entry
@@ -62,11 +64,11 @@ End Sub
 
 Public Sub When_a_test_is_started_with_STR_as_filter_for_feat_E1CA0BEA4B3F(example_context As TContext, step_expressions As Collection)
     'When a test is started with {string} as filter for feature names
-    example_context.set_value New TSession, "session"
+    example_context.set_value THelper.new_TSession, "session"
     With example_context.get_value("session")
         .reporter.enable_silent_mode
         .statistics.enable_event_log
-        .run_test feature_filter:=step_expressions(1), feature_dir:=example_context.get_value("feature_dir")
+        .run_test New Collection, feature_filter:=step_expressions(1), application_dir:=example_context.get_value("application_dir")
     End With
 End Sub
 

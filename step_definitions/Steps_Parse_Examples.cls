@@ -49,7 +49,7 @@ Public Sub When_the_example_is_parsed_CEB09D77F01F(example_context As TContext)
     Dim example As TExample
      
     On Error GoTo exception_handler
-    Set example = TFeatureParser.parse_example(example_context.get_value("gherkin_text"), New TFeature, Nothing)
+    Set example = TFeatureParser.parse_example(example_context.get_value("gherkin_text"), THelper.new_TFeature, Nothing)
     example_context.set_value example, "parsed_example"
     Exit Sub
     

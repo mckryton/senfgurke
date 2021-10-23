@@ -1,5 +1,5 @@
 Attribute VB_Name = "TSupport"
-'this module is for sharing helper functions between your test cases
+'this module is for sharing helper functions between your step implementation classes
 
 Option Explicit
 

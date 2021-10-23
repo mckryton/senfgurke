@@ -26,29 +26,26 @@ Public Sub Given_an_feature_with_one_example_with_3_steps_whe_B4401525657E(examp
                     "parsed_feature"
 End Sub
 
-Public Sub Given_a_valid_step_6A35DF3A18EC(example_context As TContext)
-    'Given a valid step
-End Sub
-
-Public Sub Given_an_invalid_step_FF6BEF10050E(example_context As TContext)
-    'And an invalid step
-    TSpec.expect(1).to_be 2
-End Sub
-
 Public Sub When_the_example_is_executed_8C8F015690BC(example_context As TContext)
     'When the example is executed
     Dim feature_runner As TFeatureRunner
     Dim parsed_feature As TFeature
+    Dim session As TSession
+    Dim step_classes As Collection
     
-    Set feature_runner = New TFeatureRunner
+    Set step_classes = New Collection
+    step_classes.Add New Steps_predefined_steps
+    Set feature_runner = THelper.new_TFeatureRunner
     If Not example_context.value_exists("parsed_feature") Then
         Set parsed_feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
     Else
         Set parsed_feature = example_context.get_value("parsed_feature")
     End If
-    example_context.set_value New TSession, "session"
-    example_context.get_value("session").reporter.enable_silent_mode
-    feature_runner.setup example_context.get_value("session")
+    Set session = THelper.new_TSession
+    session.StepImplementations = step_classes
+    session.reporter.enable_silent_mode
+    example_context.set_value session, "session"
+    feature_runner.setup session
     feature_runner.run_feature parsed_feature
 End Sub
 
