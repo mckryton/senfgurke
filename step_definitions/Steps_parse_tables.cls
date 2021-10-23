@@ -28,7 +28,7 @@ Public Sub When_the_type_of_this_line_is_parsed_4537958B6F8D(example_context As 
     'When the type of this line is parsed
     Dim parent_feature As TFeature
     
-    Set parent_feature = New TFeature
+    Set parent_feature = THelper.new_TFeature
     parent_feature.parsed_lines = -1
     On Error GoTo exception_handler
     example_context.set_value TFeatureParser.get_line_type(example_context.get_value("gherkin_text")), "line_type"
@@ -43,7 +43,7 @@ Public Sub When_the_table_is_parsed_CEB05834DFDE(example_context As TContext)
     'When the table is parsed
     Dim parent_feature As TFeature
     
-    Set parent_feature = New TFeature
+    Set parent_feature = THelper.new_TFeature
     parent_feature.parsed_lines = -1
     On Error GoTo exception_handler
     example_context.set_value TStepParser.parse_table(example_context.get_value("gherkin_text"), parent_feature), "parsed_table"

@@ -6,7 +6,7 @@ Attribute VB_Name = "TStatistics"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 'This module offers functions to create and analyze statistic events resulting
 ' from running features, examples and steps.
 

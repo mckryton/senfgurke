@@ -6,7 +6,7 @@ Attribute VB_Name = "TStepRunner"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 Option Explicit
 
 Private m_session As TSession
@@ -29,11 +29,11 @@ Public Function run_step(step_definition As TStep, context As TContext) As Varia
     On Error GoTo error_handler
     step_run_attempts = 0
     step_function_name = step_definition.get_step_function_name
-    For Each step_implementation_class In TConfig.StepImplementations
+    For Each step_implementation_class In m_session.StepImplementations
         TSpec.LastFailMsg = vbNullString
         step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions, context, step_definition.data_table)
     Next
-    If step_run_attempts = TConfig.StepImplementations.Count Then
+    If step_run_attempts = m_session.StepImplementations.Count Then
         run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING, step_definition.get_step_function_template)
     Else
         run_step = Array(STATUS_OK)

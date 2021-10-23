@@ -11,7 +11,7 @@ Option Explicit
 
 Public Sub Given_the_report_format_is_STR_94DE9139C9BF(example_context As TContext, step_expressions As Collection)
     'Given the report format is {string}
-    example_context.set_value New TSession, "session"
+    example_context.set_value THelper.new_TSession, "session"
     example_context.get_value("session").set_report_format step_expressions(1)
     example_context.get_value("session").reporter.enable_silent_mode
 End Sub
