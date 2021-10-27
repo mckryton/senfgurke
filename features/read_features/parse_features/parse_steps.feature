@@ -35,7 +35,7 @@ Ability: parse steps
     This is just for a better documentation of the step context in the reports
     but without any impact on the step execution.
 
-    Example: "And" as synonym for "Given"
+    Example: "And" following "Given"
       Given a list of steps
           """
             Given x is 1
@@ -44,7 +44,16 @@ Ability: parse steps
        When the step list is parsed
        Then the type of step 2 is set to "Given"
 
-     Example: "But" as synonym for "When"
+    Example: "And" following "When"
+     Given a list of steps
+         """
+           When some action happens
+            And some more action happens
+         """
+      When the step list is parsed
+      Then the type of step 2 is set to "When"
+
+     Example: "But" following "When"
        Given a list of steps
            """
              When some action happens
