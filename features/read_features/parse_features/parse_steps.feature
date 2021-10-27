@@ -25,7 +25,7 @@ Ability: parse steps
        Then the type of the step is set to "Then"
         And the name of the step is "some result is expected"
 
-    Example: step not starting with a step type keyword
+    Example: line includes but doesn't start with step type keyword
       Given a step is defined as "a pre-condition is Given"
        When the type of the step line is evaluated
        Then the resulting line type is not "step line"
