@@ -54,6 +54,7 @@ Public Sub Given_a_feature_directory_contains_the_files_51DDA68DE9B3(example_con
     Dim application_dir As String
     Dim feature_dir As String
     Dim table_row As Variant
+    Dim file_name As String
     
     application_dir = senfgurke_steps_workbook.path & ExtraVBA.get_path_separator _
         & "testdata" & ExtraVBA.get_path_separator _
@@ -64,7 +65,8 @@ Public Sub Given_a_feature_directory_contains_the_files_51DDA68DE9B3(example_con
     file_names = read_dir_entries(feature_dir)
     'creating files for each test run might be slow and difficult, therefore just ensure that test files are part of the repository
     For Each table_row In data_table.table_rows
-        TSpec.expect(file_names).includes_text table_row("feature_file")
+        file_name = Replace(table_row("feature_file"), "/", ExtraVBA.get_path_separator)
+        TSpec.expect(file_names).includes_text file_name
     Next
 End Sub
 
