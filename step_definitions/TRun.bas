@@ -12,7 +12,7 @@ Public Sub test(Optional filter_tag, Optional feature_filter, Optional report_fo
     Dim session As TSession
     
     Set session = THelper.new_TSession
-    session.run_test StepImplementations, filter_tag, feature_filter, report_format, application_dir:=senfgurke_steps_workbook.Path
+    session.run_test StepImplementations, filter_tag, feature_filter, report_format, application_dir:=senfgurke_steps_workbook.path
     Set session = Nothing
     Set m_step_implementations = Nothing
 End Sub

@@ -45,7 +45,7 @@ Public Function load_features(Optional feature_dir, Optional file_filter, Option
     Loop
     Set subdirs = get_subdirs(CStr(feature_dir))
     For Each subdir In subdirs
-        Set subdir_features = TFeatureLoader.load_features(feature_dir & subdir, file_filter)
+        Set subdir_features = TFeatureLoader.load_features(feature_dir & subdir, file_filter, session)
         merge_features features, subdir_features
         Set subdir_features = Nothing
     Next

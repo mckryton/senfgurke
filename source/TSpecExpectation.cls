@@ -159,7 +159,7 @@ Public Sub contains_member(expected_member As Variant)
         
         End If
     ElseIf IsArray(Me.given_value) Then
-        Debug.Print "TSpecExpectation PENDING: contains_member matcher for array"
+        Debug.Print "TSpecExpectation.contains_member PENDING: contains_member matcher for array"
     End If
 End Sub
 
@@ -175,7 +175,7 @@ Public Sub includes_text(include_item As Variant)
             raise_expectation_err matcher_fail_msg
         End If
     Else
-        Debug.Print "PENDING: include test for arrays"
+        Debug.Print "TSpecExpectation.includes_text PENDING: include test for arrays"
     End If
 End Sub
 

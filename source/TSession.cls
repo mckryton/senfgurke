@@ -69,7 +69,12 @@ Public Sub run_test(step_classes As Collection, Optional filter_tag, Optional fe
     Me.StepImplementations = step_classes
     If IsMissing(filter_tag) Then filter_tag = vbNullString
     If IsMissing(report_format) Then report_format = "verbose"
-    If Not IsMissing(application_dir) Then feature_dir = application_dir & ExtraVBA.get_path_separator & "features"
+    If Not IsMissing(application_dir) Then
+        If Right(application_dir, 1) <> ExtraVBA.get_path_separator Then
+            application_dir = application_dir & ExtraVBA.get_path_separator
+        End If
+        feature_dir = application_dir & "features"
+    End If
     set_report_format CStr(report_format)
     If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features(feature_dir, feature_filter, Me)
     Set parsed_features = parse_loaded_features(features_as_text)

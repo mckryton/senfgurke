@@ -19,7 +19,7 @@ Private Sub exportCode()
     Dim file_suffix As String
 
     path_separator = ExtraVBA.get_path_separator
-    base_path = ThisWorkbook.Path
+    base_path = ThisWorkbook.path
     For Each vbe_source_object In Application.VBE.VBProjects("Senfgurke_Steps").VBComponents
         Select Case vbe_source_object.Type
             Case vbext_ct_StdModule
