@@ -35,7 +35,7 @@ Private Property Get StepImplementations() As Collection
     For Each step_implementation_class In Array(New Steps_run_tests, New Steps_Run_Examples, New Steps_Run_Steps, _
                     New Steps_Run_features, New Steps_Load_Feature_Files, New Steps_report_verbose, _
                     New Steps_Parse_Features, New Steps_Parse_Examples, New Steps_validate_expectations, _
-                    New Steps_make_steps_executable, New Steps_parse_steps, New Steps_parse_step_expressions, _
+                    New Steps_connect_steps_with_funct, New Steps_parse_steps, New Steps_parse_step_expressions, _
                     New Steps_parse_docstrings, New Steps_parse_tags, New Steps_parse_rules, New Steps_parse_tables, _
                     New Steps_report, New Steps_report_progress, New Steps_report_statistics, _
                     New Steps_collect_statistics, New Steps_support_functions, New Steps_save_vars_in_context, _

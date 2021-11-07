@@ -199,23 +199,28 @@ Private Sub find_step_expressions(step_name As String, new_step As TStep)
         current_char = Mid(step_name, char_index, 1)
         If current_char = "\" Then
             'ignore escaped chars, continue parameter search after the escaped char
-            char_index = char_index + 2
-            name_element = name_element & Mid(step_name, char_index, char_index + 1)
-        ElseIf current_char = """" Then
-            Set expression = find_string_expression(step_name, char_index)
-        ElseIf (IsNumeric(current_char) Or current_char = ".") And InStr(" ,([{", previous_char) > 0 Then
-            Set expression = find_numeric_expression(step_name, char_index)
-        End If
-        If expression Is Nothing Then
-            name_element = name_element & current_char
+            char_index = char_index + 1
+            If char_index <= Len(step_name) Then
+                current_char = Mid(step_name, char_index, 1)
+                name_element = name_element & current_char
+            End If
         Else
-            new_step.Elements.Add Trim(name_element)
-            name_element = vbNullString
-            'add only a reference to the expression in the list of step name elements
-            new_step.Elements.Add new_step.Expressions.Count + 1
-            new_step.Expressions.Add expression.value
-            char_index = expression.IndexEnd
-            Set expression = Nothing
+            If current_char = """" Then
+                Set expression = find_string_expression(step_name, char_index)
+            ElseIf (IsNumeric(current_char) Or current_char = ".") And InStr(" ,([{", previous_char) > 0 Then
+                Set expression = find_numeric_expression(step_name, char_index)
+            End If
+            If expression Is Nothing Then
+                name_element = name_element & current_char
+            Else
+                new_step.Elements.Add Trim(name_element)
+                name_element = vbNullString
+                'add only a reference to the expression in the list of step name elements
+                new_step.Elements.Add new_step.Expressions.Count + 1
+                new_step.Expressions.Add expression.value
+                char_index = expression.IndexEnd
+                Set expression = Nothing
+            End If
         End If
     Next
     If Len(name_element) > 0 Then new_step.Elements.Add Trim(name_element)

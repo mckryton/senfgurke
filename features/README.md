@@ -144,14 +144,14 @@
   Background:
   Given a new test run started collecting statistics
 
-* [Make steps executable](run_tests/make_steps_executable.feature)
+* [Connect steps with step functions](run_tests/connect_steps_with_step_functions.feature)
 
   Whenever a new step is added to a feature, Senfgurke will offer a matching
-  step implementation function. Senfgurke tries to make the function name as
-  similar to the step name as possible so that it's easy to identify the
-  matching step implemenation for any step. But function names in any
-  programming language have to follow conventions.
-  Conventions for function and variable names in VBA are documented here:
+  step function. Senfgurke tries to make the function name as similar to the
+  step name as possible so that it's easy to identify the matching step
+  implementation for any step. But function names in any programming language
+  have to follow conventions. Conventions for function and variable names in
+  VBA are documented here:
 
 * [Run examples](run_tests/run_examples.feature)
 
