@@ -56,7 +56,7 @@ Public Function get_step_function_name() As String
                     function_name = function_name & "DBL"
             End Select
         Else
-            function_name = function_name & step_element
+            function_name = function_name & LCase(step_element)
         End If
     Next
     function_name = Replace(function_name, " ", "_")

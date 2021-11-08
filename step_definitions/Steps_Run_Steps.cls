@@ -16,7 +16,7 @@ Public Sub Given_a_list_of_numbers_FF6B22C2A68F(example_context As TContext, dat
     example_context.set_value data_table, "data_table"
 End Sub
 
-Public Sub Given_a_step_returning_PENDING_without_a_pending_m_F201CAEBCFB1(example_context As TContext)
+Public Sub Given_a_step_returning_pending_without_a_pending_m_F201A405CFB1(example_context As TContext)
     'Given a step returning PENDING without a pending message
     example_context.set_value TStepParser.parse_step_line("Given a pending step", New Collection), "example_step"
     'won't create code dynamically, so step "Given a pending step" is hard coded

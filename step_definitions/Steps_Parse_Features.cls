@@ -114,7 +114,7 @@ Public Sub Then_the_parsed_result_contains_an_example_with_tw_5E84053FD2C3(examp
     TSpec.expect(example_context.get_value("parsed_feature").sections(1).steps.Count).to_be 2
 End Sub
 
-Public Sub Then_the_Given_step_is_assigned_to_the_feature_9078F8233D0D(example_context As TContext)
+Public Sub Then_the_given_step_is_assigned_to_the_feature_F07FF8233D0D(example_context As TContext)
     'Then the Given step is assigned to the feature
     TSpec.expect(example_context.get_value("parsed_feature").background.steps(1).OriginalStepDefinition).to_be "Given one step"
 End Sub

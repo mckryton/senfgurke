@@ -26,7 +26,7 @@ Public Sub Given_a_feature_was_loaded_from_a_file_STR_STR_725154F9143A(example_c
     TSupport.load_feature_from_text step_expressions(2), example_context.get_value("loaded_features"), example_context.get_value("feature_origin")
 End Sub
 
-Public Sub When_Senfgurke_executes_the_feature_7D772B9CDDDE(example_context As TContext)
+Public Sub When_senfgurke_executes_the_feature_1D702B9CDDDE(example_context As TContext)
     'When Senfgurke executes the feature
     Dim step_classes As Collection
     Dim session As TSession

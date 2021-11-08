@@ -35,8 +35,8 @@ Public Sub Given_a_variable_refers_to_an_object_C82E72756271(example_context As 
     Set m_object_value = New Collection
 End Sub
 
-Public Sub Given_a_variable_refers_to_Nothing_6F761967BA49(example_context As TContext)
-    'Given a variable refers to nothing
+Public Sub Given_a_variable_refers_to_nothing_6F7619677868(example_context As TContext)
+    'Given a variable refers to Nothing
     Set m_object_value = Nothing
 End Sub
 
@@ -56,8 +56,8 @@ expectation_failed:
     m_expectation_result = False
 End Sub
 
-Public Sub When_the_variable_is_expected_to_be_Nothing_DBE6C57502A9(example_context As TContext)
-    'When the variable is expected to be nothing
+Public Sub When_the_variable_is_expected_to_be_nothing_DBE6C575C088(example_context As TContext)
+    'When the variable is expected to be Nothing
     m_expectation_result = True
     On Error GoTo expectation_failed
     TSpec.expect(m_object_value).to_be_nothing
@@ -67,8 +67,8 @@ expectation_failed:
     m_expectation_result = False
 End Sub
 
-Public Sub When_the_nonobject_variable_is_expected_to_be_Noth_10954F3D66FD(example_context As TContext)
-    'When the non-object variable is expected to be nothing
+Public Sub When_the_nonobject_variable_is_expected_to_be_noth_10954F3DA4DC(example_context As TContext)
+    'When the non-object variable is expected to be Nothing
     m_expectation_result = True
     On Error GoTo expectation_failed
     TSpec.expect(m_non_object_value).to_be_nothing
@@ -78,8 +78,8 @@ expectation_failed:
     m_expectation_result = False
 End Sub
 
-Public Sub When_the_variable_is_expected_not_to_be_Nothing_63DB3DDB60A8(example_context As TContext)
-    'When the variable is expected not to be nothing
+Public Sub When_the_variable_is_expected_not_to_be_nothing_63DB3DDBA289(example_context As TContext)
+    'When the variable is expected not to be Nothing
     m_expectation_result = True
     On Error GoTo expectation_failed
     TSpec.expect(m_object_value).not_to_be_nothing
@@ -89,8 +89,8 @@ expectation_failed:
     m_expectation_result = False
 End Sub
 
-Public Sub When_the_nonobject_variable_is_expected_not_to_be__A409ACAC0AB1(example_context As TContext)
-    'When the non-object variable is expected not to be nothing
+Public Sub When_the_nonobject_variable_is_expected_not_to_be__A409ACACC890(example_context As TContext)
+    'When the non-object variable is expected not to be Nothing
     m_expectation_result = True
     On Error GoTo expectation_failed
     TSpec.expect(m_non_object_value).to_be_nothing

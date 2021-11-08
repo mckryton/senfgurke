@@ -1,4 +1,4 @@
-Ability: connect steps with step functions
+  Ability: connect steps with step functions
     Whenever a new step is added to a feature, Senfgurke will offer a matching
     step function. Senfgurke tries to make the function name as similar to the
     step name as possible so that it's easy to identify the matching step
@@ -34,7 +34,7 @@ Ability: connect steps with step functions
 
   @vba-specific
   Rule: step function names replaces not allowed characters from VBA spec with underscores
-    Note on MacOS VBA doesn't support UTF. For example the UTF-8 char "ü" (in
+    Note VBA on MacOS doesn't support UTF. For example the UTF-8 char "ü" (in
     hex = c3 bc or dec = 195 188) is converted into "√º" (chr(195) & chr(188)).
 
     Example: basic step with white spaces
@@ -85,4 +85,18 @@ Ability: connect steps with step functions
           Given the next day is \"Monday\"
         """
        When the function for the step is calculated
-       Then the function name starts with "Given_the_next_day_is_Monday_"
+       Then the function name starts with "Given_the_next_day_is_monday_"
+
+
+  Rule: Gherkin steps should be case insensitive
+    This should prevent having two steps that are different only in case get
+    linked to two separate step functions.
+
+   Example: Step descriptions differ only in case
+     Given a list of steps
+        | example_step     |
+        | Given this is Up |
+        | Given This is up |
+        | Given This is UP |
+      When the a matching function for those steps is requested
+      Then the same function name is returned for all steps
