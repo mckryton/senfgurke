@@ -42,10 +42,9 @@ Ability: Report in verbose format
         """
 
 
-  Rule: format step results and names
-    Most actions during test execution are resulting in messages send to the
-    report. Depending on the report type those messages are formatted
-    accordingly.
+  Rule: executed steps should be reported with the exceution status
+    Executing a step is done by calling the matching step function and returning
+    the execution status as result.
     For the verbose report a step will be preceded with it's result in capital
     letters initially intendented by 5 spaces and step names following after
     14 characters from the left. Docstrings indicators are indented by 16 spaces
@@ -75,6 +74,22 @@ Ability: Report in verbose format
        When a step "Given a sample step" followed by a docstring "this is a docstring" is reported with status "OK"
        Then line 1 of the resulting output is "     OK       Given a sample step"
         And line 3 of the resulting output is "                  this is a docstring"
+
+    Example: successful step with a data table
+       When the following step is reported with the status "OK"
+        """
+          Given a step with a data table
+            | column_name |
+            | row 1       |
+            | row 2       |
+        """
+       Then the report output is
+        """
+          OK       Given a step with a data table
+                     | column_name |
+                     | row 1       |
+                     | row 2       |
+        """
 
 
   Rule: Failed steps will show the error message after the step indented

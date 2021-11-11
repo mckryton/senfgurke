@@ -182,6 +182,9 @@ Public Property Get name() As Variant
             step_name = step_name & step_element
         End If
     Next
+    If Not Me.data_table Is Nothing Then
+        step_name = step_name & vbLf & Me.data_table.get_table_as_text(4)
+    End If
     name = Trim(step_name)
 End Property
 

@@ -80,3 +80,50 @@ Public Property Get table_rows() As Collection
     Set table_rows = m_table_rows
 End Property
 
+Public Function get_table_as_text(Optional indention As Integer) As String
+
+    Dim column_width_list As Collection
+    Dim col_name As Variant
+    Dim table_text As String
+    Dim table_row As Variant
+    
+    If IsMissing(indention) Then indention = 0
+    table_text = ""
+    Set column_width_list = New Collection
+    table_text = Space$(indention) & "|"
+    For Each col_name In Me.column_names
+        column_width_list.Add get_max_row_width(CStr(col_name)), col_name
+        table_text = table_text & " " & CStr(col_name)
+        If Len(col_name) < column_width_list(col_name) Then
+            table_text = table_text & Space$(column_width_list(col_name) - Len(col_name))
+        End If
+        table_text = table_text & " |"
+    Next
+    table_text = table_text & vbLf
+    For Each table_row In Me.table_rows
+        table_text = table_text & Space$(indention) & "|"
+        For Each col_name In Me.column_names
+            table_text = table_text & " " & table_row(col_name)
+            If Len(table_row(col_name)) < column_width_list(col_name) Then
+                table_text = table_text & Space$(column_width_list(col_name) - Len(table_row(col_name)))
+            End If
+            table_text = table_text & " |"
+        Next
+        table_text = table_text & vbLf
+    Next
+    get_table_as_text = Left(table_text, Len(table_text) - 1)
+End Function
+
+Private Function get_max_row_width(col_name As String) As Integer
+
+    Dim max_row_width As Integer
+    Dim table_row As Variant
+    
+    max_row_width = Len(col_name)
+    For Each table_row In Me.table_rows
+        If Len(table_row(col_name)) > max_row_width Then
+            max_row_width = Len(table_row(col_name))
+        End If
+    Next
+    get_max_row_width = max_row_width
+End Function
