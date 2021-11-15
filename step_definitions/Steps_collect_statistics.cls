@@ -11,29 +11,17 @@ Option Explicit
 
 Public Sub Given_a_new_test_run_started_collecting_statistics_152BAB44CFC9(example_context As TContext)
     'Given a new test run started collecting statistics
-    example_context.set_value THelper.new_TSession, "session"
+    Dim session As TSession
+    
+    Set session = THelper.new_TSession
+    session.statistics.enable_event_log
+    example_context.set_value session, "session"
     example_context.get_value("session").reporter.enable_silent_mode
-End Sub
-
-Public Sub Given_a_feature_description_with_a_step_9DB173A5EA30(example_context As TContext)
-    'Given a feature description with a step
-    example_context.set_value New Collection, "parsed_features"
-    example_context.get_value("parsed_features").Add TFeatureParser.parse_feature("Feature: sample" & vbLf _
-                                                                & "Example: sample" & vbLf _
-                                                                & "Given a missing step")
 End Sub
 
 Public Sub Given_duration_of_a_test_run_is_INT_ms_CB357F7BA1F9(example_context As TContext, step_expressions As Collection)
     'Given duration of a test run is {integer} ms
     example_context.set_value step_expressions(1), "duration"
-End Sub
-
-Public Sub Given_a_feature_with_an_example_with_a_missing_ste_63C4BE7D2E08(example_context As TContext)
-    'Given a feature with an example with a missing step
-    example_context.set_value New Collection, "parsed_features"
-    example_context.get_value("parsed_features").Add TFeatureParser.parse_feature("Feature: sample" & vbLf _
-                                                                & "Example: sample" & vbLf _
-                                                                & "Given a missing step")
 End Sub
 
 Public Sub Given_an_example_with_INT_steps_was_executed_succe_B7CBEFE9F6DC(example_context As TContext, step_expressions As Collection)
@@ -48,7 +36,13 @@ End Sub
 
 Public Sub When_the_feature_is_executed_and_statistics_are_co_0BF6FCF4961B(example_context As TContext)
     'When the feature is executed and statistics are collected
-    example_context.get_value("session").run_parsed_features example_context.get_value("parsed_features")
+    Dim feature As TFeature
+    Dim parsed_features As Collection
+    
+    Set feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
+    Set parsed_features = New Collection
+    parsed_features.Add feature
+    example_context.get_value("session").run_parsed_features parsed_features
 End Sub
 
 Public Sub When_the_duration_is_calculated_4FCC027398DA(example_context As TContext)
@@ -72,12 +66,35 @@ Public Sub Then_the_resulting_output_is_STR_8EBDD0FB2136(example_context As TCon
     TSpec.expect(example_context.get_value("report_output")).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_one_step_with_its_result_was_counted_69B81E54CF8B(example_context As TContext)
-    'Then one step with it's result was counted
-    TSpec.expect(example_context.get_value("session").statistics.step_statistics("MISSING")).to_be 1
-End Sub
-
 Public Sub Then_statistics_results_for_steps_is_STR_305CDE5C3438(example_context As TContext, step_expressions As Collection)
     'Then statistics results for steps is {string}
     TSpec.expect(example_context.get_value("statistic_results")).to_be step_expressions(1)
 End Sub
+
+Public Sub Then_the_following_statistics_are_collected_61C4359BFDAC(example_context As TContext, data_table As TDataTable)
+    'Then the following statistics are collected
+    Dim session As TSession
+    Dim statistics As TStatistics
+    Dim event_types As Collection
+    Dim table_row As Variant
+    
+    Set session = example_context.get_value("session")
+    Set statistics = session.statistics
+    Set event_types = get_event_types()
+    For Each table_row In data_table.table_rows
+        TSpec.expect(session.statistics.filter_events(event_types(table_row("unit_type"))).Count).to_be CInt(table_row("unit_count"))
+    Next
+End Sub
+
+Private Function get_event_types() As Collection
+    Dim event_types As Collection
+    
+    Set event_types = New Collection
+    With event_types
+        .Add LOG_EVENT_RUN_STEP, "steps"
+        .Add LOG_EVENT_RUN_EXAMPLE, "examples"
+        .Add LOG_EVENT_RUN_RULE, "rules"
+        .Add LOG_EVENT_RUN_FEATURE, "features"
+    End With
+    Set get_event_types = event_types
+End Function

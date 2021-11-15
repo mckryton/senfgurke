@@ -10,12 +10,17 @@ Ability: Collect statistics
   Rule: collect start and end time for a test run
 
     Example: calculate test run duration
-      Given a feature description with a step
+      Given a feature
+        """
+          Feature: sample
+            Example: single step scenario
+              Given a missing step
+        """
        When the feature is executed and statistics are collected
        Then start and end time for the test run are set
 
 
-  Rule: Duration should be calculated as text "#m #.###s"
+  Rule: duration should be calculated as text "#m #.###s"
 
      Example: duration less than a second
        Given duration of a test run is 42 ms
@@ -28,14 +33,29 @@ Ability: Collect statistics
         Then the resulting output is "1m 14.531s"
 
 
-  Rule: Steps should be counted with their results
+  Rule: steps and their enclosing feature sections should be counted
 
-    Example: single step
-      Given a feature with an example with a missing step
+    Example: collect statistics for a feature with a single step example
+      Given a feature
+        """
+          Feature: sample
+            Example: single step scenario
+              Given a missing step
+        """
        When the feature is executed and statistics are collected
-       Then one step with it's result was counted
+       Then the following statistics are collected
+          | unit_type | unit_count |
+          | features  | 1          |
+          | rules     | 0          |
+          | examples  | 1          |
+          | steps     | 1          |
 
 
+  #ToDo: add examples
+  Rule: the result for examples and rule is passed or the result from the last failed step
+
+
+  #ToDo: move this rule to the report feature
   Rule: Steps should be counted and grouped by their results
 
     Example: successful steps
