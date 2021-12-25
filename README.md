@@ -43,12 +43,16 @@ Feature: sum plus one
 
 This way Senfgurke tells you if your code was successful or caused any error.
 
-## Setup (short version)
-1. create a new office file and add some VBA
-2. add all files from the /source folder from Senfgurke's repository.
-3. create a 'features' directory at the same location from your office file
-4. create a (Gherkin)[https://cucumber.io/docs/gherkin/] feature file (only basic elements will work)
-5. go to your code and add a new class 'step_definition_<your_feature>'
-6. go to the StepImplementations Property in the TConfig module and add your class
-7. re-comile your project
-8. call Trun.test
+## Setup
+Senfgurke is provided as an application specific Addin. This way you can easily separate the application under test and the Senfgurke test framework. To start a new VBA application follow these steps:
+
+1. Activate the Senfgurke Add-In for your application
+2. Create a new document for your code (eg.: a new xlm file for Excel)
+3. Import the TRun module from step_definitions/TRun.bas to your application
+4. Add a reference to the Senfgurke Add-In for your application in the VBA IDE
+5. Create a new directory named "features" at the same directory of your application (the document containing your VBA code)
+6. Create your first Gherkin feature file under features (add at least 1 example)
+7. Execute TRun.test from the Immediate Window in your VBA IDE
+8. Add a new Class "Step_<your_feature>" to your  application
+9. Copy the suggested code for the step functions from the Immediate Window to your Step class
+10. Register your Step class by extending the StepImplementations Property in the TRun module
