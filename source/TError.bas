@@ -1,6 +1,8 @@
 Attribute VB_Name = "TError"
 Option Explicit
 
+Private m_last_fail_msg As String
+
 ' This module sets a unique id for each error that could occur in Senfgurke.
 ' Unfortunately VBA handles errors differently when raised in a class in
 ' comparison to errors raised in a module (e.g. err.description get overwritten when
@@ -44,6 +46,14 @@ Private Const ERR_MSG_LIST = _
                 "|#" & ERR_ID_STEP_SYNTAX_TABLE_COLUMN_COUNT_MISMATCH & "|" & "column count in table row doesn't match table header >#{1}<" & _
                 "|"
 
+Public Sub raise_pre_defined_error(err_id As Long, function_name As String, Optional arguments)
+
+    Dim description As String
+    
+    description = get_err_msg(err_id, arguments)
+    LastFailMsg = description
+    Err.raise err_id, function_name, description
+End Sub
 
 Private Function get_err_msg(err_id As Long, Optional arguments) As String
 
@@ -72,6 +82,23 @@ Private Function get_err_msg(err_id As Long, Optional arguments) As String
     get_err_msg = err_msg
 End Function
 
-Public Sub raise(err_id As Long, function_name As String, Optional arguments)
-    Err.raise err_id, function_name, get_err_msg(err_id, arguments)
+Public Sub raise(err_id As Long, function_name As String, Optional description)
+    LastFailMsg = description
+    Err.raise err_id, function_name, description
 End Sub
+
+Public Property Get LastFailMsg() As String
+    
+    LastFailMsg = m_last_fail_msg
+End Property
+
+Public Property Let LastFailMsg(ByVal last_fail_msg As String)
+    ' this is a workaround for VBAs mishandling of custom errors
+    '  e.g. using callbyname() will overwritecustom errors with 440 automation error
+    '   https://stackoverflow.com/questions/18241906/vba-callbyname-and-invokehook
+    '  e.g. using strongly typed objects will overwrite the error description
+    '   https://stackoverflow.com/questions/31234805/err-raise-is-ignoring-custom-description-and-source
+    ' so in addition of adding expectation results to custom errors (aka exceptions), the most current result meessage will be saved here
+
+    m_last_fail_msg = last_fail_msg
+End Property

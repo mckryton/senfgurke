@@ -26,7 +26,7 @@ Public Function parse_step_list(feature_text As String, parent_feature As TFeatu
                 current_step.Elements.Add current_step.Expressions.Count
             Case LINE_TYPE_TABLE_ROW
                 If new_step_list.Count = 0 Then
-                    TError.raise ERR_ID_STEP_SYNTAX_TABLE_WITHOUT_STEP, _
+                    TError.raise_pre_defined_error ERR_ID_STEP_SYNTAX_TABLE_WITHOUT_STEP, _
                         "TStepParser.parse_step_list"
                 End If
                 parent_feature.parsed_lines = parent_feature.parsed_lines - 1
@@ -41,7 +41,7 @@ Public Function parse_step_list(feature_text As String, parent_feature As TFeatu
             Case Else
                 'ignore empty lines
                 If Not Trim(line) = "" Then
-                    TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                    TError.raise_pre_defined_error ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
                         "TStepParser.parse_step_list", _
                         Array(parent_feature.parsed_lines, line)
                 End If
@@ -119,7 +119,7 @@ Private Function create_data_table(table_header_line As String) As TDataTable
         column_name = Trim(CStr(column_names(column_index)))
         was_added = data_table.add_column_name(column_name)
         If Not was_added Then
-            TError.raise ERR_ID_STEP_SYNTAX_TABLE_DUPLICATE_COLUMN, _
+            TError.raise_pre_defined_error ERR_ID_STEP_SYNTAX_TABLE_DUPLICATE_COLUMN, _
                 "TStepParser.create_data_table", _
                 Array(column_name)
         End If

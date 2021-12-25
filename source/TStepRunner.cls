@@ -30,7 +30,7 @@ Public Function run_step(step_definition As TStep, context As TContext) As Varia
     step_run_attempts = 0
     step_function_name = step_definition.get_step_function_name
     For Each step_implementation_class In m_session.StepImplementations
-        TSpec.LastFailMsg = vbNullString
+        TError.LastFailMsg = vbNullString
         step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions, context, step_definition.data_table)
     Next
     If step_run_attempts = m_session.StepImplementations.Count Then
@@ -41,6 +41,7 @@ Public Function run_step(step_definition As TStep, context As TContext) As Varia
     Exit Function
 
 error_handler:
+    '438 is the returned error code when the step funbction  wasn't found in the step class
     If Err.Number = 438 Then
         step_run_attempts = step_run_attempts + 1
         Resume Next
@@ -85,6 +86,6 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
         fail_step = Array(STATUS_MISSING, vbNullString)
         m_session.reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, err_desc
     Case Else
-        fail_step = Array(STATUS_FAIL, err_desc & vbLf & TSpec.LastFailMsg)
+        fail_step = Array(STATUS_FAIL, err_desc & vbLf & TError.LastFailMsg)
     End Select
 End Function

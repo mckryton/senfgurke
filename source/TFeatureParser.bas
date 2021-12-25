@@ -15,7 +15,7 @@ Public Function parse_feature(gherkin_text As String) As TFeature
     Set section_tags = New Collection
     Set new_feature = parse_feature_definition(gherkin_text)
     If new_feature Is Nothing Then
-        TError.raise ERR_ID_FEATURE_SYNTAX_MISSING_DEFINITION, _
+            TError.raise_pre_defined_error ERR_ID_FEATURE_SYNTAX_MISSING_DEFINITION, _
             "TFeatureParser.parse_feature"
     End If
     feature_lines = Split(gherkin_text, vbLf)
@@ -55,7 +55,7 @@ Public Function parse_feature(gherkin_text As String) As TFeature
             Case Else
                 'ignore empty lines after the first section (background, rule, or example)
                 If Not Trim(line) = "" Then
-                    TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                    TError.raise_pre_defined_error ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
                         "TFeatureParser.parse_feature", _
                         Array(new_feature.parsed_lines, line)
                 End If
@@ -103,13 +103,13 @@ Public Function parse_background(gherkin_text As String, parent_feature As TFeat
                 Else
                     'ignore empty lines after the steps
                     If Not Trim(line) = "" Then
-                        TError.raise ERR_ID_SECTION_SYNTAX_DESCRIPTION_AFTER_STEPS, _
+                        TError.raise_pre_defined_error ERR_ID_SECTION_SYNTAX_DESCRIPTION_AFTER_STEPS, _
                             "TFeatureParser.parse_background", _
                             Array(parent_feature.parsed_lines, line)
                     End If
                 End If
             Case Else
-                TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                TError.raise_pre_defined_error ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
                     "TFeatureParser.parse_feature", _
                     Array(parent_feature.parsed_lines, line)
         End Select
@@ -139,7 +139,7 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
                 'ignore comments
             Case LINE_TYPE_STEP
                 'rules are not expected to have steps, they can have only examples
-                TError.raise ERR_ID_SECTION_SYNTAX_STEPS_IN_RULE, _
+                TError.raise_pre_defined_error ERR_ID_SECTION_SYNTAX_STEPS_IN_RULE, _
                     "TFeatureParser.parse_rule", _
                     Array(parent_feature.parsed_lines, line)
             Case LINE_TYPE_TAGS
@@ -167,7 +167,7 @@ Public Function parse_rule(gherkin_text As String, parent_feature As TFeature, r
                 Else
                     'ignore empty lines after the first example
                     If Not Trim(line) = "" Then
-                        TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                        TError.raise_pre_defined_error ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
                             "TFeatureParser.parse_rule", _
                             Array(parent_feature.parsed_lines, line)
                     End If
@@ -207,16 +207,16 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
                 Else
                     'ignore empty lines after the  example
                     If Not Trim(line) = "" Then
-                        TError.raise ERR_ID_SECTION_SYNTAX_DESCRIPTION_AFTER_STEPS, _
+                        TError.raise_pre_defined_error ERR_ID_SECTION_SYNTAX_DESCRIPTION_AFTER_STEPS, _
                             "TFeatureParser.parse_example", _
                             Array(parent_feature.parsed_lines, line)
                     End If
                 End If
             Case LINE_TYPE_TABLE_ROW
-                TError.raise ERR_ID_STEP_SYNTAX_TABLE_WITHOUT_STEP, _
+                TError.raise_pre_defined_error ERR_ID_STEP_SYNTAX_TABLE_WITHOUT_STEP, _
                     "TStepParser.parse_example"
             Case Else
-                TError.raise ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
+                TError.raise_pre_defined_error ERR_ID_FEATURE_SYNTAX_UNEXPECTED_LINE, _
                     "TFeatureParser.parse_example", _
                     Array(parent_feature.parsed_lines, line)
         End Select
@@ -262,7 +262,7 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
             Case Else
                 'ignore empty lines
                 If Not Trim(line) = "" Then
-                    TError.raise ERR_ID_FEATURE_SYNTAX_MISSING_FEATURE_KEYWORD, _
+                    TError.raise_pre_defined_error ERR_ID_FEATURE_SYNTAX_MISSING_FEATURE_KEYWORD, _
                         "TFeatureParser.parse_feature_definition"
                 End If
         End Select
@@ -274,7 +274,7 @@ Public Function parse_feature_definition(gherkin_text As String) As TFeature
         parsed_feature.head = CStr(feature_spec("head"))
         parsed_feature.name = CStr(feature_spec("name"))
     Else
-        TError.raise ERR_ID_FEATURE_SYNTAX_MISSING_FEATURE_NAME, _
+        TError.raise_pre_defined_error ERR_ID_FEATURE_SYNTAX_MISSING_FEATURE_NAME, _
                 "TFeatureParser.parse_feature_definition"
     End If
     line_index = line_index + 1
@@ -364,7 +364,7 @@ Private Function is_table_row(feature_line As String) As Boolean
     is_table_row = False
     If Left(Trim(feature_line), 1) = "|" Then
         If Right(Trim(feature_line), 1) <> "|" Then
-            TError.raise ERR_ID_STEP_SYNTAX_INCOMPLETE_TABLE_ROW, _
+            TError.raise_pre_defined_error ERR_ID_STEP_SYNTAX_INCOMPLETE_TABLE_ROW, _
                 "TFeatureParser.is_table_row", _
                 Array(Trim(feature_line))
         End If
