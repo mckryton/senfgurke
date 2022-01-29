@@ -121,7 +121,7 @@ Ability: Report in verbose format
           End Sub
 
           If the function is already in place, the cause for this message could be:
-          * the step implementation class is not registered in TConfig.StepImplementations
+          * the step implementation class is not registered in TRun.StepImplementations
           * the code inside the step function tries to access a non-existing method or property
         """
 

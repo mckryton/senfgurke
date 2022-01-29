@@ -9,105 +9,78 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_collection As Collection
-Private m_expected_value As Variant
-Private m_expectation_result As Boolean
-Private m_object_value As Collection
-Private m_non_object_value As Variant
-
-Public Sub Given_a_collection_has_INT_members_array_INT__STR__22433998BB74(example_context As TContext, step_expressions As Collection)
-    'Given a collection has {integer} members array( {integer}, {string} ) and array( {integer}, {string} )
-    Dim index As Integer
-    
-    Set m_collection = New Collection
-    For index = 1 To step_expressions(1) * 2 Step 2
-        m_collection.Add Array(step_expressions(index + 1), step_expressions(index + 2))
-    Next
-End Sub
-
-Public Sub Given_an_expected_value_is_an_array_INT__STR__C2EB84347C9F(example_context As TContext, step_expressions As Collection)
-    'And an expected value is an array( {integer}  {string} )
-    m_expected_value = Array(step_expressions(1), step_expressions(2))
-End Sub
-
 Public Sub Given_a_variable_refers_to_an_object_C82E72756271(example_context As TContext)
     'Given a variable refers to an object
-    Set m_object_value = New Collection
+    example_context.set_value New Collection, "sample_variable"
 End Sub
 
 Public Sub Given_a_variable_refers_to_nothing_6F7619677868(example_context As TContext)
     'Given a variable refers to Nothing
-    Set m_object_value = Nothing
+    example_context.set_value Nothing, "sample_variable"
 End Sub
 
 Public Sub Given_a_variable_refers_to_INT_B6E787C91FDE(example_context As TContext, step_expressions As Collection)
     'Given a variable refers to {integer}
-    m_non_object_value = step_expressions(1)
-End Sub
-
-Public Sub When_the_expectation_validates_that_the_collection_808FE2AA1406(example_context As TContext)
-    'When the expectation validates that the collection contains the expected value
-    m_expectation_result = True
-    On Error GoTo expectation_failed
-    TSpec.expect(m_collection).contains_member m_expected_value
-    Exit Sub
-    
-expectation_failed:
-    m_expectation_result = False
+    example_context.set_value step_expressions(1), "sample_variable"
 End Sub
 
 Public Sub When_the_variable_is_expected_to_be_nothing_DBE6C575C088(example_context As TContext)
     'When the variable is expected to be Nothing
-    m_expectation_result = True
     On Error GoTo expectation_failed
-    TSpec.expect(m_object_value).to_be_nothing
+    TSpec.expect(example_context.get_value("sample_variable")).to_be_nothing
+    example_context.set_value "confirmed", "expectation_result"
     Exit Sub
     
 expectation_failed:
-    m_expectation_result = False
+    example_context.set_value "failed", "expectation_result"
 End Sub
 
 Public Sub When_the_nonobject_variable_is_expected_to_be_noth_10954F3DA4DC(example_context As TContext)
     'When the non-object variable is expected to be Nothing
-    m_expectation_result = True
     On Error GoTo expectation_failed
-    TSpec.expect(m_non_object_value).to_be_nothing
+    TSpec.expect(example_context.get_value("sample_variable")).to_be_nothing
+    example_context.set_value "confirmed", "expectation_result"
     Exit Sub
     
 expectation_failed:
-    m_expectation_result = False
+    example_context.set_value "failed", "expectation_result"
 End Sub
 
 Public Sub When_the_variable_is_expected_not_to_be_nothing_63DB3DDBA289(example_context As TContext)
     'When the variable is expected not to be Nothing
-    m_expectation_result = True
     On Error GoTo expectation_failed
-    TSpec.expect(m_object_value).not_to_be_nothing
+    TSpec.expect(example_context.get_value("sample_variable")).not_to_be_nothing
+    example_context.set_value "confirmed", "expectation_result"
     Exit Sub
     
 expectation_failed:
-    m_expectation_result = False
+    example_context.set_value "failed", "expectation_result"
 End Sub
 
 Public Sub When_the_nonobject_variable_is_expected_not_to_be__A409ACACC890(example_context As TContext)
     'When the non-object variable is expected not to be Nothing
-    m_expectation_result = True
     On Error GoTo expectation_failed
-    TSpec.expect(m_non_object_value).to_be_nothing
+    TSpec.expect(example_context.get_value("sample_variable")).to_be_nothing
+    example_context.set_value "confirmed", "expectation_result"
     Exit Sub
     
 expectation_failed:
-    m_expectation_result = False
+    example_context.set_value "failed", "expectation_result"
 End Sub
-
 
 Public Sub Then_the_expectation_is_confirmed_A341C2A69D10(example_context As TContext)
     'Then the expectation is confirmed
-    TSpec.expect(m_expectation_result).to_be True
+    Dim expectation_result As String
+    
+    expectation_result = example_context.get_value("expectation_result")
+    TSpec.expect(expectation_result).to_be "confirmed"
 End Sub
 
 Public Sub Then_the_expectation_fails_DBF0F873A79F(example_context As TContext)
     'Then the expectation fails
-    TSpec.expect(m_expectation_result).to_be False
+    Dim expectation_result As String
+    
+    expectation_result = example_context.get_value("expectation_result")
+    TSpec.expect(expectation_result).to_be "failed"
 End Sub
 

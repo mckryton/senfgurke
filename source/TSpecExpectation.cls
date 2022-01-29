@@ -196,7 +196,9 @@ Public Sub does_not_include(include_item As Variant)
 End Sub
 
 Private Sub raise_expectation_err(fail_msg)
-    TError.raise ERR_ID_EXPECTATION_STATUS_FAILED, "TSpecExpectation.raise_expectation_err", fail_msg
+    
+    TSpec.LastFailMsg = fail_msg
+    Err.raise Number:=ERR_ID_EXPECTATION_STATUS_FAILED, description:=fail_msg
 End Sub
 
 

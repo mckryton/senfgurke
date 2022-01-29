@@ -29,7 +29,7 @@ Public Sub add_row(feature_line As String)
     feature_line = Trim(feature_line)
     column_values = Split(feature_line, "|")
     If UBound(column_values) - 1 <> Me.column_names.Count Then
-        TError.raise_pre_defined_error ERR_ID_STEP_SYNTAX_TABLE_COLUMN_COUNT_MISMATCH, "TDataTable.add_row", Array(Trim(feature_line))
+        TError.raise ERR_ID_STEP_SYNTAX_TABLE_COLUMN_COUNT_MISMATCH, "TDataTable.add_row", Array(Trim(feature_line))
     End If
     Set table_row = New Collection
     For column_index = 1 To Me.column_names.Count
@@ -51,7 +51,7 @@ Public Sub set_header(feature_line As String)
     For column_index = 1 To UBound(column_names) - 1
         column_name = Trim(CStr(column_names(column_index)))
         If ExtraVBA.collection_has_value(column_name, Me.column_names) Then
-            TError.raise_pre_defined_error ERR_ID_STEP_SYNTAX_TABLE_DUPLICATE_COLUMN, _
+            TError.raise ERR_ID_STEP_SYNTAX_TABLE_DUPLICATE_COLUMN, _
                 "TDataTable.set_header", _
                 Array(column_name)
         End If

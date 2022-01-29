@@ -28,18 +28,39 @@ End Sub
 
 Private Property Get StepImplementations() As Collection
     
+    Dim step_implementations As Variant
     Dim step_implementation_class As Variant
 
     Set m_step_implementations = New Collection
-    'add all classes with step implementations here:
-    For Each step_implementation_class In Array(New Steps_run_tests, New Steps_Run_Examples, New Steps_Run_Steps, _
-                    New Steps_Run_features, New Steps_Load_Feature_Files, New Steps_report_verbose, _
-                    New Steps_Parse_Features, New Steps_Parse_Examples, New Steps_validate_expectations, _
-                    New Steps_connect_steps_with_funct, New Steps_parse_steps, New Steps_parse_step_expressions, _
-                    New Steps_parse_docstrings, New Steps_parse_tags, New Steps_parse_rules, New Steps_parse_tables, _
-                    New Steps_report, New Steps_report_progress, New Steps_report_statistics, _
-                    New Steps_collect_statistics, New Steps_support_functions, New Steps_save_vars_in_context, _
-                    New Steps_show_step_template)
+    'REGISTER all classes with STEP IMPLEMENTATIONS HERE >>>
+    '-------------------------------------------------------
+    step_implementations = Array(New Steps_collect_statistics, New Steps_confirm_collection_member, _
+                                 New Steps_connect_steps_with_funct, _
+                                 New Steps_Load_Feature_Files, _
+                                 New Steps_parse_docstrings, _
+                                 New Steps_Parse_Examples, _
+                                 New Steps_Parse_Features, _
+                                 New Steps_parse_rules, _
+                                 New Steps_parse_step_expressions, _
+                                 New Steps_parse_steps, _
+                                 New Steps_parse_tables, _
+                                 New Steps_parse_tags, _
+                                 New Steps_predefined_steps, _
+                                 New Steps_report, _
+                                 New Steps_report_progress, _
+                                 New Steps_report_statistics, _
+                                 New Steps_report_verbose, _
+                                 New Steps_Run_Examples, _
+                                 New Steps_Run_features, _
+                                 New Steps_Run_Steps, _
+                                 New Steps_run_tests, _
+                                 New Steps_save_vars_in_context, _
+                                 New Steps_show_step_template, _
+                                 New Steps_support_functions, _
+                                 New Steps_validate_expectations _
+                                )
+    Set m_step_implementations = New Collection
+    For Each step_implementation_class In step_implementations
         m_step_implementations.Add step_implementation_class
     Next
     Set StepImplementations = m_step_implementations
