@@ -26,7 +26,7 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
     Set example_runner = New TExampleRunner
     example_runner.setup m_session
     If example_container.containerType = "feature" Then
-        m_session.statistics.log_event LOG_EVENT_RUN_FEATURE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
+        m_session.log_event LOG_EVENT_RUN_FEATURE, example_container.wholeName
         m_session.reporter.report REPORT_MSG_TYPE_FEATURE_NAME, example_container.name
         m_session.reporter.report REPORT_MSG_TYPE_DESC, example_container.description
     End If
@@ -49,7 +49,7 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
             ' a rule can contain  examples like a feature > so run it like a feature
             m_session.reporter.report REPORT_MSG_TYPE_RULE, feature_section.wholeName
             run_feature current_rule, filter_tag
-            m_session.statistics.log_event LOG_EVENT_RUN_RULE, example_container.wholeName, ExtraVBA.get_unix_timestamp_now
+            m_session.log_event LOG_EVENT_RUN_RULE, feature_section.wholeName
         End If
     Next
 End Sub

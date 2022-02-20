@@ -42,17 +42,19 @@ End Sub
 
 Public Sub When_a_test_is_started_with_STR_as_parameter_EA8A08D9425A(example_context As TContext, step_expressions As Collection)
     'When a test is started with {string} as parameter
+    Dim event_listener As EventListener
     Dim step_classes As Collection
     Dim session As TSession
     
     Set step_classes = New Collection
+    Set event_listener = New EventListener
     Set session = THelper.new_TSession
-    example_context.set_value session, "session"
+    Set event_listener.SenfgurkeEventLogger = session.EventLogger
     With session
         .reporter.enable_silent_mode
-        .statistics.enable_event_log
         .run_test step_classes, features_as_text:=example_context.get_value("loaded_features"), filter_tag:=step_expressions(1)
     End With
+    example_context.set_value event_listener, "event_listener"
 End Sub
 
 Public Sub Then_the_error_STR_is_reported_80FDB77BCB22(example_context As TContext, step_expressions As Collection)
@@ -68,25 +70,31 @@ End Sub
 Public Sub Then_only_the_example_from_the_tagged_feature_was__858E135D9F78(example_context As TContext)
     'Then only the example from the tagged feature was executed
     Dim example_events As Collection
+    Dim event_listener As EventListener
     
-    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_EVENT_RUN_EXAMPLE)
+    Set event_listener = example_context.get_value("event_listener")
+    Set example_events = event_listener.filter_events(LOG_EVENT_RUN_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 1
-    TSpec.expect(example_events(1)("msg")).includes_text "sample from tagged feature"
+    TSpec.expect(example_events(1).Message).includes_text "sample from tagged feature"
 End Sub
 
 Public Sub Then_only_the_example_from_the_tagged_rule_was_exe_0F822B53DF54(example_context As TContext)
     'Then only the example from the tagged rule was executed
     Dim example_events As Collection
+    Dim event_listener As EventListener
     
-    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_EVENT_RUN_EXAMPLE)
+    Set event_listener = example_context.get_value("event_listener")
+    Set example_events = event_listener.filter_events(LOG_EVENT_RUN_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 1
-    TSpec.expect(example_events(1)("msg")).includes_text "example assigned to the rule"
+    TSpec.expect(example_events(1).Message).includes_text "example assigned to the rule"
 End Sub
 
 Public Sub Then_no_example_was_executed_16BF2F2090BC(example_context As TContext)
     'Then no example was executed
     Dim example_events As Collection
+    Dim event_listener As EventListener
     
-    Set example_events = example_context.get_value("session").statistics.filter_events(LOG_EVENT_RUN_EXAMPLE)
+    Set event_listener = example_context.get_value("event_listener")
+    Set example_events = event_listener.filter_events(LOG_EVENT_RUN_EXAMPLE)
     TSpec.expect(example_events.Count).to_be 0
 End Sub

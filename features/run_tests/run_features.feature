@@ -28,8 +28,6 @@ Ability: run features
   Rule: for any given tag execute only those examples assigned with the tag
 
     Example: tag assigned to an example
-#      Given a feature has a first example "tagged example" with the tag "@sample"
-#      And the feature has a second example "un-tagged example" without any tag
       Given a feature
         """
           Feature: has example with tags

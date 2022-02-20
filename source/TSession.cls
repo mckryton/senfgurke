@@ -14,16 +14,38 @@ Private m_start_time As Long
 Private m_end_time As Long
 Private m_statistics As TStatistics
 Private m_step_implementations As Collection
+Private m_event_logger As TEventLogger
 
 Private Sub Class_Initialize()
     m_start_time = 0
     m_end_time = 0
+    Set m_event_logger = New TEventLogger
     Set m_statistics = New TStatistics
+    Set m_statistics.active_logger = m_event_logger
 End Sub
 
 Private Sub Class_Terminate()
     Set m_statistics = Nothing
     Set m_step_implementations = Nothing
+    Set m_event_logger = Nothing
+End Sub
+
+Public Property Get EventLogger() As TEventLogger
+    Set EventLogger = m_event_logger
+End Property
+
+Public Sub log_event(event_type As String, event_msg As String, Optional log_time, Optional event_status)
+
+    Dim new_event As TEvent
+    
+    Set new_event = New TEvent
+    With new_event
+        .message = event_msg
+        .msg_type = event_type
+    End With
+    If Not IsMissing(log_time) Then new_event.log_time = CSng(log_time)
+    If Not IsMissing(event_status) Then new_event.status = CStr(event_status)
+    m_event_logger.log_event new_event
 End Sub
 
 Public Property Get StepImplementations() As Collection

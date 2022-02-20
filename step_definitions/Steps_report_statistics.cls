@@ -17,18 +17,20 @@ End Sub
 Public Sub Given_one_example_in_this_run_had_INT_passed_INT_f_800581B31566(example_context As TContext, step_expressions As Collection)
     'And one example in this run had {integer} passed, {integer} failed, {integer} missing and {integer} pending steps
     Dim index As Integer
+    Dim session As TSession
    
+    Set session = example_context.get_value("session")
     For index = 1 To step_expressions(1)
-        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, STATUS_OK
+        session.log_event LOG_EVENT_RUN_STEP, "dummy step", event_status:=STATUS_OK
     Next
     For index = 1 To step_expressions(2)
-        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, STATUS_FAIL
+        session.log_event LOG_EVENT_RUN_STEP, "dummy step", event_status:=STATUS_FAIL
     Next
     For index = 1 To step_expressions(3)
-        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, STATUS_MISSING
+        session.log_event LOG_EVENT_RUN_STEP, "dummy step", event_status:=STATUS_MISSING
     Next
     For index = 1 To step_expressions(4)
-        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, STATUS_PENDING
+        session.log_event LOG_EVENT_RUN_STEP, "dummy step", event_status:=STATUS_PENDING
     Next
 End Sub
 

@@ -16,6 +16,7 @@ Public Const STATUS_FAIL$ = "FAIL"
 Public Const STATUS_MISSING$ = "MISSING"
 Public Const STATUS_PENDING$ = "PENDING"
 Public Const STATUS_SKIPPED$ = "SKIPPED"
+Public Const STATUS_UNKNOWN$ = "UNKNOWN"
 
 
 Public Const STEP_TYPE_GIVEN$ = "Given"

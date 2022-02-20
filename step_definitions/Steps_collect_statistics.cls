@@ -12,11 +12,15 @@ Option Explicit
 Public Sub Given_a_new_test_run_started_collecting_statistics_152BAB44CFC9(example_context As TContext)
     'Given a new test run started collecting statistics
     Dim session As TSession
+    Dim event_stream_listener As EventListener
+    Dim step_implementations As Collection
     
+    Set step_implementations = New Collection
+    step_implementations.Add New Steps_predefined_steps
     Set session = THelper.new_TSession
-    session.statistics.enable_event_log
     example_context.set_value session, "session"
-    example_context.get_value("session").reporter.enable_silent_mode
+    session.reporter.enable_silent_mode
+    session.StepImplementations = step_implementations
 End Sub
 
 Public Sub Given_duration_of_a_test_run_is_INT_ms_CB357F7BA1F9(example_context As TContext, step_expressions As Collection)
@@ -24,25 +28,17 @@ Public Sub Given_duration_of_a_test_run_is_INT_ms_CB357F7BA1F9(example_context A
     example_context.set_value step_expressions(1), "duration"
 End Sub
 
-Public Sub Given_an_example_with_INT_steps_was_executed_succe_B7CBEFE9F6DC(example_context As TContext, step_expressions As Collection)
-    'Given an example with {integer} steps was executed successful
-   
-    Dim index As Integer
-   
-    For index = 1 To step_expressions(1)
-        example_context.get_value("session").statistics.count_event LOG_EVENT_RUN_STEP, "OK"
-    Next
-End Sub
-
 Public Sub When_the_feature_is_executed_and_statistics_are_co_0BF6FCF4961B(example_context As TContext)
     'When the feature is executed and statistics are collected
     Dim feature As TFeature
     Dim parsed_features As Collection
+    Dim session As TSession
     
+    Set session = example_context.get_value("session")
     Set feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
     Set parsed_features = New Collection
     parsed_features.Add feature
-    example_context.get_value("session").run_parsed_features parsed_features
+    session.run_parsed_features parsed_features
 End Sub
 
 Public Sub When_the_duration_is_calculated_4FCC027398DA(example_context As TContext)
@@ -71,30 +67,3 @@ Public Sub Then_statistics_results_for_steps_is_STR_305CDE5C3438(example_context
     TSpec.expect(example_context.get_value("statistic_results")).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_following_statistics_are_collected_61C4359BFDAC(example_context As TContext, data_table As TDataTable)
-    'Then the following statistics are collected
-    Dim session As TSession
-    Dim statistics As TStatistics
-    Dim event_types As Collection
-    Dim table_row As Variant
-    
-    Set session = example_context.get_value("session")
-    Set statistics = session.statistics
-    Set event_types = get_event_types()
-    For Each table_row In data_table.table_rows
-        TSpec.expect(session.statistics.filter_events(event_types(table_row("unit_type"))).Count).to_be CInt(table_row("unit_count"))
-    Next
-End Sub
-
-Private Function get_event_types() As Collection
-    Dim event_types As Collection
-    
-    Set event_types = New Collection
-    With event_types
-        .Add LOG_EVENT_RUN_STEP, "steps"
-        .Add LOG_EVENT_RUN_EXAMPLE, "examples"
-        .Add LOG_EVENT_RUN_RULE, "rules"
-        .Add LOG_EVENT_RUN_FEATURE, "features"
-    End With
-    Set get_event_types = event_types
-End Function

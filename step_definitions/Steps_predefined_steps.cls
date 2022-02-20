@@ -7,8 +7,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' To prevent autoomatically generated code this class provides some steps with
-' a pre-defined behavior like failingor pending.
+' To prevent to provide automatically generated code this class includes some steps with
+' a pre-defined behavior like failing or pending.
 
 Option Explicit
 
