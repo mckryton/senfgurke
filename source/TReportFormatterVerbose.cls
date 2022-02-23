@@ -17,30 +17,30 @@ Dim m_reporter As TReport
 
 Public Function process_msg(msg_package As Collection) As String
 
-    Dim message As String
+    Dim Message As String
 
-    message = format_msg_content(msg_package)
+    Message = format_msg_content(msg_package)
     process_msg = vbNullString
     Select Case msg_package(REPORT_MSG_TYPE)
         Case REPORT_MSG_TYPE_FEATURE_NAME
-            CurrentFeature = message & vbLf
+            CurrentFeature = Message & vbLf
         Case REPORT_MSG_TYPE_RULE
-            CurrentRule = message & vbLf
+            CurrentRule = Message & vbLf
         Case REPORT_MSG_TYPE_EXAMPLE_TITLE
-            CurrentExample = message & vbLf
+            CurrentExample = Message & vbLf
         Case REPORT_MSG_TYPE_STEP
-            message = Join(Split(CurrentFeature & CurrentRule & CurrentExample & message, vbLf), vbLf)
-            If CurrentFeature = vbNullString And (CurrentRule <> vbNullString Or CurrentExample <> vbNullString) Then message = vbLf & message
+            Message = Join(Split(CurrentFeature & CurrentRule & CurrentExample & Message, vbLf), vbLf)
+            If CurrentFeature = vbNullString And (CurrentRule <> vbNullString Or CurrentExample <> vbNullString) Then Message = vbLf & Message
             'report feature names, rules and example titles only when example steps are reported
-            reporter.print_report message
-            process_msg = message
+            reporter.print_report Message
+            process_msg = Message
             CurrentFeature = vbNullString
             CurrentRule = vbNullString
             CurrentExample = vbNullString
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
-            reporter.add_code_template_to_buffer message
+            reporter.add_code_template_to_buffer Message
         Case REPORT_MSG_TYPE_STATS, REPORT_MSG_TYPE_PARSE_ERR
-            reporter.print_report message
+            reporter.print_report Message
     End Select
 End Function
 
@@ -70,7 +70,7 @@ Public Function format_msg_content(msg_package As Collection) As String
     format_msg_content = formatted_msg
 End Function
 
-Public Function format_step(step_name As String, status As String, err_msg As String) As String
+Public Function format_step(step_name As String, Status As String, err_msg As String) As String
     
     Dim formatted_msg As String
     Dim step_lines As Variant
@@ -81,7 +81,7 @@ Public Function format_step(step_name As String, status As String, err_msg As St
 
     is_docstring = False
     step_lines = Split(step_name, vbLf)
-    formatted_msg = Space$(4) & " " & status & Space$(10 - 1 - Len(status)) & step_lines(0)
+    formatted_msg = Space$(4) & " " & Status & Space$(10 - 1 - Len(Status)) & step_lines(0)
     'format docstring and or data table output if available
     For line_index = 1 To UBound(step_lines)
         line = Trim(step_lines(line_index))

@@ -9,46 +9,21 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Option Explicit
 
-Private m_message As String
-Private m_msg_type As String
-Private m_log_time As Single
-Private m_status As String
+Public EventName As String
+Public EventMessage As String
+Public SectionName As String
+Public SectionType As String
+Public SectionStatus As String
+Public LogTime As Single
+
 
 Private Sub Class_Initialize()
-    m_status = STATUS_UNKNOWN
-    m_log_time = ExtraVBA.get_unix_timestamp_now
+    SectionStatus = STATUS_UNKNOWN
+    LogTime = ExtraVBA.get_unix_timestamp_now
+    EventName = vbNullString
+    EventMessage = vbNullString
+    SectionName = vbNullString
+    SectionType = vbNullString
 End Sub
-
-Public Property Get message() As String
-    message = m_message
-End Property
-
-Public Property Let message(ByVal new_message As String)
-    m_message = new_message
-End Property
-
-Public Property Get msg_type() As String
-    msg_type = m_msg_type
-End Property
-
-Public Property Let msg_type(ByVal new_msg_type As String)
-    m_msg_type = new_msg_type
-End Property
-
-Public Property Get log_time() As String
-    log_time = m_log_time
-End Property
-
-Public Property Let log_time(ByVal new_log_time As String)
-    m_log_time = new_log_time
-End Property
-
-Public Property Get status() As String
-    status = m_status
-End Property
-
-Public Property Let status(ByVal new_status As String)
-    m_status = new_status
-End Property
 
 

@@ -34,17 +34,17 @@ Public Property Get EventLogger() As TEventLogger
     Set EventLogger = m_event_logger
 End Property
 
-Public Sub log_event(event_type As String, event_msg As String, Optional log_time, Optional event_status)
+Public Sub log_event(event_name As String, Optional event_msg, Optional section_name, Optional section_type, Optional section_status, Optional log_time)
 
     Dim new_event As TEvent
     
     Set new_event = New TEvent
-    With new_event
-        .message = event_msg
-        .msg_type = event_type
-    End With
-    If Not IsMissing(log_time) Then new_event.log_time = CSng(log_time)
-    If Not IsMissing(event_status) Then new_event.status = CStr(event_status)
+    new_event.EventName = event_name
+    If Not IsMissing(event_msg) Then new_event.EventMessage = event_msg
+    If Not IsMissing(section_name) Then new_event.SectionName = section_name
+    If Not IsMissing(section_type) Then new_event.SectionType = section_type
+    If Not IsMissing(section_status) Then new_event.SectionStatus = CStr(section_status)
+    If Not IsMissing(log_time) Then new_event.LogTime = CSng(log_time)
     m_event_logger.log_event new_event
 End Sub
 

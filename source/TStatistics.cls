@@ -31,13 +31,13 @@ Public Property Set active_logger(ByVal active_logger As TEventLogger)
     Set m_event_logger = active_logger
 End Property
 
-Private Sub count_event(event_type As String, event_status As String, event_name As String, log_time As Single)
+Private Sub count_event(event_name As String, event_status As String, log_time As Single)
     
     Dim status_count As Long
     Dim event_statistics As Collection
     
     status_count = 1
-    Select Case event_type
+    Select Case event_name
         Case LOG_EVENT_RUN_STEP
             Set event_statistics = step_statistics
         Case LOG_EVENT_RUN_EXAMPLE
@@ -90,5 +90,5 @@ Public Function get_statistics_summary() As String
 End Function
 
 Private Sub m_event_logger_EventLogged(new_event As TEvent)
-    count_event new_event.msg_type, new_event.status, new_event.message, new_event.log_time
+    count_event new_event.EventName, new_event.SectionStatus, new_event.LogTime
 End Sub

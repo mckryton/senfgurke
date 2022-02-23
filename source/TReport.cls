@@ -14,6 +14,16 @@ Private m_report_formatter As Variant
 Private m_err_buffer As String
 Private m_code_template_buffer As Collection
 
+Private Sub Class_Initialize()
+    'send output to the immediate window by default
+    Set report_out = New TReportOutImmediateWindow
+End Sub
+
+Private Sub Class_Terminate()
+    Set report_out = Nothing
+    Set m_code_template_buffer = Nothing
+End Sub
+
 Public Sub add_err_msg_to_buffer(err_msg As String)
     If Not m_err_buffer = vbNullString Then m_err_buffer = m_err_buffer & vbLf
     m_err_buffer = m_err_buffer & err_msg
@@ -36,39 +46,39 @@ Public Sub print_err_buffer()
     report_out.PrintOut vbLf & m_err_buffer
 End Sub
 
-Public Sub report(message_type As String, message_content As String, Optional status, Optional err_msg)
+Public Sub report(message_type As String, message_content As String, Optional Status, Optional err_msg)
 
     Dim msg_package As Collection
     
     If Not Report_Formatter Is Nothing Then
         Set msg_package = New Collection
-        If IsMissing(status) Then
+        If IsMissing(Status) Then
             msg_package.Add vbNullString, REPORT_MSG_STATUS
         Else
-            msg_package.Add status, REPORT_MSG_STATUS
+            msg_package.Add Status, REPORT_MSG_STATUS
         End If
         If IsMissing(err_msg) Then
             msg_package.Add vbNullString, REPORT_MSG_ERR
         Else
             msg_package.Add err_msg, REPORT_MSG_ERR
         End If
-        Set msg_package = build_msg_package(message_type, message_content, status, err_msg)
+        Set msg_package = build_msg_package(message_type, message_content, Status, err_msg)
         Report_Formatter.process_msg msg_package
         Set msg_package = Nothing
     End If
 End Sub
 
-Public Function build_msg_package(message_type As String, message_content As String, Optional status, Optional err_msg) As Collection
+Public Function build_msg_package(message_type As String, message_content As String, Optional Status, Optional err_msg) As Collection
 
     Dim msg_package As Collection
     
-    If IsMissing(status) Then status = vbNullString
+    If IsMissing(Status) Then Status = vbNullString
     If IsMissing(err_msg) Then err_msg = vbNullString
     Set msg_package = New Collection
     With msg_package
         .Add message_type, REPORT_MSG_TYPE
         .Add message_content, REPORT_MSG_CONTENT
-        .Add status, REPORT_MSG_STATUS
+        .Add Status, REPORT_MSG_STATUS
         .Add err_msg, REPORT_MSG_ERR
     End With
     Set build_msg_package = msg_package
@@ -139,12 +149,3 @@ Public Sub enable_silent_mode()
     Set report_out = New TReportOutMockConsole
 End Sub
 
-Private Sub Class_Initialize()
-    'send output to the immediate window by default
-    Set report_out = New TReportOutImmediateWindow
-End Sub
-
-Private Sub Class_Terminate()
-    Set report_out = Nothing
-    Set m_code_template_buffer = Nothing
-End Sub

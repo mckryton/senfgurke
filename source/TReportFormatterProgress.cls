@@ -16,23 +16,23 @@ Dim m_step_count As Long
 
 Public Function process_msg(msg_package As Collection) As String
 
-    Dim message As String
+    Dim Message As String
 
-    message = format_msg_content(msg_package)
+    Message = format_msg_content(msg_package)
     Select Case msg_package(REPORT_MSG_TYPE)
         Case REPORT_MSG_TYPE_STEP
             count_step
-            If step_counter Mod 80 = 0 And step_counter > 0 Then message = message & vbLf
-            reporter.print_report message, consecutive:=True
+            If step_counter Mod 80 = 0 And step_counter > 0 Then Message = Message & vbLf
+            reporter.print_report Message, consecutive:=True
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             reporter.add_code_template_to_buffer msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_PARSE_ERR
-            reporter.print_report message
+            reporter.print_report Message
         Case REPORT_MSG_TYPE_STATS
-            message = vbLf & message
-            reporter.print_report message
+            Message = vbLf & Message
+            reporter.print_report Message
     End Select
-    process_msg = message
+    process_msg = Message
 End Function
 
 Public Function format_msg_content(msg_package As Collection) As String
@@ -61,11 +61,11 @@ Public Function format_parse_error(err_msg As String, err_description As String)
                             & Space$(2) & err_description
 End Function
 
-Public Function format_step(step_name As String, status As String, err_msg As String) As String
+Public Function format_step(step_name As String, Status As String, err_msg As String) As String
     
     Dim formatted_msg As String
 
-    Select Case status
+    Select Case Status
         Case STATUS_OK
             formatted_msg = "."
         Case STATUS_MISSING
@@ -78,7 +78,7 @@ Public Function format_step(step_name As String, status As String, err_msg As St
             formatted_msg = "F"
             reporter.add_err_msg_to_buffer "Err in step: " & step_name
         Case Else
-            Debug.Print "unknown step status >" & status & "<"
+            Debug.Print "unknown step status >" & Status & "<"
     End Select
     'add err msg if available
     If err_msg <> vbNullString Then
