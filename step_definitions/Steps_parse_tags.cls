@@ -56,14 +56,14 @@ End Sub
 Public Sub Then_the_parsed_rule_contains_the_tags_STR_7B67E25E94E1(example_context As TContext, step_expressions As Collection)
     'Then the parsed rule contains the tags {string}
     
-    Dim rule As TRule
+    Dim Rule As TRule
     Dim tags As Variant
     Dim tag As Variant
     
-    Set rule = example_context.get_value("parsed_feature").sections(1)
+    Set Rule = example_context.get_value("parsed_feature").sections(1)
     tags = Split(step_expressions(1), ",")
     For Each tag In tags
-        TSpec.expect(rule.tags).contains_member Trim(tag)
+        TSpec.expect(Rule.tags).contains_member Trim(tag)
     Next
 End Sub
 
@@ -89,43 +89,43 @@ End Sub
 
 Public Sub Then_the_rule_STR_contains_the_tags_STR_7509E2DBCD3B(example_context As TContext, step_expressions As Collection)
     'Then the rule {string} contains the tags {string}
-    Dim feature As TFeature
+    Dim Feature As TFeature
     Dim section As Variant
-    Dim rule As TRule
+    Dim Rule As TRule
     Dim tags As Variant
     Dim tag As Variant
     
-    Set feature = example_context.get_value("parsed_feature")
-    For Each section In feature.sections
-        If TypeName(section) = "TRule" And section.name = step_expressions(1) Then
-            Set rule = section
-            example_context.set_value rule, "tagged_rule"
+    Set Feature = example_context.get_value("parsed_feature")
+    For Each section In Feature.sections
+        If TypeName(section) = "TRule" And section.Name = step_expressions(1) Then
+            Set Rule = section
+            example_context.set_value Rule, "tagged_rule"
             Exit For
         End If
     Next
     tags = Split(step_expressions(2), ",")
     For Each tag In tags
-        TSpec.expect(rule.tags).contains_member Trim(tag)
+        TSpec.expect(Rule.tags).contains_member Trim(tag)
     Next
 End Sub
 
 Public Sub Then_the_example_STR_contains_the_tags_STR_too_D24FF6AC6B64(example_context As TContext, step_expressions As Collection)
     'And the example {string} contains the tags {string} too
-    Dim rule As TRule
+    Dim Rule As TRule
     Dim section As Variant
-    Dim example As TExample
+    Dim Example As TExample
     Dim tags As Variant
     Dim tag As Variant
     
-    Set rule = example_context.get_value("tagged_rule")
-    For Each section In rule.sections
-        If TypeName(section) = "TExample" And section.name = step_expressions(1) Then
-            Set example = section
+    Set Rule = example_context.get_value("tagged_rule")
+    For Each section In Rule.sections
+        If TypeName(section) = "TExample" And section.Name = step_expressions(1) Then
+            Set Example = section
             Exit For
         End If
     Next
     tags = Split(step_expressions(2), ",")
     For Each tag In tags
-        TSpec.expect(example.tags).contains_member Trim(tag)
+        TSpec.expect(Example.tags).contains_member Trim(tag)
     Next
 End Sub

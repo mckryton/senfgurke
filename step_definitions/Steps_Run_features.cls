@@ -52,10 +52,10 @@ Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE(examp
     Dim log_event As Variant
     
     Set event_listener = example_context.get_value("event_listener")
-    Set step_events = event_listener.filter_events(LOG_EVENT_RUN_STEP)
+    Set step_events = event_listener.filter_events(EVENT_RUN_STEP_FINISHED)
     TSpec.expect(step_events.Count).to_be 4
-    TSpec.expect(step_events(1).Message).includes_text "background step"
-    TSpec.expect(step_events(3).Message).includes_text "background step"
+    TSpec.expect(step_events(1).SectionName).includes_text "background step"
+    TSpec.expect(step_events(3).SectionName).includes_text "background step"
 End Sub
 
 Public Sub Then_only_the_example_STR_is_executed_FD3BFD3B270C(example_context As TContext, step_expressions As Collection)
@@ -65,7 +65,7 @@ Public Sub Then_only_the_example_STR_is_executed_FD3BFD3B270C(example_context As
     Dim log_event As Variant
     
     Set event_listener = example_context.get_value("event_listener")
-    Set example_events = event_listener.filter_events(LOG_EVENT_RUN_EXAMPLE)
+    Set example_events = event_listener.filter_events(EVENT_RUN_EXAMPLE_FINISHED)
     TSpec.expect(example_events.Count).to_be 1
-    TSpec.expect(example_events(1).Message).includes_text "tagged example"
+    TSpec.expect(example_events(1).SectionName).includes_text "tagged example"
 End Sub

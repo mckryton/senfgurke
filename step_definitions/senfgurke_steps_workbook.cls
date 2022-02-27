@@ -35,7 +35,7 @@ Private Sub exportCode()
         End Select
         'save the code of the step definition classes in the step_definitions directory instead of the source directory
         sub_path = "step_definitions"
-        file_path = base_path & path_separator & sub_path & path_separator & vbe_source_object.name & "." & file_suffix
+        file_path = base_path & path_separator & sub_path & path_separator & vbe_source_object.Name & "." & file_suffix
         Debug.Print "export code to " & file_path
         #If Mac Then
             'try not to change forms unless Microsoft offers full support for forms on the Mac!

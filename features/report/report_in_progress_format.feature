@@ -104,12 +104,11 @@ Ability: Report in progress format
 
   Rule: Parse errors should be reported as-is
 
-    Example: Feature syntax error
-      Given a parse error "Found syntax error while parsing feature 'sample.feature'"
-        And the error description is "Feature lacks feature keyword at the beginning"
-       When the parse error is reported
-       Then the resulting report output is
-         """
-          Error: Found syntax error while parsing feature 'sample.feature'
-            Feature lacks feature keyword at the beginning
-         """
+    Example: report parse error in progress report
+     Given a parse error "Feature lacks feature keyword at the beginning" was found in "sample.feature"
+      When the parse error is reported
+      Then the resulting report output is
+        """
+         Error: Found syntax error while parsing feature 'sample.feature'
+           Feature lacks feature keyword at the beginning
+        """

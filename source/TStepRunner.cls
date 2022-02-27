@@ -83,7 +83,7 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
         fail_step = Array(STATUS_PENDING, err_desc)
     Case ERR_ID_STEP_IS_STATUS_MISSING
         fail_step = Array(STATUS_MISSING, vbNullString)
-        m_session.reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, err_desc
+        m_session.log_event EVENT_STEP_IS_MISSING, err_desc
     Case Else
         fail_step = Array(STATUS_FAIL, err_desc & vbLf & TSpec.LastFailMsg)
     End Select

@@ -165,12 +165,12 @@ Public Sub Then_only_STR_is_loaded_and_executed_1C2089F670AF(example_context As 
     Dim logged_events As Collection
 
     Set event_listener = example_context.get_value("event_listener")
-    Set logged_events = event_listener.filter_events(LOG_EVENT_LOAD_FEATURE)
+    Set logged_events = event_listener.filter_events(EVENT_FEATURE_LOADED)
     TSpec.expect(logged_events.Count).to_be 1
-    TSpec.expect(logged_events(1).Message).includes_text "play.feature"
-    Set logged_events = event_listener.filter_events(LOG_EVENT_RUN_FEATURE)
+    TSpec.expect(logged_events(1).EventMessage).includes_text "play.feature"
+    Set logged_events = event_listener.filter_events(EVENT_RUN_FEATURE_STARTED)
     TSpec.expect(logged_events.Count).to_be 1
-    TSpec.expect(logged_events(1).Message).to_be "Feature: play"
+    TSpec.expect(logged_events(1).SectionName).to_be "play"
 End Sub
 
 Public Sub Then_both_features_are_loaded_and_executed_A16D505188D1(example_context As TContext)
@@ -179,9 +179,9 @@ Public Sub Then_both_features_are_loaded_and_executed_A16D505188D1(example_conte
     Dim logged_events As Collection
 
     Set event_listener = example_context.get_value("event_listener")
-    Set logged_events = event_listener.filter_events(LOG_EVENT_LOAD_FEATURE)
+    Set logged_events = event_listener.filter_events(EVENT_FEATURE_LOADED)
     TSpec.expect(logged_events.Count).to_be 2
-    Set logged_events = event_listener.filter_events(LOG_EVENT_RUN_FEATURE)
+    Set logged_events = event_listener.filter_events(EVENT_RUN_FEATURE_STARTED)
     TSpec.expect(logged_events.Count).to_be 2
 End Sub
 
@@ -193,12 +193,12 @@ Public Sub Then_only_INT_features_having_names_starting_with__101BAF114ADB(examp
     Dim feature_name As String
 
     Set event_listener = example_context.get_value("event_listener")
-    Set logged_events = event_listener.filter_events(LOG_EVENT_LOAD_FEATURE)
+    Set logged_events = event_listener.filter_events(EVENT_FEATURE_LOADED)
     TSpec.expect(logged_events.Count).to_be 2
-    path_items = Split(logged_events(1).Message, ExtraVBA.get_path_separator)
+    path_items = Split(logged_events(1).EventMessage, ExtraVBA.get_path_separator)
     feature_name = path_items(UBound(path_items))
     TSpec.expect(Left(feature_name, Len(step_expressions(2)))).to_be step_expressions(2)
-    path_items = Split(logged_events(2).Message, ExtraVBA.get_path_separator)
+    path_items = Split(logged_events(2).EventMessage, ExtraVBA.get_path_separator)
     feature_name = path_items(UBound(path_items))
     TSpec.expect(Left(feature_name, Len(step_expressions(2)))).to_be step_expressions(2)
 End Sub

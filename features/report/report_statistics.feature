@@ -13,7 +13,7 @@ Ability: Report statistics
           And a test run took 22 ms
           And one example in this run had 3 passed, 1 failed, 1 missing and 2 pending steps
          When the statistics are reported
-         Then the resulting report output is
+         Then the resulting report output ends with
             """
               7 steps (3 passed, 1 failed, 1 undefined, 2 pending)
               0m 0.022s

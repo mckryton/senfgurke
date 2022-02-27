@@ -7,6 +7,7 @@ Public Const SECTION_TYPE_FEATURE$ = "feature"
 Public Const SECTION_TYPE_RULE$ = "rule"
 Public Const SECTION_TYPE_EXAMPLE$ = "example"
 Public Const SECTION_TYPE_BACKGROUND$ = "background"
+Public Const SECTION_TYPE_STEP$ = "step"
 
 Public Const SECTION_ATTR_TYPE$ = "type"
 Public Const SECTION_ATTR_NAME$ = "name"
@@ -17,7 +18,6 @@ Public Const STATUS_MISSING$ = "MISSING"
 Public Const STATUS_PENDING$ = "PENDING"
 Public Const STATUS_SKIPPED$ = "SKIPPED"
 Public Const STATUS_UNKNOWN$ = "UNKNOWN"
-
 
 Public Const STEP_TYPE_GIVEN$ = "Given"
 Public Const STEP_TYPE_WHEN$ = "When"
@@ -42,11 +42,15 @@ Public Const REPORT_MSG_TYPE_CODE_TEMPLATE$ = "msg_type_code_template"
 Public Const REPORT_MSG_TYPE_STATS$ = "msg_type_stats"
 Public Const REPORT_MSG_TYPE_PARSE_ERR$ = "msg_type_parse_err"
 
-Public Const LOG_EVENT_RUN_STEP$ = "log_run_step"
-Public Const LOG_EVENT_RUN_EXAMPLE$ = "log_run_example"
-Public Const LOG_EVENT_RUN_RULE$ = "log_run_rule"
-Public Const LOG_EVENT_RUN_FEATURE$ = "log_run_feature"
-Public Const LOG_EVENT_LOAD_FEATURE$ = "log_load_feature"
+Public Const EVENT_FEATURE_LOADED$ = "feature_loaded"
+Public Const EVENT_PARSE_ERROR = "parse_error"
+Public Const EVENT_RUN_SESSION_FINISHED$ = "run_session_finished"
+Public Const EVENT_RUN_FEATURE_STARTED$ = "run_feature_started"
+Public Const EVENT_RUN_RULE_STARTED$ = "run_rule_started"
+Public Const EVENT_RUN_EXAMPLE_STARTED$ = "run_example_started"
+Public Const EVENT_RUN_EXAMPLE_FINISHED$ = "run_example_finished"
+Public Const EVENT_RUN_STEP_FINISHED$ = "run_step_finished"
+Public Const EVENT_STEP_IS_MISSING = "step_is_missing"
 
 
 '------- Parser Constants -------

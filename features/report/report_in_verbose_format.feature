@@ -8,15 +8,38 @@ Ability: Report in verbose format
 
   Rule: feature and rule names should only appear when attached examples were executed
 
-    Example: rule without example
-      Given a feature "sample feature" was reported
-        And a rule "empty rule" was reported
-        And a rule "has example" was reported
-        And an example "sample example" was reported
-       When the execution of the first example step is reported
-       Then the report output contains "Feature: sample feature"
-        And the report output contains "Rule: has example"
-        And the report output doesn't contain "Rule: empty rule"
+    Example: skip empty rule
+      When the following events are reported as a result of running a feature
+          | section_type | section_name     | section_status |
+          | Feature      | sample feature   |                |
+          | Rule         | empty rule       |                |
+          | Rule         | rule has example |                |
+          | Example      | sample           |                |
+          | Step         | Given one step   | OK             |
+      Then the resulting report output is
+        """
+          Feature: sample feature
+            Rule: rule has example
+              Example: sample
+               OK       Given one step
+        """
+
+    Example: skip empty feature
+      When the following events are reported as a result of running a feature
+          | section_type | section_name     | section_status |
+          | Feature      | empty feature    |                |
+          | Feature      | filled feature   |                |
+          | Rule         | rule has example |                |
+          | Example      | sample           |                |
+          | Step         | Given one step   | OK             |
+      Then the resulting report output is
+        """
+          Feature: filled feature
+            Rule: rule has example
+              Example: sample
+               OK       Given one step
+        """
+
 
   Rule: descriptions shouldn't appear in verbose reports
     Verbose reports are provided for detailed feedback during devlopemnt and not
@@ -130,9 +153,8 @@ Ability: Report in verbose format
 
   Rule: Parse errors should be reported as-is
 
-    Example: Feature syntax error
-      Given a parse error "Found syntax error while parsing feature 'sample.feature'"
-        And the error description is "Feature lacks feature keyword at the beginning"
+    Example: report parse error in verbose report
+      Given a parse error "Feature lacks feature keyword at the beginning" was found in "sample.feature"
        When the parse error is reported
        Then the resulting report output is
          """

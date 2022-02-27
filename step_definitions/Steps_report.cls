@@ -11,14 +11,22 @@ Option Explicit
 
 Public Sub Given_the_report_format_is_STR_94DE9139C9BF(example_context As TContext, step_expressions As Collection)
     'Given the report format is {string}
-    example_context.set_value THelper.new_TSession, "session"
-    example_context.get_value("session").set_report_format step_expressions(1)
-    example_context.get_value("session").reporter.enable_silent_mode
+    Dim session As TSession
+    
+    Set session = THelper.new_TSession
+    With session
+        .set_report_format step_expressions(1)
+        .reporter.enable_silent_mode
+    End With
+    example_context.set_value session, "session"
 End Sub
 
 Public Sub Given_a_code_template_for_a_missing_step_was_repor_E4A1AA906A81(example_context As TContext, step_expressions As Collection)
     'Given a code template for a missing step was reported as {string}
-    example_context.get_value("session").reporter.report REPORT_MSG_TYPE_CODE_TEMPLATE, step_expressions(1)
+    Dim session As TSession
+    
+    Set session = example_context.get_value("session")
+    session.log_event EVENT_STEP_IS_MISSING, step_expressions(1)
 End Sub
 
 Public Sub Given_steps_were_reported_as_5E283B73EF13(example_context As TContext, data_table As TDataTable)
@@ -28,23 +36,18 @@ Public Sub Given_steps_were_reported_as_5E283B73EF13(example_context As TContext
     
     Set session = example_context.get_value("session")
     For Each row In data_table.table_rows
-        If row("err_msg") = vbNullString Then
-            session.reporter.report REPORT_MSG_TYPE_STEP, CStr(row("step_name")), row("status")
-        Else
-            session.reporter.report REPORT_MSG_TYPE_STEP, CStr(row("step_name")), row("status"), row("err_msg")
-        End If
+        session.log_event EVENT_RUN_STEP_FINISHED, row("err_msg"), CStr(row("step_name")), SECTION_TYPE_STEP, row("status")
     Next
 End Sub
 
-Public Sub Given_a_parse_error_STR_FF6B36833425(example_context As TContext, step_expressions As Collection)
-    'Given a parse error {string}
-    example_context.set_value New Collection, "parse_error"
-    example_context.get_value("parse_error").Add step_expressions(1), "err_msg"
-End Sub
-
-Public Sub Given_the_error_description_is_STR_73D44E8E84D9(example_context As TContext, step_expressions As Collection)
-    'And the error description is {string}
-    example_context.get_value("parse_error").Add step_expressions(1), "err_description"
+Public Sub Given_a_parse_error_STR_was_found_in_STR_570BB7623FA8(example_context As TContext, step_expressions As Collection)
+    'Given a parse error {string} was found in {string}
+    Dim parse_error As Collection
+    
+    Set parse_error = New Collection
+    parse_error.Add step_expressions(1), "err_description"
+    parse_error.Add step_expressions(2), "feature_file"
+    example_context.set_value parse_error, "parse_error"
 End Sub
 
 Public Sub When_the_parse_error_is_reported_40CCF87A8732(example_context As TContext)
@@ -54,23 +57,31 @@ Public Sub When_the_parse_error_is_reported_40CCF87A8732(example_context As TCon
     
     Set parse_error = example_context.get_value("parse_error")
     Set session = example_context.get_value("session")
-    session.reporter.report REPORT_MSG_TYPE_PARSE_ERR, parse_error("err_msg") _
-                                    , err_msg:=parse_error("err_description")
+    session.log_event EVENT_PARSE_ERROR, parse_error("err_description"), parse_error("feature_file"), SECTION_TYPE_FEATURE
 End Sub
 
 Public Sub When_a_step_STR_is_reported_with_status_STR_22E595BD5DFA(example_context As TContext, step_expressions As Collection)
     'When a step {string} is reported with status {string}
-    example_context.get_value("session").reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2)
+    Dim session As TSession
+    
+    Set session = example_context.get_value("session")
+    session.log_event EVENT_RUN_STEP_FINISHED, vbNullString, step_expressions(1), SECTION_TYPE_STEP, step_expressions(2)
 End Sub
 
 Public Sub When_a_step_STR_is_reported_with_status_STR_and_er_1F229896A06C(example_context As TContext, step_expressions As Collection)
     'When a step {string} is reported with status {string} and error msg {string}
-    example_context.get_value("session").reporter.report REPORT_MSG_TYPE_STEP, step_expressions(1), step_expressions(2), step_expressions(3)
+    Dim session As TSession
+    
+    Set session = example_context.get_value("session")
+    session.log_event EVENT_RUN_STEP_FINISHED, step_expressions(3), step_expressions(1), SECTION_TYPE_STEP, step_expressions(2)
 End Sub
 
 Public Sub When_the_report_will_report_code_templates_for_the_B3C6D3155FBC(example_context As TContext)
     'When the report will report code templates for the missing steps
-    example_context.get_value("session").reporter.finish_report
+    Dim session As TSession
+    
+    Set session = example_context.get_value("session")
+    session.reporter.finish_report
 End Sub
 
 Public Sub When_all_steps_were_reported_and_the_report_is_fin_A68058ECE13A(example_context As TContext)
@@ -84,7 +95,6 @@ Public Sub Then_the_resulting_report_output_is_STR_4C01A19A67C4(example_context 
     Dim output As String
     
     output = ExtraVBA.trim_linebreaks(example_context.get_value("session").reporter.ConsoleOutput)
-    'TSpec.expect(example_context.get_value("session").Reporter.ConsoleOutput).to_be step_expressions(1)
     TSpec.expect(output).to_be step_expressions(1)
 End Sub
 

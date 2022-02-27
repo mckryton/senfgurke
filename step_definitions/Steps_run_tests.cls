@@ -73,9 +73,9 @@ Public Sub Then_only_the_example_from_the_tagged_feature_was__858E135D9F78(examp
     Dim event_listener As EventListener
     
     Set event_listener = example_context.get_value("event_listener")
-    Set example_events = event_listener.filter_events(LOG_EVENT_RUN_EXAMPLE)
+    Set example_events = event_listener.filter_events(EVENT_RUN_EXAMPLE_FINISHED)
     TSpec.expect(example_events.Count).to_be 1
-    TSpec.expect(example_events(1).Message).includes_text "sample from tagged feature"
+    TSpec.expect(example_events(1).SectionName).includes_text "sample from tagged feature"
 End Sub
 
 Public Sub Then_only_the_example_from_the_tagged_rule_was_exe_0F822B53DF54(example_context As TContext)
@@ -84,9 +84,9 @@ Public Sub Then_only_the_example_from_the_tagged_rule_was_exe_0F822B53DF54(examp
     Dim event_listener As EventListener
     
     Set event_listener = example_context.get_value("event_listener")
-    Set example_events = event_listener.filter_events(LOG_EVENT_RUN_EXAMPLE)
+    Set example_events = event_listener.filter_events(EVENT_RUN_EXAMPLE_FINISHED)
     TSpec.expect(example_events.Count).to_be 1
-    TSpec.expect(example_events(1).Message).includes_text "example assigned to the rule"
+    TSpec.expect(example_events(1).SectionName).includes_text "example assigned to the rule"
 End Sub
 
 Public Sub Then_no_example_was_executed_16BF2F2090BC(example_context As TContext)
@@ -95,6 +95,6 @@ Public Sub Then_no_example_was_executed_16BF2F2090BC(example_context As TContext
     Dim event_listener As EventListener
     
     Set event_listener = example_context.get_value("event_listener")
-    Set example_events = event_listener.filter_events(LOG_EVENT_RUN_EXAMPLE)
+    Set example_events = event_listener.filter_events(EVENT_RUN_EXAMPLE_FINISHED)
     TSpec.expect(example_events.Count).to_be 0
 End Sub

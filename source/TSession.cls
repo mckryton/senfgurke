@@ -21,10 +21,13 @@ Private Sub Class_Initialize()
     m_end_time = 0
     Set m_event_logger = New TEventLogger
     Set m_statistics = New TStatistics
-    Set m_statistics.active_logger = m_event_logger
+    Set m_statistics.SessionEventBroker = m_event_logger
+    Set m_reporter = New TReport
+    Set m_reporter.SessionEventBroker = m_event_logger
 End Sub
 
 Private Sub Class_Terminate()
+    Set m_reporter = Nothing
     Set m_statistics = Nothing
     Set m_step_implementations = Nothing
     Set m_event_logger = Nothing
@@ -87,6 +90,7 @@ Public Sub run_test(step_classes As Collection, Optional filter_tag, Optional fe
 
     Dim parsed_features As Collection
     Dim feature_dir As String
+    Dim statistic_summary As String
 
     Me.StepImplementations = step_classes
     If IsMissing(filter_tag) Then filter_tag = vbNullString
@@ -101,9 +105,21 @@ Public Sub run_test(step_classes As Collection, Optional filter_tag, Optional fe
     If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features(feature_dir, feature_filter, Me)
     Set parsed_features = parse_loaded_features(features_as_text)
     If parsed_features.Count > 0 Then run_parsed_features parsed_features, CStr(filter_tag)
-    reporter.finish_report
-    report_statistics EndTime - StartTime
+    statistic_summary = statistics.get_statistics_summary() & vbLf & get_duration_as_text(EndTime - StartTime)
+    Me.log_event EVENT_RUN_SESSION_FINISHED, statistic_summary
 End Sub
+
+Public Function get_duration_as_text(duration_in_ms As Long) As String
+    
+    Dim minutes As Long
+    Dim seconds As Long
+    Dim milliseconds As Long
+    
+    minutes = CLng(Int(duration_in_ms / 60000))
+    seconds = CLng(Int((duration_in_ms - (minutes * 60000)) / 1000))
+    milliseconds = duration_in_ms - (minutes * 60000) - (seconds * 1000)
+    get_duration_as_text = minutes & "m " & seconds & "." & Format(milliseconds, "000") & "s"
+End Function
 
 Public Sub run_parsed_features(parsed_features As Collection, Optional filter_tag)
 
@@ -139,18 +155,6 @@ Public Property Let EndTime(ByVal new_end_time As Long)
     m_end_time = new_end_time
 End Property
 
-Public Function get_duration_as_text(duration_in_ms As Long) As String
-    
-    Dim minutes As Long
-    Dim seconds As Long
-    Dim milliseconds As Long
-    
-    minutes = CLng(Int(duration_in_ms / 60000))
-    seconds = CLng(Int((duration_in_ms - (minutes * 60000)) / 1000))
-    milliseconds = duration_in_ms - (minutes * 60000) - (seconds * 1000)
-    get_duration_as_text = minutes & "m " & seconds & "." & Format(milliseconds, "000") & "s"
-End Function
-
 Public Function parse_loaded_features(feature_list As Collection) As Collection
     
     Dim loaded_feature As Variant
@@ -168,20 +172,10 @@ Public Function parse_loaded_features(feature_list As Collection) As Collection
     
 parse_error:
     If Err.Number >= 6000 And Err.Number < 7000 Then
-        reporter.report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
-                        & loaded_feature("origin") & "'", err_msg:=Err.description
+        Me.log_event EVENT_PARSE_ERROR, Err.description, loaded_feature("origin"), SECTION_TYPE_FEATURE
     End If
     Resume Next
 End Function
-
-Public Sub report_statistics(run_duration As Long)
-
-    Dim report_msg As String
-    
-    report_msg = statistics.get_statistics_summary() & vbLf _
-                    & get_duration_as_text(run_duration)
-    reporter.report REPORT_MSG_TYPE_STATS, report_msg
-End Sub
 
 Public Property Get statistics() As TStatistics
     Set statistics = m_statistics

@@ -60,7 +60,7 @@ End Sub
 
 Public Sub Then_the_name_of_the_step_is_STR_47BC4E071438(example_context As TContext, step_expressions As Collection)
     'Then the name of the step is "a step"
-    TSpec.expect(example_context.get_value("step").name).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("step").Name).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_type_of_step_INT_is_set_to_STR_3EC1B545CDA4(example_context As TContext, step_expressions As Collection)
@@ -90,5 +90,5 @@ Public Sub Then_the_name_of_step_INT_is_STR_47BC4FBE3041(example_context As TCon
     
     Set step_list = example_context.get_value("step_list")
     Set step = step_list(step_expressions(1))
-    TSpec.expect(step.name).to_be step_expressions(2)
+    TSpec.expect(step.Name).to_be step_expressions(2)
 End Sub

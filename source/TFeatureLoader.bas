@@ -69,7 +69,7 @@ Private Function read_feature(feature_file As String, Optional session) As Colle
     Close #file_id
     feature_data.Add feature, "feature_text"
     feature_data.Add feature_file, "origin"
-    If Not IsMissing(session) Then session.log_event LOG_EVENT_LOAD_FEATURE, feature_file
+    If Not IsMissing(session) Then session.log_event EVENT_FEATURE_LOADED, feature_file
     Set read_feature = feature_data
 End Function
 

@@ -14,6 +14,9 @@ Private m_report_formatter As Variant
 Private m_err_buffer As String
 Private m_code_template_buffer As Collection
 
+Public WithEvents SessionEventBroker As TEventLogger
+Attribute SessionEventBroker.VB_VarHelpID = -1
+
 Private Sub Class_Initialize()
     'send output to the immediate window by default
     Set report_out = New TReportOutImmediateWindow
@@ -46,7 +49,7 @@ Public Sub print_err_buffer()
     report_out.PrintOut vbLf & m_err_buffer
 End Sub
 
-Public Sub report(message_type As String, message_content As String, Optional Status, Optional err_msg)
+Private Sub report(message_type As String, message_content As String, Optional Status, Optional err_msg)
 
     Dim msg_package As Collection
     
@@ -149,3 +152,25 @@ Public Sub enable_silent_mode()
     Set report_out = New TReportOutMockConsole
 End Sub
 
+Private Sub SessionEventBroker_EventLogged(new_event As TEvent)
+    'TODO: call report formatters
+    Select Case new_event.EventName
+        Case EVENT_RUN_FEATURE_STARTED
+            report REPORT_MSG_TYPE_FEATURE_NAME, new_event.SectionName
+            report REPORT_MSG_TYPE_DESC, new_event.EventMessage
+        Case EVENT_RUN_RULE_STARTED
+            report REPORT_MSG_TYPE_RULE, new_event.SectionName
+        Case EVENT_RUN_EXAMPLE_STARTED
+            report REPORT_MSG_TYPE_EXAMPLE_TITLE, new_event.SectionName
+        Case EVENT_RUN_STEP_FINISHED
+            report REPORT_MSG_TYPE_STEP, new_event.SectionName, new_event.SectionStatus, new_event.EventMessage
+        Case EVENT_PARSE_ERROR
+            report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
+                        & new_event.SectionName & "'", err_msg:=new_event.EventMessage
+        Case EVENT_RUN_SESSION_FINISHED
+            report REPORT_MSG_TYPE_STATS, new_event.EventMessage
+            finish_report
+        Case EVENT_STEP_IS_MISSING
+            report REPORT_MSG_TYPE_CODE_TEMPLATE, new_event.EventMessage
+    End Select
+End Sub

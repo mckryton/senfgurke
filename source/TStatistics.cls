@@ -14,8 +14,9 @@ Option Explicit
 
 Private m_step_statistics As Collection
 Private m_example_statistics As Collection 'aka scenario_statistics
-Private WithEvents m_event_logger As TEventLogger
-Attribute m_event_logger.VB_VarHelpID = -1
+
+Public WithEvents SessionEventBroker As TEventLogger
+Attribute SessionEventBroker.VB_VarHelpID = -1
 
 Private Sub Class_Initialize()
     Set m_step_statistics = New Collection
@@ -25,11 +26,8 @@ End Sub
 Private Sub Class_Terminate()
     Set m_step_statistics = Nothing
     Set m_example_statistics = Nothing
+    Set SessionEventBroker = Nothing
 End Sub
-
-Public Property Set active_logger(ByVal active_logger As TEventLogger)
-    Set m_event_logger = active_logger
-End Property
 
 Private Sub count_event(event_name As String, event_status As String, log_time As Single)
     
@@ -38,9 +36,9 @@ Private Sub count_event(event_name As String, event_status As String, log_time A
     
     status_count = 1
     Select Case event_name
-        Case LOG_EVENT_RUN_STEP
+        Case EVENT_RUN_STEP_FINISHED
             Set event_statistics = step_statistics
-        Case LOG_EVENT_RUN_EXAMPLE
+        Case EVENT_RUN_EXAMPLE_FINISHED
             Set event_statistics = example_statistics
         Case Else
             Exit Sub
@@ -89,6 +87,6 @@ Public Function get_statistics_summary() As String
     End If
 End Function
 
-Private Sub m_event_logger_EventLogged(new_event As TEvent)
+Private Sub SessionEventBroker_EventLogged(new_event As TEvent)
     count_event new_event.EventName, new_event.SectionStatus, new_event.LogTime
 End Sub

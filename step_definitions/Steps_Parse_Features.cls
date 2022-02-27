@@ -63,24 +63,24 @@ Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981(examp
     'Then the parsed result contains a separate item for each of the given elements
     
     Dim parsed_feature As TFeature
-    Dim rule As TRule
-    Dim example As TExample
+    Dim Rule As TRule
+    Dim Example As TExample
     
     Set parsed_feature = example_context.get_value("parsed_feature")
-    TSpec.expect(parsed_feature.name).to_be "sample feature"
+    TSpec.expect(parsed_feature.Name).to_be "sample feature"
     TSpec.expect(parsed_feature.sections.Count).to_be 1
     TSpec.expect(TypeName(parsed_feature.sections(1))).to_be "TRule"
-    Set rule = parsed_feature.sections(1)
-    TSpec.expect(rule.name).to_be "sample rule"
-    TSpec.expect(rule.sections.Count).to_be 1
-    Set example = rule.sections(1)
-    TSpec.expect(TypeName(example)).to_be "TExample"
-    TSpec.expect(example.name).to_be "sample example"
+    Set Rule = parsed_feature.sections(1)
+    TSpec.expect(Rule.Name).to_be "sample rule"
+    TSpec.expect(Rule.sections.Count).to_be 1
+    Set Example = Rule.sections(1)
+    TSpec.expect(TypeName(Example)).to_be "TExample"
+    TSpec.expect(Example.Name).to_be "sample example"
 End Sub
 
 Public Sub Then_the_parsed_result_contains_a_feature_with_the_5E84028445E3(example_context As TContext, step_expressions As Collection)
     'Then the parsed result contains a feature with the name {string}
-    TSpec.expect(example_context.get_value("parsed_feature").name).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("parsed_feature").Name).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_feature_description_is_set_to_those_two_l_3759AF1F585B(example_context As TContext)
@@ -121,7 +121,7 @@ End Sub
 
 Public Sub Then_a_feature_named_STR_is_parsed_2E9486C04330(example_context As TContext, step_expressions As Collection)
     'Then a feature named {string} is parsed
-    TSpec.expect(example_context.get_value("parsed_feature").name).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("parsed_feature").Name).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_no_parsed_feature_is_created_8F49EB33AFB0(example_context As TContext)

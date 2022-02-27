@@ -25,14 +25,14 @@ End Sub
 
 Public Sub When_the_function_name_for_the_last_step_is_calcul_3D1B9F9C0F3D(example_context As TContext)
     'When the function name for the last step is calculated
-    Dim feature As TFeature
-    Dim example As TExample
+    Dim Feature As TFeature
+    Dim Example As TExample
     Dim last_step As TStep
     
     example_context.set_value "Feature: sample" & vbLf & example_context.get_value("gherkin_text"), "gherkin_text"
-    Set feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
-    Set example = feature.sections(1)
-    Set last_step = example.steps(example.steps.Count)
+    Set Feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
+    Set Example = Feature.sections(1)
+    Set last_step = Example.steps(Example.steps.Count)
     example_context.set_value last_step.get_step_function_name, "step_function_name"
 End Sub
 

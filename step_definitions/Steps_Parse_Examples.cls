@@ -46,11 +46,11 @@ End Sub
 
 Public Sub When_the_example_is_parsed_CEB09D77F01F(example_context As TContext)
     'When the example is parsed
-    Dim example As TExample
+    Dim Example As TExample
      
     On Error GoTo exception_handler
-    Set example = TFeatureParser.parse_example(example_context.get_value("gherkin_text"), THelper.new_TFeature, Nothing)
-    example_context.set_value example, "parsed_example"
+    Set Example = TFeatureParser.parse_example(example_context.get_value("gherkin_text"), THelper.new_TFeature, Nothing)
+    example_context.set_value Example, "parsed_example"
     Exit Sub
     
 exception_handler:
@@ -59,19 +59,19 @@ End Sub
 
 Public Sub Then_the_parsed_example_contains_all_the_steps_013B99DC739C(example_context As TContext)
     'Then the parsed example contains all the steps
-    Dim example As TExample
+    Dim Example As TExample
     
-    Set example = example_context.get_value("parsed_example")
-    TSpec.expect(example.steps.Count).to_be 3
-    TSpec.expect(example.steps(1).SType).to_be STEP_TYPE_GIVEN
-    TSpec.expect(example.steps(1).name).to_be "a precondition"
-    TSpec.expect(example.steps(1).Elements(1)).to_be "Given"
-    TSpec.expect(example.steps(2).SType).to_be STEP_TYPE_WHEN
-    TSpec.expect(example.steps(2).name).to_be "action happens"
-    TSpec.expect(example.steps(2).Elements(1)).to_be "When"
-    TSpec.expect(example.steps(3).SType).to_be STEP_TYPE_THEN
-    TSpec.expect(example.steps(3).name).to_be "some result is expected"
-    TSpec.expect(example.steps(3).Elements(1)).to_be "Then"
+    Set Example = example_context.get_value("parsed_example")
+    TSpec.expect(Example.steps.Count).to_be 3
+    TSpec.expect(Example.steps(1).SType).to_be STEP_TYPE_GIVEN
+    TSpec.expect(Example.steps(1).Name).to_be "a precondition"
+    TSpec.expect(Example.steps(1).Elements(1)).to_be "Given"
+    TSpec.expect(Example.steps(2).SType).to_be STEP_TYPE_WHEN
+    TSpec.expect(Example.steps(2).Name).to_be "action happens"
+    TSpec.expect(Example.steps(2).Elements(1)).to_be "When"
+    TSpec.expect(Example.steps(3).SType).to_be STEP_TYPE_THEN
+    TSpec.expect(Example.steps(3).Name).to_be "some result is expected"
+    TSpec.expect(Example.steps(3).Elements(1)).to_be "Then"
 End Sub
 
 Public Sub Then_the_type_of_the_second_step_is_set_to_STR_9CA91DFBD6DD(example_context As TContext, step_expressions As Collection)
