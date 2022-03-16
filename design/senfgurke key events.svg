@@ -112,7 +112,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id3">
         <rect class="BoundingBox" stroke="none" fill="none" x="11501" y="11355" width="3003" height="1753"/>
-        <a xlink:href="file:///home/mac/source/senfgurke/features/run_tests/run_tests.feature">
+        <a xlink:href="../features/run_tests/run_tests.feature">
          <path fill="rgb(255,134,13)" stroke="none" d="M 13002,13106 L 11502,13106 11502,11356 14502,11356 14502,13106 13002,13106 Z"/>
          <path fill="none" stroke="rgb(52,101,164)" d="M 13002,13106 L 11502,13106 11502,11356 14502,11356 14502,13106 13002,13106 Z"/>
          <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="353px" font-weight="400"><tspan class="TextPosition" x="12240" y="12155"><tspan fill="rgb(0,0,0)" stroke="none">test run is </tspan></tspan><tspan class="TextPosition" x="12465" y="12549"><tspan fill="rgb(0,0,0)" stroke="none">started</tspan></tspan></tspan></text>
@@ -122,7 +122,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id4">
         <rect class="BoundingBox" stroke="none" fill="none" x="24251" y="11355" width="3003" height="1753"/>
-        <a xlink:href="file:///home/mac/source/senfgurke/features/read_features/load_feature_files.feature">
+        <a xlink:href="../features/read_features/load_feature_files.feature">
          <path fill="rgb(255,134,13)" stroke="none" d="M 25752,13106 L 24252,13106 24252,11356 27252,11356 27252,13106 25752,13106 Z"/>
          <path fill="none" stroke="rgb(52,101,164)" d="M 25752,13106 L 24252,13106 24252,11356 27252,11356 27252,13106 25752,13106 Z"/>
          <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="353px" font-weight="400"><tspan class="TextPosition" x="24544" y="12155"><tspan fill="rgb(0,0,0)" stroke="none">feature files are </tspan></tspan><tspan class="TextPosition" x="25227" y="12549"><tspan fill="rgb(0,0,0)" stroke="none">loaded</tspan></tspan></tspan></text>
@@ -132,7 +132,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id5">
         <rect class="BoundingBox" stroke="none" fill="none" x="37001" y="11355" width="3003" height="1753"/>
-        <a xlink:href="file:///home/mac/source/senfgurke/features/read_features/parse_features.feature">
+        <a xlink:href="../features/read_features/parse_features.feature">
          <path fill="rgb(255,134,13)" stroke="none" d="M 38502,13106 L 37002,13106 37002,11356 40002,11356 40002,13106 38502,13106 Z"/>
          <path fill="none" stroke="rgb(52,101,164)" d="M 38502,13106 L 37002,13106 37002,11356 40002,11356 40002,13106 38502,13106 Z"/>
          <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="353px" font-weight="400"><tspan class="TextPosition" x="37486" y="11958"><tspan fill="rgb(0,0,0)" stroke="none">Gherkin from </tspan></tspan><tspan class="TextPosition" x="37692" y="12352"><tspan fill="rgb(0,0,0)" stroke="none">features is </tspan></tspan><tspan class="TextPosition" x="37965" y="12746"><tspan fill="rgb(0,0,0)" stroke="none">parsed</tspan></tspan></tspan></text>
@@ -142,7 +142,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id6">
         <rect class="BoundingBox" stroke="none" fill="none" x="49751" y="11355" width="3003" height="1753"/>
-        <a xlink:href="file:///home/mac/source/senfgurke/features/run_tests/run_features.feature">
+        <a xlink:href="../features/run_tests/run_features.feature">
          <path fill="rgb(255,134,13)" stroke="none" d="M 51252,13106 L 49752,13106 49752,11356 52752,11356 52752,13106 51252,13106 Z"/>
          <path fill="none" stroke="rgb(52,101,164)" d="M 51252,13106 L 49752,13106 49752,11356 52752,11356 52752,13106 51252,13106 Z"/>
          <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="353px" font-weight="400"><tspan class="TextPosition" x="50315" y="12155"><tspan fill="rgb(0,0,0)" stroke="none">features are </tspan></tspan><tspan class="TextPosition" x="50539" y="12549"><tspan fill="rgb(0,0,0)" stroke="none">executed</tspan></tspan></tspan></text>
@@ -152,7 +152,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id7">
         <rect class="BoundingBox" stroke="none" fill="none" x="62501" y="11355" width="3003" height="1753"/>
-        <a xlink:href="file:///home/mac/source/senfgurke/features/report/report_in_verbose_format.feature">
+        <a xlink:href="../features/report/report_in_verbose_format.feature">
          <path fill="rgb(255,134,13)" stroke="none" d="M 64002,13106 L 62502,13106 62502,11356 65502,11356 65502,13106 64002,13106 Z"/>
          <path fill="none" stroke="rgb(52,101,164)" d="M 64002,13106 L 62502,13106 62502,11356 65502,11356 65502,13106 64002,13106 Z"/>
          <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="353px" font-weight="400"><tspan class="TextPosition" x="62800" y="12155"><tspan fill="rgb(0,0,0)" stroke="none">step results are </tspan></tspan><tspan class="TextPosition" x="63348" y="12549"><tspan fill="rgb(0,0,0)" stroke="none">reported</tspan></tspan></tspan></text>
@@ -162,7 +162,7 @@
       <g class="com.sun.star.drawing.CustomShape">
        <g id="id8">
         <rect class="BoundingBox" stroke="none" fill="none" x="75251" y="11355" width="3003" height="1753"/>
-        <a xlink:href="file:///home/mac/source/senfgurke/features/report/report_statistics.feature">
+        <a xlink:href="../features/report/report_statistics.feature">
          <path fill="rgb(255,134,13)" stroke="none" d="M 76752,13106 L 75252,13106 75252,11356 78252,11356 78252,13106 76752,13106 Z"/>
          <path fill="none" stroke="rgb(52,101,164)" d="M 76752,13106 L 75252,13106 75252,11356 78252,11356 78252,13106 76752,13106 Z"/>
          <text class="SVGTextShape"><tspan class="TextParagraph" font-family="Liberation Sans, sans-serif" font-size="353px" font-weight="400"><tspan class="TextPosition" x="75774" y="12155"><tspan fill="rgb(0,0,0)" stroke="none">statistics are </tspan></tspan><tspan class="TextPosition" x="76098" y="12549"><tspan fill="rgb(0,0,0)" stroke="none">reported</tspan></tspan></tspan></text>
