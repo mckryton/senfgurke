@@ -62,12 +62,12 @@ Ability: Report in progress format
           * the code inside the step function tries to access a non-existing method or property
         """
 
-
+@wip
   Rule: Failed steps should show step name and error message
-    #TODO: add feature name + example name
 
     Example: single failed step
-      Given steps were reported as
+      Given the origin for some steps is "sample.feature"
+        And steps were reported as
           | step_name             | status | err_msg        |
           | Given an invalid step | FAIL   | sample err msg |
        When all steps were reported and the report is finished
@@ -75,11 +75,13 @@ Ability: Report in progress format
         """
           F
           Err in step: Given an invalid step
+          (feature: sample.feature)
             sample err msg
         """
 
     Example: failed step followed by passed step
-      Given steps were reported as
+      Given the origin for some steps is "sample.feature"
+        And steps were reported as
           | step_name             | status | err_msg        |
           | Given an invalid step | FAIL   | sample err msg |
           | And a valid step      | OK     |                |
@@ -88,6 +90,7 @@ Ability: Report in progress format
         """
           F.
           Err in step: Given an invalid step
+          (feature: sample.feature)
             sample err msg
         """
 

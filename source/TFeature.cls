@@ -21,9 +21,11 @@ Private m_feature_tags As Collection
 Private m_background As TBackground
 Private m_container_type As String
 Private m_parsed_lines As Long
+Public FeatureFileName As String
 
 Private Sub Class_Initialize()
     m_parsed_lines = 0
+    FeatureFileName = vbNullString
 End Sub
 
 Private Sub Class_Terminate()

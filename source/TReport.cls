@@ -49,7 +49,7 @@ Public Sub print_err_buffer()
     report_out.PrintOut vbLf & m_err_buffer
 End Sub
 
-Private Sub report(message_type As String, message_content As String, Optional Status, Optional err_msg)
+Private Sub report(message_type As String, message_content As String, Optional Status, Optional err_msg, Optional feature_file_name)
 
     Dim msg_package As Collection
     
@@ -65,24 +65,30 @@ Private Sub report(message_type As String, message_content As String, Optional S
         Else
             msg_package.Add err_msg, REPORT_MSG_ERR
         End If
-        Set msg_package = build_msg_package(message_type, message_content, Status, err_msg)
+        If IsMissing(feature_file_name) Then
+            msg_package.Add vbNullString, REPORT_MSG_FEATURE_ORIGIN
+        Else
+            msg_package.Add feature_file_name, REPORT_MSG_FEATURE_ORIGIN
+        End If
+        Set msg_package = build_msg_package(message_type, message_content, Status, err_msg, feature_file_name)
         Report_Formatter.process_msg msg_package
         Set msg_package = Nothing
     End If
 End Sub
 
-Public Function build_msg_package(message_type As String, message_content As String, Optional Status, Optional err_msg) As Collection
+Public Function build_msg_package(message_type As String, message_content As String, Optional msg_status, Optional err_msg, Optional feature_file_name) As Collection
 
     Dim msg_package As Collection
     
-    If IsMissing(Status) Then Status = vbNullString
+    If IsMissing(msg_status) Then msg_status = vbNullString
     If IsMissing(err_msg) Then err_msg = vbNullString
     Set msg_package = New Collection
     With msg_package
         .Add message_type, REPORT_MSG_TYPE
         .Add message_content, REPORT_MSG_CONTENT
-        .Add Status, REPORT_MSG_STATUS
+        .Add msg_status, REPORT_MSG_STATUS
         .Add err_msg, REPORT_MSG_ERR
+        .Add feature_file_name, REPORT_MSG_FEATURE_ORIGIN
     End With
     Set build_msg_package = msg_package
 End Function
@@ -153,7 +159,6 @@ Public Sub enable_silent_mode()
 End Sub
 
 Private Sub SessionEventBroker_EventLogged(new_event As TEvent)
-    'TODO: call report formatters
     Select Case new_event.EventName
         Case EVENT_RUN_FEATURE_STARTED
             report REPORT_MSG_TYPE_FEATURE_NAME, new_event.SectionName
@@ -163,7 +168,8 @@ Private Sub SessionEventBroker_EventLogged(new_event As TEvent)
         Case EVENT_RUN_EXAMPLE_STARTED
             report REPORT_MSG_TYPE_EXAMPLE_TITLE, new_event.SectionName
         Case EVENT_RUN_STEP_FINISHED
-            report REPORT_MSG_TYPE_STEP, new_event.SectionName, new_event.SectionStatus, new_event.EventMessage
+            report REPORT_MSG_TYPE_STEP, new_event.SectionName, new_event.SectionStatus, _
+                    new_event.EventMessage, new_event.FeatureFileName
         Case EVENT_PARSE_ERROR
             report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
                         & new_event.SectionName & "'", err_msg:=new_event.EventMessage

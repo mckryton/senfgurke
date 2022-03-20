@@ -61,8 +61,9 @@ Public Sub When_the_step_is_executed_CEB06B444334(example_context As TContext)
     Dim step_runner As TStepRunner
     Dim session As TSession
     Dim step_classes As Collection
+    Dim feature_runner As TFeatureRunner
+    Dim example_runner As TExampleRunner
     
-    Set step_runner = THelper.new_TStepRunner
     Set step_classes = New Collection
     step_classes.Add New Steps_predefined_steps
     Set session = THelper.new_TSession
@@ -71,7 +72,13 @@ Public Sub When_the_step_is_executed_CEB06B444334(example_context As TContext)
         .StepImplementations = step_classes
     End With
     example_context.set_value session, "session"
-    step_runner.setup session
+    'setup all runners, because log_event function in every runner calls parent.log_event up to session.log_event
+    Set feature_runner = THelper.new_TFeatureRunner
+    feature_runner.setup session
+    Set example_runner = THelper.new_TExampleRunner
+    example_runner.setup session, feature_runner
+    Set step_runner = THelper.new_TStepRunner
+    step_runner.setup session, example_runner
     example_context.set_value step_runner.run_step(example_context.get_value("example_step"), THelper.new_TContext), "step_result"
 End Sub
 

@@ -37,8 +37,8 @@ Public Property Get EventLogger() As TEventLogger
     Set EventLogger = m_event_logger
 End Property
 
-Public Sub log_event(event_name As String, Optional event_msg, Optional section_name, Optional section_type, Optional section_status, Optional log_time)
-
+Public Sub log_event(event_name As String, Optional event_msg, Optional section_name, Optional section_type, _
+                        Optional section_status, Optional feature_file, Optional log_time)
     Dim new_event As TEvent
     
     Set new_event = New TEvent
@@ -47,12 +47,12 @@ Public Sub log_event(event_name As String, Optional event_msg, Optional section_
     If Not IsMissing(section_name) Then new_event.SectionName = section_name
     If Not IsMissing(section_type) Then new_event.SectionType = section_type
     If Not IsMissing(section_status) Then new_event.SectionStatus = CStr(section_status)
+    If Not IsMissing(feature_file) Then new_event.FeatureFileName = feature_file
     If Not IsMissing(log_time) Then new_event.LogTime = CSng(log_time)
     m_event_logger.log_event new_event
 End Sub
 
 Public Property Get StepImplementations() As Collection
-    
     Dim step_implementation_class As Variant
     
     If m_step_implementations Is Nothing Then
@@ -156,7 +156,6 @@ Public Property Let EndTime(ByVal new_end_time As Long)
 End Property
 
 Public Function parse_loaded_features(feature_list As Collection) As Collection
-    
     Dim loaded_feature As Variant
     Dim parsed_features As Collection
     Dim parsed_feature As TFeature
@@ -164,7 +163,8 @@ Public Function parse_loaded_features(feature_list As Collection) As Collection
     Set parsed_features = New Collection
     On Error GoTo parse_error
     For Each loaded_feature In feature_list
-        Set parsed_feature = parse_feature(CStr(loaded_feature("feature_text")))
+        Set parsed_feature = TFeatureParser.parse_feature(CStr(loaded_feature("feature_text")))
+        parsed_feature.FeatureFileName = loaded_feature("origin")
         If Not parsed_feature Is Nothing Then parsed_features.Add parsed_feature
     Next
     Set parse_loaded_features = parsed_features

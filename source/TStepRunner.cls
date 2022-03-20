@@ -10,17 +10,19 @@ Attribute VB_Exposed = True
 Option Explicit
 
 Private m_session As TSession
+Private m_parent_runner As TExampleRunner
 
 Private Sub Class_Terminate()
     Set m_session = Nothing
+    Set m_parent_runner = Nothing
 End Sub
 
-Public Sub setup(session As TSession)
+Public Sub setup(session As TSession, parent_runner As TExampleRunner)
     Set m_session = session
+    Set m_parent_runner = parent_runner
 End Sub
 
 Public Function run_step(step_definition As TStep, context As TContext) As Variant
-
     Dim step_result As Variant
     Dim step_implementation_class As Variant
     Dim step_function_name As String
@@ -50,7 +52,6 @@ error_handler:
 End Function
 
 Public Function try_step(step_implementation_class As Variant, step_function_name As String, step_expressions As Collection, context As TContext, data_table As TDataTable) As Variant
-
     Dim step_result As String
     
     If step_expressions.Count > 0 Then
@@ -70,7 +71,6 @@ Public Function try_step(step_implementation_class As Variant, step_function_nam
 End Function
 
 Public Function fail_step(err_id As Long, Optional err_msg) As Variant
- 
     Dim err_desc As String
     
     If IsMissing(err_msg) Then
@@ -83,7 +83,7 @@ Public Function fail_step(err_id As Long, Optional err_msg) As Variant
         fail_step = Array(STATUS_PENDING, err_desc)
     Case ERR_ID_STEP_IS_STATUS_MISSING
         fail_step = Array(STATUS_MISSING, vbNullString)
-        m_session.log_event EVENT_STEP_IS_MISSING, err_desc
+        m_parent_runner.log_event EVENT_STEP_IS_MISSING, err_desc
     Case Else
         fail_step = Array(STATUS_FAIL, err_desc & vbLf & TSpec.LastFailMsg)
     End Select

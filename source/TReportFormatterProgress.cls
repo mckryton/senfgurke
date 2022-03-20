@@ -41,7 +41,8 @@ Public Function format_msg_content(msg_package As Collection) As String
     
     Select Case msg_package(REPORT_MSG_TYPE)
         Case REPORT_MSG_TYPE_STEP
-            formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), msg_package(REPORT_MSG_ERR))
+            formatted_msg = format_step(msg_package(REPORT_MSG_CONTENT), msg_package(REPORT_MSG_STATUS), _
+                                msg_package(REPORT_MSG_ERR), msg_package(REPORT_MSG_FEATURE_ORIGIN))
         Case REPORT_MSG_TYPE_CODE_TEMPLATE
             reporter.add_code_template_to_buffer msg_package(REPORT_MSG_CONTENT)
         Case REPORT_MSG_TYPE_STATS
@@ -61,8 +62,7 @@ Public Function format_parse_error(err_msg As String, err_description As String)
                             & Space$(2) & err_description
 End Function
 
-Public Function format_step(step_name As String, Status As String, err_msg As String) As String
-    
+Public Function format_step(step_name As String, Status As String, err_msg As String, feature_origin As String) As String
     Dim formatted_msg As String
 
     Select Case Status
@@ -76,7 +76,7 @@ Public Function format_step(step_name As String, Status As String, err_msg As St
             formatted_msg = "S"
         Case STATUS_FAIL
             formatted_msg = "F"
-            reporter.add_err_msg_to_buffer "Err in step: " & step_name
+            reporter.add_err_msg_to_buffer "Err in step: " & step_name & vbLf & "(feature: " & feature_origin & ")"
         Case Else
             Debug.Print "unknown step status >" & Status & "<"
     End Select

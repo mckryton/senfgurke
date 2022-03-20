@@ -14,6 +14,7 @@ Public EventMessage As String
 Public SectionName As String
 Public SectionType As String
 Public SectionStatus As String
+Public FeatureFileName As String
 Public LogTime As Single
 
 
@@ -24,6 +25,7 @@ Private Sub Class_Initialize()
     EventMessage = vbNullString
     SectionName = vbNullString
     SectionType = vbNullString
+    FeatureFileName = vbNullString
 End Sub
 
 

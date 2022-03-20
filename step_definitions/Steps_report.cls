@@ -33,10 +33,16 @@ Public Sub Given_steps_were_reported_as_5E283B73EF13(example_context As TContext
     'Given steps were reported as
     Dim row As Variant
     Dim session As TSession
+    Dim feature_origin As String
     
+    If example_context.value_exists("feature_origin") Then
+        feature_origin = example_context.get_value("feature_origin")
+    Else
+        feature_origin = vbNullString
+    End If
     Set session = example_context.get_value("session")
     For Each row In data_table.table_rows
-        session.log_event EVENT_RUN_STEP_FINISHED, row("err_msg"), CStr(row("step_name")), SECTION_TYPE_STEP, row("status")
+        session.log_event EVENT_RUN_STEP_FINISHED, row("err_msg"), CStr(row("step_name")), SECTION_TYPE_STEP, row("status"), feature_origin
     Next
 End Sub
 

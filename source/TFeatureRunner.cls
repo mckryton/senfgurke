@@ -10,23 +10,28 @@ Attribute VB_Exposed = True
 Option Explicit
 
 Private m_session As TSession
+Private FeatureOrigin As String
 
 Public Sub setup(session As TSession)
     Set m_session = session
 End Sub
 
+' run_feature runs examples inside features as well as examples inside rules
 Public Sub run_feature(example_container As TExampleContainer, Optional filter_tag)
-    
     Dim feature_section As Variant
     Dim example As TExample
     Dim example_runner As TExampleRunner
     Dim current_rule As TExampleContainer
+    Dim current_feature As TFeature
     
     If IsMissing(filter_tag) Then filter_tag = vbNullString
     Set example_runner = New TExampleRunner
-    example_runner.setup m_session
+    example_runner.setup m_session, Me
     If example_container.containerType = "feature" Then
-        m_session.log_event EVENT_RUN_FEATURE_STARTED, example_container.description, example_container.name, SECTION_TYPE_FEATURE
+        Set current_feature = example_container
+        FeatureOrigin = current_feature.FeatureFileName
+        log_event EVENT_RUN_FEATURE_STARTED, current_feature.description, current_feature.name, _
+                                SECTION_TYPE_FEATURE, feature_file:=current_feature.FeatureFileName
     End If
     For Each feature_section In example_container.sections
         If TypeName(feature_section) = "TExample" Then
@@ -45,9 +50,19 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
         ElseIf TypeName(feature_section) = "TRule" Then
             Set current_rule = feature_section
             ' a rule can contain  examples like a feature > so run it like a feature
-            m_session.log_event EVENT_RUN_RULE_STARTED, feature_section.description, feature_section.wholeName, SECTION_TYPE_RULE
+            log_event EVENT_RUN_RULE_STARTED, feature_section.description, feature_section.wholeName, SECTION_TYPE_RULE
             run_feature current_rule, filter_tag
         End If
     Next
+    If example_container.containerType = "feature" Then
+        log_event EVENT_RUN_FEATURE_FINISHED, current_feature.description, current_feature.name, _
+                                SECTION_TYPE_FEATURE, feature_file:=current_feature.FeatureFileName
+    End If
+End Sub
+
+Public Sub log_event(event_name As String, Optional event_msg, Optional section_name, Optional section_type, _
+                        Optional section_status, Optional feature_file, Optional log_time)
+    If IsMissing(feature_file) Then feature_file = FeatureOrigin
+    m_session.log_event event_name, event_msg, section_name, section_type, section_status, feature_file, log_time
 End Sub
 

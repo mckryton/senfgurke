@@ -9,6 +9,11 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+Public Sub Given_the_origin_for_some_steps_is_STR_DAF5E456232F(example_context As TContext, step_expressions As Collection)
+    'Given the origin for some steps is {string}
+    example_context.set_value step_expressions(1), "feature_origin"
+End Sub
+
 Public Sub When__INT_steps_are_reported_as_successful_34289162846E(example_context As TContext, step_expressions As Collection)
     'When  {integer} steps are reported as successful
     Dim index As Integer

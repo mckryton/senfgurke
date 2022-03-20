@@ -15,6 +15,10 @@ Public Function new_TFeatureRunner() As TFeatureRunner
     Set new_TFeatureRunner = New TFeatureRunner
 End Function
 
+Public Function new_TExampleRunner() As TExampleRunner
+    Set new_TExampleRunner = New TExampleRunner
+End Function
+
 Public Function new_TStepRunner() As TStepRunner
     Set new_TStepRunner = New TStepRunner
 End Function

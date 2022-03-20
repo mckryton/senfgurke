@@ -14,7 +14,6 @@ Public Function get_feature_dir(this_doc_path As String) As String
 End Function
 
 Public Function load_features(Optional feature_dir, Optional file_filter, Optional session) As Collection
-
     Dim dir_entry As String
     Dim attributes As Integer
     Dim features As Collection
@@ -35,10 +34,10 @@ Public Function load_features(Optional feature_dir, Optional file_filter, Option
         If attributes <> vbHidden And attributes <> vbSystem And Right(dir_entry, 8) = ".feature" Then
             If Not IsMissing(file_filter) Then
                 If Left(dir_entry, Len(file_filter)) = CStr(file_filter) Then
-                    features.Add read_feature(feature_dir & dir_entry, session)
+                    features.Add read_feature(CStr(feature_dir), dir_entry, session)
                 End If
             Else
-                features.Add read_feature(feature_dir & dir_entry)
+                features.Add read_feature(CStr(feature_dir), dir_entry)
             End If
         End If
         dir_entry = Dir()
@@ -52,8 +51,7 @@ Public Function load_features(Optional feature_dir, Optional file_filter, Option
     Set load_features = features
 End Function
 
-Private Function read_feature(feature_file As String, Optional session) As Collection
-    
+Private Function read_feature(feature_dir As String, feature_file As String, Optional session) As Collection
     Dim feature_data As Collection
     Dim feature As String
     Dim text_line As String
@@ -61,7 +59,7 @@ Private Function read_feature(feature_file As String, Optional session) As Colle
     
     Set feature_data = New Collection
     file_id = FreeFile
-    Open feature_file For Input As #file_id
+    Open feature_dir & feature_file For Input As #file_id
     Do Until EOF(1)
         Line Input #1, text_line
         feature = feature & text_line & vbLf
