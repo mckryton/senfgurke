@@ -4,7 +4,7 @@ Senfgurke is example driven test framework for VBA. What does this mean? Using S
 - [Introduction](#Introduction)
 - [Setup](#Setup)
 - [Functional design](#Functional-design)
-
+- [Architecture](#Architecture)
 
 **BEWARE!** This is work in progress. Future versions might break your test automation code from older versions!
 
@@ -44,7 +44,7 @@ Feature: sum plus one
      OK       Given a is 2
      OK       And b is 3
      OK       When sum+1 is applied to a and b
-     OK       Then the result is 5
+     OK       Then the result is 6
 ```
 
 This way Senfgurke tells you if your code was successful or caused any error.
@@ -84,3 +84,20 @@ In parallel to the execution of the features mentioned above, results will be re
 
 ### [Report statistics](features/report/report_statistics.feature)
 At the end of every test run Senfgurke will add some statistics, for example duration and number of executed example steps.
+
+## Architecture
+![FMC block diagram for Senfgurke](https://raw.githubusercontent.com/mckryton/senfgurke/master/design/senfgurke_block_diagramm.svg "Senfgurke block diagram")
+
+The [FMC block diagram](http://www.fmc-modeling.org/download/notation_reference/Reference_Sheet-Block_Diagram.pdf) shows that the typical setup consists of three layers:
+1. OS will provide the storage for the feature files.
+2. Senfgurke add-in includes all the functionality to match example (aka scenario) steps from feature files with matching step functions.
+3. The top layer is represented by the application under test (typically an office document containing VBA code).
+
+### General Decisions
+See the [architecture decision log](architecture_decison_log.md) for some general decisions.
+
+### Goals
+#### Separations of concern
+The layered architecture shall ensure that functionality provided by Senfgurke is separated from application logic.
+
+tbc
