@@ -3,7 +3,7 @@ Senfgurke is example driven test framework for VBA. What does this mean? Using S
 
 - [Introduction](#Introduction)
 - [Setup](#Setup)
-- [Functional design](#Functional%20design)
+- [Functional design](#Functional-design)
 
 
 **BEWARE!** This is work in progress. Future versions might break your test automation code from older versions!
@@ -65,7 +65,7 @@ Senfgurke is provided as an application specific Addin. This way you can easily 
 
 ## Functional design
 The following [event map](https://vimeo.com/130202708) will explain what will happen when you ask Senfgurke to execute your features.
-![event map for Senfgurke](design/senfgurke%20key%20events.svg "Senfgurke key events")
+![event map for Senfgurke](https://raw.githubusercontent.com/mckryton/senfgurke/master/design/senfgurke%20key%20events.svg "Senfgurke key events")
 
 ### [Run a test](features/run_tests/run_tests.feature)
 Tests are usually started from the VBA console window. This way you can add tags or filters (for file names) to restrict the test run to specific tags or feature files.
