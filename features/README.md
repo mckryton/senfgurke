@@ -77,6 +77,12 @@
   docstring following the step directly. Docstrings are embraced by three double
   quotation marks
 
+* [Parse outline parameters](read_features/parse_features/parse_steps/parse_outline_parameters.feature)
+
+  Examples can include an outline table providing one or more sets of
+  parameters to vary the excution of the example. For this step are allowed to
+  use placeholder to fill in outline parameters during execution.
+
 * [Parse step expressions](read_features/parse_features/parse_steps/parse_step_expressions.feature)
 
   To match a step with it's step definition it has to be disassembled into its
@@ -92,6 +98,13 @@
 
   If examples require more extensive pre-conditions, brevity of the Given steps
   can be improved by using a data table instead of a lot of single steps.
+
+* [Parse outlines](read_features/parse_features/parse_tables/parse_outlines.feature)
+
+  Sometimes examples differ only in a small set of parameters. So instead of
+  duplicating those examples for each set of parameter it is possible to add a
+  table providing a set of parameters with each row at the end of a single
+  example.
 
 * [Parse tags](read_features/parse_features/parse_tags.feature)
 
@@ -160,6 +173,15 @@
   matching function for each step in an example (aka step implementation).
   The result of the executed step will tell you if the application works as
   expected (see feature "run steps" for more).
+
+### Run Examples
+
+* [Run outline example](run_tests/run_examples/run_outline_example.feature)
+
+  Examples can include outline tables to allow the repetition of an example but
+  with a different set of parameters. So the example will be executed once for
+  every row of the outline table while the value from each column will replace
+  the corrosponding placeholder in the examples steps.
 
 * [Run features](run_tests/run_features.feature)
 

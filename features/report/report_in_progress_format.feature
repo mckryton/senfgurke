@@ -62,7 +62,7 @@ Ability: Report in progress format
           * the code inside the step function tries to access a non-existing method or property
         """
 
-@wip
+
   Rule: Failed steps should show step name and error message
 
     Example: single failed step

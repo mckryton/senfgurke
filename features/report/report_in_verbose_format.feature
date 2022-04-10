@@ -161,3 +161,7 @@ Ability: Report in verbose format
           Error: Found syntax error while parsing feature 'sample.feature'
             Feature lacks feature keyword at the beginning
          """
+
+  @concept_outline
+  # TODO: Decide how to report outlines
+  # Rule:
