@@ -64,13 +64,13 @@ Public Sub Then_the_parsed_example_contains_all_the_steps_013B99DC739C(example_c
     Set Example = example_context.get_value("parsed_example")
     TSpec.expect(Example.steps.Count).to_be 3
     TSpec.expect(Example.steps(1).SType).to_be STEP_TYPE_GIVEN
-    TSpec.expect(Example.steps(1).Name).to_be "a precondition"
+    TSpec.expect(Example.steps(1).OriginalStepLine).to_be "Given a precondition"
     TSpec.expect(Example.steps(1).Elements(1)).to_be "Given"
     TSpec.expect(Example.steps(2).SType).to_be STEP_TYPE_WHEN
-    TSpec.expect(Example.steps(2).Name).to_be "action happens"
+    TSpec.expect(Example.steps(2).OriginalStepLine).to_be "When action happens"
     TSpec.expect(Example.steps(2).Elements(1)).to_be "When"
     TSpec.expect(Example.steps(3).SType).to_be STEP_TYPE_THEN
-    TSpec.expect(Example.steps(3).Name).to_be "some result is expected"
+    TSpec.expect(Example.steps(3).OriginalStepLine).to_be "Then some result is expected"
     TSpec.expect(Example.steps(3).Elements(1)).to_be "Then"
 End Sub
 

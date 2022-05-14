@@ -61,7 +61,7 @@ Public Sub When_the_example_is_reported_with_the_step_result__F52F4459A058(examp
     Set Example = example_context.get_value("parsed_feature").sections(1)
     Set step = Example.steps(1)
     session.log_event EVENT_RUN_EXAMPLE_STARTED, Example.description, Example.OriginalHeadline, SECTION_TYPE_EXAMPLE
-    session.log_event EVENT_RUN_STEP_FINISHED, vbNullString, step.OriginalStepDefinition, SECTION_TYPE_STEP, step_expressions(1)
+    session.log_event EVENT_RUN_STEP_FINISHED, vbNullString, step.OriginalStepLine, SECTION_TYPE_STEP, step_expressions(1)
 End Sub
 
 Public Sub When_the_following_step_is_reported_with_the_statu_2B48A62AC066(example_context As TContext, step_expressions As Collection)

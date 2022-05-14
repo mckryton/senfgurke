@@ -43,7 +43,7 @@ Private Property Get StepImplementations() As Collection
                                  New Steps_parse_rules, _
                                  New Steps_parse_step_expressions, _
                                  New Steps_parse_steps, _
-                                 New Steps_parse_tables, _
+                                 New Steps_parse_tables, New Steps_parse_outlines, _
                                  New Steps_parse_tags, _
                                  New Steps_predefined_steps, _
                                  New Steps_report, _

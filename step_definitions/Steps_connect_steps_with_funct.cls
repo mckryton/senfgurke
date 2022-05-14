@@ -38,7 +38,10 @@ End Sub
 
 Public Sub When_the_function_for_the_step_is_calculated_41249A4C9E7F(example_context As TContext)
     'When the function for the step is calculated
-    example_context.set_value example_context.get_value("example_step").get_step_function_name, "step_function_name"
+    Dim step As TStep
+    
+    Set step = example_context.get_value("example_step")
+    example_context.set_value step.get_step_function_name, "step_function_name"
 End Sub
 
 Public Sub When_the_a_matching_function_for_those_steps_is_re_AB345B8299F4(example_context As TContext)

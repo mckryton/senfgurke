@@ -9,6 +9,17 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+Public Sub When_the_step_definition_is_parsed_for_step_expres_7C11B950F2B4(example_context As TContext)
+    'When the step definition is parsed for step expressions
+    Dim step_definition As String
+    Dim new_step As TStep
+    
+    step_definition = example_context.get_value("gherkin_text")
+    Set new_step = TStepParser.parse_step_line(step_definition, New Collection)
+    new_step.parse_step_expressions
+    example_context.set_value new_step, "step"
+End Sub
+
 Public Sub Then_the_step_has_one_step_expression_with_the_dat_90F0EF0E4524(example_context As TContext, step_expressions As Collection)
     'Then the step has one step expression with the data type {string}
     TSpec.expect(LCase(TypeName(example_context.get_value("step").Expressions(1)))).to_be step_expressions(1)

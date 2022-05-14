@@ -8,6 +8,7 @@ Public Const SECTION_TYPE_RULE$ = "rule"
 Public Const SECTION_TYPE_EXAMPLE$ = "example"
 Public Const SECTION_TYPE_BACKGROUND$ = "background"
 Public Const SECTION_TYPE_STEP$ = "step"
+Public Const SECTION_TYPE_OUTLINE$ = "outline"
 
 Public Const SECTION_ATTR_TYPE$ = "type"
 Public Const SECTION_ATTR_NAME$ = "name"
@@ -56,7 +57,7 @@ Public Const EVENT_STEP_IS_MISSING = "step_is_missing"
 
 
 '------- Parser Constants -------
-Public Const START_SECTION_KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Background,Ability,Business Needs,Feature"
+Public Const START_SECTION_KEYWORDS$ = "Example,Scenario,Scenario Outline,Rule,Background,Ability,Business Needs,Feature,Examples"
 
 Public Const LINE_TYPE_FEATURE_START$ = "feature start"
 Public Const LINE_TYPE_RULE_START$ = "rule start"
@@ -68,4 +69,5 @@ Public Const LINE_TYPE_DESCRIPTION$ = "description line"
 Public Const LINE_TYPE_COMMENT$ = "comment line"
 Public Const LINE_TYPE_DOCSTRING_LIMIT$ = "docstring limit"
 Public Const LINE_TYPE_TABLE_ROW$ = "table row"
+Public Const LINE_TYPE_OUTLINE_START$ = "outline table"
 

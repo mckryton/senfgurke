@@ -183,6 +183,9 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
     Dim feature_lines As Variant
     Dim line As String
     Dim new_example As TExample
+    Dim new_outline As Collection
+    Dim outline_table As TDataTable
+    Dim outline_headline As Collection
 
     feature_lines = Split(gherkin_text, vbLf)
     line = CStr(feature_lines(parent_feature.parsed_lines))
@@ -201,6 +204,15 @@ Public Function parse_example(gherkin_text As String, parent_feature As TFeature
                 parent_feature.parsed_lines = parent_feature.parsed_lines - 1
                 Set parse_example = new_example
                 Exit Function
+            Case LINE_TYPE_OUTLINE_START
+                Set new_outline = New Collection
+                Set outline_headline = read_section_headline(line)
+                new_outline.Add outline_headline.item("name"), "name"
+                new_outline.Add Trim(line), "full_name"
+                Set outline_table = TStepParser.parse_table(gherkin_text, parent_feature)
+                new_outline.Add outline_table, "table"
+                new_example.Outlines.Add new_outline
+                'don't exit function here, because examples can have multiple outline tables
             Case LINE_TYPE_DESCRIPTION
                 If new_example.steps.Count = 0 Then
                     new_example.description = add_description(new_example.description, line)
@@ -320,6 +332,8 @@ Public Function get_line_type(line As String)
                 get_line_type = LINE_TYPE_BACKGROUND_START
             Case SECTION_TYPE_FEATURE
                 get_line_type = LINE_TYPE_FEATURE_START
+            Case SECTION_TYPE_OUTLINE
+                get_line_type = LINE_TYPE_OUTLINE_START
         End Select
     Else
         get_line_type = LINE_TYPE_DESCRIPTION
@@ -418,6 +432,8 @@ Private Function read_section_headline(text_line As String) As Collection
                 section_headline.Add SECTION_TYPE_RULE, "type"
             Case "Scenario", "Scenario Outline", "Example"
                 section_headline.Add SECTION_TYPE_EXAMPLE, "type"
+            Case "Examples"
+                section_headline.Add SECTION_TYPE_OUTLINE, "type"
             Case Else
                 Debug.Print "PARSE ERROR: unknown keyword >" & line_items(0) & "<"
         End Select

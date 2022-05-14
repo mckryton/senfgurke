@@ -22,8 +22,6 @@ Public Function parse_step_list(feature_text As String, parent_feature As TFeatu
             Case LINE_TYPE_DOCSTRING_LIMIT
                 Set current_step = new_step_list(new_step_list.Count)
                 current_step.docstring = parse_docstring(feature_text, parent_feature)
-                current_step.Expressions.Add current_step.docstring
-                current_step.Elements.Add current_step.Expressions.Count
             Case LINE_TYPE_TABLE_ROW
                 If new_step_list.Count = 0 Then
                     TError.raise ERR_ID_STEP_SYNTAX_TABLE_WITHOUT_STEP, _
@@ -33,7 +31,7 @@ Public Function parse_step_list(feature_text As String, parent_feature As TFeatu
                 Set data_table = parse_table(feature_text, parent_feature)
                 Set current_step = new_step_list(new_step_list.Count)
                 Set current_step.data_table = data_table
-            Case LINE_TYPE_EXAMPLE_START, LINE_TYPE_RULE_START, LINE_TYPE_TAGS
+            Case LINE_TYPE_EXAMPLE_START, LINE_TYPE_RULE_START, LINE_TYPE_TAGS, LINE_TYPE_OUTLINE_START
                 'new rules, examples or tags will complete the step list
                 Set parse_step_list = new_step_list
                 parent_feature.parsed_lines = parent_feature.parsed_lines - 1
@@ -160,16 +158,16 @@ Public Function align_textblock(indented_text As String) As String
 End Function
 
 Public Function parse_step_line(step_line As String, step_list As Collection) As TStep
-    
     Dim step_head As String
-    Dim step_name As String
     Dim step As TStep
     
-    step_line = Trim(step_line)
     Set step = New TStep
+    step_line = Trim(step_line)
+    step.OriginalStepLine = step_line
     step_head = Split(step_line, " ")(0)
-    step_name = Trim(Right(step_line, Len(step_line) - Len(step_head) - 1))
+    'step head is the first word in a step line e.g. Given in 'Given a step' or And in 'And another step'
     step.Elements.Add step_head
+    'step is only one of those: Given, When or Then
     If InStr("Given When Then", step_head) > 0 And Len(step_head) > 3 Then
         step.SType = step_head
     Else
@@ -180,121 +178,6 @@ Public Function parse_step_line(step_line As String, step_list As Collection) As
             step.SType = step_list(step_list.Count).SType
         End If
     End If
-    find_step_expressions step_name, step
     Set parse_step_line = step
-End Function
-
-Private Sub find_step_expressions(step_name As String, new_step As TStep)
-
-    Dim name_element As String
-    Dim char_index As Long
-    Dim current_char As String
-    Dim expression As TStepExpression
-    Dim previous_char As String
-    
-    name_element = vbNullString
-    previous_char = " "
-    For char_index = 1 To Len(step_name)
-        If char_index > 1 Then previous_char = Mid(step_name, char_index - 1, 1)
-        current_char = Mid(step_name, char_index, 1)
-        If current_char = "\" Then
-            'ignore escaped chars, continue parameter search after the escaped char
-            char_index = char_index + 1
-            If char_index <= Len(step_name) Then
-                current_char = Mid(step_name, char_index, 1)
-                name_element = name_element & current_char
-            End If
-        Else
-            If current_char = """" Then
-                Set expression = find_string_expression(step_name, char_index)
-            ElseIf (IsNumeric(current_char) Or current_char = ".") And InStr(" ,([{", previous_char) > 0 Then
-                Set expression = find_numeric_expression(step_name, char_index)
-            End If
-            If expression Is Nothing Then
-                name_element = name_element & current_char
-            Else
-                new_step.Elements.Add Trim(name_element)
-                name_element = vbNullString
-                'add only a reference to the expression in the list of step name elements
-                new_step.Elements.Add new_step.Expressions.Count + 1
-                new_step.Expressions.Add expression.value
-                char_index = expression.IndexEnd
-                Set expression = Nothing
-            End If
-        End If
-    Next
-    If Len(name_element) > 0 Then new_step.Elements.Add Trim(name_element)
-End Sub
-
-Private Function find_numeric_expression(step_name As String, start_index As Long) As TStepExpression
-
-    Dim expression As TStepExpression
-    Dim search_index As Long
-    Dim current_char As String
-    Dim expression_name As String
-    Dim expression_is_valid As Boolean
-    
-    Set expression = New TStepExpression
-    expression.TypeName = "integer"
-    expression_name = vbNullString
-    search_index = start_index
-    expression_is_valid = True
-    expression.IndexStart = start_index
-    Do
-        current_char = Mid(step_name, search_index, 1)
-        If current_char = "." Then
-            If expression.TypeName = "double" Then
-                'a numeric expression with more than one decimal separator is probably a date
-                expression_is_valid = False
-            Else
-                expression.TypeName = "double"
-            End If
-        End If
-        expression_name = expression_name & current_char
-        search_index = search_index + 1
-    Loop While (IsNumeric(current_char) Or current_char = ".") And search_index <= Len(step_name)
-    If (InStr(" ,}])", current_char) > 0 Or (IsNumeric(current_char)) And search_index > Len(step_name)) And expression_is_valid Then
-        If expression.TypeName = "integer" Then
-            If Not IsNumeric(current_char) Then expression_name = Left(expression_name, Len(expression_name) - 1)
-            expression.value = CLng(expression_name)
-        Else
-            expression.value = CDbl(Trim(expression_name))
-        End If
-        If InStr(" ,}])", current_char) > 0 Then search_index = search_index - 1
-        expression.IndexEnd = search_index
-        Set find_numeric_expression = expression
-    Else
-        'numeric value ends on a letter e.g. 2nd
-        Set find_numeric_expression = Nothing
-    End If
-End Function
-
-Private Function find_string_expression(step_name As String, start_index As Long) As TStepExpression
-
-    Dim expression As TStepExpression
-    Dim found_matching_quote As Boolean
-    Dim search_index As Long
-    Dim matching_position As Long
-
-    Set expression = New TStepExpression
-    expression.TypeName = "string"
-    'found string parameter, look for matching quotes
-    found_matching_quote = False
-    search_index = start_index
-    expression.IndexStart = start_index
-    Do
-        'ignore escaped quotes as matching quotes
-        matching_position = InStr(search_index + 1, step_name, """")
-        If Mid(step_name, matching_position - 1, 1) = "\" Then
-            search_index = matching_position
-        Else
-            found_matching_quote = True
-        End If
-    Loop While found_matching_quote = False And matching_position > 0
-    If matching_position = 0 Then matching_position = Len(step_name)
-    expression.value = Mid(step_name, start_index + 1, matching_position - start_index - 1)
-    expression.value = Replace(expression.value, "\""", """")
-    expression.IndexEnd = matching_position
-    Set find_string_expression = expression
 End Function
 

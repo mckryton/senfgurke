@@ -30,10 +30,12 @@ Public Function run_step(step_definition As TStep, context As TContext) As Varia
     
     On Error GoTo error_handler
     step_run_attempts = 0
+    'if available apply parameters from outline table to step definition
+    'TODO implement outline
     step_function_name = step_definition.get_step_function_name
     For Each step_implementation_class In m_session.StepImplementations
         TSpec.LastFailMsg = vbNullString
-        step_result = try_step(step_implementation_class, step_function_name, step_definition.Expressions, context, step_definition.data_table)
+        step_result = try_step(step_implementation_class, step_definition, context)
     Next
     If step_run_attempts = m_session.StepImplementations.Count Then
         run_step = fail_step(ERR_ID_STEP_IS_STATUS_MISSING, step_definition.get_step_function_template)
@@ -51,20 +53,25 @@ error_handler:
     End If
 End Function
 
-Public Function try_step(step_implementation_class As Variant, step_function_name As String, step_expressions As Collection, context As TContext, data_table As TDataTable) As Variant
+Public Function try_step(step_implementation_class As Variant, step_definition As TStep, context As TContext) As Variant
     Dim step_result As String
+    Dim step_expressions As Collection
+    Dim step_function_name As String
     
+    step_function_name = step_definition.get_step_function_name
+    Set step_expressions = ExtraVBA.copy_collection(step_definition.Expressions)
+    If step_definition.docstring <> vbNullString Then step_expressions.Add step_definition.docstring
     If step_expressions.Count > 0 Then
-        If data_table Is Nothing Then
+        If step_definition.data_table Is Nothing Then
             step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, step_expressions)
         Else
-            step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, step_expressions, data_table)
+            step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, step_expressions, step_definition.data_table)
         End If
     Else
-        If data_table Is Nothing Then
+        If step_definition.data_table Is Nothing Then
             step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context)
         Else
-            step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, data_table)
+            step_result = CallByName(step_implementation_class, step_function_name, VbMethod, context, step_definition.data_table)
         End If
     End If
     try_step = step_result

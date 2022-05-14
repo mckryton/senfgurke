@@ -53,6 +53,7 @@ Public Sub Given_a_step_STR_F5C6F4BA1D15(example_context As TContext, step_expre
     Set parent_feature = THelper.new_TFeature
     parent_feature.parsed_lines = -1
     Set step = TStepParser.parse_step_list(step_expressions(1), parent_feature)(1)
+    step.parse_step_expressions
     example_context.set_value step, "example_step"
 End Sub
 
@@ -84,7 +85,10 @@ End Sub
 
 Public Sub When_the_code_template_for_the_step_implementation_7D39D6705DD8(example_context As TContext)
     'When the code template for the step implementation is requested
-    example_context.set_value example_context.get_value("example_step").get_step_function_template, "step_function_template"
+    Dim step As TStep
+    
+    Set step = example_context.get_value("example_step")
+    example_context.set_value step.get_step_function_template, "step_function_template"
 End Sub
 
 Public Sub When_the_step_is_translated_into_a_function_name_D820185C4AF6(example_context As TContext)
@@ -100,7 +104,7 @@ Public Sub When_the_step_function_is_called_418C5F83C560(example_context As TCon
     
     Set step_runner = THelper.new_TStepRunner
     Set step = example_context.get_value("example_step")
-    step_runner.try_step Me, step.get_step_function_name, step.Expressions, example_context, step.data_table
+    step_runner.try_step Me, step, example_context
     Set step_runner = Nothing
 End Sub
 

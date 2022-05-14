@@ -15,6 +15,11 @@ Dim m_example_description As String
 Dim m_steps As Collection
 Dim m_example_tags As Collection
 Dim m_original_headline As String
+Dim m_outlines As Collection
+
+Private Sub Class_Terminate()
+    Set m_outlines = Nothing
+End Sub
 
 Public Property Get head() As String
     head = m_example_head
@@ -48,8 +53,12 @@ Public Property Let OriginalHeadline(original_headline As String)
     m_original_headline = original_headline
 End Property
 
-Public Property Get steps() As Collection
+Public Property Get Outlines() As Collection
+    If m_outlines Is Nothing Then Set m_outlines = New Collection
+    Set Outlines = m_outlines
+End Property
 
+Public Property Get steps() As Collection
     If m_steps Is Nothing Then
         Set m_steps = New Collection
     End If
@@ -60,7 +69,6 @@ Public Property Set steps(new_step_list As Collection)
     Set m_steps = new_step_list
 End Property
 
-
 Public Property Get tags() As Collection
     If m_example_tags Is Nothing Then
         Set m_example_tags = New Collection
@@ -69,12 +77,10 @@ Public Property Get tags() As Collection
 End Property
 
 Public Property Let tags(ByVal example_tags As Collection)
-
     Set m_example_tags = example_tags
 End Property
 
 Public Sub insert_background_steps(background_steps As Collection)
-    
     Dim background_step As TStep
     Dim step_index As Long
     
@@ -87,3 +93,4 @@ Public Sub insert_background_steps(background_steps As Collection)
         End If
     Next
 End Sub
+

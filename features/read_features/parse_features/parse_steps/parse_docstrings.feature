@@ -19,7 +19,7 @@ Ability: parse docstrings
               And another step
             """
          When the step list is parsed
-         Then the first step has an expression
+         Then the first step has an docstring
           And the function name for the first step ends with "STR"
 
       Example: step list with a multi line docstring
@@ -33,9 +33,13 @@ Ability: parse docstrings
                And another step
             """
          When the step list is parsed
-         Then the first step has an expression
+         Then the first step has an docstring
           And the function name for the first step ends with "STR"
-          And the first step has one string parameter with two lines
+          And the docstring of the first step is
+            """
+              first line of docstring
+              second line of docstring
+            """
 
       Example: docstring with leading linebreak
         Given a list of steps

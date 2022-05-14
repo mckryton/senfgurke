@@ -85,7 +85,7 @@
 
 * [Parse step expressions](read_features/parse_features/parse_steps/parse_step_expressions.feature)
 
-  To match a step with it's step definition it has to be disassembled into its
+  To match a step with it's step definition it has to be disassembled (parseed)
 
 * [Parse tables](read_features/parse_features/parse_tables.feature)
 

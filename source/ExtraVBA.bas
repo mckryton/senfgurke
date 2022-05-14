@@ -5,7 +5,7 @@ Public Function collection_has_key(search_key As Variant, search_target As Colle
                      
     On Error GoTo NOT_FOUND
     'use typename to access the collections item independ of its type (object or basic type)
-    TypeName search_target.Item(search_key)
+    TypeName search_target.item(search_key)
     On Error GoTo 0
     collection_has_key = True
     Exit Function
@@ -36,6 +36,17 @@ Public Function collection_has_value(search_value As Variant, search_target As C
             End If
         End If
     Next
+End Function
+
+Public Function copy_collection(source_collection As Collection) As Collection
+    Dim item As Variant
+    Dim target_collection As Collection
+    
+    Set target_collection = New Collection
+    For Each item In source_collection
+        target_collection.Add item
+    Next
+    Set copy_collection = target_collection
 End Function
 
 Private Function arrays_are_equal(first_array As Variant, second_array As Variant) As Boolean
