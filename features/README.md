@@ -128,11 +128,23 @@
   Background:
   Given the report format is "progress"
 
-* [Report in verbose format](report/report_in_verbose_format.feature)
+### Report In Verbose Format
+
+* [Report in verbose format](report/report_in_verbose_format/report_in_verbose_format.feature)
 
   While developing new features or debugging selected examples the verbose
   report format come in handy. It will show step definition next to the latest
   execution result as well as name and descriptions for features and rules.
+
+  Background:
+  Given the report format is "verbose"
+
+* [Report outlines in verbose format](report/report_in_verbose_format/report_outlines_in_verbose_format.feature)
+
+  Because outlines are just slight variations of an example reporting them for
+  each variation could make the report quite messy. Therefor the report should
+  quote the original definition and only name the placeholders to be replaced
+  with the values from the outline tables.
 
   Background:
   Given the report format is "verbose"
@@ -166,7 +178,9 @@
   have to follow conventions. Conventions for function and variable names in
   VBA are documented here:
 
-* [Run examples](run_tests/run_examples.feature)
+### Run Examples
+
+* [Run examples](run_tests/run_examples/run_examples.feature)
 
   Examples are the building blocks for describing the application under test.
   Running examples means that Senfgurke will try to find and execute a
@@ -174,14 +188,12 @@
   The result of the executed step will tell you if the application works as
   expected (see feature "run steps" for more).
 
-### Run Examples
-
 * [Run outline example](run_tests/run_examples/run_outline_example.feature)
 
   Examples can include outline tables to allow the repetition of an example but
   with a different set of parameters. So the example will be executed once for
   every row of the outline table while the value from each column will replace
-  the corrosponding placeholder in the examples steps.
+  the corresponding placeholder in the examples steps.
 
 * [Run features](run_tests/run_features.feature)
 

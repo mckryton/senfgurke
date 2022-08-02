@@ -1,5 +1,5 @@
 # Senfgurke
-Senfgurke is example driven test framework for VBA. What does this mean? Using Senfgurke you can turn examples given in natural language into automated tests run by VBA ([Visual Basic for Applications](https://docs.microsoft.com/en-us/office/vba/api/overview/)).
+Senfgurke is an example driven test framework for VBA. What does this mean? Using Senfgurke you can turn examples given in natural language into automated tests run by VBA ([Visual Basic for Applications](https://docs.microsoft.com/en-us/office/vba/api/overview/)).
 
 - [Introduction](#Introduction)
 - [Setup](#Setup)
