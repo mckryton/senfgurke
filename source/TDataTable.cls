@@ -11,14 +11,15 @@ Option Explicit
 
 Dim m_column_names As Collection
 Dim m_table_rows As Collection
+Dim m_column_widths As Collection
 
 Private Sub Class_Terminate()
     Set m_column_names = Nothing
     Set m_table_rows = Nothing
+    Set m_column_widths = Nothing
 End Sub
 
 Public Sub add_row(feature_line As String)
-        
     Dim column_name As Variant
     Dim column_value As Variant
     Dim column_values As Variant
@@ -41,7 +42,6 @@ Public Sub add_row(feature_line As String)
 End Sub
 
 Public Sub set_header(feature_line As String)
-
     Dim column_name As String
     Dim column_names As Variant
     Dim column_index As Integer
@@ -60,7 +60,6 @@ Public Sub set_header(feature_line As String)
 End Sub
 
 Public Function add_column_name(new_name As String) As Boolean
-
     If ExtraVBA.collection_has_value(new_name, Me.column_names) Then
         'indicate that adding a new column name has failed
         add_column_name = False
@@ -81,7 +80,6 @@ Public Property Get table_rows() As Collection
 End Property
 
 Public Function get_table_as_text(Optional indention As Integer) As String
-
     Dim column_width_list As Collection
     Dim col_name As Variant
     Dim table_text As String
@@ -89,10 +87,11 @@ Public Function get_table_as_text(Optional indention As Integer) As String
     
     If IsMissing(indention) Then indention = 0
     table_text = ""
+    ' columns are filled up with spaces to match column width of the widest item
     Set column_width_list = New Collection
     table_text = Space$(indention) & "|"
     For Each col_name In Me.column_names
-        column_width_list.Add get_max_row_width(CStr(col_name)), col_name
+        column_width_list.Add get_max_col_width(CStr(col_name)), col_name
         table_text = table_text & " " & CStr(col_name)
         If Len(col_name) < column_width_list(col_name) Then
             table_text = table_text & Space$(column_width_list(col_name) - Len(col_name))
@@ -114,8 +113,29 @@ Public Function get_table_as_text(Optional indention As Integer) As String
     get_table_as_text = Left(table_text, Len(table_text) - 1)
 End Function
 
-Private Function get_max_row_width(col_name As String) As Integer
+Public Function get_table_header_as_text() As String
+    Dim col_name As Variant
+    Dim table_header As String
+    
+    table_header = "|"
+    For Each col_name In Me.column_names
+        table_header = table_header & " " & CStr(col_name) & " |"
+    Next
+    get_table_header_as_text = table_header
+End Function
 
+Public Function get_table_row_as_text(table_row As Variant) As String
+    Dim row_as_text As String
+    Dim col_name As Variant
+    
+    row_as_text = "|"
+    For Each col_name In Me.column_names
+        row_as_text = row_as_text & " " & table_row(col_name) & Space(ColumnWidths(col_name) - Len(table_row(col_name))) & " |"
+    Next
+    get_table_row_as_text = row_as_text
+End Function
+
+Private Function get_max_col_width(col_name As String) As Integer
     Dim max_row_width As Integer
     Dim table_row As Variant
     
@@ -125,5 +145,21 @@ Private Function get_max_row_width(col_name As String) As Integer
             max_row_width = Len(table_row(col_name))
         End If
     Next
-    get_max_row_width = max_row_width
+    get_max_col_width = max_row_width
 End Function
+
+Private Property Get ColumnWidths() As Collection
+    Dim column_name As Variant
+    
+    If m_column_widths Is Nothing Then
+        Set m_column_widths = New Collection
+        For Each column_name In Me.column_names
+            m_column_widths.Add get_max_col_width(CStr(column_name)), CStr(column_name)
+        Next
+    End If
+    Set ColumnWidths = m_column_widths
+End Property
+
+Public Property Let ColumnWidths(ByVal vNewValue As Variant)
+
+End Property

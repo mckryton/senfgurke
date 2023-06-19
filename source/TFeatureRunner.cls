@@ -20,6 +20,7 @@ End Sub
 Public Sub run_feature(example_container As TExampleContainer, Optional filter_tag)
     Dim feature_section As Variant
     Dim example As TExample
+    Dim step As Variant
     Dim example_runner As TExampleRunner
     Dim current_rule As TExampleContainer
     Dim current_feature As TFeature
@@ -45,7 +46,13 @@ Public Sub run_feature(example_container As TExampleContainer, Optional filter_t
                     End If
                 End If
                 If example_container.background.steps.Count > 0 Then example.insert_background_steps example_container.background.steps
-                example_runner.run_example example
+                ' if an outline table exists repeat the example for every data row in every outline table
+                If example.Outlines.Count > 0 Then
+                    example_runner.run_outline_example example
+                Else
+                    log_event EVENT_RUN_EXAMPLE_STARTED, example.description, example.OriginalHeadline, SECTION_TYPE_EXAMPLE
+                    example_runner.run_example example
+                End If
             End If
         ElseIf TypeName(feature_section) = "TRule" Then
             Set current_rule = feature_section

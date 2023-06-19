@@ -170,7 +170,7 @@ Public Sub includes_text(include_item As Variant)
     If TypeName(include_item) = "String" Then
         If InStr(Me.given_value, include_item) = 0 Then
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
-                        vbTab & "string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                        vbTab & "found string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
                         vbTab & "should include:" & vbTab & ">" & include_item & "<"
             raise_expectation_err matcher_fail_msg
         End If
@@ -186,12 +186,28 @@ Public Sub does_not_include(include_item As Variant)
     If TypeName(include_item) = "String" Then
         If InStr(Me.given_value, include_item) > 0 Then
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
-                        vbTab & "string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                        vbTab & "found string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
                         vbTab & "should not include:" & vbTab & ">" & include_item & "<"
             raise_expectation_err matcher_fail_msg
         End If
     Else
         Debug.Print "STATUS_PENDING: include test for arrays"
+    End If
+End Sub
+
+Public Sub starts_with_text(heading_text As Variant)
+
+    Dim matcher_fail_msg As String
+    
+    If TypeName(heading_text) = "String" Then
+        If Left(Me.given_value, Len(heading_text)) <> heading_text Then
+            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+                        vbTab & "found string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                        vbTab & "should start with:" & vbTab & ">" & heading_text & "<"
+            raise_expectation_err matcher_fail_msg
+        End If
+    Else
+        Debug.Print "starts_with_text does apply only for Strings and not for " & TypeName(heading_text)
     End If
 End Sub
 

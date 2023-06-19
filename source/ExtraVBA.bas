@@ -38,6 +38,22 @@ Public Function collection_has_value(search_value As Variant, search_target As C
     Next
 End Function
 
+Public Function join_collection(ByVal source As Collection, Optional separator) As String
+    Dim item As Variant
+    Dim joined_text As String
+
+    joined_text = vbNullString
+    If IsMissing(separator) Then separator = ","
+    For Each item In source
+        If IsObject(item) Then
+            joined_text = joined_text & TypeName(item) & separator
+        Else
+            joined_text = joined_text & Trim(CStr(item)) & separator
+        End If
+    Next
+    join_collection = Left(joined_text, Len(joined_text) - Len(separator))
+End Function
+
 Public Function copy_collection(source_collection As Collection) As Collection
     Dim item As Variant
     Dim target_collection As Collection

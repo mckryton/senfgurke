@@ -36,6 +36,30 @@ Public Property Let SType(ByVal step_type As String)
     m_step_type = step_type
 End Property
 
+'clear the results from the last search step expressions
+' this is required when placeholders in the step definition are going
+' to be replaced with values from an outline table
+Public Sub reset_name()
+    'keep the step head on position 1, it won't change
+    Do While Me.Elements.Count > 1
+        Me.Elements.Remove Me.Elements.Count
+    Loop
+    Do While Me.Expressions.Count > 0
+        Me.Expressions.Remove 1
+    Loop
+    IsNameSet = False
+    Me.parse_step_expressions
+End Sub
+
+Public Sub insert_outline_parameters(outline_parameter_names As Variant, outline_parameter_set As Variant)
+    Dim parameter_name As Variant
+    
+    For Each parameter_name In outline_parameter_names
+        Me.OriginalStepLine = Replace(Me.OriginalStepLine, "<" & parameter_name & ">", outline_parameter_set(parameter_name))
+    Next
+End Sub
+
+
 'looks for strings and numbers in the original step line and replaces them with
 '  step expression as placeholders for parameters
 Public Sub parse_step_expressions()
@@ -214,8 +238,9 @@ Private Function get_step_comment_name() As String
         End If
         function_name = function_name & " "
     Next
-    'TODO add docstring
-    get_step_comment_name = Trim(function_name)
+    function_name = Trim(function_name)
+    If Not Me.docstring = vbNullString Then function_name = function_name & " {string}"
+    get_step_comment_name = function_name
 End Function
 
 Private Function remove_non_ascii_chars(function_name As String) As String
@@ -241,7 +266,6 @@ Private Function remove_non_ascii_chars(function_name As String) As String
 End Function
 
 Public Function get_step_function_template() As String
-
     Dim template As String
     
     template = "Public Sub " & Me.get_step_function_name & "(example_context as TContext"

@@ -22,16 +22,20 @@ Public Sub setup(session As TSession, parent_runner As TExampleRunner)
     Set m_parent_runner = parent_runner
 End Sub
 
-Public Function run_step(step_definition As TStep, context As TContext) As Variant
+Public Function run_step(step_definition As TStep, context As TContext, Optional dry_run) As Variant
+    'run_step returns an array with status and optional error message
     Dim step_result As Variant
     Dim step_implementation_class As Variant
     Dim step_function_name As String
     Dim step_run_attempts As Integer
     
+    If IsMissing(dry_run) Then dry_run = False
+    If dry_run Then
+        run_step = Array(STATUS_OK)
+        Exit Function
+    End If
     On Error GoTo error_handler
     step_run_attempts = 0
-    'if available apply parameters from outline table to step definition
-    'TODO implement outline
     step_function_name = step_definition.get_step_function_name
     For Each step_implementation_class In m_session.StepImplementations
         TSpec.LastFailMsg = vbNullString

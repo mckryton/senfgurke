@@ -170,6 +170,9 @@ Private Sub SessionEventBroker_EventLogged(new_event As TEvent)
         Case EVENT_RUN_STEP_FINISHED
             report REPORT_MSG_TYPE_STEP, new_event.SectionName, new_event.SectionStatus, _
                     new_event.EventMessage, new_event.FeatureFileName
+        Case EVENT_RUN_OUTLINE_STEP_DECLARED
+            report REPORT_MSG_TYPE_OUTLINE_STEP, new_event.SectionName, new_event.SectionStatus, _
+                    new_event.EventMessage, new_event.FeatureFileName
         Case EVENT_PARSE_ERROR
             report REPORT_MSG_TYPE_PARSE_ERR, "Found syntax error while parsing feature '" _
                         & new_event.SectionName & "'", err_msg:=new_event.EventMessage
@@ -178,5 +181,18 @@ Private Sub SessionEventBroker_EventLogged(new_event As TEvent)
             finish_report
         Case EVENT_STEP_IS_MISSING
             report REPORT_MSG_TYPE_CODE_TEMPLATE, new_event.EventMessage
+        Case EVENT_RUN_OUTLINE_EXAMPLE_STARTED
+            If TypeName(Me.Report_Formatter) = "TReportFormatterVerbose" Then
+                Me.Report_Formatter.OutlineWasStarted = True
+            End If
+            report REPORT_MSG_TYPE_EXAMPLE_TITLE, new_event.SectionName
+        Case EVENT_RUN_OUTLINE_EXAMPLE_FINISHED
+            If TypeName(Me.Report_Formatter) = "TReportFormatterVerbose" Then
+                Me.Report_Formatter.OutlineWasStarted = False
+            End If
+        Case EVENT_RUN_OUTLINE_TABLE_STARTED
+            report REPORT_MSG_TYPE_OUTLINE_TABLEHEADER, new_event.SectionName & vbLf & new_event.EventMessage
+        Case EVENT_RUN_OUTLINE_ROW_STARTED
+            report REPORT_MSG_TYPE_OUTLINE_ROW, new_event.EventMessage
     End Select
 End Sub
