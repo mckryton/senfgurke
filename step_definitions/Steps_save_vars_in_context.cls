@@ -20,7 +20,7 @@ Public Sub When__INT_is_add_as_STR_in_context_715E61B1C784(example_context As TC
     example_context.set_value step_expressions(1), step_expressions(2)
 End Sub
 
-Public Sub When_a_new_collection_is_added_as_STR_to_the_conte_42F4D1BED80C(example_context As TContext, step_expressions As Collection)
+Public Sub When_a_new_collection_is_added_as_STR_to_the__42F4D1BED80C(example_context As TContext, step_expressions As Collection)
     'When a new collection is added as {string} to the context
     example_context.set_value New Collection, step_expressions(1)
 End Sub
@@ -35,7 +35,7 @@ Public Sub Then_the_context_value_STR_returns_INT_2D0DA1564267(example_context A
     TSpec.expect(example_context.get_value(step_expressions(1))).to_be step_expressions(2)
 End Sub
 
-Public Sub Then_the_context_value_STR_returns_a_collection_ob_0B0B7BAA0497(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_context_value_STR_returns_a_collecti_0B0B7BAA0497(example_context As TContext, step_expressions As Collection)
     'Then the context value {string} returns a collection object
     TSpec.expect(TypeName(example_context.get_value(step_expressions(1)))).to_be "Collection"
 End Sub

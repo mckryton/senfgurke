@@ -21,7 +21,7 @@ Public Sub Given_the_report_format_is_STR_94DE9139C9BF(example_context As TConte
     example_context.set_value session, "session"
 End Sub
 
-Public Sub Given_a_code_template_for_a_missing_step_was_repor_E4A1AA906A81(example_context As TContext, step_expressions As Collection)
+Public Sub Given_a_code_template_for_a_missing_step_was__E4A1AA906A81(example_context As TContext, step_expressions As Collection)
     'Given a code template for a missing step was reported as {string}
     Dim session As TSession
     
@@ -74,7 +74,7 @@ Public Sub When_a_step_STR_is_reported_with_status_STR_22E595BD5DFA(example_cont
     session.log_event EVENT_RUN_STEP_FINISHED, vbNullString, step_expressions(1), SECTION_TYPE_STEP, step_expressions(2)
 End Sub
 
-Public Sub When_a_step_STR_is_reported_with_status_STR_and_er_1F229896A06C(example_context As TContext, step_expressions As Collection)
+Public Sub When_a_step_STR_is_reported_with_status_STR_a_1F229896A06C(example_context As TContext, step_expressions As Collection)
     'When a step {string} is reported with status {string} and error msg {string}
     Dim session As TSession
     
@@ -82,7 +82,7 @@ Public Sub When_a_step_STR_is_reported_with_status_STR_and_er_1F229896A06C(examp
     session.log_event EVENT_RUN_STEP_FINISHED, step_expressions(3), step_expressions(1), SECTION_TYPE_STEP, step_expressions(2)
 End Sub
 
-Public Sub When_the_report_will_report_code_templates_for_the_B3C6D3155FBC(example_context As TContext)
+Public Sub When_the_report_will_report_code_templates_fo_B3C6D3155FBC(example_context As TContext)
     'When the report will report code templates for the missing steps
     Dim session As TSession
     
@@ -90,7 +90,7 @@ Public Sub When_the_report_will_report_code_templates_for_the_B3C6D3155FBC(examp
     session.reporter.finish_report
 End Sub
 
-Public Sub When_all_steps_were_reported_and_the_report_is_fin_A68058ECE13A(example_context As TContext)
+Public Sub When_all_steps_were_reported_and_the_report_i_A68058ECE13A(example_context As TContext)
     'When all steps were reported and the report is finished
     example_context.get_value("session").reporter.finish_report
     example_context.set_value example_context.get_value("session").reporter.ConsoleOutput, "report_output"

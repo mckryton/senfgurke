@@ -17,7 +17,7 @@ Public Sub Then_the_first_step_has_an_docstring_451F91589372(example_context As 
     TSpec.expect(first_step.docstring).not_to_be vbNullString
 End Sub
 
-Public Sub Then_the_function_name_for_the_first_step_ends_wit_79EB11152D22(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_function_name_for_the_first_step_end_79EB11152D22(example_context As TContext, step_expressions As Collection)
     'And the function name for the first step ends with {string}
     Dim function_name As String
     Dim first_step As TStep
@@ -36,7 +36,7 @@ Public Sub Then_the_docstring_of_the_first_step_is_STR_99C591958B2D(example_cont
     TSpec.expect(first_step.docstring).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_first_line_of_the_steps_docstring_is_empt_C94363C3329C(example_context As TContext)
+Public Sub Then_the_first_line_of_the_steps_docstring_is_C94363C3329C(example_context As TContext)
     'Then the first line of the steps docstring is empty
     Dim first_step As TStep
     

@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_the_current_application_is_stored_under_STR_E4B6AFDB477F(example_context As TContext, step_expressions As Collection)
+Public Sub Given_the_current_application_is_stored_under_E4B6AFDB477F(example_context As TContext, step_expressions As Collection)
     'Given the current application is stored under {string}
     example_context.set_value Join(Split(step_expressions(1), "/"), ExtraVBA.get_path_separator), "doc_path"
 End Sub
@@ -19,12 +19,12 @@ Public Sub Given_two_feature_files_in_the_feature_dir_8FB24F121954(example_conte
     example_context.set_value ThisWorkbook.path & ExtraVBA.get_path_separator & Join(Split("testdata/features_toplevel_pure", "/"), ExtraVBA.get_path_separator), "feature_path"
 End Sub
 
-Public Sub Given_one_feature_file_and_one_text_file_in_the_fe_98F5E94C9F0E(example_context As TContext)
+Public Sub Given_one_feature_file_and_one_text_file_in_t_98F5E94C9F0E(example_context As TContext)
     'Given one feature file and one text file in the feature dir
     example_context.set_value ThisWorkbook.path & ExtraVBA.get_path_separator & Join(Split("testdata/features_toplevel_mixed", "/"), ExtraVBA.get_path_separator), "feature_path"
 End Sub
 
-Public Sub Given_one_feature_file_located_at_a_sub_directory__CA04B38A1CAE(example_context As TContext)
+Public Sub Given_one_feature_file_located_at_a_sub_direc_CA04B38A1CAE(example_context As TContext)
     'Given one feature file located at a sub directory under the feature dir
     example_context.set_value ThisWorkbook.path & ExtraVBA.get_path_separator & Join(Split("testdata/features_subdir", "/"), ExtraVBA.get_path_separator), "feature_path"
 End Sub
@@ -120,7 +120,7 @@ Public Sub When_the_feature_dir_is_read_8C8F808B5CDF(example_context As TContext
     example_context.set_value TFeatureLoader.load_features(example_context.get_value("feature_path")), "features"
 End Sub
 
-Public Sub When_a_test_is_started_with_STR_as_filter_for_feat_E1CA0BEA4B3F(example_context As TContext, step_expressions As Collection)
+Public Sub When_a_test_is_started_with_STR_as_filter_for_E1CA0BEA4B3F(example_context As TContext, step_expressions As Collection)
     'When a test is started with {string} as filter for feature names
     Dim session As TSession
     Dim event_listener As EventListener
@@ -185,7 +185,7 @@ Public Sub Then_both_features_are_loaded_and_executed_A16D505188D1(example_conte
     TSpec.expect(logged_events.Count).to_be 2
 End Sub
 
-Public Sub Then_only_INT_features_having_names_starting_with__101BAF114ADB(example_context As TContext, step_expressions As Collection)
+Public Sub Then_only_INT_features_having_names_starting__101BAF114ADB(example_context As TContext, step_expressions As Collection)
     'Then only {integer} features having names starting with {string} are loaded
     Dim event_listener As EventListener
     Dim logged_events As Collection

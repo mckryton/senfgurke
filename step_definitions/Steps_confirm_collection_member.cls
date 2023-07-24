@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_a_collection_has_INT_members_array_INT__STR__22433998BB74(example_context As TContext, step_expressions As Collection)
+Public Sub Given_a_collection_has_INT_members_array_INT__22433998BB74(example_context As TContext, step_expressions As Collection)
     'Given a collection has {integer} members array( {integer}, {string} ) and array( {integer}, {string} )
     Dim index As Integer
     Dim sample_collection As Collection
@@ -29,7 +29,7 @@ Public Sub Given_an_expected_value_is_an_array_INT__STR__C2EB84347C9F(example_co
     example_context.set_value expected_value, "expected_value"
 End Sub
 
-Public Sub When_the_expectation_validates_that_the_collection_808FE2AA1406(example_context As TContext)
+Public Sub When_the_expectation_validates_that_the_colle_808FE2AA1406(example_context As TContext)
     'When the expectation validates that the collection contains the expected value
     Dim sample_collection As Collection
     Dim expected_value As Variant

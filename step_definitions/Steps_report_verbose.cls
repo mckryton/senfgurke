@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Option Explicit
 
-Public Sub When_the_following_events_are_reported_as_a_result_0232CC26FE97(example_context As TContext, data_table As TDataTable)
+Public Sub When_the_following_events_are_reported_as_a_r_0232CC26FE97(example_context As TContext, data_table As TDataTable)
     'When the following events are reported as a result of running a feature
     Dim session As TSession
     Dim raised_event As Variant
@@ -30,7 +30,7 @@ Public Sub When_the_following_events_are_reported_as_a_result_0232CC26FE97(examp
     Next
 End Sub
 
-Public Sub When_a_step_STR_followed_by_a_docstring_STR_is_rep_8C80B341FF25(example_context As TContext, step_expressions As Collection)
+Public Sub When_a_step_STR_followed_by_a_docstring_STR_i_8C80B341FF25(example_context As TContext, step_expressions As Collection)
     'When a step {string} followed by a docstring {string} is reported with status {string}
     Dim step_name As String
     Dim session As TSession
@@ -51,7 +51,7 @@ Public Sub When_the_execution_of_the_feature_is_reported_7A6F8A00CA5C(example_co
     session.log_event EVENT_RUN_FEATURE_STARTED, parsed_feature.description, parsed_feature.Name, SECTION_TYPE_FEATURE
 End Sub
 
-Public Sub When_the_example_is_reported_with_the_step_result__F52F4459A058(example_context As TContext, step_expressions As Collection)
+Public Sub When_the_example_is_reported_with_the_step_re_F52F4459A058(example_context As TContext, step_expressions As Collection)
     'And the example is reported with the step result {string}
     Dim Example As TExample
     Dim step As TStep
@@ -64,7 +64,7 @@ Public Sub When_the_example_is_reported_with_the_step_result__F52F4459A058(examp
     session.log_event EVENT_RUN_STEP_FINISHED, vbNullString, step.OriginalStepLine, SECTION_TYPE_STEP, step_expressions(1)
 End Sub
 
-Public Sub When_the_following_step_is_reported_with_the_statu_2B48A62AC066(example_context As TContext, step_expressions As Collection)
+Public Sub When_the_following_step_is_reported_with_the__2B48A62AC066(example_context As TContext, step_expressions As Collection)
     'When the following step is reported with the status {string}
     Dim step As TStep
     Dim step_list As Collection

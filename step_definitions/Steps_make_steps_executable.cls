@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub When_the_function_name_for_the_last_step_is_calcul_3D1B9F9C0F3D(example_context As TContext)
+Public Sub When_the_function_name_for_the_last_step_is_c_3D1B9F9C0F3D(example_context As TContext)
     'When the function name for the last step is calculated
     Dim feature As TFeature
     Dim example As TExample

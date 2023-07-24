@@ -57,7 +57,7 @@ exception_handler:
     example_context.set_value Err.description, "err_msg"
 End Sub
 
-Public Sub Then_the_parsed_example_contains_all_the_steps_013B99DC739C(example_context As TContext)
+Public Sub Then_the_parsed_example_contains_all_the_step_013B99DC739C(example_context As TContext)
     'Then the parsed example contains all the steps
     Dim Example As TExample
     
@@ -74,7 +74,7 @@ Public Sub Then_the_parsed_example_contains_all_the_steps_013B99DC739C(example_c
     TSpec.expect(Example.steps(3).Elements(1)).to_be "Then"
 End Sub
 
-Public Sub Then_the_type_of_the_second_step_is_set_to_STR_9CA91DFBD6DD(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_type_of_the_second_step_is_set_to_ST_9CA91DFBD6DD(example_context As TContext, step_expressions As Collection)
     'Then the type of the second step is set to {string}
     TSpec.expect(example_context.get_value("parsed_feature").sections(1).steps(2).SType).to_be step_expressions(1)
 End Sub

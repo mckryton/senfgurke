@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_a_new_test_run_started_collecting_statistics_152BAB44CFC9(example_context As TContext)
+Public Sub Given_a_new_test_run_started_collecting_stati_152BAB44CFC9(example_context As TContext)
     'Given a new test run started collecting statistics
     Dim session As TSession
     Dim event_stream_listener As EventListener
@@ -28,7 +28,7 @@ Public Sub Given_duration_of_a_test_run_is_INT_ms_CB357F7BA1F9(example_context A
     example_context.set_value step_expressions(1), "duration"
 End Sub
 
-Public Sub When_the_feature_is_executed_and_statistics_are_co_0BF6FCF4961B(example_context As TContext)
+Public Sub When_the_feature_is_executed_and_statistics_a_0BF6FCF4961B(example_context As TContext)
     'When the feature is executed and statistics are collected
     Dim Feature As TFeature
     Dim parsed_features As Collection
@@ -51,7 +51,7 @@ Public Sub When_the_results_for_the_steps_are_summed_up_EE8E882F4756(example_con
     example_context.set_value example_context.get_value("session").statistics.get_statistics_summary, "statistic_results"
 End Sub
 
-Public Sub Then_start_and_end_time_for_the_test_run_are_set_262A8F19D7C7(example_context As TContext)
+Public Sub Then_start_and_end_time_for_the_test_run_are__262A8F19D7C7(example_context As TContext)
     'Then start and end time for the test run are set
     TSpec.expect(CLng(example_context.get_value("session").StartTime)).not_to_be 0
     TSpec.expect(CLng(example_context.get_value("session").EndTime)).not_to_be 0

@@ -35,7 +35,7 @@ expectation_failed:
     example_context.set_value "failed", "expectation_result"
 End Sub
 
-Public Sub When_the_nonobject_variable_is_expected_to_be_noth_10954F3DA4DC(example_context As TContext)
+Public Sub When_the_nonobject_variable_is_expected_to_be_10954F3DA4DC(example_context As TContext)
     'When the non-object variable is expected to be Nothing
     On Error GoTo expectation_failed
     TSpec.expect(example_context.get_value("sample_variable")).to_be_nothing
@@ -46,7 +46,7 @@ expectation_failed:
     example_context.set_value "failed", "expectation_result"
 End Sub
 
-Public Sub When_the_variable_is_expected_not_to_be_nothing_63DB3DDBA289(example_context As TContext)
+Public Sub When_the_variable_is_expected_not_to_be_nothi_63DB3DDBA289(example_context As TContext)
     'When the variable is expected not to be Nothing
     On Error GoTo expectation_failed
     TSpec.expect(example_context.get_value("sample_variable")).not_to_be_nothing
@@ -57,7 +57,7 @@ expectation_failed:
     example_context.set_value "failed", "expectation_result"
 End Sub
 
-Public Sub When_the_nonobject_variable_is_expected_not_to_be__A409ACACC890(example_context As TContext)
+Public Sub When_the_nonobject_variable_is_expected_not_t_A409ACACC890(example_context As TContext)
     'When the non-object variable is expected not to be Nothing
     On Error GoTo expectation_failed
     TSpec.expect(example_context.get_value("sample_variable")).to_be_nothing

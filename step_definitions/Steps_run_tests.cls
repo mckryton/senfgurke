@@ -17,7 +17,7 @@ Public Sub Given_a_feature_was_loaded_as_STR_A7346B4E7CD1(example_context As TCo
     TSupport.load_feature_from_text step_expressions(1), example_context.get_value("loaded_features")
 End Sub
 
-Public Sub Given_a_feature_was_loaded_from_a_file_STR_STR_725154F9143A(example_context As TContext, step_expressions As Collection)
+Public Sub Given_a_feature_was_loaded_from_a_file_STR_ST_725154F9143A(example_context As TContext, step_expressions As Collection)
     'Given a feature was loaded from a file {string} {string}
     example_context.set_value step_expressions(1), "feature_origin"
     If Not example_context.value_exists("loaded_features") Then
@@ -62,12 +62,12 @@ Public Sub Then_the_error_STR_is_reported_80FDB77BCB22(example_context As TConte
     TSpec.expect(example_context.get_value("session").reporter.ConsoleOutput).includes_text step_expressions(1)
 End Sub
 
-Public Sub Then_the_name_of_the_feature_file_is_reported_as_l_1A076B1EB8D5(example_context As TContext)
+Public Sub Then_the_name_of_the_feature_file_is_reported_1A076B1EB8D5(example_context As TContext)
     'And the name of the feature file is reported as location of the error
     TSpec.expect(example_context.get_value("session").reporter.ConsoleOutput).includes_text example_context.get_value("feature_origin")
 End Sub
 
-Public Sub Then_only_the_example_from_the_tagged_feature_was__858E135D9F78(example_context As TContext)
+Public Sub Then_only_the_example_from_the_tagged_feature_858E135D9F78(example_context As TContext)
     'Then only the example from the tagged feature was executed
     Dim example_events As Collection
     Dim event_listener As EventListener
@@ -78,7 +78,7 @@ Public Sub Then_only_the_example_from_the_tagged_feature_was__858E135D9F78(examp
     TSpec.expect(example_events(1).SectionName).includes_text "sample from tagged feature"
 End Sub
 
-Public Sub Then_only_the_example_from_the_tagged_rule_was_exe_0F822B53DF54(example_context As TContext)
+Public Sub Then_only_the_example_from_the_tagged_rule_wa_0F822B53DF54(example_context As TContext)
     'Then only the example from the tagged rule was executed
     Dim example_events As Collection
     Dim event_listener As EventListener

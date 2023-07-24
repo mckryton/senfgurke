@@ -16,7 +16,7 @@ Public Sub Given_a_list_of_numbers_FF6B22C2A68F(example_context As TContext, dat
     example_context.set_value data_table, "data_table"
 End Sub
 
-Public Sub Given_a_step_returning_pending_without_a_pending_m_F201A405CFB1(example_context As TContext)
+Public Sub Given_a_step_returning_pending_without_a_pend_F201A405CFB1(example_context As TContext)
     'Given a step returning PENDING without a pending message
     example_context.set_value TStepParser.parse_step_line("Given a pending step", New Collection), "example_step"
     'won't create code dynamically, so step "Given a pending step" is hard coded
@@ -83,7 +83,7 @@ Public Sub When_the_step_is_executed_CEB06B444334(example_context As TContext)
     example_context.set_value step_runner.run_step(example_context.get_value("example_step"), THelper.new_TContext), "step_result"
 End Sub
 
-Public Sub When_the_code_template_for_the_step_implementation_7D39D6705DD8(example_context As TContext)
+Public Sub When_the_code_template_for_the_step_implement_7D39D6705DD8(example_context As TContext)
     'When the code template for the step implementation is requested
     Dim step As TStep
     
@@ -91,7 +91,7 @@ Public Sub When_the_code_template_for_the_step_implementation_7D39D6705DD8(examp
     example_context.set_value step.get_step_function_template, "step_function_template"
 End Sub
 
-Public Sub When_the_step_is_translated_into_a_function_name_D820185C4AF6(example_context As TContext)
+Public Sub When_the_step_is_translated_into_a_function_n_D820185C4AF6(example_context As TContext)
     'When the step is translated into a function name
     example_context.set_value example_context.get_value("example_step").get_step_function_name, "step_function_name"
 End Sub
@@ -113,12 +113,12 @@ Public Sub Then_the_execution_result_is_STR_80FDCF952A5A(example_context As TCon
     TSpec.expect(example_context.get_value("step_result")(0)).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_code_template_for_the_step_implementation_9C79C155DB8E(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_code_template_for_the_step_implement_9C79C155DB8E(example_context As TContext, step_expressions As Collection)
     'Then the code template for the step implementation is {string}
     TSpec.expect(example_context.get_value("step_function_template")).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_name_of_the_resulting_function_is_STR_C88DE530F4BA(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_name_of_the_resulting_function_is_ST_C88DE530F4BA(example_context As TContext, step_expressions As Collection)
     'Then the name of the resulting function is {string}
     TSpec.expect(example_context.get_value("step_function_name")).to_be step_expressions(1)
 End Sub

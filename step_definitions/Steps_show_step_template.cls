@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Then_the_resulting_report_will_show_the_code_templ_6F55B6204642(example_context As TContext)
+Public Sub Then_the_resulting_report_will_show_the_code__6F55B6204642(example_context As TContext)
     'Then the resulting report will show the code template only once
     Dim session As TSession
     Dim code_template_buffer As Collection

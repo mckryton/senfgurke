@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub When_the_step_definition_is_parsed_for_step_expres_7C11B950F2B4(example_context As TContext)
+Public Sub When_the_step_definition_is_parsed_for_step_e_7C11B950F2B4(example_context As TContext)
     'When the step definition is parsed for step expressions
     Dim step_definition As String
     Dim new_step As TStep
@@ -20,7 +20,7 @@ Public Sub When_the_step_definition_is_parsed_for_step_expres_7C11B950F2B4(examp
     example_context.set_value new_step, "step"
 End Sub
 
-Public Sub Then_the_step_has_one_step_expression_with_the_dat_90F0EF0E4524(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_step_has_one_step_expression_with_th_90F0EF0E4524(example_context As TContext, step_expressions As Collection)
     'Then the step has one step expression with the data type {string}
     TSpec.expect(LCase(TypeName(example_context.get_value("step").Expressions(1)))).to_be step_expressions(1)
 End Sub
@@ -50,7 +50,7 @@ Public Sub Then_the_step_has_INT_step_expressions_DF47F8B87951(example_context A
     TSpec.expect(example_context.get_value("step").Expressions.Count).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_data_types_of_the_expressions_are_STR_F48BBED5B618(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_data_types_of_the_expressions_are_ST_F48BBED5B618(example_context As TContext, step_expressions As Collection)
     'And the data types of the expressions are {string}
     
     Dim data_types As Variant

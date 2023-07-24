@@ -23,7 +23,7 @@ Public Sub Given_a_list_of_steps_FF6B22C2A87B(example_context As TContext, data_
     example_context.set_value step_list, "example_steps"
 End Sub
 
-Public Sub When_the_function_name_for_the_last_step_is_calcul_3D1B9F9C0F3D(example_context As TContext)
+Public Sub When_the_function_name_for_the_last_step_is_c_3D1B9F9C0F3D(example_context As TContext)
     'When the function name for the last step is calculated
     Dim Feature As TFeature
     Dim Example As TExample
@@ -44,7 +44,7 @@ Public Sub When_the_function_for_the_step_is_calculated_41249A4C9E7F(example_con
     example_context.set_value step.get_step_function_name, "step_function_name"
 End Sub
 
-Public Sub When_the_a_matching_function_for_those_steps_is_re_AB345B8299F4(example_context As TContext)
+Public Sub When_the_a_matching_function_for_those_steps__AB345B8299F4(example_context As TContext)
     'When the a matching function for those steps is requested
     Dim function_names As Collection
     Dim step_list As Collection
@@ -68,7 +68,7 @@ Public Sub Then_the_matching_function_name_is_STR_45E90A644CD7(example_context A
     TSpec.expect(example_context.get_value("step_function_name")).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_same_function_name_is_returned_for_all_st_2DD39A9E8F72(example_context As TContext)
+Public Sub Then_the_same_function_name_is_returned_for_a_2DD39A9E8F72(example_context As TContext)
     'Then the same function name is returned for all steps
     Dim function_names As Collection
     Dim reference_name As String

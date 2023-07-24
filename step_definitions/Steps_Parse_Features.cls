@@ -19,12 +19,12 @@ Public Sub Given_a_feature_F5C67A506977(example_context As TContext)
     example_context.set_value "Feature: sample feature", "gherkin_text"
 End Sub
 
-Public Sub Given_the_first_line_of_the_feature_is___wip_impor_D41303270416(example_context As TContext)
+Public Sub Given_the_first_line_of_the_feature_is___wip__D41303270416(example_context As TContext)
     'Given the first line of the feature is "  @wip @important @beta"
     example_context.set_value "  @wip @important @beta" & vbLf & example_context.get_value("gherkin_text"), "gherkin_text"
 End Sub
 
-Public Sub Given_the_line_before_the_only_example_is___wip_im_FC1ACED9ED9D(example_context As TContext)
+Public Sub Given_the_line_before_the_only_example_is___w_FC1ACED9ED9D(example_context As TContext)
     'Given the line before the only example is "  @wip @important @beta"
     example_context.set_value example_context.get_value("gherkin_text") & vbLf & "  @wip @important @beta" & vbLf _
                         & "Example: sample example", "gherkin_text"
@@ -59,7 +59,7 @@ Public Sub Then_the_error_STR_was_raised_7C9B342540B8(example_context As TContex
     TSpec.expect(example_context.get_value("parse_error")("err_description")).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981(example_context As TContext)
+Public Sub Then_the_parsed_result_contains_a_separate_it_C01AA5CDB981(example_context As TContext)
     'Then the parsed result contains a separate item for each of the given elements
     
     Dim parsed_feature As TFeature
@@ -78,12 +78,12 @@ Public Sub Then_the_parsed_result_contains_a_separate_item_fo_C01AA5CDB981(examp
     TSpec.expect(Example.Name).to_be "sample example"
 End Sub
 
-Public Sub Then_the_parsed_result_contains_a_feature_with_the_5E84028445E3(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_parsed_result_contains_a_feature_wit_5E84028445E3(example_context As TContext, step_expressions As Collection)
     'Then the parsed result contains a feature with the name {string}
     TSpec.expect(example_context.get_value("parsed_feature").Name).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_feature_description_is_set_to_those_two_l_3759AF1F585B(example_context As TContext)
+Public Sub Then_the_feature_description_is_set_to_those__3759AF1F585B(example_context As TContext)
     'Then the feature description is set to those two lines
     TSpec.expect(example_context.get_value("parsed_feature").description).to_be "this is" & vbLf & "the feature description"
 End Sub
@@ -109,12 +109,12 @@ Public Sub Then_parsing_didnt_cause_any_errors_95DC5E1A0DA5(example_context As T
     TSpec.expect(example_context.get_value("parse_error").Count).to_be 0
 End Sub
 
-Public Sub Then_the_parsed_result_contains_an_example_with_tw_5E84053FD2C3(example_context As TContext)
+Public Sub Then_the_parsed_result_contains_an_example_wi_5E84053FD2C3(example_context As TContext)
     'Then the parsed result contains an example with two steps
     TSpec.expect(example_context.get_value("parsed_feature").sections(1).steps.Count).to_be 2
 End Sub
 
-Public Sub Then_the_given_step_is_assigned_to_the_feature_F07FF8233D0D(example_context As TContext)
+Public Sub Then_the_given_step_is_assigned_to_the_featur_F07FF8233D0D(example_context As TContext)
     'Then the Given step is assigned to the feature
     TSpec.expect(example_context.get_value("parsed_feature").background.steps(1).OriginalStepLine).to_be "Given one step"
 End Sub

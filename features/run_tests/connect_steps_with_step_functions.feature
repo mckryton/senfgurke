@@ -75,9 +75,9 @@ Ability: connect steps with step functions
        Then the function name starts with "Given_the_value_of_pi_is_DBL"
 
     Example: Step with one text value
-      Given a step "Given the name of the first day of the week is \"Monday\""
+      Given a step "Given today is \"Monday\""
        When the function for the step is calculated
-       Then the function name starts with "Given_the_name_of_the_first_day_of_the_week_is_STR"
+       Then the function name starts with "Given_today_is_STR_6A35E0F3D151"
 
     Example: step with escaped text
       Given a step

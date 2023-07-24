@@ -15,7 +15,7 @@ Public Sub Given_the_current_date_is_01011970_000001_515850950AD6(example_contex
     example_context.set_value 1, "sample_seconds"
 End Sub
 
-Public Sub When_the_date_is_converted_to_an_unix_timestamp_3D49BC76BF30(example_context As TContext)
+Public Sub When_the_date_is_converted_to_an_unix_timesta_3D49BC76BF30(example_context As TContext)
     'When the date is converted to an unix timestamp
     Dim unix_timestamp As Long
     Dim sample_date As Date

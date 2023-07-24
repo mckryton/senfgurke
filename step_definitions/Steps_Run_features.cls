@@ -27,7 +27,7 @@ Public Sub When_the_feature_is_executed_8C8F454A90BC(example_context As TContext
     example_context.set_value event_listener, "event_listener"
 End Sub
 
-Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(example_context As TContext, step_expressions As Collection)
+Public Sub When_the_feature_is_executed_with_tag_paramet_E9DFF72092D9(example_context As TContext, step_expressions As Collection)
     'When the feature is executed with tag parameter {string}
     Dim parsed_feature As TFeature
     Dim feature_runner As TFeatureRunner
@@ -45,7 +45,7 @@ Public Sub When_the_feature_is_executed_with_tag_parameter_ST_E9DFF72092D9(examp
     example_context.set_value event_listener, "event_listener"
 End Sub
 
-Public Sub Then_the_background_step_is_executed_once_before_e_AD9FFABBC1CE(example_context As TContext)
+Public Sub Then_the_background_step_is_executed_once_bef_AD9FFABBC1CE(example_context As TContext)
     'Then the background step is executed once before each example
     Dim event_listener As EventListener
     Dim step_events As Collection

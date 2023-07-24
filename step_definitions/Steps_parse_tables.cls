@@ -14,12 +14,12 @@ Public Sub Given_a_line_STR_in_a_feature_file_A1515550652D(example_context As TC
     example_context.set_value step_expressions(1), "gherkin_text"
 End Sub
 
-Public Sub Given_a_step_in_a_feature_file_is_defined_as_STR_9DBCD4C78C79(example_context As TContext, step_expressions As Collection)
+Public Sub Given_a_step_in_a_feature_file_is_defined_as__9DBCD4C78C79(example_context As TContext, step_expressions As Collection)
     'Given a step in a feature file is defined as {string}
     example_context.set_value step_expressions(1), "gherkin_text"
 End Sub
 
-Public Sub Given_a_table_in_a_feature_file_is_defined_as_STR_FD4681DF4049(example_context As TContext, step_expressions As Collection)
+Public Sub Given_a_table_in_a_feature_file_is_defined_as_FD4681DF4049(example_context As TContext, step_expressions As Collection)
     'Given a table in a feature file is defined as {string}
     example_context.set_value step_expressions(1), "gherkin_text"
 End Sub
@@ -53,7 +53,7 @@ exception_handler:
     example_context.set_value Err.description, "err_msg"
 End Sub
 
-Public Sub Then_the_line_is_recognized_as_part_of_a_table_ADEDA52A5184(example_context As TContext)
+Public Sub Then_the_line_is_recognized_as_part_of_a_tabl_ADEDA52A5184(example_context As TContext)
     'Then the line is recognized as part of a table
     TSpec.expect(example_context.get_value("line_type")).to_be LINE_TYPE_TABLE_ROW
 End Sub
@@ -121,7 +121,7 @@ Public Sub Then_the_table_contains_only_string_values_4E9F8D8EFD50(example_conte
     Next
 End Sub
 
-Public Sub Then_the_first_table_row_doesnt_contain_quotes_B5958A779CAE(example_context As TContext)
+Public Sub Then_the_first_table_row_doesnt_contain_quote_B5958A779CAE(example_context As TContext)
     'And the first table row doesn't contain quotes
     Dim parsed_table As TDataTable
     

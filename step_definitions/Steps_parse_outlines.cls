@@ -9,7 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Sub Given_an_example_in_a_feature_file_is_defined_as_S_0AC2D1C0D26A(example_context As TContext, step_expressions As Collection)
+Public Sub Given_an_example_in_a_feature_file_is_defined_0AC2D1C0D26A(example_context As TContext, step_expressions As Collection)
     'Given an example in a feature file is defined as {string}
     example_context.set_value step_expressions(1), "example_as_gherkin"
 End Sub
@@ -31,7 +31,7 @@ exception_handler:
     example_context.set_value Err.description, "err_msg"
 End Sub
 
-Public Sub Then_the_outline_table_is_assigned_to_the_example_5A24E85F82D6(example_context As TContext)
+Public Sub Then_the_outline_table_is_assigned_to_the_exa_5A24E85F82D6(example_context As TContext)
     'Then the outline table is assigned to the example
     Dim parsed_example As TExample
     Dim outline_table As TDataTable
@@ -42,7 +42,7 @@ Public Sub Then_the_outline_table_is_assigned_to_the_example_5A24E85F82D6(exampl
     TSpec.expect(outline_table).not_to_be_nothing
 End Sub
 
-Public Sub Then_the_outline_table_has_INT_columns_named_STR_a_ECA2472C1E76(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_outline_table_has_INT_columns_named__ECA2472C1E76(example_context As TContext, step_expressions As Collection)
     'And the outline table has {integer} columns named {string} and {string}
     Dim parsed_example As TExample
     Dim outline_table As TDataTable
@@ -54,7 +54,7 @@ Public Sub Then_the_outline_table_has_INT_columns_named_STR_a_ECA2472C1E76(examp
     TSpec.expect(outline_table.column_names(2)).to_be step_expressions(3)
 End Sub
 
-Public Sub Then_the_data_of_row_INT_of_the_outline_table_is_S_E87C8EB4985B(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_data_of_row_INT_of_the_outline_table_E87C8EB4985B(example_context As TContext, step_expressions As Collection)
     'And the data of row {integer} of the outline table is {string}
     Dim parsed_example As TExample
     Dim outline_table As TDataTable
@@ -71,7 +71,7 @@ Public Sub Then_the_data_of_row_INT_of_the_outline_table_is_S_E87C8EB4985B(examp
     Next
 End Sub
 
-Public Sub Then_the_full_name_of_the_outline_table_is_STR_BDAC061D7B22(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_full_name_of_the_outline_table_is_ST_BDAC061D7B22(example_context As TContext, step_expressions As Collection)
     'And the full name of the outline table is {string}
     Dim parsed_example As TExample
     
@@ -79,7 +79,7 @@ Public Sub Then_the_full_name_of_the_outline_table_is_STR_BDAC061D7B22(example_c
     TSpec.expect(parsed_example.Outlines(1)("full_name")).to_be step_expressions(1)
 End Sub
 
-Public Sub Then__INT_outline_tables_are_assigned_to_the_examp_EC7DC035E3AB(example_context As TContext, step_expressions As Collection)
+Public Sub Then__INT_outline_tables_are_assigned_to_the__EC7DC035E3AB(example_context As TContext, step_expressions As Collection)
     'Then  {integer} outline tables are assigned to the example
     Dim parsed_example As TExample
     
@@ -87,7 +87,7 @@ Public Sub Then__INT_outline_tables_are_assigned_to_the_examp_EC7DC035E3AB(examp
     TSpec.expect(parsed_example.Outlines.Count).to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_full_name_of_outline_table_INT_is_STR_BDAC37ABF023(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_full_name_of_outline_table_INT_is_ST_BDAC37ABF023(example_context As TContext, step_expressions As Collection)
     'And the full name of outline table {integer} is {string}
     Dim parsed_example As TExample
     Dim outline_table_name As String

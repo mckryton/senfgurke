@@ -1,0 +1,15 @@
+According to VBA spec the max length of a function name could be 255 characters. But due 
+some bug in the MacOS version, VBA crashes on function names longer than 59 characters. If
+the bug gets worse it can save some effort to shorten the function names on the shell.
+
+How to change function name length for step definition classes:
+
+* cd into step_definitions dir
+* inline edit step definition files using sed:
+	sed -r -I '.bak' 's/^([a-zA-Z0-9_ ]{1,56})[a-zA-Z0-9_ ]*_([A-F0-9]{12}\()/\1_\2/' Steps*.cls
+	// length of the first regex pattern is target length - 2
+	// for example if target length for function names is 58 characters, then length of the first pattern is 56
+* validate result with perl oneliner:
+    ls Steps* | xargs perl -ne '/\bsub\s+(\w+)\(/i and printf "%2.2d: %s  - %s\n", length($1), $1, $ARGV'
+* remove backup files
+	rm *.bak

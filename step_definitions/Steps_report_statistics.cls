@@ -14,7 +14,7 @@ Public Sub Given_a_test_run_took_INT_ms_A7563698E569(example_context As TContext
     example_context.set_value CLng(step_expressions(1)), "duration"
 End Sub
 
-Public Sub Given_one_example_in_this_run_had_INT_passed_INT_f_800581B31566(example_context As TContext, step_expressions As Collection)
+Public Sub Given_one_example_in_this_run_had_INT_passed__800581B31566(example_context As TContext, step_expressions As Collection)
     'And one example in this run had {integer} passed, {integer} failed, {integer} missing and {integer} pending steps
     Dim index As Integer
     Dim session As TSession
@@ -46,7 +46,7 @@ Public Sub When_the_statistics_are_reported_418C385A7E0B(example_context As TCon
     session.log_event EVENT_RUN_SESSION_FINISHED, statistic_summary
 End Sub
 
-Public Sub Then_the_resulting_report_output_ends_with_STR_422DE5AFAABA(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_resulting_report_output_ends_with_ST_422DE5AFAABA(example_context As TContext, step_expressions As Collection)
     'Then the resulting report output ends with {string}
     Dim console_output As String
     Dim session As TSession

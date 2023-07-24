@@ -78,7 +78,7 @@ Public Sub Then_the_resulting_line_type_is_not_STR_4C0165DE378D(example_context 
     TSpec.expect(example_context.get_value("line_type")).not_to_be step_expressions(1)
 End Sub
 
-Public Sub Then_the_resulting_step_list_contains_only_INT_ste_DD326A098DF8(example_context As TContext, step_expressions As Collection)
+Public Sub Then_the_resulting_step_list_contains_only_IN_DD326A098DF8(example_context As TContext, step_expressions As Collection)
     'Then the resulting step list contains only {integer} steps
     TSpec.expect(example_context.get_value("step_list").Count).to_be step_expressions(1)
 End Sub
