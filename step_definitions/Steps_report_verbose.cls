@@ -53,14 +53,14 @@ End Sub
 
 Public Sub When_the_example_is_reported_with_the_step_re_F52F4459A058(example_context As TContext, step_expressions As Collection)
     'And the example is reported with the step result {string}
-    Dim Example As TExample
+    Dim example As TExample
     Dim step As TStep
     Dim session As TSession
     
     Set session = example_context.get_value("session")
-    Set Example = example_context.get_value("parsed_feature").sections(1)
-    Set step = Example.steps(1)
-    session.log_event EVENT_RUN_EXAMPLE_STARTED, Example.description, Example.OriginalHeadline, SECTION_TYPE_EXAMPLE
+    Set example = example_context.get_value("parsed_feature").sections(1)
+    Set step = example.steps(1)
+    session.log_event EVENT_RUN_EXAMPLE_STARTED, example.description, example.OriginalHeadline, SECTION_TYPE_EXAMPLE
     session.log_event EVENT_RUN_STEP_FINISHED, vbNullString, step.OriginalStepLine, SECTION_TYPE_STEP, step_expressions(1)
 End Sub
 

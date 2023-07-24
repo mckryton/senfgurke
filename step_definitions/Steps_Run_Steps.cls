@@ -93,7 +93,11 @@ End Sub
 
 Public Sub When_the_step_is_translated_into_a_function_n_D820185C4AF6(example_context As TContext)
     'When the step is translated into a function name
-    example_context.set_value example_context.get_value("example_step").get_step_function_name, "step_function_name"
+    Dim example_step As TStep
+    
+    Set example_step = example_context.get_value("example_step")
+    example_step.max_function_name_length = CInt(example_context.get_value("max_function_name_length"))
+    example_context.set_value example_step.get_step_function_name, "step_function_name"
 End Sub
 
 Public Sub When_the_step_function_is_called_418C5F83C560(example_context As TContext)

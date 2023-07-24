@@ -64,7 +64,7 @@ Public Sub Then_the_parsed_result_contains_a_separate_it_C01AA5CDB981(example_co
     
     Dim parsed_feature As TFeature
     Dim Rule As TRule
-    Dim Example As TExample
+    Dim example As TExample
     
     Set parsed_feature = example_context.get_value("parsed_feature")
     TSpec.expect(parsed_feature.Name).to_be "sample feature"
@@ -73,9 +73,9 @@ Public Sub Then_the_parsed_result_contains_a_separate_it_C01AA5CDB981(example_co
     Set Rule = parsed_feature.sections(1)
     TSpec.expect(Rule.Name).to_be "sample rule"
     TSpec.expect(Rule.sections.Count).to_be 1
-    Set Example = Rule.sections(1)
-    TSpec.expect(TypeName(Example)).to_be "TExample"
-    TSpec.expect(Example.Name).to_be "sample example"
+    Set example = Rule.sections(1)
+    TSpec.expect(TypeName(example)).to_be "TExample"
+    TSpec.expect(example.Name).to_be "sample example"
 End Sub
 
 Public Sub Then_the_parsed_result_contains_a_feature_wit_5E84028445E3(example_context As TContext, step_expressions As Collection)

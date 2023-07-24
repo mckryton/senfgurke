@@ -52,6 +52,6 @@ Public Sub Then_the_report_output_of_the_example_starts__64BB2A944AE4(example_co
     Dim session As TSession
     
     Set session = example_context.get_value("session")
-    tspec.expect(ExtraVBA.align_textblock(session.reporter.ConsoleOutput)).starts_with_text _
+    TSpec.expect(ExtraVBA.align_textblock(session.reporter.ConsoleOutput)).starts_with_text _
                     vbLf & step_expressions(1) & vbLf
 End Sub

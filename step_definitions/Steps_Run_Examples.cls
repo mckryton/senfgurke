@@ -62,7 +62,7 @@ End Sub
 
 Public Sub Then_step_statistics_is_STR_121A2677FC0F(example_context As TContext, step_expressions As Collection)
     'Then step statistics is {string}
-    tspec.expect(example_context.get_value("session").statistics.get_statistics_summary).to_be step_expressions(1)
+    TSpec.expect(example_context.get_value("session").statistics.get_statistics_summary).to_be step_expressions(1)
 End Sub
 
 

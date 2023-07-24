@@ -49,8 +49,8 @@ Private Property Get StepImplementations() As Collection
                                  New Steps_report, _
                                  New Steps_report_progress, _
                                  New Steps_report_statistics, _
-                                 New Steps_report_verbose, _
-                                 New Steps_Run_Examples, _
+                                 New Steps_report_verbose, New Steps_report_verbose_outlines, _
+                                 New Steps_Run_Examples, New Steps_run_outline_example, _
                                  New Steps_Run_features, _
                                  New Steps_Run_Steps, _
                                  New Steps_run_tests, _

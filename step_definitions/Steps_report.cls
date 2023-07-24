@@ -101,6 +101,8 @@ Public Sub Then_the_resulting_report_output_is_STR_4C01A19A67C4(example_context 
     Dim output As String
     
     output = ExtraVBA.trim_linebreaks(example_context.get_value("session").reporter.ConsoleOutput)
+    'align resulting text to the left for comparison, because example might be indented differently
+    output = ExtraVBA.align_textblock(output)
     TSpec.expect(output).to_be step_expressions(1)
 End Sub
 

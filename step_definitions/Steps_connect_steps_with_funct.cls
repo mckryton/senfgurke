@@ -23,16 +23,21 @@ Public Sub Given_a_list_of_steps_FF6B22C2A87B(example_context As TContext, data_
     example_context.set_value step_list, "example_steps"
 End Sub
 
+Public Sub Given_the_max_length_for_step_function_names__EBDFB722B531(example_context As TContext, step_expressions As Collection)
+    'Given the max length for step function names is set to {integer}
+    example_context.set_value CInt(step_expressions(1)), "max_function_name_length"
+End Sub
+
 Public Sub When_the_function_name_for_the_last_step_is_c_3D1B9F9C0F3D(example_context As TContext)
     'When the function name for the last step is calculated
-    Dim Feature As TFeature
-    Dim Example As TExample
+    Dim feature As TFeature
+    Dim example As TExample
     Dim last_step As TStep
     
     example_context.set_value "Feature: sample" & vbLf & example_context.get_value("gherkin_text"), "gherkin_text"
-    Set Feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
-    Set Example = Feature.sections(1)
-    Set last_step = Example.steps(Example.steps.Count)
+    Set feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
+    Set example = feature.sections(1)
+    Set last_step = example.steps(example.steps.Count)
     example_context.set_value last_step.get_step_function_name, "step_function_name"
 End Sub
 

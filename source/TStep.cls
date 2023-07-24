@@ -15,11 +15,13 @@ Dim m_parent_clause As Variant
 Dim m_elements As Collection
 Dim m_docstring As String
 Dim m_data_table As TDataTable
+Dim m_max_function_name_length As Integer
 Public OriginalStepLine As String
 Private IsNameSet As Boolean
 
 Private Sub Class_Initialize()
     m_docstring = vbNullString
+    m_max_function_name_length = TConfig.MaxStepFunctionNameLength
     IsNameSet = False
 End Sub
 
@@ -218,7 +220,7 @@ Public Function get_step_function_name() As String
     function_name = Replace(function_name, " ", "_")
     function_name = remove_non_ascii_chars(function_name)
     'max len of a function name is 255 chars, but config may require a lower value because of a bug in Office for Mac
-    function_name = Left(Trim(function_name), TConfig.MaxStepFunctionNameLength - 13) & "_" & ExtraVBA.hash12(function_name)
+    function_name = Left(Trim(function_name), Me.max_function_name_length - 13) & "_" & ExtraVBA.hash12(function_name)
     get_step_function_name = function_name
 End Function
 
@@ -363,3 +365,12 @@ Public Property Set data_table(ByVal new_data_table As TDataTable)
     Set m_data_table = new_data_table
 End Property
 
+Public Property Get max_function_name_length() As Integer
+    max_function_name_length = m_max_function_name_length
+End Property
+
+Public Property Let max_function_name_length(ByVal new_max_length As Integer)
+    'usually max_function_name_length is read from TConfig.MaxStepFunctionNameLength by class initialize
+    ' but for testing config might be overwritten as specified by the example
+    m_max_function_name_length = new_max_length
+End Property

@@ -27,7 +27,7 @@ Public Sub Then_in_total_INT_steps_where_executed_5C9B02007642(example_context A
     
     Set event_listener = example_context.get_value("event_listener")
     Set event_list = event_listener.filter_events(EVENT_RUN_STEP_FINISHED)
-    tspec.expect(event_list.Count).to_be step_expressions(1)
+    TSpec.expect(event_list.Count).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_the_step_definition_has_changed_to_STR_9017F65FCB1B(example_context As TContext, step_expressions As Collection)
@@ -37,7 +37,7 @@ Public Sub Then_the_step_definition_has_changed_to_STR_9017F65FCB1B(example_cont
     
     Set event_listener = example_context.get_value("event_listener")
     Set event_list = event_listener.filter_events(EVENT_RUN_STEP_FINISHED)
-    tspec.expect(event_list(1).SectionName).to_be step_expressions(1)
+    TSpec.expect(event_list(1).SectionName).to_be step_expressions(1)
 End Sub
 
 Public Sub Then_step_definitions_should_have_changed_to__407185A0FF0E(example_context As TContext, step_expressions As Collection)
@@ -54,5 +54,5 @@ Public Sub Then_step_definitions_should_have_changed_to__407185A0FF0E(example_co
         If step_definitions <> vbNullString Then step_definitions = step_definitions & vbLf
         step_definitions = step_definitions & run_step_event.SectionName
     Next
-    tspec.expect(step_definitions).to_be step_expressions(1)
+    TSpec.expect(step_definitions).to_be step_expressions(1)
 End Sub

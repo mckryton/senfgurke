@@ -33,6 +33,25 @@ Ability: connect steps with step functions
        Then the function name starts with "When_no_sound_occurs"
 
   @vba-specific
+  Rule: step function names should not exceed the max possible length set by VBA
+    VBA spec says function names can have up to 255 characters
+    (https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/visual-basic-naming-rules)
+    but on MacOS VBA crashes for much shorter function names (eg. 59 characters
+    on Excel 16.75.2)
+
+   Example: step name not be shortened
+     Given the max length for step function names is set to 58
+       And a step "Given a step"
+      When the step is translated into a function name
+      Then the name of the resulting function is "Given_a_step_C72276450E70"
+@wip
+   Example: long step name to be shortened
+     Given the max length for step function names is set to 50
+       And a step "Given a very long step that is much much longer than the max length of step function names"
+      When the step is translated into a function name
+      Then the name of the resulting function is "Given_a_very_long_step_that_is_much_m_61CDF372E459"
+
+  @vba-specific
   Rule: step function names replaces not allowed characters from VBA spec with underscores
     Note VBA on MacOS doesn't support UTF. For example the UTF-8 char "ü" (in
     hex = c3 bc or dec = 195 188) is converted into "√º" (chr(195) & chr(188)).

@@ -64,20 +64,6 @@ Ability: show step function templates
             End Sub
           """
 
-
-  @vba-specific
-  Rule: suggested step function names should include the first part of the step name and a hash
-    The name of the step implemenation function is the full step name stripped
-    from illegal characters and spaces replaced with underscore + hash from the
-    original step name. The hash is calculated using the full step name as
-    input.
-
-    Example: simple step name
-      Given a step "Given a step"
-      When the step is translated into a function name
-      Then the name of the resulting function is "Given_a_step_C72276450E70"
-
-
   Rule: steps using a synonym keyword should show only one code template
 
     Example: Two steps using Given and And

@@ -30,14 +30,14 @@ End Sub
 
 Public Sub When_the_feature_is_executed_and_statistics_a_0BF6FCF4961B(example_context As TContext)
     'When the feature is executed and statistics are collected
-    Dim Feature As TFeature
+    Dim feature As TFeature
     Dim parsed_features As Collection
     Dim session As TSession
     
     Set session = example_context.get_value("session")
-    Set Feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
+    Set feature = TFeatureParser.parse_feature(example_context.get_value("gherkin_text"))
     Set parsed_features = New Collection
-    parsed_features.Add Feature
+    parsed_features.Add feature
     session.run_parsed_features parsed_features
 End Sub
 
