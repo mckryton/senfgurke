@@ -44,7 +44,7 @@ Ability: connect steps with step functions
        And a step "Given a step"
       When the step is translated into a function name
       Then the name of the resulting function is "Given_a_step_C72276450E70"
-@wip
+
    Example: long step name to be shortened
      Given the max length for step function names is set to 50
        And a step "Given a very long step that is much much longer than the max length of step function names"
