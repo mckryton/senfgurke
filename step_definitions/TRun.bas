@@ -34,8 +34,8 @@ Private Property Get StepImplementations() As Collection
     Set m_step_implementations = New Collection
     'REGISTER all classes with STEP IMPLEMENTATIONS HERE >>>
     '-------------------------------------------------------
-    step_implementations = Array(New Steps_collect_statistics, New Steps_confirm_collection_member, _
-                                 New Steps_connect_steps_with_funct, _
+    step_implementations = Array(New Steps_cleanup_after_example, New Steps_collect_statistics, _
+                                 New Steps_confirm_collection_member, New Steps_connect_steps_with_funct, _
                                  New Steps_Load_Feature_Files, _
                                  New Steps_parse_docstrings, _
                                  New Steps_Parse_Examples, _

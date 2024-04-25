@@ -15,11 +15,13 @@ Private m_end_time As Long
 Private m_statistics As TStatistics
 Private m_step_implementations As Collection
 Private m_event_logger As TEventLogger
+Private m_execution_hooks As TExecutionHooks
 
 Private Sub Class_Initialize()
     m_start_time = 0
     m_end_time = 0
     Set m_event_logger = New TEventLogger
+    Set m_execution_hooks = New TExecutionHooks
     Set m_statistics = New TStatistics
     Set m_statistics.SessionEventBroker = m_event_logger
     Set m_reporter = New TReport
@@ -34,7 +36,13 @@ Private Sub Class_Terminate()
 End Sub
 
 Public Property Get EventLogger() As TEventLogger
+    'handle events for internal purposes, eg. collecting statistics
     Set EventLogger = m_event_logger
+End Property
+
+Public Property Get ExecutionHooks() As TExecutionHooks
+    'provides an interface for test code, eg. to get notified whenever an example excution was complete
+    Set ExecutionHooks = m_execution_hooks
 End Property
 
 Public Sub log_event(event_name As String, Optional event_msg, Optional section_name, Optional section_type, _
@@ -50,6 +58,15 @@ Public Sub log_event(event_name As String, Optional event_msg, Optional section_
     If Not IsMissing(feature_file) Then new_event.FeatureFileName = feature_file
     If Not IsMissing(log_time) Then new_event.LogTime = CSng(log_time)
     m_event_logger.log_event new_event
+    'trigger after event excution hooks for selected events
+    call_execution_hook new_event
+End Sub
+
+Private Sub call_execution_hook(log_event As TEvent)
+    Select Case log_event.EventName
+        Case EVENT_RUN_EXAMPLE_FINISHED
+            m_execution_hooks.call_after_example_hook log_event
+    End Select
 End Sub
 
 Public Property Get StepImplementations() As Collection
@@ -181,3 +198,7 @@ Public Property Get statistics() As TStatistics
     Set statistics = m_statistics
 End Property
 
+Public Sub enable_silent_mode()
+    'if called any reporting activity is suppressed
+    Me.reporter.enable_silent_mode
+End Sub

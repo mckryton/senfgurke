@@ -36,6 +36,7 @@ Public Sub run_example(example As TExample, Optional outline_parameter_names, Op
     Dim step_runner As TStepRunner
     Dim context As TContext
     Dim original_step_line As String
+    Dim example_status As String
 
     If IsMissing(dry_run) Then dry_run = False
     step_result = vbNullString
@@ -43,6 +44,7 @@ Public Sub run_example(example As TExample, Optional outline_parameter_names, Op
     step_runner.setup m_session, Me
     Set context = New TContext
     step_status = vbNullString
+    example_status = vbNullString
     For Each step In example.steps
         err_msg = vbNullString
         previous_step_status = step_status
@@ -72,7 +74,9 @@ Public Sub run_example(example As TExample, Optional outline_parameter_names, Op
         End If
         log_event EVENT_RUN_STEP_FINISHED, err_msg, step.OriginalStepDefinition, SECTION_TYPE_STEP, step_status
     Next
-    log_event EVENT_RUN_EXAMPLE_FINISHED, example.description, example.OriginalHeadline, SECTION_TYPE_EXAMPLE
+    'consider the example to be OK only if the status of the last step was OK
+    If step_status = STATUS_OK Then example_status = STATUS_OK Else example_status = STATUS_FAIL
+    log_event EVENT_RUN_EXAMPLE_FINISHED, example.description, example.OriginalHeadline, SECTION_TYPE_EXAMPLE, example_status
 End Sub
 
 Public Sub run_outline_example(outline_example As TExample, Optional dry_run)
