@@ -5,13 +5,18 @@ Attribute VB_Name = "TRun"
 
 Option Explicit
 
+'when assigned to a WithEvents variable, Sengurke will call connected functions for selected events
+' eg., after an example was executed
+Public ExecutionHooks As Senfgurke.TExecutionHooks
+
 Private m_step_implementations As Collection
 
 Public Sub test(Optional filter_tag, Optional feature_filter, Optional report_format)
-
-    Dim session As TSession
+    
+    Dim session As Senfgurke.TSession
     
     Set session = THelper.new_TSession
+    Set ExecutionHooks = session.ExecutionHooks
     session.run_test StepImplementations, filter_tag, feature_filter, report_format, application_dir:=senfgurke_steps_workbook.path
     Set session = Nothing
     Set m_step_implementations = Nothing
