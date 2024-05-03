@@ -12,8 +12,8 @@ Option Explicit
 Private WithEvents StepStatusListener As TEventLogger
 Attribute StepStatusListener.VB_VarHelpID = -1
 Private FailedSteps As Collection
-Private WithEvents ExecutionHooks As TExecutionHooks
-Attribute ExecutionHooks.VB_VarHelpID = -1
+Private WithEvents TestSessionExecutionHooks As TExecutionHooks
+Attribute TestSessionExecutionHooks.VB_VarHelpID = -1
 Private AfterExampleCallsCount As Integer
 Private ExampleExecutionStatus As String
 
@@ -51,7 +51,7 @@ Public Sub When_the_result_for_running_every_step_of_the_4D22A6E0BB19(example_co
     'reset the counter for after examplehook calls
     AfterExampleCallsCount = 0
     'connect this class to the execution hooks from test session
-    Set ExecutionHooks = test_session.ExecutionHooks
+    Set TestSessionExecutionHooks = test_session.ExecutionHooks
     'listen for run_step_finished events from test_session
     Set StepStatusListener = test_session.EventLogger
     Set FailedSteps = New Collection
@@ -84,7 +84,7 @@ Public Sub When_the_scenario_succeeds_successfully_for_a_F7618495DC78(example_co
     Set test_session = THelper.new_TSession
     example_context.set_value test_session, "test_session"
     'connect this class to the execution hooks from test session
-    Set ExecutionHooks = test_session.ExecutionHooks
+    Set TestSessionExecutionHooks = test_session.ExecutionHooks
     'listen for run_step_finished events from test_session and save the step results in the FailedSteps collection
     Set StepStatusListener = test_session.EventLogger
     Set FailedSteps = New Collection
@@ -112,7 +112,7 @@ Public Sub When_the_scenario_fails_because_of_missing_st_416C361CBD50(example_co
     Set test_session = THelper.new_TSession
     example_context.set_value test_session, "test_session"
     'connect this class to the execution hooks from test session
-    Set ExecutionHooks = test_session.ExecutionHooks
+    Set TestSessionExecutionHooks = test_session.ExecutionHooks
     'listen for run_step_finished events from test_session and save the step results in the FailedSteps collection
     Set StepStatusListener = test_session.EventLogger
     Set FailedSteps = New Collection
@@ -174,7 +174,7 @@ Private Sub Class_Terminate()
     Set FailedSteps = Nothing
 End Sub
 
-Private Sub ExecutionHooks_AfterExampleHook(log_event As Senfgurke.TEvent)
+Private Sub TestSessionExecutionHooks_AfterExampleHook(log_event As Senfgurke.TEvent)
     AfterExampleCallsCount = AfterExampleCallsCount + 1
     ExampleExecutionStatus = log_event.SectionStatus
 End Sub

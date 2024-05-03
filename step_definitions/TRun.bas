@@ -2,12 +2,7 @@ Attribute VB_Name = "TRun"
 'This is the starting point for all test runs. TRun.test will allow you to optional add tags and
 ' report formats while TRun.wip will call test with the @wip (work in progress) tag using the
 ' the verbose report format by default.
-
 Option Explicit
-
-'when assigned to a WithEvents variable, Sengurke will call connected functions for selected events
-' eg., after an example was executed
-Public ExecutionHooks As Senfgurke.TExecutionHooks
 
 Private m_step_implementations As Collection
 
@@ -16,8 +11,7 @@ Public Sub test(Optional filter_tag, Optional feature_filter, Optional report_fo
     Dim session As Senfgurke.TSession
     
     Set session = THelper.new_TSession
-    Set ExecutionHooks = session.ExecutionHooks
-    session.run_test StepImplementations, filter_tag, feature_filter, report_format, application_dir:=senfgurke_steps_workbook.path
+    session.run_test StepImplementations(session.ExecutionHooks), filter_tag, feature_filter, report_format, application_dir:=senfgurke_steps_workbook.path
     Set session = Nothing
     Set m_step_implementations = Nothing
 End Sub
@@ -31,7 +25,7 @@ Public Sub progress(Optional filter_tag)
     test filter_tag, report_format:="progress"
 End Sub
 
-Private Property Get StepImplementations() As Collection
+Private Property Get StepImplementations(session_execution_hooks As Senfgurke.TExecutionHooks) As Collection
     
     Dim step_implementations As Variant
     Dim step_implementation_class As Variant
@@ -66,6 +60,10 @@ Private Property Get StepImplementations() As Collection
                                 )
     Set m_step_implementations = New Collection
     For Each step_implementation_class In step_implementations
+        On Error Resume Next
+        'ignore error messages if the step implementationcalss hasn't declared an execution hook variable
+        Set step_implementation_class.ExecutionHooks = session_execution_hooks
+        On Error GoTo 0
         m_step_implementations.Add step_implementation_class
     Next
     Set StepImplementations = m_step_implementations

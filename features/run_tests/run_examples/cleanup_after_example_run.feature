@@ -7,13 +7,15 @@ Ability: cleanup after example run
     documents created by any example). Senfgurke will call this function every
     time an example is finished.
 
-    Access to any hook function requires to steps:
-      1. add a new variable to the step implementation class:
-            Private WithEvents ExecutionHooks As TExecutionHooks
-      2. assign this variable to your test sessions
-            set ExecutionHooks = TRun.Session.ExecutionHooks
-    Execution hook function will now appear in the VB editor in the class
-    window when the ExecutionHooks entry is selected
+    To get access to hook functionsjust add a new variable to any step
+    implementation class like this:
+
+      Private WithEvents ExecutionHooks As TExecutionHooks
+
+    Senfgurke will assign this variable with the current test run so that any
+    hook function get called automatically. Also execution hook functions will
+    now appear in the VB editor in the class window when the ExecutionHooks
+    entry is selected.
 
     Background:
        Given a scenario
