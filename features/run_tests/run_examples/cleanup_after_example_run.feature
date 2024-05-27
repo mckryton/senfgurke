@@ -10,12 +10,12 @@ Ability: cleanup after example run
     To get access to hook functionsjust add a new variable to any step
     implementation class like this:
 
-      Private WithEvents ExecutionHooks As TExecutionHooks
+      Public WithEvents ExecutionHooks As TExecutionHooks
 
-    Senfgurke will assign this variable with the current test run so that any
-    hook function get called automatically. Also execution hook functions will
-    now appear in the VB editor in the class window when the ExecutionHooks
-    entry is selected.
+    Senfgurke will assign this variable with the current test run session so
+    that any hook function get called automatically. Also execution hook
+    functions will now appear in the VB editor in the class window when the
+    ExecutionHooks entry is selected.
 
     Background:
        Given a scenario

@@ -60,9 +60,10 @@ Private Property Get StepImplementations(session_execution_hooks As Senfgurke.TE
                                 )
     Set m_step_implementations = New Collection
     For Each step_implementation_class In step_implementations
-        On Error Resume Next
         'ignore error messages if the step implementationcalss hasn't declared an execution hook variable
-        Set step_implementation_class.ExecutionHooks = session_execution_hooks
+        On Error Resume Next
+            'connect any ExecutionHook in step definition classes with the current test run session
+            Set step_implementation_class.ExecutionHooks = session_execution_hooks
         On Error GoTo 0
         m_step_implementations.Add step_implementation_class
     Next
