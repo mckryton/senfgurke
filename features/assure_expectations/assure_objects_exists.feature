@@ -1,9 +1,9 @@
 @vba-specific
-Ability: check if objects exists
+Ability: assure objects exists
     VBA distinguishes between variables assigned to objects and variables
     assigned to basic data types (e.g. string, integer, boolean). This
-    expectation validates if a variable is assigned to an object or not. The
-    expectation is using the Nothing keyword to determin if a variable is
+    expectation assures a variable is assigned to an object or not. The
+    expectation is using the Nothing keyword to determine if a variable is
     assigned to an objoct or not.
 
 

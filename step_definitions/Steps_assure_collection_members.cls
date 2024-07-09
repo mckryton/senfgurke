@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "Steps_confirm_collection_member"
+Attribute VB_Name = "Steps_assure_collection_members"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -18,6 +18,18 @@ Public Sub Given_a_collection_has_INT_members_array_INT__22433998BB74(example_co
     example_context.set_value sample_collection, "sample_collection"
     For index = 1 To step_expressions(1) * 2 Step 2
         sample_collection.Add Array(step_expressions(index + 1), step_expressions(index + 2))
+    Next
+End Sub
+
+Public Sub Given_a_collection_has_INT_members_STR_and_ST_20E2C2F8B116(example_context As TContext, step_expressions As Collection)
+    'Given a collection has {integer} members {string} and {string}
+    Dim index As Integer
+    Dim sample_collection As Collection
+
+    Set sample_collection = New Collection
+    example_context.set_value sample_collection, "sample_collection"
+    For index = 2 To step_expressions(1) + 1
+        sample_collection.Add step_expressions(index)
     Next
 End Sub
 
