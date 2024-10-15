@@ -34,8 +34,7 @@ Private Property Get StepImplementations(session_execution_hooks As Senfgurke.TE
     'REGISTER all classes with STEP IMPLEMENTATIONS HERE >>>
     '-------------------------------------------------------
     step_implementations = Array(New Steps_cleanup_after_example, New Steps_collect_statistics, _
-                                 New Steps_assure_collection_members, New Steps_assure_expectations, _
-                                 New Steps_connect_steps_with_funct, _
+                                 New Steps_assure_collection_members, New Steps_connect_steps_with_funct, _
                                  New Steps_Load_Feature_Files, _
                                  New Steps_parse_docstrings, _
                                  New Steps_Parse_Examples, _
@@ -56,11 +55,12 @@ Private Property Get StepImplementations(session_execution_hooks As Senfgurke.TE
                                  New Steps_run_tests, _
                                  New Steps_save_vars_in_context, _
                                  New Steps_show_step_template, _
-                                 New Steps_support_functions _
+                                 New Steps_support_functions, _
+                                 New Steps_assure_expectations _
                                 )
     Set m_step_implementations = New Collection
     For Each step_implementation_class In step_implementations
-        'ignore error messages if the step implementation class hasn't been declared an execution hook variable
+        'ignore error messages if the step implementationcalss hasn't declared an execution hook variable
         On Error Resume Next
             'connect any ExecutionHook in step definition classes with the current test run session
             Set step_implementation_class.ExecutionHooks = session_execution_hooks
