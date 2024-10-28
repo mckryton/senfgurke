@@ -11,33 +11,31 @@ Option Explicit
 
 Dim mvarGivenValue As Variant
 
-Public Sub to_be(pExpectedValue)
+Public Sub to_be(expected_value, Optional custom_err_msg)
 
     Dim matcher_fail_msg As String
     
-    test_comparability Me.given_value, pExpectedValue
+    'basic data types (e.g. string, integer) can't be compared with objects
+    test_comparability Me.given_value, expected_value
     
-    If Not values_are_equal(Me.given_value, pExpectedValue) Then
-        If IsObject(Me.given_value) Then
-            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
-                                vbTab & "can't match objects"
-            raise_expectation_err matcher_fail_msg
-        Else
-            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+    If Not values_are_equal(Me.given_value, expected_value) Then
+        matcher_fail_msg = vbTab & "missed expectation:" & vbLf & _
                                 vbTab & "found:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
-                                vbTab & "expected:" & vbTab & ">" & pExpectedValue & "<"
-            raise_expectation_err matcher_fail_msg
+                                vbTab & "expected:" & vbTab & "not >" & expected_value & "<"
+        If Not IsMissing(custom_err_msg) Then
+            matcher_fail_msg = matcher_fail_msg & vbLf & vbTab & custom_err_msg
         End If
+        raise_expectation_err matcher_fail_msg
     End If
 End Sub
 
-Public Sub not_to_be(pExpectedValue)
+Public Sub not_to_be(expected_value)
 
     Dim matcher_fail_msg As String
     
-    test_comparability Me.given_value, pExpectedValue
+    test_comparability Me.given_value, expected_value
     
-    If values_are_equal(Me.given_value, pExpectedValue) Then
+    If values_are_equal(Me.given_value, expected_value) Then
         If IsObject(Me.given_value) Then
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
                                 vbTab & "compared objects match"
@@ -45,7 +43,7 @@ Public Sub not_to_be(pExpectedValue)
         Else
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
                                 vbTab & "found:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
-                                vbTab & "expected:" & vbTab & "not >" & pExpectedValue & "<"
+                                vbTab & "expected:" & vbTab & "not >" & expected_value & "<"
             raise_expectation_err matcher_fail_msg
         End If
     End If
@@ -207,7 +205,25 @@ Public Sub starts_with_text(heading_text As Variant)
             raise_expectation_err matcher_fail_msg
         End If
     Else
-        Debug.Print "starts_with_text does apply only for Strings and not for " & TypeName(heading_text)
+        raise_expectation_err "invalid input for expectation method starts_with_text:" & vbLf & vbTab & _
+                                "starts_with_text does apply only for Strings and not for " & TypeName(heading_text)
+    End If
+End Sub
+
+Public Sub ends_with_text(trailing_text As Variant)
+
+    Dim matcher_fail_msg As String
+    
+    If TypeName(trailing_text) = "String" Then
+        If Right(Me.given_value, Len(trailing_text)) <> trailing_text Then
+            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+                        vbTab & "found string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                        vbTab & "should end with:" & vbTab & ">" & trailing_text & "<"
+            raise_expectation_err matcher_fail_msg
+        End If
+    Else
+        raise_expectation_err "invalid input for expectation method ends_with_text:" & vbLf & vbTab & _
+                                "ends_with_text does apply only for Strings and not for " & TypeName(trailing_text)
     End If
 End Sub
 

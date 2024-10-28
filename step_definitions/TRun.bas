@@ -56,7 +56,7 @@ Private Property Get StepImplementations(session_execution_hooks As Senfgurke.TE
                                  New Steps_save_vars_in_context, _
                                  New Steps_show_step_template, _
                                  New Steps_support_functions, _
-                                 New Steps_assure_expectations _
+                                 New Steps_assure_expectations, New Steps_custom_err_msg_expectatio _
                                 )
     Set m_step_implementations = New Collection
     For Each step_implementation_class In step_implementations
