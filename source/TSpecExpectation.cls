@@ -15,9 +15,6 @@ Public Sub to_be(expected_value, Optional custom_err_msg)
 
     Dim matcher_fail_msg As String
     
-    'basic data types (e.g. string, integer) can't be compared with objects
-    test_comparability Me.given_value, expected_value
-    
     If Not values_are_equal(Me.given_value, expected_value) Then
         matcher_fail_msg = vbTab & "missed expectation:" & vbLf & _
                                 vbTab & "found:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
@@ -29,23 +26,18 @@ Public Sub to_be(expected_value, Optional custom_err_msg)
     End If
 End Sub
 
-Public Sub not_to_be(expected_value)
+Public Sub not_to_be(expected_value, Optional custom_err_msg)
 
     Dim matcher_fail_msg As String
     
-    test_comparability Me.given_value, expected_value
-    
     If values_are_equal(Me.given_value, expected_value) Then
-        If IsObject(Me.given_value) Then
-            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
-                                vbTab & "compared objects match"
-            raise_expectation_err matcher_fail_msg
-        Else
-            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
-                                vbTab & "found:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
-                                vbTab & "expected:" & vbTab & "not >" & expected_value & "<"
-            raise_expectation_err matcher_fail_msg
+        matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+                            vbTab & "found:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
+                            vbTab & "expected:" & vbTab & "not >" & expected_value & "<"
+        If Not IsMissing(custom_err_msg) Then
+            matcher_fail_msg = matcher_fail_msg & vbLf & vbTab & custom_err_msg
         End If
+        raise_expectation_err matcher_fail_msg
     End If
 End Sub
 
@@ -98,28 +90,32 @@ Private Sub test_comparability(pGivenValue As Variant, pExpectedValue As Variant
     End If
 End Sub
 
-Private Function values_are_equal(pGivenValue As Variant, pExpectedValue As Variant) As Boolean
+Private Function values_are_equal(given_value As Variant, expected_value As Variant) As Boolean
 
     Dim index As Integer
     
+    'basic data types (e.g. string, integer) can't be compared with objects
+    test_comparability given_value, expected_value
+    
     values_are_equal = True
-    If IsObject(pGivenValue) Then
-        If Not (pGivenValue Is pExpectedValue) Then
+    If IsObject(given_value) Then
+        If Not (given_value Is expected_value) Then
             values_are_equal = False
         End If
-    ElseIf IsArray(pGivenValue) Then
-        If UBound(pGivenValue) <> UBound(pExpectedValue) Then
+    ElseIf IsArray(given_value) Then
+        If UBound(given_value) <> UBound(expected_value) Then
+            'if two arrays have a different size, they can't be equal
             values_are_equal = False
         Else
-            For index = 0 To UBound(pGivenValue)
-                If pGivenValue(index) <> pExpectedValue(index) Then
+            For index = 0 To UBound(given_value)
+                If given_value(index) <> expected_value(index) Then
                    values_are_equal = False
                    Exit For
                 End If
             Next
         End If
     Else
-        If pGivenValue <> pExpectedValue Then
+        If given_value <> expected_value Then
             values_are_equal = False
         End If
     End If
@@ -139,7 +135,7 @@ Public Property Let given_value(ByVal pvarGivenValue As Variant)
     On Error GoTo 0
 End Property
 
-Public Sub contains_member(expected_member As Variant)
+Public Sub contains_member(expected_member As Variant, Optional custom_err_msg)
 
     Dim matcher_fail_msg As String
     Dim expected_member_text As String
@@ -148,16 +144,28 @@ Public Sub contains_member(expected_member As Variant)
         If Not ExtraVBA.collection_has_value(expected_member, Me.given_value) Then
             If IsArray(expected_member) Then
                 expected_member_text = Join(expected_member, "*")
+            ElseIf IsObject(expected_member) Then
+                expected_member_text = "given " & TypeName(expected_member)
             Else
                 expected_member_text = CStr(expected_member)
             End If
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
                         vbTab & "collection does not contain item " & ">" & expected_member_text & "<"
+            If Not IsMissing(custom_err_msg) Then
+                matcher_fail_msg = matcher_fail_msg & vbLf & vbTab & custom_err_msg
+            End If
             raise_expectation_err matcher_fail_msg
-        
         End If
     ElseIf IsArray(Me.given_value) Then
-        Debug.Print "TSpecExpectation.contains_member PENDING: contains_member matcher for array"
+        If Not ExtraVBA.array_has_value(expected_member, Me.given_value) Then
+            expected_member_text = CStr(expected_member)
+            matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
+                vbTab & "collection does not contain item " & ">" & expected_member_text & "<"
+            If Not IsMissing(custom_err_msg) Then
+                matcher_fail_msg = matcher_fail_msg & vbLf & vbTab & custom_err_msg
+            End If
+            raise_expectation_err matcher_fail_msg
+        End If
     End If
 End Sub
 

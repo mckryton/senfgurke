@@ -33,6 +33,21 @@ Public Function align_textblock(indented_text As String) As String
     align_textblock = trimmed_text
 End Function
 
+Public Function array_has_value(search_value As Variant, search_array As Variant) As Boolean
+    Dim array_index As Long
+    
+    array_has_value = False
+    If Not IsArray(search_array) Then
+        Err.raise ERR_ID_PARAMETER_IS_WRONG_DATA_TYPE_ERROR, "Senfgurke.xlam.ExtraVBA.array_has_value", "input parameter search _array isn't an array"
+    End If
+    For array_index = LBound(search_array) To UBound(search_array)
+        If search_array(array_index) = search_value Then
+            array_has_value = True
+            Exit Function
+        End If
+    Next
+End Function
+
 Public Function collection_has_key(search_key As Variant, search_target As Collection) As Boolean
                      
     On Error GoTo NOT_FOUND
