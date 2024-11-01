@@ -22,7 +22,7 @@ Ability: add custom error message for failed expectations
         | to_be           |            200 |          400 | "cell doesn't have the expected width" |
         | not_to_be       |            400 |          400 | "width is still set to default size"   |
 
-    @vba
+    @vba-specific
     Example: has_member expectation fails with custom error message
       # VBA offers either a built-in Array data type or Collection objects to manage lists
 
