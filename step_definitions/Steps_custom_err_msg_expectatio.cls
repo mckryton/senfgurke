@@ -47,8 +47,8 @@ Public Sub Given_a_array_was_used_to_save_cell_backgroun_1EFBF20EF10A(example_co
     example_context.set_value sample_array, "sample_array"
 End Sub
 
-Public Sub Given_an_text_was_expected_to_be_STR_68850790D397(example_context As TContext, step_expressions As Collection)
-    'Given an text was expected to be {string}
+Public Sub Given_an_text_was_expected_to_include_STR_84A9E7DB025F(example_context As TContext, step_expressions As Collection)
+    'Given an text was expected to include {string}
     Dim expected_text As String
     
     expected_text = step_expressions(1)
@@ -116,6 +116,20 @@ Public Sub When_the_text_is_compared_using_ends_with_F7C2E74C69E2(example_contex
     actual_text = example_context.get_value("actual_text")
     custom_err_msg = example_context.get_value("custom_err_msg")
     actual_err_msg = run_comparison_expectation(actual_text, expected_text, custom_err_msg, "ends_with")
+    example_context.set_value actual_err_msg, "actual_err_msg"
+End Sub
+
+Public Sub When_the_text_is_compared_using_includes_text_38E99F35B921(example_context As TContext)
+    'When the text is compared using includes_text
+    Dim expected_text As String
+    Dim actual_text As String
+    Dim actual_err_msg As String
+    Dim custom_err_msg As String
+    
+    expected_text = example_context.get_value("expected_text")
+    actual_text = example_context.get_value("actual_text")
+    custom_err_msg = example_context.get_value("custom_err_msg")
+    actual_err_msg = run_comparison_expectation(actual_text, expected_text, custom_err_msg, "includes_text")
     example_context.set_value actual_err_msg, "actual_err_msg"
 End Sub
 
@@ -188,6 +202,8 @@ Private Function run_comparison_expectation(actual_value As Variant, expected_va
             TSpec.expect(actual_value).starts_with_text expected_value, custom_err_msg
         Case "ends_with"
             TSpec.expect(actual_value).ends_with_text expected_value, custom_err_msg
+        Case "includes_text"
+            TSpec.expect(actual_value).includes_text expected_value, custom_err_msg
         Case "to_be"
             TSpec.expect(actual_value).to_be expected_value, custom_err_msg
         Case "not_to_be"

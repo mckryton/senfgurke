@@ -169,7 +169,7 @@ Public Sub contains_member(expected_member As Variant, Optional custom_err_msg)
     End If
 End Sub
 
-Public Sub includes_text(include_item As Variant)
+Public Sub includes_text(include_item As Variant, Optional custom_err_msg)
 
     Dim matcher_fail_msg As String
     
@@ -178,6 +178,9 @@ Public Sub includes_text(include_item As Variant)
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
                         vbTab & "found string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
                         vbTab & "should include:" & vbTab & ">" & include_item & "<"
+            If Not IsMissing(custom_err_msg) Then
+                matcher_fail_msg = matcher_fail_msg & vbLf & vbTab & custom_err_msg
+            End If
             raise_expectation_err matcher_fail_msg
         End If
     Else
@@ -201,8 +204,7 @@ Public Sub does_not_include(include_item As Variant)
     End If
 End Sub
 
-Public Sub starts_with_text(heading_text As Variant)
-
+Public Sub starts_with_text(heading_text As Variant, Optional custom_err_msg)
     Dim matcher_fail_msg As String
     
     If TypeName(heading_text) = "String" Then
@@ -210,6 +212,9 @@ Public Sub starts_with_text(heading_text As Variant)
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
                         vbTab & "found string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
                         vbTab & "should start with:" & vbTab & ">" & heading_text & "<"
+            If Not IsMissing(custom_err_msg) Then
+                matcher_fail_msg = matcher_fail_msg & vbLf & vbTab & custom_err_msg
+            End If
             raise_expectation_err matcher_fail_msg
         End If
     Else
@@ -218,8 +223,7 @@ Public Sub starts_with_text(heading_text As Variant)
     End If
 End Sub
 
-Public Sub ends_with_text(trailing_text As Variant)
-
+Public Sub ends_with_text(trailing_text As Variant, Optional custom_err_msg)
     Dim matcher_fail_msg As String
     
     If TypeName(trailing_text) = "String" Then
@@ -227,6 +231,9 @@ Public Sub ends_with_text(trailing_text As Variant)
             matcher_fail_msg = vbTab & "missed expectation" & vbLf & _
                         vbTab & "found string:" & vbTab & vbTab & ">" & Me.given_value & "<" & vbLf & _
                         vbTab & "should end with:" & vbTab & ">" & trailing_text & "<"
+            If Not IsMissing(custom_err_msg) Then
+                matcher_fail_msg = matcher_fail_msg & vbLf & vbTab & custom_err_msg
+            End If
             raise_expectation_err matcher_fail_msg
         End If
     Else
@@ -236,9 +243,7 @@ Public Sub ends_with_text(trailing_text As Variant)
 End Sub
 
 Private Sub raise_expectation_err(fail_msg)
-    
     TSpec.LastFailMsg = fail_msg
     Err.raise Number:=ERR_ID_EXPECTATION_STATUS_FAILED, description:=fail_msg
 End Sub
-
 

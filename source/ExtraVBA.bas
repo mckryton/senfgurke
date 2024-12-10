@@ -1,6 +1,38 @@
 Attribute VB_Name = "ExtraVBA"
 Option Explicit
 
+Public Function align_textblock(indented_text As String) As String
+    
+    Dim trimmed_text As String
+    Dim min_indention As Integer
+    Dim lines As Variant
+    Dim line As Variant
+    Dim indention As Long
+
+    min_indention = -1
+    lines = Split(indented_text, vbLf)
+    For Each line In lines
+        If Trim(line) <> vbNullString Then
+            indention = Len(line) - Len(LTrim(line))
+            If min_indention = -1 Or indention < min_indention Then min_indention = indention
+        End If
+    Next
+    If min_indention = -1 Then
+        trimmed_text = indented_text
+    Else
+        For Each line In lines
+            If Len(line) > min_indention Then
+                trimmed_text = trimmed_text & Right(line, Len(line) - min_indention) & vbLf
+            Else
+                trimmed_text = trimmed_text & line & vbLf
+            End If
+        Next
+        'remove the last linebreak
+        If Len(trimmed_text) > 0 Then trimmed_text = Left(trimmed_text, Len(trimmed_text) - 1)
+    End If
+    align_textblock = trimmed_text
+End Function
+
 Public Function array_has_value(search_value As Variant, search_array As Variant) As Boolean
     Dim array_index As Long
     
@@ -15,6 +47,7 @@ Public Function array_has_value(search_value As Variant, search_array As Variant
         End If
     Next
 End Function
+
 
 Public Function collection_has_key(search_key As Variant, search_target As Collection) As Boolean
                      
