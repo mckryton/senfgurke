@@ -22,7 +22,11 @@ Public Function load_features(Optional feature_dir, Optional file_filter, Option
     Dim subdirs As Collection
     
     If IsMissing(feature_dir) Then
-        feature_dir = get_feature_dir(senfgurke_workbook.Path)
+        #If app_name = "Microsoft PowerPoint" Then
+            TError.raise ERR_ID_UNKNOWN_FEATURE_PATH
+        #ElseIf app_name = "Microsoft Excel" Then
+            feature_dir = get_feature_dir(senfgurke_workbook.Path)
+        #End If
     End If
     If Right(feature_dir, 1) <> ExtraVBA.get_path_separator Then
         feature_dir = feature_dir & ExtraVBA.get_path_separator

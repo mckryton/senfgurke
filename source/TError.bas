@@ -30,6 +30,7 @@ Public Const ERR_ID_EXPECTATION_STATUS_FAILED& = 8010
 Public Const ERR_ID_UNSUPPORTED_ARRAY_ERROR& = 8110
 Public Const ERR_ID_PARAMETER_IS_WRONG_DATA_TYPE_ERROR& = 8120
 Public Const ERR_ID_UNKNOWN_MSG_TYPE& = 9010
+Public Const ERR_ID_UNKNOWN_FEATURE_PATH& = 9020
 
 
 Private Const ERR_MSG_LIST = _
@@ -43,6 +44,7 @@ Private Const ERR_MSG_LIST = _
                 "|#" & ERR_ID_STEP_SYNTAX_TABLE_WITHOUT_STEP & "|" & "preceding step for data table is missing" & _
                 "|#" & ERR_ID_STEP_SYNTAX_TABLE_DUPLICATE_COLUMN & "|" & "duplicate column names found in data table: >#{1}<" & _
                 "|#" & ERR_ID_STEP_SYNTAX_TABLE_COLUMN_COUNT_MISMATCH & "|" & "column count in table row doesn't match table header >#{1}<" & _
+                "|#" & ERR_ID_UNKNOWN_FEATURE_PATH& & "|" & "can't find features dir" & _
                 "|"
 
 
