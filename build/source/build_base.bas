@@ -1,8 +1,8 @@
 Attribute VB_Name = "build_base"
 Option Explicit
 
-Const DOC_TYPE_ADDIN = "doc_type_addin"
-Const DOC_TYPE_STEP_DEF = "doc_type_step_definition"
+Global Const DOC_TYPE_ADDIN = "doc_type_addin"
+Global Const DOC_TYPE_STEP_DEF = "doc_type_step_definition"
 
 Public Sub build_addin()
     build_document DOC_TYPE_ADDIN, "Senfgurke", "source"
@@ -26,13 +26,13 @@ Private Sub build_document(doc_type As String, vba_project_name As String, sourc
         Exit Sub
     End If
     
-    Set addin_doc = create_new_document(vba_project_name)
+    Set addin_doc = create_new_document(doc_type, vba_project_name)
     
     path_separator = get_path_separator
     file_name = Dir(source_path)
     While file_name <> vbNullString
         file_extension = Right(file_name, 4)
-        If InStr(CODE_FILE_EXTENSIONS, file_extension) > 0 Then
+        If InStr(CODE_FILE_EXTENSIONS, file_extension) > 0 And Not is_exclusive_for_other_office_apps(file_name) Then
             addin_doc.VBProject.VBComponents.Import source_path & path_separator & file_name
             Debug.Print "imported>" & vbTab & file_name
         Else
@@ -66,7 +66,7 @@ Private Function get_source_path(source_path_sub_dir_name As String)
     get_source_path = Left(ThisDocument.Path, Len(ThisDocument.Path) - Len(build_dir)) & path_separator & source_path_sub_dir_name
 End Function
 
-Private Function get_path_separator() As String
+Public Function get_path_separator() As String
     ' word and excel return path separator via Application.PathSeparator
     '  but this property is missing in Powerpoint
 
