@@ -11,7 +11,7 @@ Public Sub test(Optional filter_tag, Optional feature_filter, Optional report_fo
     Dim session As Senfgurke.TSession
     
     Set session = THelper.new_TSession
-    session.run_test StepImplementations(session.ExecutionHooks), filter_tag, feature_filter, report_format, application_dir:=senfgurke_steps_workbook.path
+    session.run_test StepImplementations(session.ExecutionHooks), filter_tag, feature_filter, report_format, application_dir:=get_app_root_path()
     Set session = Nothing
     Set m_step_implementations = Nothing
 End Sub
