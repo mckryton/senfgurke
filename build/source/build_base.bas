@@ -14,7 +14,7 @@ End Sub
 
 Private Sub build_document(doc_type As String, vba_project_name As String, source_dir_name As String)
     Const CODE_FILE_EXTENSIONS = "|.bas|.cls|.frm|"
-    Dim addin_doc As Document
+    Dim addin_doc As Variant
     Dim source_path As String
     Dim file_name As String
     Dim file_extension As String
@@ -49,6 +49,7 @@ Private Function get_source_path(source_path_sub_dir_name As String)
     Dim build_dir As String
     Dim build_path As String
     Dim source_path As String
+    Dim root_path As String
     
     'if the path to the Senfgurke repository is /home/user/senfgurke then the
     ' location of this document is expected to be /home/user/senfgurke/build while
@@ -60,10 +61,11 @@ Private Function get_source_path(source_path_sub_dir_name As String)
     build_path = get_build_path()
     If Right(build_path, Len(build_dir)) <> build_dir Then
         Debug.Print "ERROR: This document is expected to be located in the build sub dir but was found in >" & _
-                ThisDocument.Path & "<"
+                get_build_path() & "<"
         get_source_path = vbNullString
     End If
-    get_source_path = Left(ThisDocument.Path, Len(ThisDocument.Path) - Len(build_dir)) & path_separator & source_path_sub_dir_name
+    root_path = Left(build_path, Len(build_path) - Len(build_dir))
+    get_source_path = root_path & path_separator & source_path_sub_dir_name
 End Function
 
 Public Function get_path_separator() As String
