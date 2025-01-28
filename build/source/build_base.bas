@@ -13,12 +13,10 @@ Public Sub build_step_definitions()
 End Sub
 
 Private Sub build_document(doc_type As String, vba_project_name As String, source_dir_name As String)
-    Const CODE_FILE_EXTENSIONS = "|.bas|.cls|.frm|"
     Dim addin_doc As Variant
     Dim source_path As String
-    Dim file_name As String
-    Dim file_extension As String
-    Dim path_separator As String
+    Dim file_name As Variant
+    Dim source_file_names As Variant
     
     source_path = get_source_path(source_dir_name)
     If source_path = vbNullString Then
@@ -28,21 +26,42 @@ Private Sub build_document(doc_type As String, vba_project_name As String, sourc
     
     Set addin_doc = create_new_document(doc_type, vba_project_name)
     
-    path_separator = get_path_separator
+    source_file_names = read_source_file_names(source_path)
+    
+    #If Mac Then
+        GrantAccessToMultipleFiles source_file_names
+    #End If
+    
+    For Each file_name In source_file_names
+        addin_doc.VBProject.VBComponents.Import file_name
+        Debug.Print "imported>" & vbTab & file_name
+    Next
+        
+    Debug.Print "build COMPLETED"
+End Sub
+
+Private Function read_source_file_names(source_path As String) As Variant
+    Const CODE_FILE_EXTENSIONS = "|.bas|.cls|.frm|"
+    Dim file_name As String
+    Dim file_extension As String
+    Dim path_separator As String
+    Dim source_files As String
+    
+    source_files = ""
     file_name = Dir(source_path)
     While file_name <> vbNullString
         file_extension = Right(file_name, 4)
         If InStr(CODE_FILE_EXTENSIONS, file_extension) > 0 And Not is_exclusive_for_other_office_apps(file_name) Then
-            addin_doc.VBProject.VBComponents.Import source_path & path_separator & file_name
-            Debug.Print "imported>" & vbTab & file_name
+            source_files = source_files & source_path & file_name & "|"
         Else
             Debug.Print "ignored>" & vbTab & file_name
         End If
         file_name = Dir()
     Wend
+    source_files = Left(source_files, Len(source_files) - 1)
+    read_source_file_names = Split(source_files, "|")
+End Function
 
-    Debug.Print "build COMPLETED"
-End Sub
 
 Private Function get_source_path(source_path_sub_dir_name As String)
     Dim path_separator As String
@@ -65,7 +84,7 @@ Private Function get_source_path(source_path_sub_dir_name As String)
         get_source_path = vbNullString
     End If
     root_path = Left(build_path, Len(build_path) - Len(build_dir))
-    get_source_path = root_path & path_separator & source_path_sub_dir_name
+    get_source_path = root_path & path_separator & source_path_sub_dir_name & path_separator
 End Function
 
 Public Function get_path_separator() As String
