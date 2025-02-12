@@ -7,11 +7,10 @@ Option Explicit
 Private m_step_implementations As Collection
 
 Public Sub test(Optional filter_tag, Optional feature_filter, Optional report_format)
-    
     Dim session As Senfgurke.TSession
     
     Set session = THelper.new_TSession
-    session.run_test StepImplementations(session.ExecutionHooks), filter_tag, feature_filter, report_format, application_dir:=get_app_root_path()
+    session.run_test StepImplementations(session.ExecutionHooks), filter_tag, feature_filter, report_format, application_dir:=senfgurke_steps_workbook.Path
     Set session = Nothing
     Set m_step_implementations = Nothing
 End Sub
@@ -26,41 +25,15 @@ Public Sub progress(Optional filter_tag)
 End Sub
 
 Private Property Get StepImplementations(session_execution_hooks As Senfgurke.TExecutionHooks) As Collection
-    
     Dim step_implementations As Variant
     Dim step_implementation_class As Variant
 
     Set m_step_implementations = New Collection
-    'REGISTER all classes with STEP IMPLEMENTATIONS HERE >>>
-    '-------------------------------------------------------
-    step_implementations = Array(New Steps_cleanup_after_example, New Steps_collect_statistics, _
-                                 New Steps_assure_collection_members, New Steps_connect_steps_with_funct, _
-                                 New Steps_Load_Feature_Files, _
-                                 New Steps_parse_docstrings, _
-                                 New Steps_Parse_Examples, _
-                                 New Steps_Parse_Features, _
-                                 New Steps_parse_rules, _
-                                 New Steps_parse_step_expressions, _
-                                 New Steps_parse_steps, _
-                                 New Steps_parse_tables, New Steps_parse_outlines, _
-                                 New Steps_parse_tags, _
-                                 New Steps_predefined_steps, _
-                                 New Steps_report, _
-                                 New Steps_report_progress, _
-                                 New Steps_report_statistics, _
-                                 New Steps_report_verbose, New Steps_report_verbose_outlines, _
-                                 New Steps_Run_Examples, New Steps_run_outline_example, _
-                                 New Steps_Run_features, _
-                                 New Steps_Run_Steps, _
-                                 New Steps_run_tests, _
-                                 New Steps_save_vars_in_context, _
-                                 New Steps_show_step_template, _
-                                 New Steps_support_functions, _
-                                 New Steps_assure_expectations, New Steps_custom_err_msg_expectatio _
-                                )
+    'register new step definition classes in module TStepRegister
+    step_implementations = TStepRegister.get_step_definition_classes()
     Set m_step_implementations = New Collection
     For Each step_implementation_class In step_implementations
-        'ignore error messages if the step implementationcalss hasn't declared an execution hook variable
+        'ignore error messages if the step implementation class hasn't declared an execution hook variable
         On Error Resume Next
             'connect any ExecutionHook in step definition classes with the current test run session
             Set step_implementation_class.ExecutionHooks = session_execution_hooks

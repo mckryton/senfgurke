@@ -127,7 +127,7 @@ Public Function get_code_templates_for_missing_steps() As String
             report_output = report_output & vbLf & vbLf & CStr(template)
         Next
         report_output = report_output & vbLf & vbLf & "If the function is already in place, the cause for this message could be:" & vbLf _
-                            & "* the step implementation class is not registered in TRun.StepImplementations" & vbLf _
+                            & "* the step implementation class is not registered in the TStepRegister module" & vbLf _
                             & "* the code inside the step function tries to access a non-existing method or property"
                             
     End If
