@@ -16,17 +16,17 @@ End Sub
 
 Public Sub Given_two_feature_files_in_the_feature_dir_8FB24F121954(example_context As TContext)
     'Given two feature files in the feature dir
-    example_context.set_value get_app_root_path() & ExtraVBA.get_path_separator & Join(Split("testdata/features_toplevel_pure", "/"), ExtraVBA.get_path_separator), "feature_path"
+    example_context.set_value get_this_document_path() & ExtraVBA.get_path_separator & Join(Split("testdata/features_toplevel_pure", "/"), ExtraVBA.get_path_separator), "feature_path"
 End Sub
 
 Public Sub Given_one_feature_file_and_one_text_file_in_t_98F5E94C9F0E(example_context As TContext)
     'Given one feature file and one text file in the feature dir
-    example_context.set_value get_app_root_path() & ExtraVBA.get_path_separator & Join(Split("testdata/features_toplevel_mixed", "/"), ExtraVBA.get_path_separator), "feature_path"
+    example_context.set_value get_this_document_path() & ExtraVBA.get_path_separator & Join(Split("testdata/features_toplevel_mixed", "/"), ExtraVBA.get_path_separator), "feature_path"
 End Sub
 
 Public Sub Given_one_feature_file_located_at_a_sub_direc_CA04B38A1CAE(example_context As TContext)
     'Given one feature file located at a sub directory under the feature dir
-    example_context.set_value get_app_root_path() & ExtraVBA.get_path_separator & Join(Split("testdata/features_subdir", "/"), ExtraVBA.get_path_separator), "feature_path"
+    example_context.set_value get_this_document_path() & ExtraVBA.get_path_separator & Join(Split("testdata/features_subdir", "/"), ExtraVBA.get_path_separator), "feature_path"
 End Sub
 
 Public Sub Given_a_feature_file_STR_D7FE0A9A5327(example_context As TContext, step_expressions As Collection)
@@ -36,7 +36,7 @@ Public Sub Given_a_feature_file_STR_D7FE0A9A5327(example_context As TContext, st
     Dim application_dir As String
     Dim feature_dir As String
     
-    application_dir = get_app_root_path() & ExtraVBA.get_path_separator _
+    application_dir = get_this_document_path() & ExtraVBA.get_path_separator _
         & "testdata" & ExtraVBA.get_path_separator _
         & "filter_for_loading_features" '& ExtraVBA.get_path_separator
     example_context.set_value application_dir, "application_dir"
@@ -56,7 +56,7 @@ Public Sub Given_a_feature_directory_contains_the_files_51DDA68DE9B3(example_con
     Dim table_row As Variant
     Dim file_name As String
     
-    application_dir = get_app_root_path() & ExtraVBA.get_path_separator _
+    application_dir = get_this_document_path() & ExtraVBA.get_path_separator _
         & "testdata" & ExtraVBA.get_path_separator _
         & "filter_for_loading_features" & ExtraVBA.get_path_separator
     example_context.set_value application_dir, "application_dir"
