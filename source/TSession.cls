@@ -102,9 +102,8 @@ Public Property Let reporter(ByVal new_reporter As TReport)
     Set reporter = new_reporter
 End Property
 
-Public Sub run_test(step_classes As Collection, Optional filter_tag, Optional feature_filter, Optional report_format, _
-                        Optional features_as_text As Collection, Optional application_dir)
-
+Public Sub run_test(step_classes As Collection, Optional filter_tag, Optional feature_filter, _
+                        Optional report_format, Optional features_as_text As Collection, Optional application_dir As String)
     Dim parsed_features As Collection
     Dim feature_dir As String
     Dim statistic_summary As String
@@ -117,9 +116,15 @@ Public Sub run_test(step_classes As Collection, Optional filter_tag, Optional fe
             application_dir = application_dir & ExtraVBA.get_path_separator
         End If
         feature_dir = application_dir & "features"
+    Else
+        feature_dir = vbNullString
     End If
     set_report_format CStr(report_format)
-    If features_as_text Is Nothing Then Set features_as_text = TFeatureLoader.load_features(feature_dir, feature_filter, Me)
+    'load feature from files only if no feature were given as text by parameter
+    ' and a feature directory was specified
+    If features_as_text Is Nothing And Not feature_dir = vbNullString Then
+        Set features_as_text = TFeatureLoader.load_features(feature_dir, feature_filter, Me)
+    End If
     Set parsed_features = parse_loaded_features(features_as_text)
     If parsed_features.Count > 0 Then run_parsed_features parsed_features, CStr(filter_tag)
     statistic_summary = statistics.get_statistics_summary() & vbLf & get_duration_as_text(EndTime - StartTime)
