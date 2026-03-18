@@ -52,3 +52,14 @@ Ability: parse docstrings
             """
          When the step list is parsed
          Then the first line of the steps docstring is empty
+
+      Example: docstring limiter uses tabs
+        Given a list of steps
+            """
+              Given a sample step
+                \t\"\"\"
+                  this is a docstring
+                \t\"\"\"
+            """
+         When the step list is parsed
+         Then the first step has an docstring
