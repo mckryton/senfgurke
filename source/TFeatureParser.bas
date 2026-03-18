@@ -315,7 +315,7 @@ Public Function get_line_type(line As String)
         get_line_type = LINE_TYPE_STEP
     ElseIf is_table_row(line) Then
         get_line_type = LINE_TYPE_TABLE_ROW
-    ElseIf Trim(line) = """""""" Then
+    ElseIf Trim(Replace(line, vbTab, Space(2))) = """""""" Then
         get_line_type = LINE_TYPE_DOCSTRING_LIMIT
     ElseIf is_comment_line(line) Then
         get_line_type = LINE_TYPE_COMMENT

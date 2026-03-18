@@ -21,10 +21,11 @@ End Sub
 
 Public Sub Given_a_list_of_steps_STR_D7FEE94DD01B(example_context As TContext, step_expressions As Collection)
     'Given a list of steps {string}
-    'TODO refactor stepexpression to remove escape characters the right way
     Dim step_list_gherkin As String
     
-    step_list_gherkin = Replace(step_expressions(1), "\", "")
+    step_list_gherkin = Replace(step_expressions(1), "\""", """")
+    'translate \t placeholders into real tabs
+    step_list_gherkin = Replace(step_list_gherkin, "\t", vbTab)
     example_context.set_value step_list_gherkin, "gherkin_text"
 End Sub
 
